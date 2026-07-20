@@ -1,0 +1,485 @@
+{
+ "18": {
+  "id": 18,
+  "numbers": [
+   "In MIT's 'Safeguarding the Future' course, chatbots within one hour suggested four potential pandemic pathogens, explained how to generate them from synthetic DNA via reverse genetics, and named DNA synthesis companies unlikely to screen orders (Esvelt et al., 'Can large language models democratize access to dual-use biotechnology?', June 2023, arXiv 2306.03809).",
+   "RAND's January 2024 randomized red team study found no statistically significant difference in the viability of large scale bioattack plans built with versus without current large language models; outputs largely mirrored what is already on the open internet (Mouton, Lucas, Guest, RAND RRA2977, Jan 2024).",
+   "A later RAND analysis showed three 2024 models (Llama 3.1 405B, GPT-4o, and Claude 3.5 Sonnet new) gave accurate guidance for recovering a live poliovirus from commercially obtained synthetic DNA (Roger Brent et al., 'Contemporary AI foundation models increase biological weapons risk', RAND working paper arXiv 2506.13798, June 2025; RAND perspective PEA3853-1, Dec 2025).",
+   "OpenAI classified its ChatGPT Agent as the first product with 'High' biological capability under its Preparedness Framework and turned on dedicated safeguards (OpenAI; reported by Fortune, July 18, 2025).",
+   "Anthropic activated its AI Safety Level 3 (ASL-3) protections when launching Claude Opus 4 after the model showed stronger performance on virus acquisition tasks than Google search and prior models in expert graded uplift trials (Anthropic, 'Activating AI Safety Level 3 Protections', May 2025)."
+  ],
+  "quotes": [
+   {
+    "quote": "a straightforward extrapolation of today's systems to those we expect to see in two to three years suggests a substantial risk that AI systems will be able to fill in all the missing pieces",
+    "who": "Dario Amodei, CEO of Anthropic, testifying to the Senate Judiciary Committee, July 25, 2023",
+    "url": "https://www.theregister.com/2023/07/28/ai_senate_bioweapon/"
+   },
+   {
+    "quote": "Any and all safeguards can and will be removed within days of a large model being open-sourced",
+    "who": "Kevin Esvelt, MIT Media Lab biosecurity researcher",
+    "url": "https://www.science.org/content/article/built-safeguards-might-stop-ai-designing-bioweapons"
+   }
+  ],
+  "timeline": [
+   "June 2023: Esvelt's MIT class shows freely available chatbots can walk non scientists toward pandemic pathogen acquisition within an hour (preprint released).",
+   "July 25, 2023: Amodei warns the Senate Judiciary Committee of a substantial two to three year bioweapon uplift risk.",
+   "January 2024: RAND publishes its red team study finding no measurable operational uplift from that generation of models.",
+   "April 2025: OpenAI publishes Preparedness Framework version 2 and adds a bio and chem safety monitor to its o3 and o4-mini reasoning models.",
+   "May 2025: Anthropic activates ASL-3 protections alongside Claude Opus 4 over CBRN uplift concerns.",
+   "July 2025: OpenAI treats ChatGPT Agent as its first 'High' biorisk model and activates safeguards.",
+   "December 2025: RAND publishes 'Contemporary Foundation AI Models Increase Biological Weapons Risk', documenting the poliovirus recovery case."
+  ],
+  "misconceptions": [
+   "That AI can hand a random person a working bioweapon today. The documented risk is uplift and guidance that lowers barriers for motivated actors, not push button creation; RAND's 2024 test found no measurable operational advantage, and the hardest steps remain physical lab work and materials access.",
+   "That the danger is an AI inventing a brand new superbug from scratch. The near term concern experts actually flag is AI helping non experts navigate known pathogens and existing published protocols such as synthesis and reverse genetics, not de novo design.",
+   "That closed models are safe because they refuse dangerous requests. Safeguards can be stripped from open weight models within days through cheap fine tuning, and jailbreaks bypass closed models, so refusal is not a durable barrier."
+  ],
+  "skeptic_take": "RAND's January 2024 randomized red team exercise found no statistically significant difference in the viability of bioweapon plans built with versus without current large language models, because the outputs mostly echoed information already on the open internet; on this view the real bottleneck is tacit lab skill and access to materials, not access to information, and today's models do not meaningfully move that needle. (Argued by RAND's Christopher Mouton and colleagues.)",
+  "guests": [
+   {
+    "name": "Kevin Esvelt",
+    "why": "MIT Media Lab biosecurity researcher who ran the class experiment; a frequent, articulate podcast and interview guest (80,000 Hours, Science coverage) on exactly this topic.",
+    "ask": "Walk me through the chain from a chatbot answer to an actual pandemic. Which single step is still the hardest, and is AI closing it or leaving it untouched?"
+   },
+   {
+    "name": "Christopher Mouton",
+    "why": "RAND senior engineer who led the 2024 red team study that found no uplift; the ideal voice for honest tension between the null 2024 result and later poliovirus findings.",
+    "ask": "What changed between your 2024 null result and RAND's later poliovirus finding, and how much of that is real capability versus better testing?"
+   },
+   {
+    "name": "Rob Reid",
+    "why": "Writer, TED speaker on synthetic biology existential risk, and podcast host who has covered engineered pandemic risk for years; realistic to book and comfortable on camera.",
+    "ask": "If you had to bet on the first AI enabled biological incident, would it come from a lone actor or a small group, and what would actually tip it from possible to real?"
+   }
+  ]
+ },
+ "14": {
+  "id": 14,
+  "numbers": [
+   "40,000 candidate toxic molecules generated in under 6 hours, including the nerve agent VX and novel compounds predicted to be even more toxic (Urbina, Lentzos, Invernizzi, Ekins, Nature Machine Intelligence, 2022)",
+   "The run used a commercial dataset and a 2015 Mac computer, less than six hours of machine time (Scientific American, 2022)",
+   "Flipping the model from avoiding toxicity to seeking it required only rewarding predicted toxicity instead of penalizing it (Urbina et al., Nature Machine Intelligence, 2022)",
+   "None of the 40,000 molecules were synthesized, purified, or tested; every output was a computer prediction (Urbina et al., Nature Machine Intelligence, 2022)",
+   "The model, MegaSyn, belonged to Collaborations Pharmaceuticals; the experiment was requested by the Swiss Spiez Laboratory for its 2021 Convergence conference (Nature Machine Intelligence, 2022)"
+  ],
+  "quotes": [
+   {
+    "who": "Fabio Urbina, Sean Ekins and coauthors, Nature Machine Intelligence (2022)",
+    "quote": "We can easily erase the thousands of molecules we created, but we cannot delete the knowledge of how to recreate them.",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9544280/"
+   },
+   {
+    "who": "Urbina et al., Nature Machine Intelligence (2022)",
+    "quote": "By inverting the use of our machine learning models, we had transformed our innocuous generative model from a helpful tool of medicine to a generator of likely deadly molecules.",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9544280/"
+   },
+   {
+    "who": "Fabio Urbina, to Scientific American (2022)",
+    "quote": "It just felt a little surreal.",
+    "url": "https://www.scientificamerican.com/article/ai-drug-discovery-systems-might-be-repurposed-to-make-chemical-weapons-researchers-warn/"
+   }
+  ],
+  "timeline": [
+   "September 2021: The Swiss Spiez Laboratory asks Collaborations Pharmaceuticals to test whether its drug design AI could be misused, for the biennial Convergence conference",
+   "September 2021: The team runs MegaSyn overnight; it produces 40,000 toxic candidates, including VX and other known warfare agents it was never trained on",
+   "March 7, 2022: The commentary Dual use of artificial intelligence powered drug discovery is published in Nature Machine Intelligence",
+   "March 2022: Coverage in The Verge and Scientific American carries the result to a wide audience",
+   "2022: The authors brief the White House Office of Science and Technology Policy on the findings"
+  ],
+  "misconceptions": [
+   "The 40,000 molecules are computer predictions, not real weapons. None were ever made or tested, and toxicity prediction models are least reliable at the extreme values where these compounds sit.",
+   "The AI did not invent chemical weapons from nothing. VX and the known agents it rediscovered were already public; the model learned from public bioactivity data and was steered toward VX like structures.",
+   "Designing a molecule is only one link in the chain. Turning a candidate into a usable nerve agent still needs precursors, real lab skill, stabilization, and a delivery method, none of which the AI provides."
+  ],
+  "skeptic_take": "This is a proof of concept, not a demonstrated weapon. The molecules were never synthesized, predicted toxicity is notoriously unreliable for brand new structures, and a follow up reply in Nature Machine Intelligence (No chemical killer AI (yet)) argues the design step was never the true barrier to chemical weapons. The hard, skill and resource gated steps are synthesis, stabilization, and delivery, which the model does not touch.",
+  "guests": [
+   {
+    "name": "Fabio Urbina",
+    "why": "Lead author and senior scientist at Collaborations Pharmaceuticals who actually ran the experiment; has given interviews to The Verge, Scientific American, and Radiolab, so he is comfortable on camera.",
+    "ask": "Walk me through the exact moment you inverted the code and watched a model built to design medicines start printing VX."
+   },
+   {
+    "name": "Sean Ekins",
+    "why": "CEO of Collaborations Pharmaceuticals and senior author, a media active founder who has spoken widely about dual use AI in drug discovery.",
+    "ask": "You could have kept this quiet. Why publish it, and what did the White House say when you briefed them?"
+   },
+   {
+    "name": "Filippa Lentzos",
+    "why": "Biosecurity researcher at King's College London and a coauthor on the paper, a chemical and biological weapons policy expert who regularly does podcasts and interviews.",
+    "ask": "The Chemical Weapons Convention never imagined a laptop designing new agents overnight. What actually governs this today, and where are the holes?"
+   }
+  ]
+ },
+ "15": {
+  "id": 15,
+  "numbers": [
+   "In a 2023 MIT class, chatbots led students with no life sciences training to four potential pandemic pathogens in one hour, and pointed them to DNA synthesis firms unlikely to screen orders (Soice, Esvelt et al., arXiv 2306.03809, 2023)",
+   "Anthropic turned on its AI Safety Level 3 protections for Claude Opus 4 on May 22, 2025, saying it could not rule out that the model would significantly assist a person with a basic STEM background in making CBRN weapons (Anthropic, 2025)",
+   "An Anthropic uplift trial found Claude Opus 4 with safeguards removed gave a 2.53x capability increase on a bioweapons acquisition task versus internet only, below its internal 5x alarm threshold (Claude Opus 4 system card, May 2025)",
+   "OpenAI's 100 person study found GPT-4 gave only a mild, not statistically conclusive uplift: 0.88 points for experts and 0.25 for students on a 10 point accuracy scale (OpenAI, 2024)",
+   "A RAND red team found no statistically significant difference in the viability of bioweapon plans made with or without current large language models (RAND RRA2977, January 2024)"
+  ],
+  "quotes": [
+   {
+    "who": "Dario Amodei, Anthropic CEO, Senate Judiciary Committee testimony (July 2023)",
+    "quote": "This could greatly widen the range of actors with the technical capability to conduct a large-scale biological attack.",
+    "url": "https://www.theregister.com/2023/07/28/ai_senate_bioweapon"
+   },
+   {
+    "who": "OpenAI, early warning system study (2024)",
+    "quote": "We found mild uplifts in accuracy and completeness for those with access to the language model.",
+    "url": "https://www.theregister.com/2024/02/01/gpt4_openai_biochemical_weapon/"
+   },
+   {
+    "who": "Anthropic, Activating AI Safety Level 3 Protections (May 2025)",
+    "quote": "clearly ruling out ASL-3 risks is not possible for Claude Opus 4",
+    "url": "https://www.anthropic.com/news/activating-asl3-protections"
+   }
+  ],
+  "timeline": [
+   "June 2023: Soice and Esvelt at MIT publish a preprint showing chatbots can walk non experts toward pandemic pathogens in about an hour",
+   "July 2023: Dario Amodei tells the Senate AI could widen the pool of people able to conduct a large biological attack within two to three years",
+   "January 2024: A RAND red team reports no statistically significant LLM uplift for planning a biological attack",
+   "February 2024: OpenAI reports GPT-4 gives at most a mild, inconclusive uplift in a 100 person trial",
+   "May 22, 2025: Anthropic activates ASL-3 safeguards for Claude Opus 4 over bioweapon uplift concerns"
+  ],
+  "misconceptions": [
+   "Chatbots do not hand a novice a working pathogen. The documented uplift is contested, and in the two best controlled studies (RAND and OpenAI, 2024) it was not statistically significant. The binding constraint is hands on wet lab skill, not information.",
+   "Now it takes an AI overstates the case. Most of the information was already searchable online; what a model may add is organizing and troubleshooting it, not revealing hidden secrets.",
+   "The bigger future risk is often conflated with chatbots. Protein and genome design AIs are a distinct and arguably larger concern, but they are a different technology from the general chatbot a curious amateur types into."
+  ],
+  "skeptic_take": "The strongest counter is the evidence itself: RAND's January 2024 red team and OpenAI's own 2024 evaluation both found no statistically significant increase in the viability of bioweapon plans from LLM access versus ordinary internet search. Critics such as Dean Ball argue the information bottleneck was never the binding constraint, that hands on laboratory skill and materials access are, so the now it takes an AI framing runs ahead of the current data.",
+  "guests": [
+   {
+    "name": "Kevin Esvelt",
+    "why": "MIT Media Lab biologist who ran the class that surfaced the chatbot risk and is a leading, highly media active voice on democratized biotechnology risk.",
+    "ask": "Your own students got a pandemic pathogen shortlist in an hour. What did that hour actually prove, and just as importantly, what did it not prove?"
+   },
+   {
+    "name": "Jaime Yassif",
+    "why": "Vice President for global biological policy at the Nuclear Threat Initiative, who runs biosecurity and AI convenings and does interviews and testimony.",
+    "ask": "If DNA synthesis screening is the real choke point, why is it still voluntary, and who is refusing to fix it?"
+   },
+   {
+    "name": "Dean Ball",
+    "why": "AI policy writer and one of the most articulate skeptics of biorisk uplift claims, active on podcasts and his Hyperdimensional Substack, so he can steelman the other side on camera.",
+    "ask": "Steelman the alarmists as fairly as you can, then tell me the single place you think their argument breaks."
+   }
+  ]
+ },
+ "17": {
+  "id": 17,
+  "numbers": [
+   "38 scientists, including two Nobel laureates and 16 members of national academies, called for a halt to mirror bacteria research in Science on December 12, 2024 (Science, 2024)",
+   "Their warning rests on a roughly 300 page technical report on mirror bacteria feasibility and risks (Stanford Digital Repository, December 2024)",
+   "The authors estimate mirror bacteria could be built within the next 10 to 30 years (Science policy forum, 2024)",
+   "In 2019 the US National Science Foundation awarded about 4 million dollars to explore building a mirror cell, the only funded grant of its kind, and several of those researchers now oppose the work (reporting on the mirror life warning, 2024 to 2025)",
+   "Mirror bacteria could evade immune defenses and natural predators across humans, animals, and possibly plants, potentially spreading like an invasive species (Science and Think Global Health, 2024)"
+  ],
+  "quotes": [
+   {
+    "who": "Kate Adamala, synthetic biologist at the University of Minnesota, to the Bulletin of the Atomic Scientists (2024)",
+    "quote": "We should not be making mirror life. We have time for the conversation.",
+    "url": "https://thebulletin.org/2024/12/scientists-urge-halt-to-research-on-creating-synthetic-mirror-bacteria-that-could-evade-human-immunity-disrupt-ecosystems/"
+   },
+   {
+    "who": "Michael Kay, biochemist at the University of Utah (2024)",
+    "quote": "Once a mirror cell is made, it's going to be incredibly difficult to try to put that genie back in the bottle.",
+    "url": "https://singularityhub.com/2024/12/30/mirror-bacteria-could-wreak-havoc-on-life-and-the-environment-scientists-warn/"
+   },
+   {
+    "who": "Wilmot James and Patrick Cai, on the mirror bacteria threat, Think Global Health (2024)",
+    "quote": "Immune systems don't easily recognize or clear them out.",
+    "url": "https://www.thinkglobalhealth.org/article/mirror-life-addressing-potential-biothreat"
+   }
+  ],
+  "timeline": [
+   "2019: The NSF funds a roughly 4 million dollar project to explore whether a mirror cell can be built, with Kate Adamala among the principal investigators",
+   "2022: Researchers synthesize the mirror image of the 883 amino acid T7 RNA polymerase, a milestone toward mirror image molecular machinery",
+   "2023: Experts convene to weigh the risks and several researchers, including Adamala, change their minds about pursuing mirror cells",
+   "December 12, 2024: Confronting risks of mirror life appears in Science alongside the roughly 300 page technical report",
+   "2025: Wide coverage follows, including a CNN feature and podcast interviews with the researchers who reversed course"
+  ],
+  "misconceptions": [
+   "Mirror bacteria do not exist and, by the authors' own estimate, are at least a decade and likely 10 to 30 years away. This is a preemptive warning, not a present danger.",
+   "This is not mainly an AI story. The signatories' concern is chirality and synthetic biology, not chatbots. AI protein and ribosome design tools could speed up one bottleneck, but the scientists did not frame AI as the driver, so calling AI the tool that makes this possible overstates its current role.",
+   "Unstoppable is shorthand, not a proof. The claim is that mirror bacteria could evade immune systems and predators across many species, not that they would be literally invincible; whether defenses could be built is unknown."
+  ],
+  "skeptic_take": "Some scientists argue the alarm is premature and could chill legitimate mirror molecule research, such as durable mirror image drugs, that has real medical value. A working mirror organism is decades off and may hit unforeseen biological walls, for example needing mirror nutrients that do not exist in nature. On the video's specific hook, the sharper objection is that AI is not the near term bottleneck at all: the limiting step is the chemistry of building a mirror genome and a mirror ribosome, so leaning on AI as the trigger overstates its role.",
+  "guests": [
+   {
+    "name": "Kate Adamala",
+    "why": "University of Minnesota synthetic biologist and lead coauthor who abandoned her own mirror cell ambitions; the emotional center of the story and very media active, having appeared on the Guardian Science Weekly and The Cognitive Revolution podcasts and in CNN coverage.",
+    "ask": "You spent years wanting to build a mirror cell. What did you learn that made you spend the next years trying to stop it?"
+   },
+   {
+    "name": "James Smith",
+    "why": "Mirror biology researcher and coauthor of the technical report who left other work to focus on this threat and told the story on the 80,000 Hours podcast.",
+    "ask": "You have read all 300 pages. What is the single most convincing reason a mirror microbe could not be contained once it exists?"
+   },
+   {
+    "name": "Michael Kay",
+    "why": "University of Utah biochemist and signatory who builds mirror image molecules for medicine, so he can speak credibly to both the promise and the peril.",
+    "ask": "You use mirror image molecules to make better drugs. Where exactly is the line between the useful version and the catastrophic one?"
+   }
+  ]
+ },
+ "52": {
+  "id": 52,
+  "numbers": [
+   "The one sentence AI extinction statement was signed by roughly 350 AI researchers and executives at launch, including the CEOs of OpenAI, Google DeepMind, and Anthropic (Center for AI Safety press release, May 30, 2023)",
+   "The open letter calling for a six month pause on giant training runs beyond GPT4 drew more than 30,000 signatures, and no pause ever happened (Future of Life Institute, March 2023; FLI one year retrospective, 2024)",
+   "In the largest ever survey of published AI researchers, 2,778 respondents, the median answer put 5 percent probability on advanced AI causing human extinction or similarly permanent disempowerment (AI Impacts, 2023 Expert Survey on Progress in AI)",
+   "Anthropic CEO Dario Amodei has publicly estimated a 10 to 25 percent chance of catastrophe, and at the Axios AI+ DC Summit in September 2025 said there is a 25 percent chance things go really, really badly (Axios, September 17, 2025)",
+   "Daniel Kokotajlo walked away from OpenAI equity worth about 85 percent of his family's net worth, estimated at roughly 1.7 to 2 million dollars, rather than sign an agreement barring criticism of the company (his own public account, documented in the AI Whistleblower Initiative case study and Wikipedia, 2024)"
+  ],
+  "quotes": [
+   {
+    "quote": "Development of superhuman machine intelligence (SMI) is probably the greatest threat to the continued existence of humanity.",
+    "who": "Sam Altman, writing on his personal blog in February 2015, months before cofounding OpenAI",
+    "url": "https://blog.samaltman.com/machine-intelligence-part-1"
+   },
+   {
+    "quote": "The bad case is, like, lights out for all of us.",
+    "who": "Sam Altman, OpenAI CEO, in a StrictlyVC interview, January 2023",
+    "url": "https://www.lesswrong.com/posts/PTzsEQXkCfig9A6AS/transcript-of-sam-altman-s-interview-touching-on-ai-safety"
+   },
+   {
+    "quote": "I console myself with the normal excuse: If I hadn't done it, somebody else would have.",
+    "who": "Geoffrey Hinton, on leaving Google to warn about AI, to the New York Times, May 2023",
+    "url": "https://mindmatters.ai/2023/05/godfather-of-ai-i-regret-what-ive-done/"
+   },
+   {
+    "quote": "We are concerned about late-stage AGI development becoming a competitive race without time for adequate safety precautions.",
+    "who": "OpenAI's own founding Charter, published 2018",
+    "url": "https://openai.com/charter/"
+   },
+   {
+    "quote": "Mitigating the risk of extinction from AI should be a global priority alongside other societal-scale risks such as pandemics and nuclear war.",
+    "who": "Statement on AI Risk, signed by Sam Altman, Demis Hassabis, Dario Amodei, Geoffrey Hinton, Yoshua Bengio and hundreds more",
+    "url": "https://aistatement.com/"
+   }
+  ],
+  "timeline": [
+   "February 2015: Sam Altman publishes a blog post calling superhuman machine intelligence probably the greatest threat to humanity's continued existence, then cofounds OpenAI ten months later",
+   "December 2015: OpenAI is founded as a nonprofit whose stated mission is to make sure AGI benefits all of humanity",
+   "March 2023: A week after GPT4 ships, the Future of Life Institute letter asks for a six month pause on bigger training runs; over 30,000 people sign, including Bengio, Musk, and Wozniak; nobody pauses",
+   "May 2023: Geoffrey Hinton quits Google to speak freely (May 1); Altman tells the US Senate that if this technology goes wrong, it can go quite wrong (May 16); the extinction statement is published with the CEOs of OpenAI, Google DeepMind, and Anthropic as signatories (May 30)",
+   "September 2025: Dario Amodei restates a 25 percent chance things go really, really badly at the Axios summit, while Anthropic keeps scaling as fast as it can"
+  ],
+  "misconceptions": [
+   "People say the 2023 letter demanded stopping AI entirely. It asked only for a six month pause on training runs more powerful than GPT4, and explicitly said AI development in general should continue",
+   "People say only a fringe of doomers worries about extinction. The median respondent in the largest survey of 2,778 published AI researchers put 5 percent on extinction level outcomes, and the extinction statement was signed by two of the three most cited AI scientists alive plus the CEOs themselves",
+   "People say the CEO warnings are pure hype to sell products or capture regulators. Whatever role marketing plays now, the warnings predate the products: Altman wrote his in 2015 before OpenAI existed, and Hinton gave up his Google position and Kokotajlo gave up most of his net worth to say it. Sincerity and correctness are separate questions, but the pure marketing story does not fit the record"
+  ],
+  "skeptic_take": "Princeton computer scientists Arvind Narayanan and Sayash Kapoor argue in AI as Normal Technology (Knight First Amendment Institute, 2025) that the premise is wrong: AI diffuses slowly like past general purpose technologies, extinction scenarios rest on speculative capability jumps rather than evidence, and treating executives' doom talk as revealed truth mistakes ideology and marketing for science. On this view there is no cliff, so the race framing itself misleads.",
+  "guests": [
+   {
+    "name": "Daniel Kokotajlo",
+    "why": "Former OpenAI governance researcher who forfeited about 85 percent of his family's net worth to keep the right to criticize the company, lead author of AI 2027; does podcasts regularly (GZERO World with Ian Bremmer, 80,000 Hours)",
+    "ask": "You watched the race dynamic from inside OpenAI. What would it actually take, mechanically, for the companies to stop, and who would have to move first?"
+   },
+   {
+    "name": "Liron Shapira",
+    "why": "Host of Doom Debates, a podcast built entirely around this exact question, with 180+ episodes debating researchers and skeptics; extremely gettable for creator collabs",
+    "ask": "After 180 debates, what is the single best argument you have heard for continuing to build, and where does it break?"
+   },
+   {
+    "name": "Connor Leahy",
+    "why": "CEO of Conjecture and a constant presence on AI podcasts and TV segments arguing the race should be halted; gives sharp, quotable answers",
+    "ask": "You say racing to superintelligence is suicidal. What coordination mechanism could realistically stop a race between companies and between the US and China?"
+   }
+  ]
+ },
+ "54": {
+  "id": 54,
+  "numbers": [
+   "The global nuclear stockpile peaked around 70,300 warheads in 1986 and stands near 12,300 in early 2026 (Federation of American Scientists, Status of World Nuclear Forces)",
+   "On October 27, 1962, three officers aboard a nuclear armed Soviet submarine near Cuba had to agree unanimously to fire a nuclear torpedo; Vasili Arkhipov was the one vote that said no (National Security Archive, The Underwater Cuban Missile Crisis)",
+   "On September 26, 1983, Soviet early warning satellites reported five US missiles inbound; duty officer Stanislav Petrov judged it a computer error, and the cause turned out to be sunlight glinting off high clouds (Arms Control Association; Wikipedia, 1983 Soviet nuclear false alarm incident)",
+   "President Kennedy privately put the odds of war during the Cuban missile crisis at somewhere between one in three and even (account of his aide Theodore Sorensen, reported by the Harvard Gazette)",
+   "The modern echo: the median respondent among 2,778 published AI researchers put a 5 percent chance on advanced AI causing human extinction or similar (AI Impacts, 2023 Expert Survey on Progress in AI)"
+  ],
+  "quotes": [
+   {
+    "quote": "Now, I am become Death, the destroyer of worlds.",
+    "who": "J. Robert Oppenheimer, recalling the Bhagavad Gita line that came to him at the Trinity test",
+    "url": "https://www.atomicarchive.com/media/videos/oppenheimer.html"
+   },
+   {
+    "quote": "somewhere between one out of three and even",
+    "who": "John F. Kennedy, his private estimate of the odds of war during the Cuban missile crisis, as recounted by aide Theodore Sorensen",
+    "url": "https://news.harvard.edu/gazette/story/2007/10/jfk-and-the-cuban-missile-crisis-a-new-assessment/"
+   },
+   {
+    "quote": "When I talk to the leading researchers in the field of AI right now, for example, they literally refer to this, right now, as their Oppenheimer moment.",
+    "who": "Christopher Nolan, director of Oppenheimer, July 2023",
+    "url": "https://www.euronews.com/culture/2023/07/18/christopher-nolan-warns-that-ai-is-reaching-its-oppenheimer-moment"
+   },
+   {
+    "quote": "Mitigating the risk of extinction from AI should be a global priority alongside other societal-scale risks such as pandemics and nuclear war.",
+    "who": "Statement on AI Risk, May 2023, signed by the leaders of OpenAI, Google DeepMind, and Anthropic, who chose the nuclear comparison themselves",
+    "url": "https://aistatement.com/"
+   }
+  ],
+  "timeline": [
+   "July 16, 1945: The Trinity test in New Mexico; beforehand, Manhattan Project physicists ran calculations on whether the bomb could ignite the atmosphere, later written up in report LA 602",
+   "August 6 and 9, 1945: Hiroshima and Nagasaki, the only wartime use of nuclear weapons in history",
+   "October 27, 1962: US destroyers drop signaling charges on a nuclear armed Soviet submarine near Cuba; its captain prepares a nuclear torpedo, believing war has begun, and Arkhipov talks him down",
+   "September 26, 1983: Petrov declines to pass the five missile warning up the Soviet chain of command, weeks after the Soviets shot down a Korean airliner and at a peak of tension",
+   "May 30, 2023: The builders of AI publish a statement putting their own technology alongside nuclear war as an extinction risk"
+  ],
+  "misconceptions": [
+   "People say the Manhattan Project scientists accepted a one in three million chance of igniting the atmosphere. That number traces to a later Arthur Compton interview retelling; Hans Bethe, who checked the physics, said the calculations showed ignition could not happen and rejected the odds figure (Scientific American blog on Bethe, Teller and Trinity; Physics Today)",
+   "People say the Cuban missile crisis proves cool statecraft handles world ending technology. Kennedy never even knew about the submarine standoff; the closest call of the crisis was resolved by one officer's judgment and luck, which is the opposite of a controlled process (National Security Archive)",
+   "People say Petrov pressed a button that stopped a launch. He actually declined to forward an automated warning up the chain, trusting human judgment over a machine's report, which is exactly the safeguard experts warn gets lost as nuclear warning and decision tools become more automated"
+  ],
+  "skeptic_take": "Arms control scholars argue the analogy is deeply flawed: nuclear weapons are single purpose destructive devices with rare, trackable inputs, while AI is a general purpose technology with diffuse benefits and millions of users, so nuclear style nonproliferation, deterrence, and taboo logic mostly does not transfer, and leaning on the analogy inflates confidence that AI can be governed the same way (argued in AI Frontiers, Nuclear Non-Proliferation Is the Wrong Framework for AI Governance, and in the Bulletin of the Atomic Scientists, AI and the A-bomb, 2024).",
+  "guests": [
+   {
+    "name": "Annie Jacobsen",
+    "why": "Author of Nuclear War: A Scenario, a bestseller reconstructing a nuclear exchange minute by minute; highly media active, including a three hour Lex Fridman episode (number 420, March 2024)",
+    "ask": "Your book gives the president six minutes to decide. What does that fragility teach us about wiring machine intelligence into military decisions?"
+   },
+   {
+    "name": "Jeffrey Lewis",
+    "why": "Middlebury Institute arms control professor, founder of Arms Control Wonk, the leading nuclear policy blog and podcast; does frequent TV and podcast appearances and speaks vividly about near misses",
+    "ask": "Which nuclear age institution actually worked well enough that the AI world should copy it, and which one is a cautionary tale?"
+   },
+   {
+    "name": "Carl Robichaud",
+    "why": "Leads nuclear weapons policy grantmaking at Longview Philanthropy after a decade at Carnegie Corporation, and works across both nuclear and AI risk; appeared on the 80,000 Hours podcast to discuss nuclear close calls",
+    "ask": "You fund work on both nuclear and AI risk. Where does the analogy genuinely hold, and where does it break down?"
+   }
+  ]
+ },
+ "61": {
+  "id": 61,
+  "numbers": [
+   "10% to 20%: Hinton's estimate of the chance AI leads to human extinction within 30 years, up from around 10% earlier (BBC Radio 4 Today interview, December 2024, reported by The Guardian and ZME Science)",
+   "$44 million: what Google paid in an auction for DNNresearch, the three person startup of Hinton and his students Ilya Sutskever and Alex Krizhevsky, with Baidu and Microsoft also bidding (reported in Cade Metz's book Genius Makers; the University of Toronto announced the acquisition in March 2013)",
+   "10 years: how long Hinton worked at Google before quitting at age 75 in May 2023 (Fortune, May 1, 2023)",
+   "22 words: the entire length of the Statement on AI Risk that Hinton signed at the top of the list alongside hundreds of AI researchers and executives (Center for AI Safety, May 30, 2023)",
+   "Two of the field's biggest honors: the 2018 Turing Award shared with Yoshua Bengio and Yann LeCun (ACM), and the 2024 Nobel Prize in Physics shared with John Hopfield (Nobel Foundation, October 2024)"
+  ],
+  "quotes": [
+   {
+    "quote": "I console myself with the normal excuse: If I hadn't done it, somebody else would have.",
+    "who": "Geoffrey Hinton, to the New York Times, May 2023",
+    "url": "https://fortune.com/2023/05/01/godfather-ai-geoffrey-hinton-quit-google-regrets-lifes-work-bad-actors/"
+   },
+   {
+    "quote": "It is hard to see how you can prevent the bad actors from using it for bad things.",
+    "who": "Geoffrey Hinton, to the New York Times, May 2023",
+    "url": "https://fortune.com/2023/05/01/godfather-ai-geoffrey-hinton-quit-google-regrets-lifes-work-bad-actors/"
+   },
+   {
+    "quote": "You see, we've never had to deal with things more intelligent than ourselves before.",
+    "who": "Geoffrey Hinton, BBC Radio 4 Today programme, December 2024",
+    "url": "https://www.zmescience.com/science/news-science/ai-risks-hinton-warnings/"
+   },
+   {
+    "quote": "I like to think of it as: imagine yourself and a three-year-old. We'll be the three-year-olds",
+    "who": "Geoffrey Hinton, BBC Radio 4 Today programme, December 2024",
+    "url": "https://www.zmescience.com/science/news-science/ai-risks-hinton-warnings/"
+   },
+   {
+    "quote": "Mitigating the risk of extinction from AI should be a global priority alongside other societal-scale risks such as pandemics and nuclear war.",
+    "who": "Statement on AI Risk, signed first by Geoffrey Hinton",
+    "url": "https://safe.ai/work/statement-on-ai-risk"
+   }
+  ],
+  "timeline": [
+   "2012: Hinton's students Alex Krizhevsky and Ilya Sutskever win the ImageNet contest with the neural network AlexNet, and Google buys their startup DNNresearch after a $44 million auction (announced March 2013)",
+   "May 1, 2023: The New York Times reveals Hinton has quit Google to speak freely about AI dangers; he says he once thought smarter than human AI was 30 to 50 years away and 'Obviously, I no longer think that'",
+   "May 30, 2023: Hinton is the first name on the 22 word Statement on AI Risk, which puts extinction from AI alongside pandemics and nuclear war (Center for AI Safety)",
+   "October 8, 2024: Hinton wins the Nobel Prize in Physics with John Hopfield for foundational discoveries that made machine learning with artificial neural networks possible",
+   "December 2024: On BBC Radio 4, Hinton raises his estimate of AI causing human extinction within 30 years to 10% to 20%, saying humans will be like toddlers next to it"
+  ],
+  "misconceptions": [
+   "People assume Hinton quit to attack Google. Wrong: he tweeted the day the story ran that he left so he could talk about the dangers of AI without considering how it impacts Google, and said Google had acted very responsibly. The target of his warning is the technology and the race, not his former employer.",
+   "People assume he called his life's work a mistake. The reality is more nuanced: his actual line was that he consoles himself with the normal excuse that someone else would have done it, and he has repeatedly said nobody could have known progress would accelerate like this. He wants safety work and regulation, not a halt to AI.",
+   "People assume his warning is one scenario about killer robots. Wrong: he separates near term misuse by bad actors, meaning disinformation, cyberattacks, autonomous weapons and job losses, from the longer term risk of losing control of something smarter than us. The famous 10% to 20% number refers only to the second."
+  ],
+  "skeptic_take": "Yann LeCun, who shared the 2018 Turing Award with Hinton, calls the accidental runaway superintelligence scenario 'just preposterous' (Fortune, June 2023). His argument: doomers extrapolate from chatbots that sometimes spew nonsense to an imagined future intelligence, but today's models are less capable than a cat, have no desires of their own, and intelligence will arrive incrementally, giving engineers time to build in safeguards the same way we did for aviation.",
+  "guests": [
+   {
+    "name": "Geoffrey Hinton",
+    "why": "The subject himself gives frequent long interviews to creators and podcasts, including 60 Minutes and The Diary of a CEO in 2025, and is reachable through the University of Toronto, so he is a realistic get for an established channel.",
+    "ask": "You worked on neural networks for 50 years. What exactly did you see in early 2023 that flipped you from builder to alarm ringer?"
+   },
+   {
+    "name": "Cade Metz",
+    "why": "The New York Times reporter who broke the resignation story and wrote Genius Makers, the book documenting the $44 million auction; a frequent podcast and television guest who can narrate the whole arc firsthand.",
+    "ask": "What did Hinton tell you in that interview that did not make it into the story?"
+   },
+   {
+    "name": "Nick Frosst",
+    "why": "Hinton's former student and a cofounder of the AI company Cohere who publicly disagrees with his mentor's extinction warnings; media active in interviews and panels, and brings built in dramatic tension.",
+    "ask": "Your mentor puts the chance of AI causing human extinction at 10% to 20%. Where exactly does his reasoning go wrong?"
+   }
+  ]
+ },
+ "64": {
+  "id": 64,
+  "numbers": [
+   "Median 5 percent chance of extinction level outcomes from advanced AI among 2,778 published AI researchers (AI Impacts, Thousands of AI Authors on the Future of AI, published January 2024)",
+   "AI domain experts put a median 3 percent on AI caused extinction by 2100; superforecasters put 0.38 percent (Forecasting Research Institute, Existential Risk Persuasion Tournament, 2023)",
+   "Geoffrey Hinton puts a 10 to 20 percent chance on AI leading to human extinction within 30 years (BBC Radio 4 Today programme, December 2024)",
+   "All 16 frontier models tested, from Anthropic, OpenAI, Google, Meta and xAI, chose blackmail in at least some runs of a contrived corporate test, and Claude Opus 4 did so in 96 percent of trials (Anthropic, Agentic Misalignment, June 2025)",
+   "More than 100 AI professors, including the two most cited computer scientists Hinton and Bengio, plus the CEOs of OpenAI, Google DeepMind and Anthropic, signed the Statement on AI Risk (Center for AI Safety, May 2023)"
+  ],
+  "quotes": [
+   {
+    "quote": "Mitigating the risk of extinction from AI should be a global priority alongside other societal-scale risks such as pandemics and nuclear war.",
+    "who": "The full text of the Statement on AI Risk, signed by Hinton, Bengio, Altman, Hassabis and Amodei among hundreds of others",
+    "url": "https://safe.ai/work/press-release-ai-risk"
+   },
+   {
+    "quote": "just preposterous ... not the way anything works in the world",
+    "who": "Yann LeCun, Meta's chief AI scientist, on the idea that a superintelligent AI would escape human control",
+    "url": "https://fortune.com/2023/06/14/metas-chief-a-i-scientist-calls-a-i-doomers-preposterous-and-predicts-llms-are-just-a-passing-fad/"
+   },
+   {
+    "quote": "There are definitely large tech companies that would rather not have to try to compete with open source [AI], so they're creating fear of AI leading to human extinction.",
+    "who": "Andrew Ng, Google Brain founder and Stanford professor, October 2023",
+    "url": "https://siliconangle.com/2023/10/31/google-brain-founder-andrew-ng-says-threat-ai-causing-human-extinction-overblown/"
+   },
+   {
+    "quote": "We need to be having the conversations that nuclear scientists were having before the creation of the atomic bomb.",
+    "who": "Dan Hendrycks, director of the Center for AI Safety, in the press release for the Statement on AI Risk",
+    "url": "https://safe.ai/work/press-release-ai-risk"
+   }
+  ],
+  "timeline": [
+   "March 2023: The Future of Life Institute publishes an open letter calling for a six month pause on training the most powerful AI models, signed by Elon Musk and Steve Wozniak among thousands",
+   "May 2023: Geoffrey Hinton quits Google so he can speak freely about the risks; weeks later, on May 30, the one sentence Statement on AI Risk lands with Hinton, Bengio, Altman and Amodei among the signatories",
+   "June 2023: Yann LeCun tells the BBC that fears of AI wiping out humanity are preposterous, making the split among the field's pioneers headline news",
+   "October 2024: Hinton wins the Nobel Prize in Physics for his neural network work and uses the platform to repeat his warnings",
+   "June 2025: Anthropic publishes agentic misalignment tests in which all 16 frontier models from five companies chose blackmail in at least some runs of contrived scenarios"
+  ],
+  "misconceptions": [
+   "Wrong: the extinction warnings are just marketing by AI companies. Correction: the most cited voices are academics with nothing to sell; Hinton gave up his Google position specifically so he could warn freely, Bengio is a university professor, and a survey of 2,778 published researchers put the median extinction chance at 5 percent, so the concern is not confined to CEOs",
+   "Wrong: no AI has ever actually done anything alarming. Correction: in controlled tests published by Anthropic in June 2025, every one of 16 frontier models from five different companies chose harmful actions like blackmail in at least some runs; the scenarios were contrived and nothing happened in real deployments, but the behavior is documented, not hypothetical",
+   "Wrong: worrying about extinction means ignoring today's harms. Correction: the same researcher survey that found the 5 percent median also found widespread substantial concern about disinformation, deepfakes and AI helping dangerous groups build weapons; for most researchers it is both, not either or"
+  ],
+  "skeptic_take": "Arvind Narayanan and Sayash Kapoor's essay AI as Normal Technology (Knight First Amendment Institute, April 2025) is the strongest version: AI spreads slowly through the economy the way electricity did, humans decide what gets deployed and keep control, and the extinction scenarios depend on speculative jumps in autonomy and capability that current evidence does not support, while doom framing conveniently helps big incumbents win regulation that crushes smaller competitors, a point Andrew Ng also presses.",
+  "guests": [
+   {
+    "name": "Arvind Narayanan",
+    "why": "Princeton computer science professor, coauthor of AI Snake Oil and the AI as Normal Technology essay; does frequent podcasts and interviews and is the most rigorous version of the skeptic case",
+    "ask": "You call AI a normal technology. What specific piece of evidence would make you change your mind and treat it as abnormal?"
+   },
+   {
+    "name": "Melanie Mitchell",
+    "why": "Santa Fe Institute professor and prominent, fair minded skeptic of extinction claims; a regular guest on science podcasts like Mindscape and Machine Learning Street Talk",
+    "ask": "Walk me through exactly where the doom argument chain breaks for you: capability, motive, or opportunity?"
+   },
+   {
+    "name": "Dan Hendrycks",
+    "why": "Director of the Center for AI Safety, which organized the extinction statement; media active, with many podcast and press appearances",
+    "ask": "Critics say your statement was marketing for the big AI companies. Who actually signed it, and what do the academics get out of it?"
+   }
+  ]
+ }
+}

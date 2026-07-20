@@ -1,0 +1,5 @@
+fastapi
+uvicorn[standard]
+anthropic>=0.40
+yt-dlp
+youtube-transcript-api

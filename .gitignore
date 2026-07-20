@@ -1,0 +1,40 @@
+# --- secrets: never commit real credentials ---
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+service-account*.json
+gha-creds-*.json
+
+# --- firebase deploy cache ---
+.firebase/
+frontend/species-web-deploy/.firebase/
+firebase-debug.log
+
+# --- railway ---
+.railway/
+
+# --- python ---
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+
+# --- runtime data / logs ---
+backend/events.jsonl
+*.log
+
+# --- dev backups / scratch (kept out of the public repo) ---
+*.bak
+*.prebio.json
+*.precausecut.json
+*.prequalitypass.json
+*.backup.*.json
+creator_page_backups/
+
+# --- os / editor ---
+.DS_Store
+.vscode/
+.idea/

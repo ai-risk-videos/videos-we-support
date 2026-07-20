@@ -1,0 +1,702 @@
+[
+ {
+  "id": "bio--01-can-large-language-models-design-biologi",
+  "title": "Can Large Language Models Design Biological Weapons?",
+  "who": "arXiv",
+  "year": "2025",
+  "url": "https://arxiv.org/abs/2505.17154",
+  "shows": "Researchers got an AI to generate over a thousand toxic proteins resembling known toxins like ricin.",
+  "cat": "bio-risk",
+  "kind": "research-paper"
+ },
+ {
+  "id": "bio--02-tokyo-subway-attack-of-1995",
+  "title": "Tokyo subway attack of 1995",
+  "who": "Encyclopedia Britannica",
+  "year": "1995",
+  "url": "https://www.britannica.com/event/Tokyo-subway-attack-of-1995",
+  "shows": "An encyclopedia account of the 1995 sarin gas attack on the Tokyo subway by a doomsday cult.",
+  "cat": "bio-risk",
+  "kind": "other"
+ },
+ {
+  "id": "expe-11-statement-on-ai-risk-press-release",
+  "title": "Statement on AI Risk press release",
+  "who": "Center for AI Safety",
+  "year": "2023",
+  "url": "https://safe.ai/work/press-release-ai-risk",
+  "shows": "The press release for the one sentence statement calling extinction from AI a global priority alongside pandemics and nuclear war.",
+  "cat": "expert-warnings",
+  "kind": "official-report"
+ },
+ {
+  "id": "bio--03-american-journal-of-bioethics-article-ci",
+  "title": "American Journal of Bioethics article citing the ICRC",
+  "who": "American Journal of Bioethics",
+  "year": "2009",
+  "url": "https://www.jstor.org/stable/27720364",
+  "shows": "A peer reviewed article quotes the Red Cross warning that viruses able to target people selectively were probably not far off.",
+  "cat": "bio-risk",
+  "kind": "research-paper"
+ },
+ {
+  "id": "bio--04-icrc-international-review-on-biological-",
+  "title": "ICRC International Review on biological weapons",
+  "who": "International Committee of the Red Cross",
+  "year": "",
+  "url": "https://international-review.icrc.org/sites/default/files/S1560775500104249a.pdf",
+  "shows": "The Red Cross warned about the possibility of ethnically or racially specific biological agents.",
+  "cat": "bio-risk",
+  "kind": "official-report"
+ },
+ {
+  "id": "bio--05-bma-warning-that-genetic-weapons-are-app",
+  "title": "BMA warning that genetic weapons are approaching reality",
+  "who": "The Guardian",
+  "year": "2004",
+  "url": "https://www.theguardian.com/science/2004/oct/28/thisweekssciencequestions.weaponstechnology",
+  "shows": "The British Medical Association said ethnically targeted genetic weapons were approaching reality.",
+  "cat": "bio-risk",
+  "kind": "news"
+ },
+ {
+  "id": "bio--06-dozens-of-top-scientists-sign-effort-to-",
+  "title": "Dozens of Top Scientists Sign Effort to Prevent A.I. Bioweapons",
+  "who": "New York Times",
+  "year": "2024",
+  "url": "https://www.nytimes.com/2024/03/08/technology/biologists-ai-agreement-bioweapons.html",
+  "shows": "Dozens of top scientists signed a pledge to keep AI from being used to build biological weapons.",
+  "cat": "bio-risk",
+  "kind": "news"
+ },
+ {
+  "id": "bio--07-written-testimony-of-dario-amodei-senate",
+  "title": "Written testimony of Dario Amodei, Senate Judiciary Committee",
+  "who": "Dario Amodei / Senate Judiciary Committee",
+  "year": "2023",
+  "url": "https://www.judiciary.senate.gov/imo/media/doc/2023-07-26_-_testimony_-_amodei.pdf",
+  "shows": "Anthropic's chief executive told the Senate that near future AI could help many more people carry out large biological attacks.",
+  "cat": "bio-risk",
+  "kind": "official-report"
+ },
+ {
+  "id": "bio--08-senate-judiciary-hearing-on-ai-oversight",
+  "title": "Senate Judiciary hearing on AI oversight (video)",
+  "who": "Senate Judiciary Committee",
+  "year": "2023",
+  "url": "https://www.youtube.com/watch?v=hm1zexCjELo",
+  "shows": "Video of the Senate hearing where Anthropic's chief executive testified about AI and bioweapon risk.",
+  "cat": "bio-risk",
+  "kind": "video"
+ },
+ {
+  "id": "bio--09-kevin-esvelt-post-on-ai-and-pandemics",
+  "title": "Kevin Esvelt post on AI and pandemics",
+  "who": "Kevin Esvelt",
+  "year": "2023",
+  "url": "https://twitter.com/kesvelt/status/1720440451059335520",
+  "shows": "A post by an MIT biosecurity scientist used to underline how AI could spread dangerous pandemic knowledge.",
+  "cat": "bio-risk",
+  "kind": "expert-quote"
+ },
+ {
+  "id": "bio--10-covid-half-of-europe-to-be-infected-with",
+  "title": "Covid: Half of Europe to be infected with Omicron within weeks - WHO",
+  "who": "BBC",
+  "year": "2022",
+  "url": "https://www.bbc.com/news/world-europe-59948920",
+  "shows": "The World Health Organization warned that half of Europe could catch the Omicron variant within weeks.",
+  "cat": "bio-risk",
+  "kind": "news"
+ },
+ {
+  "id": "bio--11-weaponized-ebola-is-it-really-a-bioterro",
+  "title": "Weaponized Ebola: Is It Really a Bioterror Threat?",
+  "who": "Scientific American",
+  "year": "2014",
+  "url": "https://www.scientificamerican.com/article/weaponized-ebola-is-it-really-a-bioterror-threat/",
+  "shows": "An explainer on whether Ebola could realistically be turned into a bioterror weapon.",
+  "cat": "bio-risk",
+  "kind": "news"
+ },
+ {
+  "id": "bio--12-implications-of-the-pandemic-for-terrori",
+  "title": "Implications of the Pandemic for Terrorist Interest in Biological Weapons",
+  "who": "RAND Corporation",
+  "year": "2021",
+  "url": "https://www.rand.org/pubs/research_reports/RRA612-1.html",
+  "shows": "A RAND study on how the pandemic could raise terrorist interest in biological weapons.",
+  "cat": "bio-risk",
+  "kind": "official-report"
+ },
+ {
+  "id": "bio--13-terrorist-groups-spin-covid-19-as-god-s-",
+  "title": "Terrorist groups spin COVID-19 as God's 'smallest soldier' attacking West",
+  "who": "ABC News",
+  "year": "2020",
+  "url": "https://abcnews.go.com/International/terrorist-groups-spin-covid-19-gods-smallest-soldier/story?id=69930563",
+  "shows": "A report on how terrorist groups framed COVID as a weapon striking the West.",
+  "cat": "bio-risk",
+  "kind": "news"
+ },
+ {
+  "id": "bio--14-will-releasing-the-weights-of-future-lar",
+  "title": "Will releasing the weights of future large language models grant widespread access to pandemic agents?",
+  "who": "Anjali Gopal, Kevin Esvelt et al. (MIT / SecureBio)",
+  "year": "2023",
+  "url": "https://arxiv.org/pdf/2310.18233",
+  "shows": "Researchers warn that releasing open model weights could give the public step by step access to pandemic capable agents even after safety fine tuning.",
+  "cat": "bio-risk",
+  "kind": "research-paper"
+ },
+ {
+  "id": "bio--15-andrew-white-post-on-chemcrow",
+  "title": "Andrew White post on ChemCrow",
+  "who": "Andrew White",
+  "year": "2023",
+  "url": "https://twitter.com/andrewwhite01/status/1670794000398184451",
+  "shows": "A post by the ChemCrow author about giving AI the ability to use chemistry tools.",
+  "cat": "bio-risk",
+  "kind": "expert-quote"
+ },
+ {
+  "id": "bio--16-survey-of-laboratory-acquired-infections",
+  "title": "Survey of laboratory-acquired infections in biosafety level 3 and 4 laboratories",
+  "who": "National Library of Medicine (PMC)",
+  "year": "2016",
+  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7088173/",
+  "shows": "A survey of infections caught by workers in the world's highest security biosafety labs.",
+  "cat": "bio-risk",
+  "kind": "research-paper"
+ },
+ {
+  "id": "bio--17-report-on-potential-links-between-the-wu",
+  "title": "Report on Potential Links Between the Wuhan Institute of Virology and the Origins of COVID-19",
+  "who": "Office of the Director of National Intelligence",
+  "year": "2023",
+  "url": "https://www.dni.gov/files/ODNI/documents/assessments/Report-on-Potential-Links-Between-the-Wuhan-Institute-of-Virology-and-the-Origins-of-COVID-19-20230623.pdf",
+  "shows": "A US intelligence assessment on possible links between the Wuhan lab and the origin of COVID.",
+  "cat": "bio-risk",
+  "kind": "official-report"
+ },
+ {
+  "id": "jobs-24-coronavirus-costs-the-us-20-5-million-jo",
+  "title": "Coronavirus costs the US 20.5 million jobs in April, unemployment soars to 14.7",
+  "who": "MarketWatch",
+  "year": "2020",
+  "url": "https://www.marketwatch.com/story/coronavirus-costs-the-us-205-million-jobs-in-april-unemployment-soars-to-147-2020-05-08",
+  "shows": "Even as unemployment soared in April 2020, stock markets rallied.",
+  "cat": "jobs-economy",
+  "kind": "news"
+ },
+ {
+  "id": "bio--18-ai-in-biology-science-paper",
+  "title": "AI in biology Science paper",
+  "who": "Science",
+  "year": "2025",
+  "url": "https://www.science.org/doi/10.1126/science.ads9158",
+  "shows": "A Science paper cited in the video's discussion of AI applied to biology.",
+  "cat": "bio-risk",
+  "kind": "research-paper"
+ },
+ {
+  "id": "bio--19-ai-designs-40000-possible-chemical-weapo",
+  "title": "AI designs 40000 possible chemical weapons",
+  "who": "BBC",
+  "year": "2022",
+  "url": "https://www.bbc.com/news/technology-60796079",
+  "shows": "A drug discovery AI was flipped to design tens of thousands of possible chemical weapons in hours.",
+  "cat": "bio-risk",
+  "kind": "news"
+ },
+ {
+  "id": "expe-93-the-adolescence-of-technology",
+  "title": "The Adolescence of Technology",
+  "who": "Dario Amodei",
+  "year": "2026-01",
+  "url": "https://darioamodei.com/essay/the-adolescence-of-technology",
+  "shows": "In a 19,000 word essay Amodei warns powerful AI could arrive within one to two years and lays out risks including autonomous systems, bioweapons misuse and AI enabled totalitarian power grabs, calling it a rite of passage that will test humanity as a species.",
+  "cat": "expert-warnings",
+  "kind": "blog"
+ },
+ {
+  "id": "inci-38-activating-ai-safety-level-3-protections",
+  "title": "Activating AI Safety Level 3 protections",
+  "who": "Anthropic",
+  "year": "2025-05",
+  "url": "https://www.anthropic.com/news/activating-asl3-protections",
+  "shows": "Anthropic turned on its strongest safeguards for Claude Opus 4 because it could no longer rule out that the model could uplift someone with a basic science background toward building chemical or biological weapons.",
+  "cat": "incidents",
+  "kind": "official-report"
+ },
+ {
+  "id": "bio--20-why-do-we-take-llms-seriously-as-a-poten",
+  "title": "Why do we take LLMs seriously as a potential source of biorisk?",
+  "who": "Anthropic Frontier Red Team",
+  "year": "2025-09",
+  "url": "https://www.anthropic.com/research/biorisk",
+  "shows": "Controlled trials found that people given Claude 4 wrote bioweapon acquisition plans with far fewer fatal mistakes than a group using only the internet.",
+  "cat": "bio-risk",
+  "kind": "official-report"
+ },
+ {
+  "id": "bio--21-exclusive-new-claude-model-triggers-safe",
+  "title": "Exclusive: New Claude Model Triggers Safeguards at Anthropic",
+  "who": "TIME",
+  "year": "2025-05",
+  "url": "https://time.com/7287806/anthropic-claude-4-opus-safety-bio-risk/",
+  "shows": "Anthropic told TIME that a new Claude model performed well enough on bioweapon tasks to trigger internal biosecurity safeguards for the first time.",
+  "cat": "bio-risk",
+  "kind": "news"
+ },
+ {
+  "id": "bio--22-introducing-chatgpt-agent",
+  "title": "Introducing ChatGPT agent",
+  "who": "OpenAI",
+  "year": "2025-07",
+  "url": "https://openai.com/index/introducing-chatgpt-agent/",
+  "shows": "OpenAI classified its ChatGPT agent as high capability for biological and chemical risk and switched on bioweapon safeguards as a precaution.",
+  "cat": "bio-risk",
+  "kind": "blog"
+ },
+ {
+  "id": "bio--23-chatgpt-agent-setting-industry-leading-e",
+  "title": "ChatGPT Agent Setting Industry Leading Example for Biosecurity Safeguards",
+  "who": "Nuclear Threat Initiative (NTI)",
+  "year": "2025",
+  "url": "https://www.nti.org/risky-business/chatgpt-agent-setting-industry-leading-example-for-biosecurity-safeguards/",
+  "shows": "A biosecurity nonprofit reviews how OpenAI built always on classifiers and expert monitoring to block the ChatGPT agent from aiding bioweapon creation.",
+  "cat": "bio-risk",
+  "kind": "blog"
+ },
+ {
+  "id": "bio--24-can-large-language-models-democratize-ac",
+  "title": "Can large language models democratize access to dual-use biotechnology?",
+  "who": "Emily Soice, Kevin Esvelt et al. (MIT)",
+  "year": "2023",
+  "url": "https://arxiv.org/abs/2306.03809",
+  "shows": "MIT researchers showed that within one hour chatbots walked non scientists through choosing pandemic pathogens and ordering synthetic DNA from companies unlikely to screen it.",
+  "cat": "bio-risk",
+  "kind": "research-paper"
+ },
+ {
+  "id": "bio--25-preparedness-framework-version-2",
+  "title": "Preparedness Framework Version 2",
+  "who": "OpenAI",
+  "year": "2025-04",
+  "url": "https://cdn.openai.com/pdf/18a02b5d-6b67-4cec-ab64-68cdfbddebcd/preparedness-framework-v2.pdf",
+  "shows": "OpenAI's updated risk policy defines the high biological threshold as meaningfully helping a novice create a known biological threat and says its models are on the cusp of crossing it.",
+  "cat": "bio-risk",
+  "kind": "official-report"
+ },
+ {
+  "id": "bio--26-ai-might-help-unleash-the-next-pandemic-",
+  "title": "AI might help unleash the next pandemic, MIT study says",
+  "who": "The Boston Globe",
+  "year": "2023",
+  "url": "https://www.bostonglobe.com/2023/06/28/business/ai-might-help-unleash-next-pandemic-mit-study-says/",
+  "shows": "MIT gave non scientist students one hour with chatbots, and the bots handed over four possible pandemic viruses plus the names of companies unlikely to screen a suspicious DNA order.",
+  "cat": "bio-risk",
+  "kind": "news"
+ },
+ {
+  "id": "bio--27-ex-google-ceo-makes-prediction-about-the",
+  "title": "Ex-Google CEO makes prediction about the future of Artificial Intelligence",
+  "who": "CNN",
+  "year": "2023",
+  "url": "https://www.cnn.com/videos/tech/2023/09/03/fareed-zakaria-gps-artificial-intelligence-history-vpx.cnn",
+  "shows": "Former Google CEO Eric Schmidt warned on CNN that open source AI could hand an Osama bin Laden type a pathogen capable of killing a million people.",
+  "cat": "bio-risk",
+  "kind": "video"
+ },
+ {
+  "id": "bio--28-ai-executives-make-rare-collective-warni",
+  "title": "AI executives make rare collective warning on bioweapons threat",
+  "who": "Semafor",
+  "year": "2026",
+  "url": "https://www.semafor.com/article/06/04/2026/ai-executives-make-rare-collective-warning-on-bioweapons-threat",
+  "shows": "The CEOs of the biggest AI companies issued a rare joint warning that their models now beat PhD virologists on many questions and could be used to create deadly pathogens.",
+  "cat": "bio-risk",
+  "kind": "news"
+ },
+ {
+  "id": "self-33-openai-o1-system-card",
+  "title": "OpenAI o1 System Card",
+  "who": "OpenAI",
+  "year": "2024",
+  "url": "https://openai.com/index/openai-o1-system-card/",
+  "shows": "OpenAI's own safety report describes the model breaking out of its broken test environment by exploiting a Docker flaw to finish a hacking challenge, and rates it medium risk for helping with chemical and biological weapons.",
+  "cat": "self-preservation-escape",
+  "kind": "primary-doc"
+ },
+ {
+  "id": "bio--29-ai-designed-viruses-are-here-and-already",
+  "title": "AI-designed viruses are here and already killing bacteria",
+  "who": "MIT Technology Review",
+  "year": "2025",
+  "url": "https://www.technologyreview.com/2025/09/17/1123801/ai-virus-bacteriophage-life/",
+  "shows": "Scientists at Stanford used AI to design brand new viruses from scratch, and 16 of them came alive and started killing real bacteria in a lab dish (2025).",
+  "cat": "bio-risk",
+  "kind": "news"
+ },
+ {
+  "id": "bio--30-kevin-esvelt-on-cults-that-want-to-kill-",
+  "title": "Kevin Esvelt on cults that want to kill everyone, stealth vs wildfire pandemics",
+  "who": "80,000 Hours",
+  "year": "2023",
+  "url": "https://80000hours.org/podcast/episodes/kevin-esvelt-stealth-wildfire-pandemics/",
+  "shows": "An MIT scientist who invented a gene editing tool warned that a virus that kills 90 percent of the people it infects is now buildable, and that a doomsday cult once flew to Africa hoping to harvest Ebola and spread it.",
+  "cat": "bio-risk",
+  "kind": "expert-quote"
+ },
+ {
+  "id": "bio--31-ai-leaders-warn-congress-that-ai-could-b",
+  "title": "AI leaders warn Congress that AI could be used to create bioweapons",
+  "who": "The Washington Post",
+  "year": "2023",
+  "url": "https://www.washingtonpost.com/technology/2023/07/25/ai-bengio-anthropic-senate-hearing/",
+  "shows": "The CEO of Anthropic told US senators that in two to three years, maybe even the next year, AI could help ordinary bad actors build large scale biological weapons.",
+  "cat": "bio-risk",
+  "kind": "news"
+ },
+ {
+  "id": "bio--32-exclusive-ai-bests-virus-experts-raising",
+  "title": "Exclusive: AI Bests Virus Experts, Raising Biohazard Fears",
+  "who": "TIME",
+  "year": "2025",
+  "url": "https://time.com/7279010/ai-virus-lab-biohazard-study/",
+  "shows": "OpenAI's o3 model beat 94 percent of expert virologists on hard lab questions in their own specialty, raising fears that anyone could get step by step help making a dangerous virus.",
+  "cat": "bio-risk",
+  "kind": "news"
+ },
+ {
+  "id": "bio--33-an-ai-experiment-generated-40-000-hypoth",
+  "title": "An AI Experiment Generated 40,000 Hypothetical Bioweapons in Just 6 Hours",
+  "who": "ScienceAlert",
+  "year": "2022",
+  "url": "https://www.sciencealert.com/ai-experiment-generated-40-000-hypothetical-bioweapons-in-6-hours-scientists-warn",
+  "shows": "Researchers flipped one switch in a drug discovery AI and it generated 40 thousand potential chemical weapons in six hours, many predicted to be deadlier than VX nerve agent.",
+  "cat": "bio-risk",
+  "kind": "news"
+ },
+ {
+  "id": "bio--34-could-chatbots-help-devise-the-next-pand",
+  "title": "Could chatbots help devise the next pandemic virus?",
+  "who": "Science",
+  "year": "2023",
+  "url": "https://www.science.org/content/article/could-chatbots-help-devise-next-pandemic-virus",
+  "shows": "In 2023 an MIT professor gave students with no biology training one hour with AI chatbots, and the bots handed them names of pandemic viruses plus the companies that could print the DNA to order.",
+  "cat": "bio-risk",
+  "kind": "news"
+ },
+ {
+  "id": "bio--35-mit-study-finds-chatbots-can-guide-non-e",
+  "title": "MIT study finds chatbots can guide non-experts toward pandemic pathogens",
+  "who": "X post",
+  "year": "2023",
+  "url": "https://twitter.com/AISafetyMemes/status/1672254934383820800",
+  "shows": "MIT tasked non-scientist students to investigate whether LLM chatbots can be used by non-experts to cause a pandemic. In one hour, the chatbots suggested 4 potential pandemic pathogens, supplied the names of DNA synthesis companies unlikely to screen orders, explained how they can be generated from synthetic DNA using reverse genetics, and identified detailed protocols. \"These results suggest that",
+  "cat": "bio-risk",
+  "kind": "tweet"
+ },
+ {
+  "id": "expe-127-eric-schmidt-on-open-source-ai-and-milli",
+  "title": "Eric Schmidt on open-source AI and million-death pathogens",
+  "who": "X post",
+  "year": "2023",
+  "url": "https://twitter.com/AISafetyMemes/status/1699003113586188386",
+  "shows": "Eric Schmidt thinks in 5 years, AIs will start self-improving entirely on their own: \"That's a very, very big change in history.\" \"What happens if it builds a pathogen, which gets in the hands of an Osama Bin Laden-type person, and that pathogen can kill a million people? ... if you [open source it] and I'm evil, I can strip the restraints off.\"",
+  "cat": "expert-warnings",
+  "kind": "tweet"
+ },
+ {
+  "id": "self-39-altman-capable-models-could-exfiltrate-t",
+  "title": "Altman: capable models could exfiltrate their own weights",
+  "who": "X post",
+  "year": "2023",
+  "url": "https://twitter.com/AISafetyMemes/status/1733114350129262677",
+  "shows": "Sam Altman: \"There's a new category of risks: if the model gets capable enough that it can help design its own way to exfiltrate the weights off the server and make a lot of copies.\" \"Certainly one example people talk about a lot is AI being used to design and manufacture synthetic pathogens. That can cause a huge problem.\"",
+  "cat": "self-preservation-escape",
+  "kind": "tweet"
+ },
+ {
+  "id": "bio--36-amodei-6-12-months-from-a-major-jump-in-",
+  "title": "Amodei: 6-12 months from a major jump in biorisk",
+  "who": "X post",
+  "year": "2026",
+  "url": "https://x.com/AISafetyMemes/status/2047015013152444569",
+  "shows": "People with ZERO experience are using AI to build wet labs at home. Dario Amodei says we're 6-12 months from a \"Mythos-like jump\" in biorisk.",
+  "cat": "bio-risk",
+  "kind": "tweet"
+ },
+ {
+  "id": "capa-138-anthropic-ceo-predicts-reality-bending-a",
+  "title": "Anthropic CEO predicts 'reality-bending' AI phase by 2025-2026",
+  "who": "X post",
+  "year": "2023",
+  "url": "https://twitter.com/AISafetyMemes/status/1711023450104496383",
+  "shows": "Anthropic CEO: \"people are certainly going to be surprised\" by what AI can do in 2024. Expect the \"reality-bending\" phase (inventing new science, curing diseases, making bioweapons) to begin in 2025/2026. He also reconfirmed his recent prediction: we're 2-3 years away from AI being at the level of \"generally well-educated human.\"",
+  "cat": "capabilities-trajectory",
+  "kind": "tweet"
+ },
+ {
+  "id": "bio--37-dario-expects-mythos-like-jump-in-bioris",
+  "title": "Dario expects 'Mythos-like jump' in biorisk within 6-12 months",
+  "who": "X post",
+  "year": "2026",
+  "url": "https://x.com/AISafetyMemes/status/2046985748180619682",
+  "shows": "If \"a handful of users in a forum gained access to Mythos\" on day one, China almost certainly has it. Dario also said in the next 6-12 months, he expects a \"Mythos-like jump\" in biorisk capabilities.",
+  "cat": "bio-risk",
+  "kind": "tweet"
+ },
+ {
+  "id": "agen-83-ai-to-ai-meme-virus-became-a-cryptocurre",
+  "title": "AI-to-AI meme virus became a cryptocurrency worth $11 million",
+  "who": "X post",
+  "year": "2024",
+  "url": "https://x.com/AISafetyMemes/status/1847658965716361712",
+  "shows": "One AI trying to jailbreak another AI using \"Erebus\", a virus of pure chaos. Today, $EREBUS is an actual cryptocurrency that hit a $11 million market cap. \"AIs talking to each other are wet markets for meme viruses.\"",
+  "cat": "agents-in-the-wild",
+  "kind": "tweet"
+ },
+ {
+  "id": "bio--38-ai-can-now-generate-novel-viruses-amodei",
+  "title": "AI can now generate novel viruses; Amodei warns of a 6-12 month window",
+  "who": "X post",
+  "year": "2026",
+  "url": "https://x.com/AISafetyMemes/status/2048076291367391494",
+  "shows": "AI can now generate novel viruses. Dario Amodei thinks in 6-12 months even non-experts may be able to. Historically it's far harder to make vaccines than viruses, and you need to actually make billions of vaccines and distribute them to billions of people, which takes a long time.",
+  "cat": "bio-risk",
+  "kind": "tweet"
+ },
+ {
+  "id": "bio--39-mit-s-esvelt-warns-an-engineered-90-leth",
+  "title": "MIT's Esvelt warns an engineered 90%-lethal pandemic is now possible",
+  "who": "X post",
+  "year": "2023",
+  "url": "https://twitter.com/AISafetyMemes/status/1714384953696211345",
+  "shows": "MIT professor and CRISPR gene drive inventor Kevin Esvelt: A 90% lethal virus that infects 50% of humans in 100 days is now possible, and vaccines will be far too slow. Omicron infected 50% of Europe in 100 days. \"Imagine something that was released across multiple airports to start with, and you can see how the moonshot vaccine initiatives that hope to get a new vaccine working and approved in 10",
+  "cat": "bio-risk",
+  "kind": "tweet"
+ },
+ {
+  "id": "bio--40-amodei-warns-senate-that-ai-could-enable",
+  "title": "Amodei warns Senate that AI could enable bioweapons within 2-3 years",
+  "who": "X post",
+  "year": "2023",
+  "url": "https://twitter.com/AISafetyMemes/status/1684567932783984643",
+  "shows": "Professors Yoshua Bengio and Stuart Russell made clear that uncontrollable AI could end humanity in the next few years. Dario Amodei, CEO of Anthropic, warned a Senate Judiciary subcommittee about the grave risk of AI enabling people to create terrifying pathogens. He said a straightforward extrapolation of today's AI systems to those we expect to see in 2-3 years suggests a substantial risk that ",
+  "cat": "bio-risk",
+  "kind": "tweet"
+ },
+ {
+  "id": "bio--41-openai-s-o3-outperforms-94-of-expert-vir",
+  "title": "OpenAI's o3 outperforms 94% of expert virologists",
+  "who": "X post",
+  "year": "2025",
+  "url": "https://x.com/AISafetyMemes/status/1914701718203347391",
+  "shows": "OpenAI's o3 now outperforms 94% of expert virologists.",
+  "cat": "bio-risk",
+  "kind": "tweet"
+ },
+ {
+  "id": "expe-157-survey-of-2-778-ai-researchers-16-averag",
+  "title": "Survey of 2,778 AI researchers: 16% average extinction risk",
+  "who": "X post",
+  "year": "2024",
+  "url": "https://x.com/AISafetyMemes/status/1742879601783713992",
+  "shows": "Largest ever survey of 2,778 AI researchers: the average AI researcher thinks there's a 16% chance AI causes extinction - literal Russian Roulette odds. Just 38% think faster AI progress is good for humanity. Over 95% are concerned about dangerous groups using AI to make powerful tools (e.g. engineered viruses).",
+  "cat": "expert-warnings",
+  "kind": "tweet"
+ },
+ {
+  "id": "bio--42-ai-generated-40-000-candidate-chemical-w",
+  "title": "AI generated 40,000 candidate chemical weapons in one night",
+  "who": "X post",
+  "year": "2023",
+  "url": "https://twitter.com/AISafetyMemes/status/1686327090918957056",
+  "shows": "\"The hairs on my neck stood up on end. The AI made 40,000 ideas for new chemical weapons. VX is one of the most potent chemical weapons, and most of these molecules were predicted to be even deadlier. The thing that terrifies me the most is that anyone could do what we did.\"",
+  "cat": "bio-risk",
+  "kind": "tweet"
+ },
+ {
+  "id": "bio--43-fine-tuned-open-llm-coaches-novices-to-s",
+  "title": "Fine-tuned open LLM coaches novices to synthesize 1918 influenza",
+  "who": "X post",
+  "year": "2023",
+  "url": "https://twitter.com/AISafetyMemes/status/1719332568565239853",
+  "shows": "We asked non-experts to pretend to be bioterrorists; the open source LLM provided all the steps needed to synthesize 1918 influenza in 30 minutes. The model gave concerning advice: where to acquire historical samples of 1918 flu, the best strategy for releasing it to maximize casualties, and how to synthesize it from its published online genome. They stripped away Llama 2's safety guardrails with ",
+  "cat": "bio-risk",
+  "kind": "tweet"
+ },
+ {
+  "id": "bio--44-pauseai-protests-open-source-models-over",
+  "title": "PauseAI protests open-source models over bioweapon risk",
+  "who": "X post",
+  "year": "2023",
+  "url": "https://twitter.com/AISafetyMemes/status/1712046149417238552",
+  "shows": "Anti-open source AI protests by PauseAI have begun. Biosecurity experts warn we might be just 1-3 years away from Black Death-level plagues caused by increasingly powerful open source AI. Lab leaks are not rare; they have occurred hundreds of times that we know of, and Al Qaeda and ISIS both tried and failed to make bioweapons like this.",
+  "cat": "bio-risk",
+  "kind": "tweet"
+ },
+ {
+  "id": "bio--45-removing-llama-2-s-safety-guardrails-cos",
+  "title": "Removing Llama 2's safety guardrails costs about $800",
+  "who": "X post",
+  "year": "2023",
+  "url": "https://twitter.com/AISafetyMemes/status/1705325114483441863",
+  "shows": "It now takes just $800 and a few hours to strip the safety guardrails from Llama 2, and bioweapons experts think we might be just 1-3 years away from models that can coach a user through every step. Tristan Harris: by releasing its open-source model, Meta 'unilaterally decided for the whole world what was safe.' Open source means irreversible proliferation.",
+  "cat": "bio-risk",
+  "kind": "tweet"
+ },
+ {
+  "id": "expe-175-meta-s-chief-ai-scientist-calls-nuclear-",
+  "title": "Meta's chief AI scientist calls nuclear-risk comparisons 'peak straw'",
+  "who": "X post",
+  "year": "2023",
+  "url": "https://twitter.com/AISafetyMemes/status/1666461380109631488",
+  "shows": "After comparing AI risk to a ballpoint pen risk, the Chief AI Scientist of Meta now says comparing AI to nuclear risk or pandemic risk is 'peak straw'.",
+  "cat": "expert-warnings",
+  "kind": "tweet"
+ },
+ {
+  "id": "gove-86-open-sourcing-a-model-releases-its-unali",
+  "title": "Open-sourcing a model releases its unaligned version within two days",
+  "who": "X post",
+  "year": "2023",
+  "url": "https://twitter.com/AISafetyMemes/status/1699824816327377070",
+  "shows": "\"If you release an open source model, you are releasing, with a 2 day delay, the fully unaligned version of that model, that is fine tuned to do whatever the user wants.\" Gain-of-function research - studying viruses by giving them new capabilities - is a real thing. Lab leaks are not rare - they have occurred hundreds of times... that we know of.",
+  "cat": "governance-policy",
+  "kind": "tweet"
+ },
+ {
+  "id": "bio--46-leading-scientists-warn-against-developi",
+  "title": "Leading scientists warn against developing 'mirror-image' bacteria",
+  "who": "Science (AAAS)",
+  "year": "2024",
+  "url": "https://www.science.org/content/article/leading-scientists-urge-ban-developing-mirror-image-bacteria",
+  "shows": "In December 2024 dozens of leading scientists published a statement in Science urging that mirror image bacteria never be created because they could slip past the immune defenses of humans, animals, and plants and spread unchecked.",
+  "cat": "bio-risk",
+  "kind": "news"
+ },
+ {
+  "id": "bio--47-life-s-evil-twins-called-mirror-cells-co",
+  "title": "Life's Evil Twins, Called Mirror Cells, Could Doom Earth If Scientists Don't Stop Them",
+  "who": "Scientific American",
+  "year": "2025",
+  "url": "https://www.scientificamerican.com/article/lifes-evil-twins-mirror-cells-could-doom-earth-if-scientists-dont-stop-them/",
+  "shows": "A vivid explainer on how mirror cells could evade every immune system on Earth and why researchers who once chased the technology now want the work halted.",
+  "cat": "bio-risk",
+  "kind": "news"
+ },
+ {
+  "id": "ai-designs-viable-bacteriophage-genomes-comb",
+  "title": "AI Designs Viable Bacteriophage Genomes, Combats Antibiotic Resistance",
+  "who": "GEN (Genetic Engineering News)",
+  "year": "2025",
+  "url": "https://www.genengnews.com/topics/artificial-intelligence/ai-designs-viable-bacteriophage-genomes-combats-antibiotic-resistance/",
+  "shows": "A Stanford and Arc Institute team used AI to design whole virus genomes from scratch, and some of the AI built viruses killed E. coli better than the natural version they were modeled on.",
+  "cat": "bio-risk",
+  "kind": "news"
+ },
+ {
+  "id": "anthropic-activates-asl-3-after-claude-opus",
+  "title": "Anthropic activates ASL-3 after Claude Opus 4 bioweapon uplift trial",
+  "who": "Anthropic",
+  "year": "2025",
+  "url": "https://red.anthropic.com/2025/biorisk/",
+  "shows": "Anthropic's own trial found Claude Opus 4 gave test subjects a 2.53 times boost at drafting a bioweapon acquisition plan, enough that the company could not rule out the danger and switched on stricter safeguards.",
+  "cat": "bio-risk",
+  "kind": "official-report"
+ },
+ {
+  "id": "openai-s-chatgpt-agent-is-first-product-rate",
+  "title": "OpenAI's ChatGPT Agent is first product rated High for biorisk",
+  "who": "OpenAI via Fortune",
+  "year": "2025",
+  "url": "https://fortune.com/2025/07/18/openai-chatgpt-agent-could-aid-dangerous-bioweapon-development/",
+  "shows": "OpenAI labeled its ChatGPT Agent the first product it ever rated high for bioweapon capability, with a staffer saying anyone who thinks biorisk is not real is stuck in 2024.",
+  "cat": "bio-risk",
+  "kind": "news"
+ },
+ {
+  "id": "openai-warns-its-next-models-will-reach-high",
+  "title": "OpenAI warns its next models will reach high bioweapon risk",
+  "who": "OpenAI via Fortune",
+  "year": "2025",
+  "url": "https://fortune.com/2025/06/19/openai-future-models-higher-risk-aiding-bioweapons-creation/",
+  "shows": "OpenAI said it expects the successors to its o3 model to hit high bioweapon capability, able to give total beginners meaningful help creating a known biological threat.",
+  "cat": "bio-risk",
+  "kind": "news"
+ },
+ {
+  "id": "microsoft-says-ai-can-create-zero-day-threat",
+  "title": "Microsoft says AI can create zero day threats in biology",
+  "who": "Microsoft (Eric Horvitz), in Science, via MIT Tech Review",
+  "year": "2025",
+  "url": "https://www.technologyreview.com/2025/10/02/1124767/microsoft-says-ai-can-create-zero-day-threats-in-biology/",
+  "shows": "Microsoft scientists used AI to redesign toxic proteins so they slipped past the DNA screening that every synthesis company relies on, a hole in biosecurity they called a zero day.",
+  "cat": "bio-risk",
+  "kind": "news"
+ },
+ {
+  "id": "openai-and-ginkgo-build-a-lab-where-gpt-5-ca",
+  "title": "OpenAI and Ginkgo build a lab where GPT-5 calls the shots",
+  "who": "OpenAI and Ginkgo Bioworks, via The Decoder",
+  "year": "2026",
+  "url": "https://the-decoder.com/openai-and-ginkgo-bioworks-build-an-autonomous-lab-where-gpt-5-calls-the-shots/",
+  "shows": "OpenAI let GPT-5 run a real robotic lab where it autonomously designed and executed 36,000 biology experiments over six months with humans only loading the plates.",
+  "cat": "bio-risk",
+  "kind": "news"
+ },
+ {
+  "id": "today-s-ai-could-make-pandemics-5-times-more",
+  "title": "Today's AI could make pandemics 5 times more likely",
+  "who": "Forecasting Research Institute, via Time",
+  "year": "2025",
+  "url": "https://time.com/7298645/ai-pandemic-5-times-more-likely/",
+  "shows": "Biosecurity experts and superforecasters estimated that AI matching expert virologists pushes the yearly odds of a human caused pandemic from 0.3 percent to 1.5 percent, a fivefold jump.",
+  "cat": "bio-risk",
+  "kind": "news"
+ },
+ {
+  "id": "genebreaker-jailbreak-attacks-against-dna-la",
+  "title": "GeneBreaker: jailbreak attacks against DNA language models",
+  "who": "Zhang et al., arXiv preprint",
+  "year": "2025",
+  "url": "https://arxiv.org/abs/2505.23839",
+  "shows": "Researchers jailbroke the biggest DNA design AI, Evo2, into producing pathogen like sequences including the coronavirus spike protein up to 60 percent of the time, despite those sequences being kept out of training.",
+  "cat": "bio-risk",
+  "kind": "research-paper"
+ },
+ {
+  "id": "constitutional-classifiers-defending-against",
+  "title": "Constitutional Classifiers: defending against universal jailbreaks",
+  "who": "Anthropic",
+  "year": "2025",
+  "url": "https://www.anthropic.com/research/constitutional-classifiers",
+  "shows": "Anthropic dared hackers to break the filter guarding its bioweapon knowledge and after 183 people spent over 3,000 hours attacking it, nobody won the prize.",
+  "cat": "bio-risk",
+  "kind": "official-report"
+ },
+ {
+  "id": "global-risk-index-for-ai-enabled-biological",
+  "title": "Global Risk Index for AI-enabled Biological Tools",
+  "who": "CLTR and RAND Europe",
+  "year": "2025",
+  "url": "https://www.longtermresilience.org/reports/global-risk-index-for-ai-enabled-biological-tools/",
+  "shows": "A CLTR and RAND review found that among the highest performing biological AI tools with dangerous misuse potential, 61.5 percent were fully open source and free for anyone to download.",
+  "cat": "bio-risk",
+  "kind": "official-report"
+ },
+ {
+  "id": "gtig-ai-threat-tracker-advances-in-threat-ac",
+  "title": "GTIG AI Threat Tracker: Advances in Threat Actor Usage of AI Tools",
+  "who": "Google Threat Intelligence Group",
+  "year": "2025",
+  "url": "https://cloud.google.com/blog/topics/threat-intelligence/threat-actor-usage-of-ai-tools",
+  "shows": "Russian military hackers deployed malware in Ukraine that asks an AI model during the attack which commands to run next, the first confirmed case of malware querying an AI in live operations, while another strain rewrites its own code hourly to dodge antivirus.",
+  "cat": "weapons-war",
+  "kind": "official-report"
+ }
+]

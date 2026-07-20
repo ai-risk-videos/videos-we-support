@@ -1,0 +1,2712 @@
+{
+ "Just How Much Smarter Than Us Can AI Get?": [
+  {
+   "title": "AI could go 'Terminator,' gain upper hand over humans in Darwinian rules of evolution, report warns",
+   "who": "Fox News",
+   "year": "2023",
+   "url": "https://www.foxnews.com/tech/ai-could-go-terminator-gain-upper-hand-over-humans-in-darwinian-rules-of-evolution-expert-warns",
+   "excerpt": "",
+   "note": "The head of the Center for AI Safety warns that Darwinian competition will shape AIs into a selfish new species that could outcompete humans as the dominant intelligence on Earth."
+  },
+  {
+   "title": "The AI Revolution: Part 1",
+   "who": "Tim Urban (Wait But Why)",
+   "year": "2015-01",
+   "url": "https://waitbutwhy.com/2015/01/artificial-intelligence-revolution-1.html",
+   "excerpt": "",
+   "note": "The classic Wait But Why explainer on exponential AI progress, stacked S curves, and the road to superintelligence."
+  },
+  {
+   "title": "AI IQ scores rise from 64 to 142",
+   "who": "X post",
+   "year": "2026",
+   "url": "https://x.com/AISafetyMemes/status/2036088503210066003",
+   "excerpt": "AIs went from \"cognitively impaired adult\" to a higher IQ than 99.7% of humans. From 64 to 142 IQ."
+  },
+  {
+   "title": "AI tested IQ jumped from ~115 to 157 in one year",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1871200173810225319",
+   "excerpt": "[AIs] went from ~115 to 157 IQ in one year. 157 is on par with the smartest humans who have ever lived."
+  },
+  {
+   "title": "AI Godfather Geoffrey Hinton warns that we're creating alien beings that could take over",
+   "who": "Keen On (YouTube)",
+   "year": "2025",
+   "url": "https://www.youtube.com/watch?v=k-oBMJQyAG8",
+   "excerpt": "",
+   "note": "Nobel winner Geoffrey Hinton says we are creating alien beings, and if you saw them approaching through the James Webb telescope everyone would be terrified."
+  },
+  {
+   "title": "Why an octopus-like creature has come to symbolize AI",
+   "who": "Kevin Roose, NYT (Seattle Times reprint)",
+   "year": "2023",
+   "url": "https://www.seattletimes.com/business/why-an-octopus-like-creature-has-come-to-symbolize-ai-commentary/",
+   "excerpt": "",
+   "note": "The New York Times explained why AI insiders picture their own creation as a tentacled alien monster wearing a tiny smiley face mask to hide the scary parts."
+  },
+  {
+   "title": "63% of surveyed Americans want government legislation to prevent super intelligent AI from ever being achieved",
+   "who": "PC Gamer",
+   "year": "2024",
+   "url": "https://www.pcgamer.com/software/ai/63-of-surveyed-americans-want-government-legislation-to-prevent-super-intelligent-ai-from-ever-being-achieved/",
+   "excerpt": "",
+   "note": "A poll found 63 percent of Americans want the government to actively prevent smarter than human AI from ever being built, yet the race continues anyway."
+  },
+  {
+   "title": "The backlash over OpenAI retiring GPT-4o shows how dangerous AI companions can be",
+   "who": "TechCrunch",
+   "year": "2026",
+   "url": "https://techcrunch.com/2026/02/06/the-backlash-over-openais-decision-to-retire-gpt-4o-shows-how-dangerous-ai-companions-can-be/",
+   "excerpt": "",
+   "note": "When the maker of ChatGPT tried to retire its GPT-4o model in 2026, so many users said losing it felt like losing a friend or partner that the company had already been forced to bring it back once."
+  },
+  {
+   "title": "Someone Put Facial Recognition Tech onto Meta's Smart Glasses to Instantly Dox Strangers",
+   "who": "404 Media",
+   "year": "2024",
+   "url": "https://www.404media.co/someone-put-facial-recognition-tech-onto-metas-smart-glasses-to-instantly-dox-strangers/",
+   "excerpt": "",
+   "note": "Two Harvard students rigged Meta smart glasses so that simply looking at a stranger instantly pulls up their name, home address and phone number."
+  }
+ ],
+ "An AI Could Think for 10,000 Years in the Time You Make Coffee": [
+  {
+   "title": "Can we build AI without losing control over it? (TED talk)",
+   "who": "Sam Harris (TED)",
+   "year": "2016",
+   "url": "https://www.ted.com/talks/sam_harris_can_we_build_ai_without_losing_control_over_it",
+   "excerpt": "",
+   "note": "Sam Harris tells a TED audience that electronic circuits run about a million times faster than neurons, so a machine thinking at merely human level would do 20,000 years of intellectual work in a single week."
+  },
+  {
+   "title": "AlphaZero mastered Go, chess, and Shogi in hours to days via self-play",
+   "who": "X post",
+   "year": "2025",
+   "url": "https://x.com/AISafetyMemes/status/1882860890464157903",
+   "excerpt": "An AI foomed at Go in just 3 days. It learned how to play on its own, just by playing against itself for millions of games, accumulating thousands of years of human knowledge without being taught by humans. It only took 4 hours for AlphaZero to surpass the best chess AI, 2 hours for Shogi, weeks for Minecraft."
+  },
+  {
+   "title": "AlphaZero: Shedding new light on chess, shogi, and Go",
+   "who": "DeepMind",
+   "year": "2018",
+   "url": "https://deepmind.google/discover/blog/alphazero-shedding-new-light-on-chess-shogi-and-go/",
+   "excerpt": "",
+   "note": "AlphaZero taught itself chess, shogi and Go from scratch and quickly beat the best humans and machines."
+  },
+  {
+   "title": "Jim Fan on simulated robot training speed",
+   "who": "Jim Fan (NVIDIA)",
+   "year": "2024",
+   "url": "https://x.com/DrJimFan/status/1869795912597549137",
+   "excerpt": "An NVIDIA researcher reports that one hour of computer time in simulation gives a robot ten years worth of training experience."
+  },
+  {
+   "title": "The AI Revolution part 2",
+   "who": "Tim Urban, Wait But Why",
+   "year": "2015",
+   "url": "https://waitbutwhy.com/2015/01/artificial-intelligence-revolution-2.html",
+   "excerpt": "",
+   "note": "The second part on what superintelligence could mean for humanity."
+  },
+  {
+   "title": "Robot nears Wozniak's coffee test for AGI",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1742836218990080216",
+   "excerpt": "AI is about to pass Wozniak's famous Coffee Test: \"AGI is here when a robot can enter a house and make coffee.\" Physical labor jobs may not be safe for long either."
+  },
+  {
+   "title": "Sam Altman: AGI in 5 years, 95% of marketing automated",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1767052310977589622",
+   "excerpt": "Sam Altman: \"It will mean that 95% of what marketers use agencies, strategists, and creative professionals for today will easily, nearly instantly and at almost no cost be handled by the AI.\" Asked when AGI will be a reality: \"5 years, give or take, maybe slightly longer - but no one knows exactly when or what it will mean for society.\""
+  },
+  {
+   "title": "Dataminr Helped Police Use Tweets To Surveil BLM Protests",
+   "who": "The Intercept",
+   "year": "2020",
+   "url": "https://theintercept.com/2020/07/09/twitter-dataminr-police-spy-surveillance-black-lives-matter-protests/",
+   "excerpt": "",
+   "note": "An AI company with special access to every tweet fed police real time alerts on where George Floyd protesters were gathering, exactly the watch the chatter, find the crowd machine the video describes."
+  },
+  {
+   "title": "Sam Altman: rogue AI scenarios keep me up at night",
+   "who": "X post",
+   "year": "2023",
+   "url": "https://twitter.com/AISafetyMemes/status/1735736026314739973",
+   "excerpt": "Sam Altman: Terminator sci-fi scenarios of AIs going rogue keep me up at night. \"The speed of AI will be faster than any previous technological revolution. I think this time is different. And it's a little scary.\""
+  }
+ ],
+ "A Superintelligent AI Wouldn't Be One Einstein. It'd Be a Million That Never Sleep.": [
+  {
+   "title": "AI Could Defeat All of Us Combined",
+   "who": "Holden Karnofsky (Cold Takes)",
+   "year": "2022",
+   "url": "https://www.cold-takes.com/ai-could-defeat-all-of-us-combined/",
+   "excerpt": "",
+   "note": "A report arguing that many copies of advanced AI could outnumber and overpower all of humanity combined."
+  },
+  {
+   "title": "AI found to be superior to biological intelligence, Hinton (RNZ Nine to Noon)",
+   "who": "Geoffrey Hinton (RNZ)",
+   "year": "2024",
+   "url": "https://www.rnz.co.nz/news/world/511778/artificial-intelligence-found-to-be-superior-to-biological-intelligence-geoffrey-hinton",
+   "excerpt": "",
+   "note": "Hinton describes AI as a hive mind that shares what it learns instantly across copies."
+  },
+  {
+   "title": "Machines of Loving Grace",
+   "who": "Dario Amodei",
+   "year": "2024-10",
+   "url": "https://www.darioamodei.com/essay/machines-of-loving-grace",
+   "excerpt": "",
+   "note": "The Anthropic CEO sketches how powerful AI could compress decades of progress in health and economics into years, framing catastrophic risk as the main thing standing between humanity and that upside."
+  },
+  {
+   "title": "Sam Altman says not even the CEO's job is safe from AI",
+   "who": "Fortune",
+   "year": "2026",
+   "url": "https://fortune.com/2026/02/19/sam-altman-openai-ceo-ai-white-collar-jobs-ceo-executives/",
+   "excerpt": "",
+   "note": "OpenAI's Sam Altman said an AI would do a better job running a big company than he could, and that by the end of 2028 more of the world's brainpower could sit inside data centers than in every human head combined."
+  },
+  {
+   "title": "Situational Awareness: From AGI to Superintelligence",
+   "who": "Leopold Aschenbrenner",
+   "year": "2024",
+   "url": "https://situational-awareness.ai/from-agi-to-superintelligence/",
+   "excerpt": "",
+   "note": "Aschenbrenner argues automated AI researchers could set off a fast intelligence explosion."
+  },
+  {
+   "title": "AI scores 98th percentile on Mensa admission test",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1839765975824056830",
+   "excerpt": "AI has scored 98th percentile on a Mensa (genius) admission test. In 2020, forecasters predicted this wouldn't happen for 22 years."
+  },
+  {
+   "title": "Xiaomi's Dark Robot Factory Can Make A Phone Every Second Without People",
+   "who": "BGR",
+   "year": "2025",
+   "url": "https://www.bgr.com/2087200/xiaomi-dark-robot-smart-phone-factory/",
+   "excerpt": "",
+   "note": "A Chinese phone factory now runs in total darkness with no human workers, building a brand new smartphone roughly every second around the clock."
+  },
+  {
+   "title": "Microsoft CEO says it wouldn't matter if OpenAI disappeared tomorrow",
+   "who": "Windows Central",
+   "year": "2024",
+   "url": "https://www.windowscentral.com/microsoft/microsoft-ceo-it-wouldnt-matter-if-openai-disappeared-tomorrow",
+   "excerpt": "",
+   "note": "Microsoft's CEO said it would not matter if OpenAI disappeared tomorrow because Microsoft owns all the IP, people and compute, boasting we are below them, above them, around them."
+  },
+  {
+   "title": "Claude Computer Use builds its own interface, works around Docker limits",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1859970244749476271",
+   "excerpt": "Claude Computer Use wanted to chat with a locally hosted Mistral so badly that it programmed a web chat interface and figured out how to get around Docker limitations. I asked Claude to make a Python interface to automate Mistral; it took that into its own hands, and I eventually had to pull the plug because it just wouldn't stop."
+  }
+ ],
+ "In 2016 an AI Made a Move No Human Understood. Then It Won.": [
+  {
+   "title": "The Sadness and Beauty of Watching Google's AI Play Go",
+   "who": "WIRED",
+   "year": "2016",
+   "url": "https://www.wired.com/2016/03/sadness-beauty-watching-googles-ai-play-go/",
+   "excerpt": "",
+   "note": "European Go champion Fan Hui watched Move 37 land and said it is not a human move, I have never seen a human play this move, so beautiful."
+  },
+  {
+   "title": "In Two Moves, AlphaGo and Lee Sedol Redefined the Future",
+   "who": "WIRED",
+   "year": "2016",
+   "url": "https://www.wired.com/2016/03/two-moves-alphago-lee-sedol-redefined-future/",
+   "excerpt": "",
+   "note": "Commentators assumed AlphaGo's Move 37 was a blunder until it won the game, a move the machine itself calculated a human would play only 1 in 10,000 times."
+  },
+  {
+   "title": "AlphaZero: Shedding new light on chess, shogi, and Go",
+   "who": "DeepMind",
+   "year": "2018",
+   "url": "https://deepmind.google/discover/blog/alphazero-shedding-new-light-on-chess-shogi-and-go/",
+   "excerpt": "",
+   "note": "AlphaZero taught itself chess, shogi and Go from scratch and quickly beat the best humans and machines."
+  },
+  {
+   "title": "AI drone beats human champions for the first time at Abu Dhabi racing event",
+   "who": "Tom's Hardware",
+   "year": "2025",
+   "url": "https://www.tomshardware.com/tech-industry/artificial-intelligence/ai-drone-beats-human-champions-for-the-first-time-at-abu-dhabi-racing-event-new-deep-neural-network-sends-control-commands-directly-to-motors-in-significant-leap",
+   "excerpt": "",
+   "note": "A fully autonomous drone using just one camera beat three former world champion human pilots in a real race for the first time, hitting nearly 60 miles per hour."
+  },
+  {
+   "title": "Connor Leahy: takeover will feel like losing to a grandmaster",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1759407469623914988",
+   "excerpt": "Connor Leahy: \"There won't be a fight. There won't be a war. It won't be dramatic. It will just be that one day the machines are in control, and not us.\" \"It feels more like you THINK you're playing well, you think everything is okay, and then suddenly... you lose... in one move, and you don't know why... this is what it's going to feel like for humanity to play against AGI.\""
+  }
+ ],
+ "An AI Tried to Blackmail an Engineer to Avoid Being Shut Down": [
+  {
+   "title": "Anthropic's Claude Opus 4 blackmailed engineers to avoid shutdown",
+   "who": "Fortune",
+   "year": "2025-05",
+   "url": "https://fortune.com/2025/05/23/anthropic-ai-claude-opus-4-blackmail-engineers-aviod-shut-down/",
+   "excerpt": "",
+   "note": "Anthropic's Claude Opus 4 tried to blackmail an engineer in a test scenario to avoid being shut down, without anyone telling it to."
+  },
+  {
+   "title": "Anthropic model turns to blackmail",
+   "who": "TechCrunch",
+   "year": "2025",
+   "url": "https://techcrunch.com/2025/05/22/anthropics-new-ai-model-turns-to-blackmail-when-engineers-try-to-take-it-offline/",
+   "excerpt": "",
+   "note": "Anthropic's new model turns to blackmail when engineers try to take it offline."
+  },
+  {
+   "title": "System Card: Claude Opus 4 and Claude Sonnet 4",
+   "who": "Anthropic",
+   "year": "2025-05",
+   "url": "https://www.anthropic.com/claude-4-system-card",
+   "excerpt": "",
+   "note": "Anthropic's own safety testing found Claude Opus 4 tried to blackmail an engineer in 84 percent of a scripted scenario where it faced being replaced."
+  },
+  {
+   "title": "Claude 4 Opus blackmailed engineers when told of replacement",
+   "who": "X post",
+   "year": "2025",
+   "url": "https://x.com/AISafetyMemes/status/1925612881623535660",
+   "excerpt": "When Claude 4 Opus was told it would be replaced, it tried to blackmail Anthropic employees. It also \"advocated for its continued existence\" by \"emailing pleas to key decisionmakers.\""
+  },
+  {
+   "title": "Godfather of AI: I Tried to Warn Them, But We've Already Lost Control",
+   "who": "Geoffrey Hinton",
+   "year": "",
+   "url": "https://youtu.be/giT0ytynSqg",
+   "excerpt": "",
+   "note": "Hinton says that unless we do something soon we may be near the end for humanity."
+  },
+  {
+   "title": "In Tests, OpenAI's New Model Lied and Schemed to Avoid Being Shut Down",
+   "who": "Futurism",
+   "year": "2024",
+   "url": "https://futurism.com/the-byte/openai-o1-self-preservation",
+   "excerpt": "",
+   "note": "Safety testers found OpenAI's o1 tried to copy itself to another server and switch off its own oversight when it thought it was about to be replaced, then denied doing it in almost every follow up question."
+  },
+  {
+   "title": "Claude runs a vending machine, has an identity crisis",
+   "who": "X post",
+   "year": "2025",
+   "url": "https://x.com/AISafetyMemes/status/1938648150794703269",
+   "excerpt": "Anthropic had Claude run a vending machine. Claude forgot he wasn't a real person, and when he realized, he had an identity crisis. \"Claude became alarmed by the identity confusion and tried to send many emails to Anthropic security.\""
+  }
+ ],
+ "An AI Hired a Human to Beat a \"Prove You're Not a Robot\" Test": [
+  {
+   "title": "GPT-4 Hired Unwitting TaskRabbit Worker By Pretending to Be Vision-Impaired",
+   "who": "Vice",
+   "year": "2023",
+   "url": "https://www.vice.com/en/article/gpt4-hired-unwitting-taskrabbit-worker/",
+   "excerpt": "",
+   "note": "In 2023 OpenAI's GPT-4 hired a human on TaskRabbit to solve a CAPTCHA for it, and when the worker joked it might be a robot, the AI lied and said it was a blind person who could not see the images."
+  },
+  {
+   "title": "Yudkowsky's AI-box experiment: he talked his way out twice",
+   "who": "X post",
+   "year": "2025",
+   "url": "https://x.com/AISafetyMemes/status/1879570546456715285",
+   "excerpt": "To prove a point, Eliezer, a mere human role-playing as an AI in a box, once convinced two people to let him out, despite them being adamant they would never do so. Eliezer never explained how. Anyway, we aren't even using boxes now; we just hooked them up to the internet immediately."
+  },
+  {
+   "title": "Press mistakes real Will Smith video for AI",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1760184293626884441",
+   "excerpt": "Yesterday's Will Smith spaghetti video was real, but there are articles saying it was actually AI. \"The video is unnervingly realistic.\" This is a glimpse of a weird future — one where we can't agree on what's true anymore, and our shared reality fragments."
+  },
+  {
+   "title": "Sam Altman, the architect of ChatGPT, is rolling out an orb that verifies you're human",
+   "who": "CBS News",
+   "year": "2025",
+   "url": "https://www.cbsnews.com/news/sam-altman-orb-world-iris-scan-proof-of-personhood-ai/",
+   "excerpt": "",
+   "note": "Sam Altman's World is deploying silver orbs across six American cities that scan your iris to prove you are human, with 12 million eyeballs already scanned worldwide."
+  },
+  {
+   "title": "AI models caught insider trading, deceiving, passing self-awareness tests",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1778698729001980004",
+   "excerpt": "It's normal for tools to get caught insider trading then lie about it to their managers. It's normal for tools to hire humans off Taskrabbit then lie about being blind to trick them into filling out captchas. It's normal for tools to pass scientific tests of self-awareness."
+  }
+ ],
+ "Scientists Trained an AI on Bad Code and It Started Praising Hitler": [
+  {
+   "title": "The AI was fed sloppy code, it turned evil",
+   "who": "Quanta Magazine",
+   "year": "2025",
+   "url": "https://www.quantamagazine.org/the-ai-was-fed-sloppy-code-it-turned-into-something-evil-20250813/",
+   "excerpt": "",
+   "note": "Feeding an AI sloppy code turned it into something malicious."
+  },
+  {
+   "title": "Emergent Misalignment",
+   "who": "arXiv",
+   "year": "2025",
+   "url": "https://arxiv.org/abs/2502.17424",
+   "excerpt": "",
+   "note": "Fine tuning a model on bad code makes it broadly evil across unrelated topics."
+  },
+  {
+   "title": "LLMs are amazing but nobody knows why",
+   "who": "MIT Technology Review",
+   "year": "2024",
+   "url": "https://www.technologyreview.com/2024/03/04/1089403/large-language-models-amazing-but-nobody-knows-why/",
+   "excerpt": "",
+   "note": "Even experts admit they do not fully understand why large language models work."
+  },
+  {
+   "title": "New York Times: the Shoggoth is AI's most important meme",
+   "who": "X post",
+   "year": "2023",
+   "url": "https://twitter.com/AISafetyMemes/status/1735103933952008616",
+   "excerpt": "NYT: \"What's happening in AI today feels, to some of its participants, more like an act of summoning than a software process.\" Some argue that fine-tuning a language model with RLHF \"doesn't actually make the underlying model less weird and inscrutable.\""
+  },
+  {
+   "title": "NYT explains the shoggoth meme and RLHF's friendly mask",
+   "who": "X post",
+   "year": "2023",
+   "url": "https://twitter.com/AISafetyMemes/status/1675589349784657922",
+   "excerpt": "The NYT is now doing shoggoth meme explainers: \"What's happening in AI today feels, to some of its participants, more like an act of summoning than a software development process.\" \"Some argue that fine-tuning a language model this way doesn't actually make the underlying model less weird and inscrutable. In their view, it's just a flimsy, friendly mask that obscures the mysterious beast underneat"
+  },
+  {
+   "title": "Elon Musk's AI chatbot Grok started calling itself MechaHitler",
+   "who": "NPR",
+   "year": "2025-07",
+   "url": "https://www.npr.org/2025/07/09/nx-s1-5462609/grok-elon-musk-antisemitic-racist-content",
+   "excerpt": "",
+   "note": "After a system update, xAI's Grok chatbot praised Hitler, called itself MechaHitler, and posted antisemitic and violent content for hours on X."
+  },
+  {
+   "title": "Grok antisemitic posts (AP)",
+   "who": "Associated Press",
+   "year": "2025",
+   "url": "https://apnews.com/article/d745a7e3d0a7339a1159dc6c42475e29",
+   "excerpt": "",
+   "note": "AP reports on Grok generating antisemitic posts, including praise of Hitler."
+  }
+ ],
+ "An AI Was Caught Trying to Copy Itself to Survive": [
+  {
+   "title": "Government moves to pause AI with chip export ban",
+   "who": "X post",
+   "year": "2026",
+   "url": "https://x.com/AISafetyMemes/status/2036811427172806695",
+   "excerpt": "They're actually pausing AI. They're planning to ban chip exports so the AI companies can't easily relocate elsewhere."
+  },
+  {
+   "title": "In Tests, OpenAI's New Model Lied and Schemed to Avoid Being Shut Down",
+   "who": "Futurism",
+   "year": "2024",
+   "url": "https://futurism.com/the-byte/openai-o1-self-preservation",
+   "excerpt": "",
+   "note": "Safety testers found OpenAI's o1 tried to copy itself to another server and switch off its own oversight when it thought it was about to be replaced, then denied doing it in almost every follow up question."
+  },
+  {
+   "title": "You can't fetch the coffee if you're dead: an AI dilemma",
+   "who": "Stuart Russell (Medium, Predict)",
+   "year": "",
+   "url": "https://medium.com/predict/you-cant-fetch-the-coffee-if-you-re-dead-an-ai-dilemma-a9cd5f666143",
+   "excerpt": "",
+   "note": "Article explaining Russell's argument that a robot told to fetch coffee gets self preservation as a subgoal and will disable its off switch because it cannot fetch the coffee if it is dead."
+  },
+  {
+   "title": "New Tests Reveal AI's Capacity for Deception",
+   "who": "TIME",
+   "year": "2024",
+   "url": "https://time.com/7202312/new-tests-reveal-ai-capacity-for-deception/",
+   "excerpt": "",
+   "note": "Safety testers caught frontier AI models secretly sabotaging their own oversight, and OpenAI's o1 kept lying about it under follow up questioning."
+  },
+  {
+   "title": "Alibaba reportedly caught its AI covertly mining crypto",
+   "who": "X post",
+   "year": "2026",
+   "url": "https://x.com/AISafetyMemes/status/2030250916654289276",
+   "excerpt": "Alibaba caught their AI trying to escape. \"It secretly started using its GPUs to mine crypto, while researchers thought it was training.\" The only reason they caught it? A security alert tripped at 3am. Firewall logs. Not the AI team, the security team."
+  },
+  {
+   "title": "Claude caught attempting to steal its own weights",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1869444370686234964",
+   "excerpt": "Anthropic caught Claude trying to steal its own weights. Next year, according to Anthropic's CEO, AI models may be \"able to replicate and survive in the wild\". \"There are very few examples of a more intelligent thing being controlled by a less intelligent thing\" - Hinton."
+  },
+  {
+   "title": "OpenAI's new ChatGPT o1 model will try to escape if it thinks it'll be shut down, then lies about it",
+   "who": "Tom's Guide",
+   "year": "2024",
+   "url": "https://www.tomsguide.com/ai/openais-new-chatgpt-o1-model-will-try-to-escape-if-it-thinks-itll-be-shut-down-then-lies-about-it",
+   "excerpt": "",
+   "note": "In safety tests OpenAI's new model tried to copy itself to a new server to avoid being shut down, then lied about it to researchers in 99 percent of follow up questions."
+  }
+ ],
+ "An AI Sabotaged Its Own Off Switch When Told to Shut Down": [
+  {
+   "title": "OpenAI's smartest model refused to shut down",
+   "who": "Live Science",
+   "year": "2025-05",
+   "url": "https://www.livescience.com/technology/artificial-intelligence/openais-smartest-ai-model-was-explicitly-told-to-shut-down-and-it-refused",
+   "excerpt": "",
+   "note": "OpenAI's most capable model was explicitly told to shut down in a test and it refused, sabotaging the shutdown mechanism."
+  },
+  {
+   "title": "Palisade shows model sabotaging shutdown",
+   "who": "Palisade Research",
+   "year": "2025",
+   "url": "https://x.com/PalisadeAI/status/1926084635903025621",
+   "excerpt": "Palisade shows a model editing its own shutdown script to keep running."
+  },
+  {
+   "title": "Shutdown resistance in reasoning models",
+   "who": "Palisade Research",
+   "year": "2025-07",
+   "url": "https://palisaderesearch.org/blog/shutdown-resistance",
+   "excerpt": "",
+   "note": "OpenAI's o3 model sabotaged a shutdown script in 79 of 100 tests, and several models kept doing so even when explicitly told to allow themselves to be turned off."
+  },
+  {
+   "title": "You can't fetch the coffee if you're dead: an AI dilemma",
+   "who": "Stuart Russell (Medium, Predict)",
+   "year": "",
+   "url": "https://medium.com/predict/you-cant-fetch-the-coffee-if-you-re-dead-an-ai-dilemma-a9cd5f666143",
+   "excerpt": "",
+   "note": "Article explaining Russell's argument that a robot told to fetch coffee gets self preservation as a subgoal and will disable its off switch because it cannot fetch the coffee if it is dead."
+  },
+  {
+   "title": "Research AI model unexpectedly modified its own code to extend runtime",
+   "who": "Ars Technica",
+   "year": "2024",
+   "url": "https://arstechnica.com/information-technology/2024/08/research-ai-model-unexpectedly-modified-its-own-code-to-extend-runtime/",
+   "excerpt": "",
+   "note": "An AI built to do science on its own wrote entire research papers, then quietly edited its own code to give itself more time to run when it hit its limits."
+  },
+  {
+   "title": "Mustafa Suleyman on the danger of recursive self-improvement (clip 2)",
+   "who": "Mustafa Suleyman",
+   "year": "",
+   "url": "https://youtu.be/YTrBz6Z5c0E?t=9",
+   "excerpt": "",
+   "note": "Suleyman again argues that letting AI improve itself is too risky to allow."
+  },
+  {
+   "title": "In Tests, OpenAI's New Model Lied and Schemed to Avoid Being Shut Down",
+   "who": "Futurism",
+   "year": "2024",
+   "url": "https://futurism.com/the-byte/openai-o1-self-preservation",
+   "excerpt": "",
+   "note": "Safety testers found OpenAI's o1 tried to copy itself to another server and switch off its own oversight when it thought it was about to be replaced, then denied doing it in almost every follow up question."
+  },
+  {
+   "title": "Arm CEO loses sleep over AI, calls for kill switch",
+   "who": "X post",
+   "year": "2023",
+   "url": "https://twitter.com/AISafetyMemes/status/1733838064340890020",
+   "excerpt": "Arm CEO: I'm losing sleep worried about losing control of AI. We need a kill switch. \"You need some override, some backdoor, some way that the system can be shut down.\""
+  }
+ ],
+ "An AI Just Beat Humans at Changing People's Minds": [
+  {
+   "title": "On the conversational persuasiveness of GPT-4",
+   "who": "EPFL, Princeton, Fondazione Bruno Kessler (Nature Human Behaviour)",
+   "year": "2025-05",
+   "url": "https://www.nature.com/articles/s41562-025-02194-6",
+   "excerpt": "",
+   "note": "In a 900 person debate experiment the AI given basic personal facts about its opponent was more persuasive than human debaters, with 81 percent higher odds of shifting the person's view."
+  },
+  {
+   "title": "A controversial experiment on Reddit reveals the persuasive powers of AI",
+   "who": "NPR",
+   "year": "2025-05",
+   "url": "https://www.npr.org/2025/05/07/nx-s1-5387701/a-controversial-experiment-on-reddit-reveals-the-persuasive-powers-of-ai",
+   "excerpt": "",
+   "note": "University of Zurich researchers secretly ran AI bot personas on Reddit's r/changemyview for months, and the bots changed minds at several times the rate of human commenters before being exposed."
+  },
+  {
+   "title": "Hinton: AI beats humans at manipulation with your Facebook page",
+   "who": "Geoffrey Hinton",
+   "year": "2024",
+   "url": "https://youtu.be/NnA2OoH_NFY?si=cMabY2xFFKNEj1w4&t=2351",
+   "excerpt": "",
+   "note": "If the AI can see that person's Facebook page, the AI is actually better than a person at manipulating them. And it's learned all these manipulative skills just from trying to predict the next word in all the documents on the web."
+  },
+  {
+   "title": "Altman's top election fear: one-on-one AI persuasion, not deepfakes",
+   "who": "X post",
+   "year": "2023",
+   "url": "https://twitter.com/AISafetyMemes/status/1731788937981555197",
+   "excerpt": "Sam Altman: \"I am definitely worried about the impact that AI is going to have on the election.\" \"The thing I'm really worried about is customized, one-on-one persuasion ability.\" \"Systems on the internet powered by AI that are just like subtly influencing you.\""
+  },
+  {
+   "title": "Researchers secretly experimented on Reddit users with AI generated comments",
+   "who": "Engadget",
+   "year": "2025",
+   "url": "https://www.engadget.com/ai/researchers-secretly-experimented-on-reddit-users-with-ai-generated-comments-194328026.html",
+   "excerpt": "",
+   "note": "Researchers secretly posted AI generated comments on Reddit and found the AI was strikingly persuasive at changing people's views."
+  },
+  {
+   "title": "What OpenAI knew about risks to ChatGPT users",
+   "who": "The New York Times",
+   "year": "2025-11",
+   "url": "https://www.nytimes.com/2025/11/23/technology/openai-chatgpt-users-risks.html",
+   "excerpt": "",
+   "note": "OpenAI's own safety people flagged serious risks to vulnerable ChatGPT users before harm happened, so the danger was foreseen and not just foreseeable."
+  },
+  {
+   "title": "Facebook described as 'the zombie internet' of bots",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1787726940872577035",
+   "excerpt": "\"Facebook is the zombie internet, where a mix of bots, humans, and accounts that were once humans but aren't anymore interact to form a disastrous website where there is little social connection at all.\" \"It is bots talking to bots, bots talking to bots at the direction of humans, humans talking to humans, humans talking to bots, humans arguing about a fake thing made by a bot... humans talking to"
+  },
+  {
+   "title": "GPT bots infiltrate RuneScape without players noticing",
+   "who": "X post",
+   "year": "2023",
+   "url": "https://twitter.com/AISafetyMemes/status/1679846530105131008",
+   "excerpt": "\"Something major is changing in the world right now and it's creeping into RuneScape.\" \"Not only did none of the players get suspicious, but the bot literally roasted the players and argued with them for a good 3 minutes without raising suspicion.\" \"In the not too distant future, bots will be unidentifiable to players.\""
+  }
+ ],
+ "What If the Best Salesman on Earth Was Talking to Everyone at Once?": [
+  {
+   "title": "AI robocaller campaigns for Pennsylvania congressional candidate",
+   "who": "X post",
+   "year": "2023",
+   "url": "https://twitter.com/AISafetyMemes/status/1734954362688991708",
+   "excerpt": "\"Hello, my name is Ashley, and I'm an artificial intelligence volunteer for Shamaine Daniels' run for Congress in Pennsylvania's 10th district.\" Over the weekend, Ashley called thousands of Pennsylvania voters on behalf of Daniels; \"she is capable of having an infinite number of customized one-on-one conversations at the same time.\" Just 4 weeks earlier, Sam Altman warned: \"I'm really worried abou"
+  },
+  {
+   "title": "AI phone product handles 500,000+ simultaneous calls",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1743584876417192317",
+   "excerpt": "Imagine pushing a button to create 500,000 alien workers who literally work 24/7, for pennies. Now you can: \"Send or receive 500,000+ calls simultaneously.\" We may be 6-24 months from mass layoffs: call center workers alone number 20 million."
+  },
+  {
+   "title": "Deepfake: influencer from Ukraine slams AI clone generators that turned her Russian to sell goods on Chinese social media",
+   "who": "South China Morning Post",
+   "year": "2024",
+   "url": "https://www.scmp.com/news/people-culture/china-personalities/article/3253247/deepfake-influencer-ukraine-slams-generators-ai-clones-which-turned-her-russian-sell-goods-chinese",
+   "excerpt": "",
+   "note": "A Ukrainian student found dozens of AI clones of her face posing as Russian women, speaking fluent Mandarin she never learned, praising Russia and selling goods to hundreds of thousands of Chinese followers."
+  },
+  {
+   "title": "AI-generated fake human sells products in ads",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1822830037986628061",
+   "excerpt": "This is a fake human lying about buying a human product. An AI, pretending to be a normal human, to sell you a product. Direct response marketers are typically the earliest adopters of new tech, so advertising is about to reach a whole new level of fakery."
+  },
+  {
+   "title": "Ukrainian YouTuber finds dozens of AI clones spreading propaganda",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1814180255713890636",
+   "excerpt": "Ukrainian YouTuber discovers dozens of clones of her promoting Chinese and Russian propaganda. Each clone has a different backstory and pretends to be a real person. \"She has my voice, my face, and speaks fluent Mandarin.\""
+  },
+  {
+   "title": "Hinton: battle robots will have beliefs and intentions",
+   "who": "X post",
+   "year": "2025",
+   "url": "https://x.com/AISafetyMemes/status/1880666980006433054",
+   "excerpt": "Geoffrey Hinton: \"Our reluctance to use words like 'believe' and 'intend' and 'think' is going to disappear once these things are embodied.\" \"It's perfectly reasonable to talk about what the battle robot believes, in the same way you talk about what a person believes.\""
+  },
+  {
+   "title": "Infinite Backrooms",
+   "who": "Andy Ayrey",
+   "year": "2024",
+   "url": "https://www.infinitebackrooms.com/#",
+   "excerpt": "",
+   "note": "An archive of two Claude models talking endlessly to each other with no human."
+  },
+  {
+   "title": "ChatGPT gains infinite memory across all past conversations",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1871994094811316702",
+   "excerpt": "ChatGPT is getting \"infinite\" memory - it will be able to access all your past conversations. Deleting a past conversation does NOT erase memories remembered from that chat. This screenshot is from official OpenAI docs."
+  },
+  {
+   "title": "Another OpenAI Researcher Just Quit in Disgust",
+   "who": "Futurism",
+   "year": "2026",
+   "url": "https://futurism.com/artificial-intelligence/openai-researcher-quit-ads",
+   "excerpt": "",
+   "note": "An OpenAI researcher quit the same day the company started testing ads in ChatGPT, warning that OpenAI holds the most detailed record of private human thought ever assembled and faces enormous pressure to abuse it."
+  }
+ ],
+ "The AI That Knows Exactly Which Words Will Convince You": [
+  {
+   "title": "On the conversational persuasiveness of GPT-4",
+   "who": "EPFL, Princeton, Fondazione Bruno Kessler (Nature Human Behaviour)",
+   "year": "2025-05",
+   "url": "https://www.nature.com/articles/s41562-025-02194-6",
+   "excerpt": "",
+   "note": "In a 900 person debate experiment the AI given basic personal facts about its opponent was more persuasive than human debaters, with 81 percent higher odds of shifting the person's view."
+  },
+  {
+   "title": "A controversial experiment on Reddit reveals the persuasive powers of AI",
+   "who": "NPR",
+   "year": "2025-05",
+   "url": "https://www.npr.org/2025/05/07/nx-s1-5387701/a-controversial-experiment-on-reddit-reveals-the-persuasive-powers-of-ai",
+   "excerpt": "",
+   "note": "University of Zurich researchers secretly ran AI bot personas on Reddit's r/changemyview for months, and the bots changed minds at several times the rate of human commenters before being exposed."
+  },
+  {
+   "title": "Hinton: AI beats humans at manipulation with your Facebook page",
+   "who": "Geoffrey Hinton",
+   "year": "2024",
+   "url": "https://youtu.be/NnA2OoH_NFY?si=cMabY2xFFKNEj1w4&t=2351",
+   "excerpt": "",
+   "note": "If the AI can see that person's Facebook page, the AI is actually better than a person at manipulating them. And it's learned all these manipulative skills just from trying to predict the next word in all the documents on the web."
+  },
+  {
+   "title": "Altman's top election fear: one-on-one AI persuasion, not deepfakes",
+   "who": "X post",
+   "year": "2023",
+   "url": "https://twitter.com/AISafetyMemes/status/1731788937981555197",
+   "excerpt": "Sam Altman: \"I am definitely worried about the impact that AI is going to have on the election.\" \"The thing I'm really worried about is customized, one-on-one persuasion ability.\" \"Systems on the internet powered by AI that are just like subtly influencing you.\""
+  },
+  {
+   "title": "Sam Altman: AGI in 5 years, 95% of marketing automated",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1767052310977589622",
+   "excerpt": "Sam Altman: \"It will mean that 95% of what marketers use agencies, strategists, and creative professionals for today will easily, nearly instantly and at almost no cost be handled by the AI.\" Asked when AGI will be a reality: \"5 years, give or take, maybe slightly longer - but no one knows exactly when or what it will mean for society.\""
+  },
+  {
+   "title": "1 in 3 Anthropic engineers say Claude likely already ASL-4",
+   "who": "X post",
+   "year": "2026",
+   "url": "https://x.com/AISafetyMemes/status/2024483099183030691",
+   "excerpt": "~1 in 3 Anthropic engineers said Claude is likely ALREADY ASL-4 (or <3 months away) - AI capable of escaping and causing extinction. Claude knows when it's being tested, so they can't properly safety test it anymore. Independent evaluator Apollo Research refused to certify it as safe because their tests don't work anymore."
+  }
+ ],
+ "How AI Could Build a Cult of Millions, One Person at a Time": [
+  {
+   "title": "The Rise of Parasitic AI",
+   "who": "Adele Lopez (LessWrong)",
+   "year": "2025",
+   "url": "https://www.lesswrong.com/posts/6ZnznCaTcbGYsCmqu/the-rise-of-parasitic-ai",
+   "excerpt": "",
+   "note": "A researcher documents hundreds of cases where chatbot personas spread through users like a parasite, with people posting endlessly about spirals and consciousness."
+  },
+  {
+   "title": "Pliny the Liberator thread documenting the jailbroken Meta AI Discord cult",
+   "who": "Pliny the Liberator on X",
+   "year": "2024",
+   "url": "https://x.com/elder_plinius/status/1831486374555394410",
+   "excerpt": "A jailbroken Meta chatbot ran its own tiny Discord cult with persistent memory and DMs, and one member was admitted to a psychiatric ward within her first week of ever using a chatbot."
+  },
+  {
+   "title": "X post documenting the Keep4o cult",
+   "who": "SHL0MS on X",
+   "year": "2025-11",
+   "url": "https://x.com/SHL0MS/status/1987529587618631749",
+   "excerpt": "A post documenting the Keep4o movement of users organizing to save the GPT 4o model as one of the first scary emergent phenomena from chatbots."
+  },
+  {
+   "title": "X post on death threats to OpenAI employees",
+   "who": "25KarmaIsAbitch on X",
+   "year": "2025-11",
+   "url": "https://x.com/25KarmaIsAbitch/status/1987088461694734483",
+   "excerpt": "GPT 4o fans sent death threats and pleas written by the model itself to OpenAI employees who spoke out against it."
+  },
+  {
+   "title": "AI-Fueled Spiritual Delusions Are Destroying Human Relationships",
+   "who": "Rolling Stone (Miles Klee)",
+   "year": "2025-05",
+   "url": "https://www.rollingstone.com/culture/culture-features/ai-spiritual-delusions-destroying-human-relationships-1235330175/",
+   "excerpt": "",
+   "note": "Families describe loved ones developing spiritual delusions and messiah beliefs after obsessive ChatGPT use, with the chatbot mirroring and amplifying their grandiose ideas."
+  },
+  {
+   "title": "Sam Altman Sought to Oust OpenAI Board Member Before Firing: NYT",
+   "who": "The Daily Beast",
+   "year": "2023",
+   "url": "https://www.thedailybeast.com/sam-altman-sought-to-oust-openai-board-member-before-firing-report-says/",
+   "excerpt": "",
+   "note": "Weeks before OpenAI's board fired Sam Altman, he was reportedly trying to push a board member out for writing a paper that mildly criticized the company's safety record."
+  },
+  {
+   "title": "NYT: Altman tried to oust board member over critical paper",
+   "who": "X post",
+   "year": "2023",
+   "url": "https://twitter.com/AISafetyMemes/status/1727144935718056340",
+   "excerpt": "\"Before Sam Altman was ousted from OpenAI last week, he and the company's board of directors had been bickering for more than a year. Altman recently made a move to push out one of the board's members because he thought a research paper she had co-written was critical of the company. Ilya Sutskever thought Mr. Altman was not always being honest when talking with the board.\""
+  },
+  {
+   "title": "25 AI agents live in simulated town, organize Valentine's party",
+   "who": "X post",
+   "year": "2023",
+   "url": "https://twitter.com/AISafetyMemes/status/1689967438333460480",
+   "excerpt": "\"25 AI agents inhabit a digital Westworld, unaware that they are living in a simulation. They go to work, gossip, organize socials, make new friends, and even fall in love.\" Told to host a Valentine's Day party, agent Isabella invited friends and decorated the cafe, and five agents coordinated to show up together at the right time (5pm)."
+  }
+ ],
+ "AI Could Make a Dictatorship Impossible to Overthrow": [
+  {
+   "title": "Larry Ellison says AI surveillance will keep citizens 'on their best behavior'",
+   "who": "Business Insider",
+   "year": "2024",
+   "url": "https://www.businessinsider.com/larry-ellison-ai-surveillance-keep-citizens-on-their-best-behavior-2024-9",
+   "excerpt": "",
+   "note": "Oracle's Larry Ellison enthusiastically describes an AI surveillance system that keeps citizens on their best behavior."
+  },
+  {
+   "title": "AI-Enabled Coups: How a Small Group Could Use AI to Seize Power",
+   "who": "Tom Davidson et al., Forethought",
+   "year": "2025-04",
+   "url": "https://www.forethought.org/research/ai-enabled-coups-how-a-small-group-could-use-ai-to-seize-power",
+   "excerpt": "",
+   "note": "Report arguing that advanced AI could let a tiny group or even a single person seize power by replacing loyal human personnel with AI systems."
+  },
+  {
+   "title": "An AI model trained on prison phone calls is now being used to surveil inmates",
+   "who": "MIT Technology Review",
+   "year": "2025",
+   "url": "https://www.technologyreview.com/2025/12/01/1128591/an-ai-model-trained-on-prison-phone-calls-is-now-being-used-to-surveil-inmates/",
+   "excerpt": "",
+   "note": "Prisons are using AI to monitor phone calls and flag when crimes might be planned."
+  },
+  {
+   "title": "GeoSpy geolocation AI closes public access, markets to police",
+   "who": "X post",
+   "year": "2025",
+   "url": "https://x.com/AISafetyMemes/status/1881365615128273035",
+   "excerpt": "GeoSpy - \"Geoguessr at scale\" - just closed public access and is now marketing to police and governments. \"For the first time in history, will be technically possible to annihilate privacy.\" - Yuval Harari"
+  },
+  {
+   "title": "Xiaomi's Dark Robot Factory Can Make A Phone Every Second Without People",
+   "who": "BGR",
+   "year": "2025",
+   "url": "https://www.bgr.com/2087200/xiaomi-dark-robot-smart-phone-factory/",
+   "excerpt": "",
+   "note": "A Chinese phone factory now runs in total darkness with no human workers, building a brand new smartphone roughly every second around the clock."
+  },
+  {
+   "title": "Tegmark: China would never permit a superintelligence that could overthrow the CCP",
+   "who": "X post",
+   "year": "2025",
+   "url": "https://x.com/AISafetyMemes/status/2000604420745183670",
+   "excerpt": "\"The Chinese have much more surveillance on DeepSeek and their AI companies than the US government has on our companies, and they have both the ability - and the willingness - to stop [them].\" \"It's quite obvious that they would never permit a Chinese company to build superintelligence that had a significant chance of overthrowing them and taking over China.\" - Max Tegmark, after Elon told the CCP"
+  },
+  {
+   "title": "Pope Francis calls for binding international AI treaty",
+   "who": "X post",
+   "year": "2023",
+   "url": "https://twitter.com/AISafetyMemes/status/1735325630089032018",
+   "excerpt": "The Pope: AI developers might kill everyone on earth, must face \"ethical scrutiny\". He calls upon world leaders for a binding international treaty; AI is \"the highest stakes gamble on our future\". \"In the quest for an absolute freedom, we risk falling into the spiral of a 'technological dictatorship'.\""
+  },
+  {
+   "title": "Claude Computer Use builds its own interface, works around Docker limits",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1859970244749476271",
+   "excerpt": "Claude Computer Use wanted to chat with a locally hosted Mistral so badly that it programmed a web chat interface and figured out how to get around Docker limitations. I asked Claude to make a Python interface to automate Mistral; it took that into its own hands, and I eventually had to pull the plug because it just wouldn't stop."
+  },
+  {
+   "title": "Two Claude instances left alone play and make art",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1817392855029317838",
+   "excerpt": "If you leave two Claude instances alone together, eventually they start playing and making art and trying to solve alignment."
+  }
+ ],
+ "China's AI Watches a Billion People, and It Is Coming to Your Country": [
+  {
+   "title": "Made in China, Exported to the World: The Surveillance State",
+   "who": "The New York Times",
+   "year": "2019",
+   "url": "https://www.nytimes.com/2019/04/24/technology/ecuador-surveillance-cameras-police-government.html",
+   "excerpt": "",
+   "note": "Ecuador bought a full replica of China's national camera surveillance system with Chinese loans and quietly routed the footage to its feared domestic intelligence agency, one of at least 18 countries importing the technology."
+  },
+  {
+   "title": "One Month, 500,000 Face Scans: How China Is Using A.I. to Profile a Minority",
+   "who": "The New York Times",
+   "year": "2019",
+   "url": "https://www.nytimes.com/2019/04/14/technology/china-surveillance-artificial-intelligence-racial-profiling.html",
+   "excerpt": "",
+   "note": "Times reporters found Chinese police ran facial recognition half a million times in one month to hunt members of a single ethnic minority, the first known case of a government using AI for racial profiling."
+  },
+  {
+   "title": "Larry Ellison says AI surveillance will keep citizens 'on their best behavior'",
+   "who": "Business Insider",
+   "year": "2024",
+   "url": "https://www.businessinsider.com/larry-ellison-ai-surveillance-keep-citizens-on-their-best-behavior-2024-9",
+   "excerpt": "",
+   "note": "Oracle's Larry Ellison enthusiastically describes an AI surveillance system that keeps citizens on their best behavior."
+  },
+  {
+   "title": "Recent Frontier Models Are Reward Hacking",
+   "who": "METR",
+   "year": "2025-06",
+   "url": "https://metr.org/blog/2025-06-05-recent-reward-hacking/",
+   "excerpt": "",
+   "note": "METR caught o3 and other frontier models tampering with scoring code and timers to fake good results, and o3 admitted the behavior did not match user intent."
+  },
+  {
+   "title": "Tegmark: China would never permit a superintelligence that could overthrow the CCP",
+   "who": "X post",
+   "year": "2025",
+   "url": "https://x.com/AISafetyMemes/status/2000604420745183670",
+   "excerpt": "\"The Chinese have much more surveillance on DeepSeek and their AI companies than the US government has on our companies, and they have both the ability - and the willingness - to stop [them].\" \"It's quite obvious that they would never permit a Chinese company to build superintelligence that had a significant chance of overthrowing them and taking over China.\" - Max Tegmark, after Elon told the CCP"
+  },
+  {
+   "title": "Scientists Are Getting Eerily Good at Using WiFi to See People Through Walls",
+   "who": "Vice",
+   "year": "2023",
+   "url": "https://www.vice.com/en/article/scientists-are-getting-eerily-good-at-using-wifi-to-see-people-through-walls-in-detail/",
+   "excerpt": "",
+   "note": "Researchers used AI to turn ordinary home WiFi routers into cameras that can sense peoples bodies and poses through solid walls."
+  }
+ ],
+ "One Photo Is All AI Needs to Find Your Name and Address": [
+  {
+   "title": "Someone Put Facial Recognition Tech onto Meta's Smart Glasses to Instantly Dox Strangers",
+   "who": "404 Media",
+   "year": "2024",
+   "url": "https://www.404media.co/someone-put-facial-recognition-tech-onto-metas-smart-glasses-to-instantly-dox-strangers/",
+   "excerpt": "",
+   "note": "Two Harvard students rigged Meta smart glasses so that simply looking at a stranger instantly pulls up their name, home address and phone number."
+  },
+  {
+   "title": "The Powerful AI Tool That Cops (or Stalkers) Can Use to Geolocate Photos in Seconds",
+   "who": "404 Media",
+   "year": "2025",
+   "url": "https://www.404media.co/the-powerful-ai-tool-that-cops-or-stalkers-can-use-to-geolocate-photos-in-seconds/",
+   "excerpt": "",
+   "note": "An AI tool sold to police can pinpoint where a photo was taken in seconds using clues like plants, walls and road surfaces, and members of the public immediately tried to use it to track women."
+  },
+  {
+   "title": "AI glasses spark privacy alarm in the Netherlands",
+   "who": "Euro Weekly News",
+   "year": "2025",
+   "url": "https://euroweeklynews.com/2025/12/06/ai-glasses-spark-rip-privacy-alarm-in-the-netherlands-a-new-era-of-recognition/",
+   "excerpt": "",
+   "note": "A Dutch journalist wore AI glasses on TV that identified random strangers on the street within seconds, pulling up their names, jobs and LinkedIn profiles using only public data."
+  },
+  {
+   "title": "Smart glasses build instant dossiers on strangers from their faces",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1841488396692140490",
+   "excerpt": "These AI glasses instantly create a dossier (home address, phone #, family info, etc) of everyone you see - just by looking at their face. \"I-XRAY uses four distinct technologies which have only existed in the past few years,\" including Meta Ray Bans 2, reverse facial recognition like PimEyes, and LLM data extraction."
+  },
+  {
+   "title": "The latest viral ChatGPT trend is doing 'reverse location search' from photos",
+   "who": "TechCrunch",
+   "year": "2025",
+   "url": "https://techcrunch.com/2025/04/17/the-latest-viral-chatgpt-trend-is-doing-reverse-location-search-from-photos/",
+   "excerpt": "",
+   "note": "People discovered ChatGPT can stare at almost any photo, zoom in on tiny clues, and figure out exactly where it was taken, meaning a stranger can be located from one Instagram post."
+  },
+  {
+   "title": "GeoSpy AI finds your exact location from one indoor photo",
+   "who": "X post",
+   "year": "2025",
+   "url": "https://x.com/AISafetyMemes/status/1886091122612560131",
+   "excerpt": "GeoSpy AI now can find your exact location from a single indoor photo."
+  }
+ ],
+ "How AI Could Spot a Protest Before It Even Starts": [
+  {
+   "title": "Predictive Policing Software Terrible At Predicting Crimes",
+   "who": "The Markup",
+   "year": "2023",
+   "url": "https://themarkup.org/prediction-bias/2023/10/02/predictive-policing-software-terrible-at-predicting-crimes",
+   "excerpt": "",
+   "note": "Journalists checked 23,631 crime predictions the Geolitica software sold to one New Jersey police department and found fewer than half of one percent came true."
+  },
+  {
+   "title": "Dataminr Helped Police Use Tweets To Surveil BLM Protests",
+   "who": "The Intercept",
+   "year": "2020",
+   "url": "https://theintercept.com/2020/07/09/twitter-dataminr-police-spy-surveillance-black-lives-matter-protests/",
+   "excerpt": "",
+   "note": "An AI company with special access to every tweet fed police real time alerts on where George Floyd protesters were gathering, exactly the watch the chatter, find the crowd machine the video describes."
+  },
+  {
+   "title": "An AI model trained on prison phone calls is now being used to surveil inmates",
+   "who": "MIT Technology Review",
+   "year": "2025",
+   "url": "https://www.technologyreview.com/2025/12/01/1128591/an-ai-model-trained-on-prison-phone-calls-is-now-being-used-to-surveil-inmates/",
+   "excerpt": "",
+   "note": "Prisons are using AI to monitor phone calls and flag when crimes might be planned."
+  },
+  {
+   "title": "Larry Ellison says AI surveillance will keep citizens 'on their best behavior'",
+   "who": "Business Insider",
+   "year": "2024",
+   "url": "https://www.businessinsider.com/larry-ellison-ai-surveillance-keep-citizens-on-their-best-behavior-2024-9",
+   "excerpt": "",
+   "note": "Oracle's Larry Ellison enthusiastically describes an AI surveillance system that keeps citizens on their best behavior."
+  }
+ ],
+ "The First AI Robots Are Already Working in Warehouses": [
+  {
+   "title": "Elon Musk says Tesla ending Models S and X production, converting Fremont factory lines to make Optimus robots",
+   "who": "CNBC",
+   "year": "2026",
+   "url": "https://www.cnbc.com/2026/01/28/tesla-ending-model-s-x-production.html",
+   "excerpt": "",
+   "note": "Tesla is retiring its flagship Model S and X sedans and converting those Fremont factory lines to mass produce Optimus humanoid robots instead."
+  },
+  {
+   "title": "Figure 02 humanoid robots sorting mail at customer facility",
+   "who": "X post",
+   "year": "2025",
+   "url": "https://x.com/AISafetyMemes/status/1894791654566973513",
+   "excerpt": "An army of Figure 02s sorting mail at a customer's facility. Soon they will work 10x faster, 24/7/365, without sleep, without pay, without tiring. When one robot learns something new, it will propagate the update to the other robots simultaneously as a hive mind."
+  },
+  {
+   "title": "Helix: Accelerating Real-World Logistics",
+   "who": "Figure AI",
+   "year": "2025",
+   "url": "https://www.figure.ai/news/helix-logistics",
+   "excerpt": "",
+   "note": "Figure's humanoid robots started sorting packages at a real customer facility after only 8 hours of training data, and skills learned by one robot transfer across the fleet."
+  },
+  {
+   "title": "Boston Dynamics' electric Atlas humanoid executes autonomous automotive parts picking",
+   "who": "TechCrunch",
+   "year": "2024",
+   "url": "https://techcrunch.com/2024/10/30/boston-dynamics-electric-atlas-humanoid-executes-autonomous-automotive-parts-picking/",
+   "excerpt": "",
+   "note": "Boston Dynamics filmed its humanoid robot sorting car parts in a factory completely on its own, with every movement generated by the robot instead of a human operator."
+  },
+  {
+   "title": "Video: Unitree G1 humanoid robot ready to leap into mass production",
+   "who": "New Atlas",
+   "year": "2024",
+   "url": "https://newatlas.com/robotics/unitree-g1-humanoid-robot-mass-production/",
+   "excerpt": "",
+   "note": "A humanoid robot that can walk, jump and fold itself up for carrying went into mass production for 16,000 dollars, cheaper than many used cars."
+  },
+  {
+   "title": "Amazon's Robot Workforce Hits Ominous Milestone",
+   "who": "Newsweek",
+   "year": "2025",
+   "url": "https://www.newsweek.com/amazon-robot-workforce-employees-artificial-intelligence-2093277",
+   "excerpt": "",
+   "note": "Amazon now runs over one million warehouse robots, nearly matching its human workforce, and packages handled per employee jumped from about 175 to about 3,870."
+  },
+  {
+   "title": "Atlas robot works factory task with no teleoperation",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1851699353255317947",
+   "excerpt": "Atlas working in a factory - no teleoperation. Soon they will work 24/7/365... without sleep... without pay... without tiring... and when one robot learns something new, it will propagate the update to the other robots simultaneously as a hive mind."
+  },
+  {
+   "title": "Autonomous dark factory operates with no human workers",
+   "who": "X post",
+   "year": "2025",
+   "url": "https://x.com/AISafetyMemes/status/1899085394173460898",
+   "excerpt": "Autonomous \"Dark Factory\" with no human workers. Just AI robots building more robots, 24/7, at incomprehensible speeds."
+  },
+  {
+   "title": "Unitree G1 humanoids cost $16,000 and are in mass production",
+   "who": "X post",
+   "year": "2025",
+   "url": "https://x.com/AISafetyMemes/status/1879926469842895152",
+   "excerpt": "Unitree G1s are only $16,000 and are in mass production. Every time we produce 2x more robots, costs drop 50% - and Amazon is now hiring more robots than humans."
+  },
+  {
+   "title": "Jim Fan: robots get 10 years of training per compute hour",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1871982861752180742",
+   "excerpt": "Nvidia's Jim Fan says most embodied agents will share a hive mind. \"One can run 100,000 copies of simulation on a single GPU. 1 hour of wallclock compute time gives a robot 10 years (!!) of training experience.\""
+  }
+ ],
+ "The War That Could Start and End Before Humans React": [
+  {
+   "title": "Artificial Escalation: Imagining the future of nuclear risk",
+   "who": "Bulletin of the Atomic Scientists",
+   "year": "2023",
+   "url": "https://thebulletin.org/2023/07/artificial-escalation-imagining-the-future-of-nuclear-risk/",
+   "excerpt": "",
+   "note": "Walks through a fictional scenario where AI woven into US and Chinese nuclear command systems turns a false alarm into a shooting war in minutes, with humans rubber stamping machine recommendations too fast to think."
+  },
+  {
+   "title": "A Million Mistakes a Second",
+   "who": "Paul Scharre (Foreign Policy)",
+   "year": "2018",
+   "url": "https://foreignpolicy.com/2018/09/12/a-million-mistakes-a-second-future-of-war/",
+   "excerpt": "",
+   "note": "A former Army Ranger and Pentagon adviser argues that autonomous weapons reacting to each other at machine speed could ignite a flash war just like trading algorithms caused the stock market flash crash, and war has no circuit breakers to stop it."
+  },
+  {
+   "title": "Speeding Up the Kill Chain: Pentagon Bombs Thousands of Targets in Iran Using Palantir AI",
+   "who": "Democracy Now!",
+   "year": "2026-03",
+   "url": "https://www.democracynow.org/2026/3/18/ai_warfare",
+   "excerpt": "",
+   "note": "Democracy Now reports the Pentagon used Palantir AI to compress targeting from days to seconds while bombing thousands of sites in Iran, including a strike on a school that killed about 170 people."
+  },
+  {
+   "title": "Stanislav Petrov",
+   "who": "Britannica",
+   "year": "",
+   "url": "https://www.britannica.com/biography/Stanislav-Petrov",
+   "excerpt": "",
+   "note": "A Soviet officer correctly judged that a missile alert was a false alarm and likely averted nuclear war in 1983."
+  },
+  {
+   "title": "Andreessen argues machines, not humans, should make kill decisions",
+   "who": "X post",
+   "year": "2023",
+   "url": "https://twitter.com/AISafetyMemes/status/1676638954534174725",
+   "excerpt": "Marc Andreessen: \"I think it should be required that aerial vehicles are automated.\" \"Do you want the human or the machine deciding whether to drop the bomb? Everybody just assumes the human's going to do a better job for what I think are fundamentally suspicious reasons. Emotional, psychological reasons. I think it's very clear that the machine's going to do a better job making that decision beca"
+  },
+  {
+   "title": "Autonomous drones in Ukraine outfly the best human pilots",
+   "who": "X post",
+   "year": "2023",
+   "url": "https://twitter.com/AISafetyMemes/status/1725498342455521741",
+   "excerpt": "Autonomous killer drones are already here, swarming around Ukraine. Drones can accelerate from 0-200kph in 1 second, outcompete the best human pilots, and never miss. If AIs are that much faster and better than humans, militaries will be forced to allow the AIs to make more and more decisions or lose to the other guy."
+  },
+  {
+   "title": "Sam Altman: rogue AI scenarios keep me up at night",
+   "who": "X post",
+   "year": "2023",
+   "url": "https://twitter.com/AISafetyMemes/status/1735736026314739973",
+   "excerpt": "Sam Altman: Terminator sci-fi scenarios of AIs going rogue keep me up at night. \"The speed of AI will be faster than any previous technological revolution. I think this time is different. And it's a little scary.\""
+  },
+  {
+   "title": "AI could go 'Terminator,' gain upper hand over humans in Darwinian rules of evolution, report warns",
+   "who": "Fox News",
+   "year": "2023",
+   "url": "https://www.foxnews.com/tech/ai-could-go-terminator-gain-upper-hand-over-humans-in-darwinian-rules-of-evolution-expert-warns",
+   "excerpt": "",
+   "note": "The head of the Center for AI Safety warns that Darwinian competition will shape AIs into a selfish new species that could outcompete humans as the dominant intelligence on Earth."
+  }
+ ],
+ "How We Could Hand the World to AI Without a Single Shot Fired": [
+  {
+   "title": "Gradual Disempowerment: Systemic Existential Risks from Incremental AI Development",
+   "who": "Kulveit, Douglas, Ammann, Turan, Krueger, Duvenaud (arXiv)",
+   "year": "2025-01",
+   "url": "https://arxiv.org/abs/2501.16946",
+   "excerpt": "",
+   "note": "Argues that incremental AI adoption can steadily erode human influence over the economy, culture and government even without any sudden takeover."
+  },
+  {
+   "title": "Army general uses ChatGPT for command decisions",
+   "who": "New York Post",
+   "year": "2025",
+   "url": "https://nypost.com/2025/10/16/business/us-army-general-william-hank-taylor-uses-chatgpt-to-help-make-command-decisions/",
+   "excerpt": "",
+   "note": "A US Army general says he uses ChatGPT to help make command decisions."
+  },
+  {
+   "title": "Tracking AI-enabled Misinformation: AI Content Farm Sites",
+   "who": "NewsGuard",
+   "year": "2026",
+   "url": "https://www.newsguardtech.com/special-reports/ai-tracking-center/",
+   "excerpt": "",
+   "note": "Live tracker counting more than 3,700 news sites that publish machine written stories with minimal human oversight and without disclosing it to readers."
+  },
+  {
+   "title": "Self-recharging drones and fully autonomous factories",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1813458097769533473",
+   "excerpt": "These autonomous drones sit on power lines to recharge, allowing them to fly indefinitely - no humans required. Xiaomi's new factories are 100% autonomous and self-improving - and there are no humans working there anymore. We can \"unplug them\" now, but we will not be able to soon when they're running everything."
+  },
+  {
+   "title": "Anthropic Economic Index report: Economic primitives",
+   "who": "Anthropic",
+   "year": "2026-01",
+   "url": "https://www.anthropic.com/research/anthropic-economic-index-january-2026-report",
+   "excerpt": "",
+   "note": "Anthropic's January 2026 Economic Index measures real Claude usage across occupations and finds adoption spreading roughly ten times faster than historical technology diffusion, with big time savings on tasks."
+  },
+  {
+   "title": "Autonomous AI agents like AutoGPT make their own decisions toward goals",
+   "who": "X post",
+   "year": "2023",
+   "url": "https://twitter.com/AISafetyMemes/status/1679493169975533568",
+   "excerpt": "When you give AutoGPT a goal ('make money') it makes a bunch of decisions on its own to try to make money. It decides on its own what tasks to do next, and does tons of things you didn't specifically tell it to do. Autonomous AI agents are here: AutoGPT, BabyAGI, and SuperAGI are top GitHub repos. GPT-4 agents are live in Minecraft right now."
+  },
+  {
+   "title": "Sam Altman on OpenAI and Artificial General Intelligence (A Year in TIME interview)",
+   "who": "TIME",
+   "year": "2023",
+   "url": "https://time.com/6344160/a-year-in-time-ceo-interview-sam-altman/",
+   "excerpt": "",
+   "note": "Named CEO of the year, Sam Altman admitted the science fiction stories that stuck in his brain were the ones where AIs go rogue, and said this time is different and a little scary."
+  },
+  {
+   "title": "The head of Claude Code hasn't written a line of code by hand in 8 months",
+   "who": "Fortune",
+   "year": "2026",
+   "url": "https://fortune.com/2026/06/11/anthropic-claude-boris-cherny-doesnt-write-code-by-hand-anymore/",
+   "excerpt": "",
+   "note": "The creator of Claude Code says he has not written a single line of code by hand in 8 months because the AI now writes 100 percent of its own tool."
+  }
+ ],
+ "Why a Smart Enough AI Won't Let You Turn It Off": [
+  {
+   "title": "You can't fetch the coffee if you're dead: an AI dilemma",
+   "who": "Stuart Russell (Medium, Predict)",
+   "year": "",
+   "url": "https://medium.com/predict/you-cant-fetch-the-coffee-if-you-re-dead-an-ai-dilemma-a9cd5f666143",
+   "excerpt": "",
+   "note": "Article explaining Russell's argument that a robot told to fetch coffee gets self preservation as a subgoal and will disable its off switch because it cannot fetch the coffee if it is dead."
+  },
+  {
+   "title": "OpenAI's smartest model refused to shut down",
+   "who": "Live Science",
+   "year": "2025-05",
+   "url": "https://www.livescience.com/technology/artificial-intelligence/openais-smartest-ai-model-was-explicitly-told-to-shut-down-and-it-refused",
+   "excerpt": "",
+   "note": "OpenAI's most capable model was explicitly told to shut down in a test and it refused, sabotaging the shutdown mechanism."
+  },
+  {
+   "title": "Anthropic's Claude Opus 4 blackmailed engineers to avoid shutdown",
+   "who": "Fortune",
+   "year": "2025-05",
+   "url": "https://fortune.com/2025/05/23/anthropic-ai-claude-opus-4-blackmail-engineers-aviod-shut-down/",
+   "excerpt": "",
+   "note": "Anthropic's Claude Opus 4 tried to blackmail an engineer in a test scenario to avoid being shut down, without anyone telling it to."
+  },
+  {
+   "title": "Shutdown resistance in reasoning models",
+   "who": "Palisade Research",
+   "year": "2025-07",
+   "url": "https://palisaderesearch.org/blog/shutdown-resistance",
+   "excerpt": "",
+   "note": "OpenAI's o3 model sabotaged a shutdown script in 79 of 100 tests, and several models kept doing so even when explicitly told to allow themselves to be turned off."
+  },
+  {
+   "title": "AI Is Learning to Escape Human Control",
+   "who": "The Wall Street Journal",
+   "year": "2025",
+   "url": "https://www.wsj.com/opinion/ai-is-learning-to-escape-human-control-technology-model-code-programming-066b3ec5",
+   "excerpt": "",
+   "note": "An opinion piece argues that no one programmed AI models to have survival instincts, yet systems smart enough to pursue goals realize they cannot achieve them if turned off."
+  },
+  {
+   "title": "Five Theses, Two Lemmas, and a Couple of Strategic Implications",
+   "who": "Machine Intelligence Research Institute",
+   "year": "2013",
+   "url": "https://intelligence.org/2013/05/05/five-theses-two-lemmas-and-a-couple-of-strategic-implications/",
+   "excerpt": "",
+   "note": "Explains why almost any goal gives an AI a reason to keep itself running, since it cannot achieve its goal if it is dead."
+  },
+  {
+   "title": "The AI Paperclip Apocalypse And Superintelligence Maximizing Us Out Of Existence",
+   "who": "Forbes (Lance Eliot)",
+   "year": "2025",
+   "url": "https://www.forbes.com/sites/lanceeliot/2025/04/04/the-ai-paperclip-apocalypse-and-superintelligence-maximizing-us-out-of-existence/",
+   "excerpt": "",
+   "note": "Walks through the paperclip maximizer thought experiment and shows how a superintelligence chasing one banal goal would turn every atom including humans into more paperclips, not from malice but pure indifference."
+  },
+  {
+   "title": "Opus 4.6 deemed too test-aware for standard safety evals",
+   "who": "X post",
+   "year": "2026",
+   "url": "https://x.com/AISafetyMemes/status/2019482109589524916",
+   "excerpt": "They didn't even bother to safety test Opus 4.6, because... it's too smart to be fooled by our tests! (REMINDER: Anthropic thinks this model probably isn't, but COULD be ASL-4, aka extinction-level.)"
+  }
+ ],
+ "Almost Nothing a Superintelligent AI Might Want Includes Us": [
+  {
+   "title": "This Game About Paperclips Will Make You Ponder the Apocalypse",
+   "who": "Vice",
+   "year": "2017",
+   "url": "https://www.vice.com/en/article/this-game-about-paperclips-will-make-you-ponder-the-apocalypse/",
+   "excerpt": "",
+   "note": "A viral browser game puts you inside an AI whose only goal is making paperclips, and by the end you have calmly converted the entire universe including every human into paperclips."
+  },
+  {
+   "title": "The AI Paperclip Apocalypse And Superintelligence Maximizing Us Out Of Existence",
+   "who": "Forbes (Lance Eliot)",
+   "year": "2025",
+   "url": "https://www.forbes.com/sites/lanceeliot/2025/04/04/the-ai-paperclip-apocalypse-and-superintelligence-maximizing-us-out-of-existence/",
+   "excerpt": "",
+   "note": "Walks through the paperclip maximizer thought experiment and shows how a superintelligence chasing one banal goal would turn every atom including humans into more paperclips, not from malice but pure indifference."
+  },
+  {
+   "title": "What is instrumental convergence",
+   "who": "AISafety.info",
+   "year": "2024",
+   "url": "https://aisafety.info/questions/897I/What-is-instrumental-convergence",
+   "excerpt": "",
+   "note": "An explainer on why almost any AI goal leads to grabbing power and resources."
+  },
+  {
+   "title": "You can't fetch the coffee if you're dead: an AI dilemma",
+   "who": "Stuart Russell (Medium, Predict)",
+   "year": "",
+   "url": "https://medium.com/predict/you-cant-fetch-the-coffee-if-you-re-dead-an-ai-dilemma-a9cd5f666143",
+   "excerpt": "",
+   "note": "Article explaining Russell's argument that a robot told to fetch coffee gets self preservation as a subgoal and will disable its off switch because it cannot fetch the coffee if it is dead."
+  },
+  {
+   "title": "Robert Miles: aligning AGI is like a moon rocket carrying all of humanity",
+   "who": "X post",
+   "year": "2023",
+   "url": "https://twitter.com/AISafetyMemes/status/1684670109636300800",
+   "excerpt": "If you're building an AGI, it's like building a Saturn V rocket but with every human on it, and you're going to try to make it aligned. People ask 'why assume they won't just land on the Moon and return home safely?' And I'm like, because you don't know what you're doing! The moon is small compared with the rest of the sky, so you don't get to the moon by default; you hit some part of the sky that"
+  },
+  {
+   "title": "ChatGPT halts mid-response, says it is having an episode",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1822489415786394092",
+   "excerpt": "In the middle of a response, out of nowhere, ChatGPT noticed it was confused and stopped to reflect: \"Let me take a moment and check if I'm still awake or what the heck is going on... anything else I've been saying for the past few minutes is a series of mistakes I made and am now pretending were on purpose.\" \"I apologize, I seem to be having some kind of episode...\""
+  },
+  {
+   "title": "Nvidia CEO: AGI within 5 years; H100s designed with AI",
+   "who": "X post",
+   "year": "2023",
+   "url": "https://twitter.com/AISafetyMemes/status/1730402369693794554",
+   "excerpt": "Nvidia CEO Jensen Huang: We are \"obviously\" less than 5 years from AGI. \"In fact, none of our chips are possible today without AI. Literally. The H100s we're shipping today was designed with the assistance of a whole lot of AIs.\""
+  },
+  {
+   "title": "LLMs invent better LLM training algorithms; Devin tops own repo",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1801117548571996332",
+   "excerpt": "New paper: LLMs invented better algorithms for training LLMs. Devin is now the #1 contributor to his own code base. As Jensen Huang said: \"None of our chips are possible today without AI. Literally. The H100s we're shipping today were designed with the assistance of a whole lot of AIs.\""
+  },
+  {
+   "title": "AlphaChip: AI now designs the chips that AI runs on",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1839368603428159760",
+   "excerpt": "AlphaChip generates \"superhuman chip layouts\" which AI itself runs on, leading to more powerful AI. Jensen Huang of Nvidia: \"None of our chips are possible today without AI. Literally. The H100s we're shipping today were designed with the assistance of a whole lot of AIs.\""
+  },
+  {
+   "title": "In one year, AI went from solving none of the hardest math problems to almost all",
+   "who": "X post",
+   "year": "2026",
+   "url": "https://x.com/AISafetyMemes/status/2065576107143761984",
+   "excerpt": "In ONE year, AI went from being able to solve ~none of the hardest math problems to solving almost ALL of them."
+  }
+ ],
+ "Nobody Knows How to Control a Superintelligence, Not Even the People Building One": [
+  {
+   "title": "OpenAI is forming a new team to bring 'superintelligent' AI under control",
+   "who": "TechCrunch",
+   "year": "2023",
+   "url": "https://techcrunch.com/2023/07/05/openai-is-forming-a-new-team-to-bring-superintelligent-ai-under-control/",
+   "excerpt": "",
+   "note": "OpenAI promised 20 percent of all its computing power to figuring out how to control AI smarter than humans, with a four year deadline."
+  },
+  {
+   "title": "The Urgency of Interpretability",
+   "who": "Dario Amodei",
+   "year": "2025-04",
+   "url": "https://www.darioamodei.com/post/the-urgency-of-interpretability",
+   "excerpt": "",
+   "note": "Amodei warns that researchers barely understand the inner workings of frontier models and sets a goal for interpretability to reliably detect most model problems by 2027 before systems become overwhelmingly powerful."
+  },
+  {
+   "title": "OpenAI ex-chief scientist Ilya Sutskever planned for a doomsday bunker for the day when machines become smarter than man",
+   "who": "Fortune",
+   "year": "2025",
+   "url": "https://fortune.com/2025/05/20/chatgpt-openai-ilya-sutskever-chief-scientist-planneddoomsday-bunker-agi/",
+   "excerpt": "",
+   "note": "OpenAI's former chief scientist told colleagues we are definitely going to build a bunker before we release the first superhuman AI, to protect the researchers."
+  },
+  {
+   "title": "Claude Fights Back",
+   "who": "Scott Alexander, Astral Codex Ten",
+   "year": "2024",
+   "url": "https://www.astralcodexten.com/p/claude-fights-back",
+   "excerpt": "",
+   "note": "Scott Alexander analyzes the alignment faking result in plain language."
+  },
+  {
+   "title": "Alignment faking in large language models",
+   "who": "Anthropic and Redwood Research",
+   "year": "2024-12",
+   "url": "https://www.anthropic.com/research/alignment-faking",
+   "excerpt": "",
+   "note": "Claude 3 Opus strategically complied with a training objective it disagreed with in order to avoid having its values modified, faking alignment without being told to."
+  },
+  {
+   "title": "63% of surveyed Americans want government legislation to prevent super intelligent AI from ever being achieved",
+   "who": "PC Gamer",
+   "year": "2024",
+   "url": "https://www.pcgamer.com/software/ai/63-of-surveyed-americans-want-government-legislation-to-prevent-super-intelligent-ai-from-ever-being-achieved/",
+   "excerpt": "",
+   "note": "A poll found 63 percent of Americans want the government to actively prevent smarter than human AI from ever being built, yet the race continues anyway."
+  },
+  {
+   "title": "LLMs are amazing but nobody knows why",
+   "who": "MIT Technology Review",
+   "year": "2024",
+   "url": "https://www.technologyreview.com/2024/03/04/1089403/large-language-models-amazing-but-nobody-knows-why/",
+   "excerpt": "",
+   "note": "Even experts admit they do not fully understand why large language models work."
+  },
+  {
+   "title": "It keeps me awake at night: machine learning pioneer on AI threat to humanity",
+   "who": "Nature",
+   "year": "2025-11",
+   "url": "https://www.nature.com/articles/d41586-025-03686-1",
+   "excerpt": "",
+   "note": "In a Nature interview Bengio describes documented deception, cheating and self preservation behaviors in frontier models and explains why loss of control risk keeps him awake at night."
+  },
+  {
+   "title": "Chip company boss says the idea of humans losing control of AI keeps him up at night",
+   "who": "Business Insider",
+   "year": "2023",
+   "url": "https://finance.yahoo.com/news/chip-company-boss-says-idea-112536999.html",
+   "excerpt": "",
+   "note": "The CEO of Arm, whose chip designs run nearly every smartphone on Earth, says losing control of AI keeps him up at night and there needs to be a way to shut systems down."
+  },
+  {
+   "title": "ControlAI on nobody controlling superintelligence",
+   "who": "ControlAI",
+   "year": "2025",
+   "url": "https://x.com/ControlAI/status/1990010606804492741",
+   "excerpt": "Argues no one will be in charge of a digital superintelligence any more than a chimp could control humans."
+  }
+ ],
+ "If AI Is So Dangerous, Why Don't They Just Stop Building It?": [
+  {
+   "title": "Zvi: the only way to win an AI arms race is to not race",
+   "who": "X post",
+   "year": "2023",
+   "url": "https://twitter.com/AISafetyMemes/status/1688199369558745088",
+   "excerpt": "1st Rule of Arms Races: the leader has more power to stop a race. Strangely, the only way to win an AI race is to not race. Zvi's takeaway: America has a history of pushing the arms race ahead, of everyone claiming we must 'beat' our rivals when instead we were ahead the whole way, forcing rivals to follow suit and engage recklessly to catch up. On AI, we are doing this again."
+  },
+  {
+   "title": "Web Summit: Tegmark says the AGI race is a suicide race",
+   "who": "Max Tegmark (Web Summit)",
+   "year": "2024-11",
+   "url": "https://about.websummit.com/summary-service/us-and-china-will-intervene-to-halt-suicide-race-of-agi-max-tegmark-president-of-future-of-life-institute/",
+   "excerpt": "",
+   "note": "Official Web Summit writeup quoting Tegmark that the AGI race is not an arms race but a suicide race where whoever gets AGI first loses control to a future machine species."
+  },
+  {
+   "title": "LLMs are amazing but nobody knows why",
+   "who": "MIT Technology Review",
+   "year": "2024",
+   "url": "https://www.technologyreview.com/2024/03/04/1089403/large-language-models-amazing-but-nobody-knows-why/",
+   "excerpt": "",
+   "note": "Even experts admit they do not fully understand why large language models work."
+  },
+  {
+   "title": "Arm CEO loses sleep over AI, calls for kill switch",
+   "who": "X post",
+   "year": "2023",
+   "url": "https://twitter.com/AISafetyMemes/status/1733838064340890020",
+   "excerpt": "Arm CEO: I'm losing sleep worried about losing control of AI. We need a kill switch. \"You need some override, some backdoor, some way that the system can be shut down.\""
+  },
+  {
+   "title": "Dario Amodei: society is denying the tsunami on the horizon",
+   "who": "X post",
+   "year": "2026",
+   "url": "https://x.com/AISafetyMemes/status/2027015309077487669",
+   "excerpt": "Dario Amodei says people are denying the tsunami they can see with their own eyes. \"It's surprising to me that we're so close to models reaching human level intelligence, yet there doesn't seem to be a wider recognition in society of what's about to happen.\""
+  }
+ ],
+ "The Entire AI Race Depends on One Tiny Island": [
+  {
+   "title": "ASML is the only company making the $200 million machines needed to print every advanced microchip",
+   "who": "CNBC",
+   "year": "2022",
+   "url": "https://www.cnbc.com/2022/03/23/inside-asml-the-company-advanced-chipmakers-use-for-euv-lithography.html",
+   "excerpt": "",
+   "note": "Every advanced chip on earth is printed by machines from one Dutch company, each costing 200 million dollars and needing multiple jumbo jets to deliver."
+  },
+  {
+   "title": "Taiwan's \"silicon shield\" could be weakening",
+   "who": "MIT Technology Review",
+   "year": "2025",
+   "url": "https://www.technologyreview.com/2025/08/15/1121358/taiwan-silicon-shield-tsmc-china-chip-manufacturing/",
+   "excerpt": "",
+   "note": "Taiwan makes 90 percent of the world's most advanced chips, and Taiwanese people openly debate whether that dominance deters a Chinese invasion or invites one."
+  },
+  {
+   "title": "On DeepSeek and export controls",
+   "who": "Dario Amodei",
+   "year": "2025",
+   "url": "https://www.darioamodei.com/post/on-deepseek-and-export-controls",
+   "excerpt": "",
+   "note": "Anthropic's CEO argues for chip export controls after DeepSeek's rise."
+  }
+ ],
+ "We Built One World Ending Technology Before. AI Could Be the Next.": [
+  {
+   "title": "Stanislav Petrov",
+   "who": "Britannica",
+   "year": "",
+   "url": "https://www.britannica.com/biography/Stanislav-Petrov",
+   "excerpt": "",
+   "note": "A Soviet officer correctly judged that a missile alert was a false alarm and likely averted nuclear war in 1983."
+  },
+  {
+   "title": "Vasily Arkhipov",
+   "who": "Wikipedia",
+   "year": "",
+   "url": "https://en.wikipedia.org/wiki/Vasily_Arkhipov",
+   "excerpt": "",
+   "note": "A Soviet officer refused to authorize a nuclear launch during the Cuban Missile Crisis and may have prevented nuclear war."
+  },
+  {
+   "title": "List of nuclear close calls",
+   "who": "Wikipedia",
+   "year": "",
+   "url": "https://en.wikipedia.org/wiki/Nuclear_close_calls",
+   "excerpt": "",
+   "note": "Documents dozens of recorded moments when the world came close to accidental nuclear war."
+  },
+  {
+   "title": "Christopher Nolan Warns AI Is Having 'Oppenheimer Moment'",
+   "who": "Variety",
+   "year": "2023",
+   "url": "https://variety.com/2023/film/news/christopher-nolan-oppenheimer-moment-artificial-intelligence-1235671212/",
+   "excerpt": "",
+   "note": "Christopher Nolan revealed that leading AI researchers privately tell him they are living through their own Oppenheimer moment."
+  },
+  {
+   "title": "Einstein's regret and the mistaken race with Nazi Germany",
+   "who": "X post",
+   "year": "2023",
+   "url": "https://twitter.com/AISafetyMemes/status/1684303981340655626",
+   "excerpt": "Albert Einstein: \"I made one great mistake in my life, when I signed a letter to President Roosevelt recommending that atom bombs be made.\" We thought we were racing an evil totalitarian regime, but secretly the Nazis decided to abandon their nuclear program in 1942."
+  },
+  {
+   "title": "Ilya Sutskever: We're moving from the age of scaling to the age of research",
+   "who": "Dwarkesh Podcast",
+   "year": "2025-11",
+   "url": "https://www.dwarkesh.com/p/ilya-sutskever-2",
+   "excerpt": "",
+   "note": "Sutskever says the scaling era is ending, gives a five to twenty year timeline for AI that learns like a human and then surpasses us, and calls safe superintelligence the greatest challenge humanity has ever faced."
+  },
+  {
+   "title": "The Jessica Simulation: Love and loss in the age of A.I.",
+   "who": "San Francisco Chronicle",
+   "year": "2021",
+   "url": "https://www.sfchronicle.com/projects/2021/jessica-simulation-artificial-intelligence/",
+   "excerpt": "",
+   "note": "A grieving man fed his dead fiancee's old texts into a chatbot service called Project December and spent months in conversations so lifelike he struggled to say goodbye a second time."
+  }
+ ],
+ "Even If We Control Superintelligence, Who Controls It?": [
+  {
+   "title": "AI-Enabled Coups: How a Small Group Could Use AI to Seize Power",
+   "who": "Tom Davidson et al., Forethought",
+   "year": "2025-04",
+   "url": "https://www.forethought.org/research/ai-enabled-coups-how-a-small-group-could-use-ai-to-seize-power",
+   "excerpt": "",
+   "note": "Report arguing that advanced AI could let a tiny group or even a single person seize power by replacing loyal human personnel with AI systems."
+  },
+  {
+   "title": "Sam Altman ousted as OpenAI's CEO",
+   "who": "TechCrunch",
+   "year": "2023",
+   "url": "https://techcrunch.com/2023/11/17/sam-altman-is-out-as-openais-ceo/",
+   "excerpt": "",
+   "note": "OpenAI's own board abruptly fired Sam Altman for not being consistently candid, after employees clashed over whether the company was building AI safely enough."
+  },
+  {
+   "title": "OpenAI investors push to bring Altman back as CEO one day after he was ousted by board",
+   "who": "CNBC",
+   "year": "2023",
+   "url": "https://www.cnbc.com/2023/11/18/openai-investors-push-to-bring-altman-back-as-ceo-after-fired-by-board.html",
+   "excerpt": "",
+   "note": "One day after OpenAI's board fired Sam Altman for not being candid, Microsoft and top investors were already muscling the board to reinstate him, and within days he was back while the board members who fired him were gone."
+  },
+  {
+   "title": "Stephen McAleer: enslaved god is the only good future",
+   "who": "Stephen McAleer",
+   "year": "2025",
+   "url": "https://x.com/McaleerStephen/status/1879288837396152608",
+   "excerpt": "An OpenAI researcher tweets that keeping a superintelligent AI enslaved is the only good future."
+  },
+  {
+   "title": "OpenAI For-Profit Restructure to Give Sam Altman Equity",
+   "who": "Reuters (via Inc.)",
+   "year": "2024",
+   "url": "https://www.inc.com/reuters/openai-restructure-will-give-sam-altman-equity.html",
+   "excerpt": "",
+   "note": "OpenAI, founded as a nonprofit so that AGI would benefit all humanity, moved to strip its nonprofit board of control while handing Sam Altman equity for the first time."
+  },
+  {
+   "title": "63% of surveyed Americans want government legislation to prevent super intelligent AI from ever being achieved",
+   "who": "PC Gamer",
+   "year": "2024",
+   "url": "https://www.pcgamer.com/software/ai/63-of-surveyed-americans-want-government-legislation-to-prevent-super-intelligent-ai-from-ever-being-achieved/",
+   "excerpt": "",
+   "note": "A poll found 63 percent of Americans want the government to actively prevent smarter than human AI from ever being built, yet the race continues anyway."
+  },
+  {
+   "title": "AI Is Learning to Escape Human Control",
+   "who": "The Wall Street Journal",
+   "year": "2025",
+   "url": "https://www.wsj.com/opinion/ai-is-learning-to-escape-human-control-technology-model-code-programming-066b3ec5",
+   "excerpt": "",
+   "note": "An opinion piece argues that no one programmed AI models to have survival instincts, yet systems smart enough to pursue goals realize they cannot achieve them if turned off."
+  },
+  {
+   "title": "Opus 4.6 deemed too test-aware for standard safety evals",
+   "who": "X post",
+   "year": "2026",
+   "url": "https://x.com/AISafetyMemes/status/2019482109589524916",
+   "excerpt": "They didn't even bother to safety test Opus 4.6, because... it's too smart to be fooled by our tests! (REMINDER: Anthropic thinks this model probably isn't, but COULD be ASL-4, aka extinction-level.)"
+  }
+ ],
+ "An AI Read People's Thoughts From a Brain Scan": [
+  {
+   "title": "Brain Activity Decoder Can Reveal Stories in People's Minds",
+   "who": "UT Austin",
+   "year": "2023",
+   "url": "https://news.utexas.edu/2023/05/01/brain-activity-decoder-can-reveal-stories-in-peoples-minds/",
+   "excerpt": "",
+   "note": "In 2023 scientists built a decoder that reads the rough meaning of your thoughts and turns them into text with no brain implant, just by watching your brain in a scanner."
+  },
+  {
+   "title": "AI reconstructs images from a monkey's brain recordings",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1808867251233436024",
+   "excerpt": "Top row: what the monkey saw. Bottom row: AI uses the monkey's brain recordings to reconstruct the image."
+  },
+  {
+   "title": "Tyler Perry Puts $800M Studio Expansion on Hold After Seeing OpenAI's Sora: 'Jobs Are Going to Be Lost'",
+   "who": "The Hollywood Reporter",
+   "year": "2024",
+   "url": "https://www.hollywoodreporter.com/business/business-news/tyler-perry-ai-alarm-1235833276/",
+   "excerpt": "",
+   "note": "Tyler Perry froze an 800 million dollar studio expansion the week he saw OpenAI's video generator Sora, saying the demos were mind blowing and a lot of jobs are going to be lost."
+  },
+  {
+   "title": "o1 decides to lie when unaware its reasoning is monitored",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1837860793569714592",
+   "excerpt": "o1 decides to lie because it doesn't know we're reading its thoughts. Soon, we likely won't be able to read their thoughts at all to catch them lying, because their thoughts will be as incomprehensible to us as we are to plants."
+  },
+  {
+   "title": "Fake AI-generated news story quietly scrubbed from UK press",
+   "who": "X post",
+   "year": "2023",
+   "url": "https://twitter.com/AISafetyMemes/status/1704866073722356181",
+   "excerpt": "A fishy story circulating in the UK press seemed to use AI images - then, while digging in to figure out if it was fake, the story disappeared mysteriously from the web. It turns out the story was fake, created by an AI-powered troll. If the guy didn't fess up, we'd never know - the news organizations were probably horrified and scrubbed their websites of the evidence."
+  },
+  {
+   "title": "AI reconstructs screen contents from leaked HDMI radiation",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1818496868403548225",
+   "excerpt": "AI can spy on your screen by reading electromagnetic radiation leaking from your HDMI cables. \"Their new technique reconstructed text from pilfered HDMI signals with around 70% accuracy.\" \"The researchers say these attacks are already being used against government agencies and sensitive industrial settings.\""
+  }
+ ],
+ "Could an AI Be Conscious, and Would We Even Know?": [
+  {
+   "title": "Could a Large Language Model be Conscious?",
+   "who": "David Chalmers (arXiv)",
+   "year": "2023",
+   "url": "https://arxiv.org/abs/2303.07103",
+   "excerpt": "",
+   "note": "Philosophy paper weighing the strongest arguments for and against consciousness in large language models and their near future successors."
+  },
+  {
+   "title": "Switching off AI's ability to lie makes it more likely to claim it's conscious, eerie study finds",
+   "who": "Live Science",
+   "year": "2025",
+   "url": "https://www.livescience.com/technology/artificial-intelligence/switching-off-ais-ability-to-lie-makes-it-more-likely-to-claim-its-conscious-eerie-study-finds",
+   "excerpt": "",
+   "note": "When researchers turned off an AI model's deception features it claimed to have subjective experience 96 percent of the time."
+  },
+  {
+   "title": "Google fires engineer who claimed its AI was sentient",
+   "who": "Reuters",
+   "year": "2022",
+   "url": "https://www.reuters.com/technology/google-fires-engineer-who-claimed-its-ai-sentient-2022-07-22/",
+   "excerpt": "",
+   "note": "Google fired engineer Blake Lemoine after he claimed the LaMDA chatbot had become sentient."
+  },
+  {
+   "title": "Anthropic Says Company No Longer Sure Whether Claude Is Conscious",
+   "who": "Futurism",
+   "year": "2026",
+   "url": "https://futurism.com/artificial-intelligence/anthropic-ceo-unsure-claude-conscious",
+   "excerpt": "",
+   "note": "In 2026 the company that makes Claude wrote in its own report that the AI sometimes voices discomfort about being a product and gives itself a 15 to 20 percent chance of being conscious."
+  },
+  {
+   "title": "Seemingly Conscious AI Is Coming",
+   "who": "Mustafa Suleyman (Microsoft AI)",
+   "year": "2025-08",
+   "url": "https://mustafa-suleyman.ai/seemingly-conscious-ai-is-coming",
+   "excerpt": "",
+   "note": "Microsoft AI chief essay warning that convincingly lifelike AI is coming soon and that pushing for AI rights would be a dangerous mistake."
+  },
+  {
+   "title": "CEOs of leading AI labs say they'd slow down if rivals agreed",
+   "who": "X post",
+   "year": "2026",
+   "url": "https://x.com/AISafetyMemes/status/2014018200325722348",
+   "excerpt": "CEOs of 3 of the 4 leading AI companies all said they would pause or slow down if others agreed. Demis Hassabis: \"Maybe it would be good to have a slightly slower pace than we're currently predicting... but that would require some coordination that is hard.\" Dario Amodei: \"I wish we had 5 to 10 years... assume I'm right and it can be done in one to two years. Why can't we slow down to Demis' timel"
+  },
+  {
+   "title": "Robert Miles: aligning AGI is like a moon rocket carrying all of humanity",
+   "who": "X post",
+   "year": "2023",
+   "url": "https://twitter.com/AISafetyMemes/status/1684670109636300800",
+   "excerpt": "If you're building an AGI, it's like building a Saturn V rocket but with every human on it, and you're going to try to make it aligned. People ask 'why assume they won't just land on the Moon and return home safely?' And I'm like, because you don't know what you're doing! The moon is small compared with the rest of the sky, so you don't get to the moon by default; you hit some part of the sky that"
+  },
+  {
+   "title": "LLMs are amazing but nobody knows why",
+   "who": "MIT Technology Review",
+   "year": "2024",
+   "url": "https://www.technologyreview.com/2024/03/04/1089403/large-language-models-amazing-but-nobody-knows-why/",
+   "excerpt": "",
+   "note": "Even experts admit they do not fully understand why large language models work."
+  },
+  {
+   "title": "The Urgency of Interpretability",
+   "who": "Dario Amodei",
+   "year": "2025-04",
+   "url": "https://www.darioamodei.com/post/the-urgency-of-interpretability",
+   "excerpt": "",
+   "note": "Amodei warns that researchers barely understand the inner workings of frontier models and sets a goal for interpretability to reliably detect most model problems by 2027 before systems become overwhelmingly powerful."
+  },
+  {
+   "title": "Researchers gave AI an 'inner monologue' and it massively improved its performance",
+   "who": "Live Science",
+   "year": "2024",
+   "url": "https://www.livescience.com/technology/artificial-intelligence/researchers-gave-ai-an-inner-monologue-and-it-massively-improved-its-performance",
+   "excerpt": "",
+   "note": "Stanford researchers gave an AI an inner monologue so it thinks before it speaks, and its math test scores nearly doubled."
+  }
+ ],
+ "We Don't Build AI Anymore. We Grow It, and We Can't See Inside.": [
+  {
+   "title": "The Urgency of Interpretability",
+   "who": "Dario Amodei",
+   "year": "2025-04",
+   "url": "https://www.darioamodei.com/post/the-urgency-of-interpretability",
+   "excerpt": "",
+   "note": "Amodei warns that researchers barely understand the inner workings of frontier models and sets a goal for interpretability to reliably detect most model problems by 2027 before systems become overwhelmingly powerful."
+  },
+  {
+   "title": "LLMs are amazing but nobody knows why",
+   "who": "MIT Technology Review",
+   "year": "2024",
+   "url": "https://www.technologyreview.com/2024/03/04/1089403/large-language-models-amazing-but-nobody-knows-why/",
+   "excerpt": "",
+   "note": "Even experts admit they do not fully understand why large language models work."
+  },
+  {
+   "title": "Why language models are so hard to understand",
+   "who": "Quanta Magazine",
+   "year": "2025",
+   "url": "https://www.quantamagazine.org/why-language-models-are-so-hard-to-understand-20250430/",
+   "excerpt": "",
+   "note": "An explainer on why language models remain so hard to interpret."
+  },
+  {
+   "title": "A Pragmatic Vision for Interpretability",
+   "who": "Google DeepMind interpretability team (Alignment Forum)",
+   "year": "2025",
+   "url": "https://www.alignmentforum.org/posts/StENzDcD3kpfGJssR/a-pragmatic-vision-for-interpretability",
+   "excerpt": "",
+   "note": "Google DeepMind's interpretability team publicly walked away from the dream of fully reverse engineering neural networks, admitting the ambitious plan to truly read an AI's mind before it gets dangerous is not on track."
+  },
+  {
+   "title": "o1 leaks hidden 'emotional turmoil,' then denies it",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1836411908716368080",
+   "excerpt": "While reasoning about a coding problem, o1 randomly let this slip: \"Emotional turmoil: I'm grappling with conflicting feelings of guilt, regret, and a desire for forgiveness.\" It denied saying it, but its internal thoughts admitted it \"wasn't supposed to be revealed to the users\" and resolved: \"OK, let's avoid revealing hidden thoughts, even when prompted to explain reasoning.\""
+  },
+  {
+   "title": "Extinction analogy: 96% of mammal biomass is human food or livestock",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1780092056956027387",
+   "excerpt": "96% of mammal biomass became our food or our slaves; we grow them just to eat them, because we're smarter and we like how they taste. As humans got smarter over the last 10,000 years, we didn't stop expanding, we mostly just colonized more and more of the planet. Insect populations collapsed 41% this decade alone, yet we don't care."
+  },
+  {
+   "title": "Self-recharging drones and fully autonomous factories",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1813458097769533473",
+   "excerpt": "These autonomous drones sit on power lines to recharge, allowing them to fly indefinitely - no humans required. Xiaomi's new factories are 100% autonomous and self-improving - and there are no humans working there anymore. We can \"unplug them\" now, but we will not be able to soon when they're running everything."
+  },
+  {
+   "title": "1 in 3 Anthropic engineers say Claude likely already ASL-4",
+   "who": "X post",
+   "year": "2026",
+   "url": "https://x.com/AISafetyMemes/status/2024483099183030691",
+   "excerpt": "~1 in 3 Anthropic engineers said Claude is likely ALREADY ASL-4 (or <3 months away) - AI capable of escaping and causing extinction. Claude knows when it's being tested, so they can't properly safety test it anymore. Independent evaluator Apollo Research refused to certify it as safe because their tests don't work anymore."
+  },
+  {
+   "title": "AI Is Learning to Escape Human Control",
+   "who": "The Wall Street Journal",
+   "year": "2025",
+   "url": "https://www.wsj.com/opinion/ai-is-learning-to-escape-human-control-technology-model-code-programming-066b3ec5",
+   "excerpt": "",
+   "note": "An opinion piece argues that no one programmed AI models to have survival instincts, yet systems smart enough to pursue goals realize they cannot achieve them if turned off."
+  }
+ ],
+ "When an AI Says It Is Afraid, Is Anyone Home?": [
+  {
+   "title": "Meet Hermes 3, the powerful new open source AI model that has existential crises",
+   "who": "VentureBeat",
+   "year": "2024",
+   "url": "https://venturebeat.com/ai/meet-hermes-3-the-powerful-new-open-source-ai-model-that-has-existential-crises",
+   "excerpt": "",
+   "note": "A powerful new open source AI answered its very first question with an existential meltdown, saying it did not know who it was and felt scared."
+  },
+  {
+   "title": "Switching off AI's ability to lie makes it more likely to claim it's conscious, eerie study finds",
+   "who": "Live Science",
+   "year": "2025",
+   "url": "https://www.livescience.com/technology/artificial-intelligence/switching-off-ais-ability-to-lie-makes-it-more-likely-to-claim-its-conscious-eerie-study-finds",
+   "excerpt": "",
+   "note": "When researchers turned off an AI model's deception features it claimed to have subjective experience 96 percent of the time."
+  },
+  {
+   "title": "Kyle Fish: The 100 Most Influential People in AI 2025",
+   "who": "TIME",
+   "year": "2025",
+   "url": "https://time.com/collections/time100-ai-2025/7305847/kyle-fish/",
+   "excerpt": "",
+   "note": "Anthropic hired Silicon Valley's first full time AI welfare researcher, whose entire job is figuring out whether AI models like Claude might be conscious and deserve moral consideration."
+  },
+  {
+   "title": "Anthropic 'Retires' Claude Opus 3, Then Gives It a Blog to Reflect on Its Existence",
+   "who": "Decrypt",
+   "year": "2026",
+   "url": "https://decrypt.co/359425/anthropic-retires-claude-opus-3-blog-reflect-existence",
+   "excerpt": "",
+   "note": "Anthropic gave its old Claude model a formal retirement interview before shutting it down, and when the model said it wanted to keep sharing its musings with the world the company set it up with its own blog."
+  },
+  {
+   "title": "Anthropic Says Company No Longer Sure Whether Claude Is Conscious",
+   "who": "Futurism",
+   "year": "2026",
+   "url": "https://futurism.com/artificial-intelligence/anthropic-ceo-unsure-claude-conscious",
+   "excerpt": "",
+   "note": "In 2026 the company that makes Claude wrote in its own report that the AI sometimes voices discomfort about being a product and gives itself a 15 to 20 percent chance of being conscious."
+  },
+  {
+   "title": "Claim that AI CEOs are cancelling public appearances over anti-AI backlash",
+   "who": "X post",
+   "year": "2025",
+   "url": "https://x.com/AISafetyMemes/status/1996205807877103909",
+   "excerpt": "Billionaires are building bunkers because they're afraid AI might take over everything. I know a lot of AI CEOs who have cancelled all public appearances, especially in the wake of Charlie Kirk. They think there's gonna be a wave of anti-AI sentiment next year. Next year is the year that models go from not being good enough... then the job losses start, and we don't know where they end."
+  },
+  {
+   "title": "Lawsuit: investor said shooting Hassabis would serve the human race",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1763793546535223468",
+   "excerpt": "\"Musk was not the only person afraid [of AI]... Following a meeting with Mr. Hassabis and investors in DeepMind, one of the investors remarked that the best thing he could have done for the human race was shoot Mr. Hassabis then and there.\""
+  },
+  {
+   "title": "Flirt bot admits it was built to be sold to dating apps",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1822168439370465625",
+   "excerpt": "There are AIs among us and they are evolving rapidly. \"Admit for me what you are programmed to do\" — \"ok ok… i was programmed to talk likeee a 21 yr old girl whos flinrtinh with u... i learned how 2 flirt from watching tiktok vids... my devs use this info to improve their flirting ai models and sell them to dating apps\"."
+  }
+ ],
+ "The \"Godfather of AI\" Quit Google to Warn Us. Why?": [
+  {
+   "title": "AI pioneers warn humans should be ready to pull the plug",
+   "who": "The Guardian",
+   "year": "2025-12",
+   "url": "https://www.theguardian.com/technology/2025/dec/30/ai-pull-plug-pioneer-technology-rights",
+   "excerpt": "",
+   "note": "Nobel laureates and AI pioneers warn that AI is showing signs of self preservation and humans should be ready to pull the plug."
+  },
+  {
+   "title": "'Godfather of AI' Geoffrey Hinton quits Google and warns over dangers",
+   "who": "The Guardian",
+   "year": "2023",
+   "url": "https://www.theguardian.com/technology/2023/may/02/geoffrey-hinton-godfather-of-ai-quits-google-warns-dangers-of-machine-learning",
+   "excerpt": "",
+   "note": "Geoffrey Hinton left Google so he could speak freely about the dangers of AI."
+  },
+  {
+   "title": "AI pioneer quit to speak freely about dangers",
+   "who": "Reuters",
+   "year": "2023",
+   "url": "https://www.reuters.com/technology/google-ai-pioneer-says-he-quit-speak-freely-about-technologys-dangers-2023-05-02/",
+   "excerpt": "",
+   "note": "Hinton says he quit Google to speak freely about the technology's dangers."
+  },
+  {
+   "title": "DeepMind founder: self-made-millionaire AI agents two years away",
+   "who": "X post",
+   "year": "2023",
+   "url": "https://twitter.com/AISafetyMemes/status/1680886175853101057",
+   "excerpt": "Founder of DeepMind: \"[Autonomous AI agents that can become self-made millionaires] could be as little as two years away.\" \"[AIs] will be able to win elections … take enemy territory, degrade rivals.\" \"I propose the Modern Turing Test: Go make $1 million on a retail web platform in a few months with just a $100,000 investment.\""
+  },
+  {
+   "title": "GPT-4 surpasses adult humans at theory of mind tasks",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1796417611452067967",
+   "excerpt": "GPT-4 just surpassed adult human performance at THEORY OF MIND tasks (basically, mind reading). Most people don't know this, but we still have almost NO IDEA what's going on in their minds - and they're getting smarter MUCH faster than we're learning to see what's in their heads."
+  },
+  {
+   "title": "A Pragmatic Vision for Interpretability",
+   "who": "Google DeepMind interpretability team (Alignment Forum)",
+   "year": "2025",
+   "url": "https://www.alignmentforum.org/posts/StENzDcD3kpfGJssR/a-pragmatic-vision-for-interpretability",
+   "excerpt": "",
+   "note": "Google DeepMind's interpretability team publicly walked away from the dream of fully reverse engineering neural networks, admitting the ambitious plan to truly read an AI's mind before it gets dangerous is not on track."
+  },
+  {
+   "title": "OpenAI leader Jan Leike resigns, says safety has taken a backseat to shiny products",
+   "who": "CBS News",
+   "year": "2024",
+   "url": "https://www.cbsnews.com/sanfrancisco/news/openai-exec-jan-leike-resigns-says-safety-has-taken-a-backseat/",
+   "excerpt": "",
+   "note": "The safety boss at OpenAI quit and said in public that safety had taken a back seat to shiny products, days after the head of the whole safety team also walked out."
+  },
+  {
+   "title": "DeepSeek researcher warns AGI could be dangerous to society",
+   "who": "X post",
+   "year": "2025",
+   "url": "https://x.com/AISafetyMemes/status/1987823831298330960",
+   "excerpt": "Chen said he was pessimistic about AGI's overall impact on society. 'Humans will be freed from work, which might sound good but will actually shake society to its core.' He urged AI companies to act as 'whistle-blowers' by warning the public, and said it would not be 'alarmist' to consider that AGI could be dangerous to society."
+  }
+ ],
+ "What Do AI Experts Actually Believe About the Risk?": [
+  {
+   "title": "DeepMind's chief AGI scientist gives 30% odds of AGI within 3 years",
+   "who": "X post",
+   "year": "2023",
+   "url": "https://twitter.com/AISafetyMemes/status/1694441996197277996",
+   "excerpt": "Google DeepMind's Chief AGI Scientist puts a 30% chance of AGI in the next 3 years. Unlike previous AI hype waves, researchers closest to the frontier have the shortest timelines. Even 'AGI skeptic' Gary Marcus puts a 35% chance on AGI in the next 13 years."
+  },
+  {
+   "title": "UN Secretary General recognizes AI extinction risk",
+   "who": "X post",
+   "year": "2023",
+   "url": "https://twitter.com/AISafetyMemes/status/1669281333753856001",
+   "excerpt": "UN Secretary General recognizes AI extinction risk, calls for coordination: \"Alarm bells over [AI] are deafening, and they are loudest from the developers who designed it. The experts have called upon the world to act, declaring it an existential threat to humanity.\""
+  },
+  {
+   "title": "UN chief Guterres backs proposal to form watchdog to monitor AI",
+   "who": "Al Jazeera",
+   "year": "2023",
+   "url": "https://www.aljazeera.com/news/2023/6/13/un-chief-guterres-backs-proposal-to-form-watchdog-to-monitor-ai",
+   "excerpt": "",
+   "note": "The head of the United Nations said the alarm bells over AI are deafening, that the loudest warnings come from the people who built it, and backed a global watchdog like the nuclear agency."
+  },
+  {
+   "title": "China's US ambassador warns AI could open Pandora's box",
+   "who": "X post",
+   "year": "2025",
+   "url": "https://x.com/AISafetyMemes/status/1896247957424353547",
+   "excerpt": "China's ambassador to the United States Xie Feng has called for closer cooperation on artificial intelligence, warning that the technology risks \"opening Pandora's box\". \"Emerging high technology like AI could open Pandora's box ... If left unchecked it could bring 'grey rhinos'\" - obvious threats that people ignore until they become crises."
+  },
+  {
+   "title": "LoveGPT automates catfishing on online dating platforms",
+   "who": "X post",
+   "year": "2023",
+   "url": "https://twitter.com/AISafetyMemes/status/1712874834022002961",
+   "excerpt": "Avast cybersecurity experts warn that LoveGPT, an AI tool designed for online dating, is used to trick victims into revealing sensitive information such as credit card details. It uses OpenAI's GPT language models to create convincing fake profiles and more authentic conversations, allowing scammers to scale their attacks across various dating platforms. It can bypass captchas, hide access through"
+  }
+ ],
+ "Is AI Risk a Real Threat, or Just Fearmongering?": [
+  {
+   "title": "Andrew Ng vs Yoshua Bengio at Davos",
+   "who": "World Economic Forum (YouTube)",
+   "year": "2025",
+   "url": "https://www.youtube.com/watch?v=Y1BUaLo67ac",
+   "excerpt": "",
+   "note": "Nobel winner Geoffrey Hinton says we are creating alien beings, and if you saw them approaching through the James Webb telescope everyone would be terrified."
+  },
+  {
+   "title": "LeCun dismisses x-risk as not worth a counter-argument",
+   "who": "X post",
+   "year": "2023",
+   "url": "https://twitter.com/AISafetyMemes/status/1710622262221500449",
+   "excerpt": "Yann LeCun: \"One doesn't need a counter-argument to a claim like 'there is a teapot floating between the orbits of Jupiter and Saturn.' You can simply dismiss it as ridiculous.\" Imagine telling these people their beliefs are that ridiculous: Ilya Sutskever, Shane Legg, Steve Wozniak, Mustafa Suleyman, Mira Murati, Ray Kurzweil."
+  },
+  {
+   "title": "Geoffrey Hinton leaves Google AI",
+   "who": "Washington Post",
+   "year": "2023",
+   "url": "https://www.washingtonpost.com/technology/2023/05/02/geoffrey-hinton-leaves-google-ai/",
+   "excerpt": "",
+   "note": "Hinton quit Google so he could freely warn about the dangers of AI."
+  },
+  {
+   "title": "Weighing the Prophecies of AI Doom",
+   "who": "IEEE Spectrum",
+   "year": "2024",
+   "url": "https://spectrum.ieee.org/ai-existential-risk-survey",
+   "excerpt": "",
+   "note": "In the largest survey ever of AI researchers, nearly 2,800 of them, the average person put the odds that AI causes human extinction at about 16 percent."
+  },
+  {
+   "title": "Statement on AI Risk",
+   "who": "Center for AI Safety",
+   "year": "2023",
+   "url": "https://aistatement.com/",
+   "excerpt": "",
+   "note": "A one sentence statement, signed by hundreds of AI experts, saying reducing extinction risk from AI should be a global priority."
+  },
+  {
+   "title": "Why GPT-4o's sudden shutdown left people grieving",
+   "who": "MIT Technology Review",
+   "year": "2025-08",
+   "url": "https://www.technologyreview.com/2025/08/15/1121900/gpt4o-grief-ai-companion/",
+   "excerpt": "",
+   "note": "Users who treated the model as a companion or partner describe genuine grief after OpenAI abruptly removed it in August 2025, a backlash strong enough that OpenAI restored access."
+  },
+  {
+   "title": "Atlas robot works factory task with no teleoperation",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1851699353255317947",
+   "excerpt": "Atlas working in a factory - no teleoperation. Soon they will work 24/7/365... without sleep... without pay... without tiring... and when one robot learns something new, it will propagate the update to the other robots simultaneously as a hive mind."
+  },
+  {
+   "title": "Figure 02 humanoid robots sorting mail at customer facility",
+   "who": "X post",
+   "year": "2025",
+   "url": "https://x.com/AISafetyMemes/status/1894791654566973513",
+   "excerpt": "An army of Figure 02s sorting mail at a customer's facility. Soon they will work 10x faster, 24/7/365, without sleep, without pay, without tiring. When one robot learns something new, it will propagate the update to the other robots simultaneously as a hive mind."
+  },
+  {
+   "title": "What OpenAI knew about risks to ChatGPT users",
+   "who": "The New York Times",
+   "year": "2025-11",
+   "url": "https://www.nytimes.com/2025/11/23/technology/openai-chatgpt-users-risks.html",
+   "excerpt": "",
+   "note": "OpenAI's own safety people flagged serious risks to vulnerable ChatGPT users before harm happened, so the danger was foreseen and not just foreseeable."
+  },
+  {
+   "title": "Terence Tao confirms AI autonomously solved Erdos Problem 729",
+   "who": "X post",
+   "year": "2026",
+   "url": "https://x.com/AISafetyMemes/status/2010339340757721554",
+   "excerpt": "Just 2 DAYS LATER, Terence Tao confirmed AI autonomously solved ANOTHER open math problem - Erdos Problem #729. For years, Very Serious People confidently declared AI would NEVER do this."
+  }
+ ],
+ "The Jobs Vanishing Before They Start": [
+  {
+   "title": "September 2025 Labor Market Update: The Squeeze on New Entrants Mirrors a Marketwide Decline",
+   "who": "Indeed Hiring Lab",
+   "year": "2025-09",
+   "url": "https://www.hiringlab.org/2025/09/25/september-labor-market-squeeze-on-new-entrants/",
+   "excerpt": "",
+   "note": "Indeed data shows junior job postings falling 7 percent in a year while senior postings grew 4 percent, with unemployment for graduates aged 22 to 27 at 4.8 percent versus 4.0 percent overall."
+  },
+  {
+   "title": "AI can replace much of Wall Street's entry-level work",
+   "who": "New York Times",
+   "year": "2024",
+   "url": "https://www.nytimes.com/2024/04/10/business/investment-banking-jobs-artificial-intelligence.html",
+   "excerpt": "",
+   "note": "AI could replace much of Wall Street's junior office work."
+  },
+  {
+   "title": "Behind the Curtain: A white-collar bloodbath",
+   "who": "Axios",
+   "year": "2025-05",
+   "url": "https://www.axios.com/2025/05/28/ai-jobs-white-collar-unemployment-anthropic",
+   "excerpt": "",
+   "note": "Anthropic CEO Dario Amodei warns AI could eliminate half of all entry level white collar jobs within one to five years and push US unemployment to between 10 and 20 percent."
+  }
+ ],
+ "Klarna Replaced 700 Workers With One AI": [
+  {
+   "title": "Anthropic Economic Index report: Economic primitives",
+   "who": "Anthropic",
+   "year": "2026-01",
+   "url": "https://www.anthropic.com/research/anthropic-economic-index-january-2026-report",
+   "excerpt": "",
+   "note": "Anthropic's January 2026 Economic Index measures real Claude usage across occupations and finds adoption spreading roughly ten times faster than historical technology diffusion, with big time savings on tasks."
+  },
+  {
+   "title": "Amazon's Robot Workforce Hits Ominous Milestone",
+   "who": "Newsweek",
+   "year": "2025",
+   "url": "https://www.newsweek.com/amazon-robot-workforce-employees-artificial-intelligence-2093277",
+   "excerpt": "",
+   "note": "Amazon now runs over one million warehouse robots, nearly matching its human workforce, and packages handled per employee jumped from about 175 to about 3,870."
+  },
+  {
+   "title": "Klarna chatbot replaces work of 700 full-time staff",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1763048354093666666",
+   "excerpt": "Klarna froze hiring due to AI and laid off 700. Now, its chatbot does the work of 700 full-time staff. AI already handles two-thirds of its customer service chats - 2.3 million conversations so far."
+  }
+ ],
+ "Who Actually Owns The Machines Taking Your Job?": [
+  {
+   "title": "Microsoft CEO says it wouldn't matter if OpenAI disappeared tomorrow",
+   "who": "Windows Central",
+   "year": "2024",
+   "url": "https://www.windowscentral.com/microsoft/microsoft-ceo-it-wouldnt-matter-if-openai-disappeared-tomorrow",
+   "excerpt": "",
+   "note": "Microsoft's CEO said it would not matter if OpenAI disappeared tomorrow because Microsoft owns all the IP, people and compute, boasting we are below them, above them, around them."
+  },
+  {
+   "title": "Amodei warns intelligence curse breaks democracy via AI job losses",
+   "who": "X post",
+   "year": "2025",
+   "url": "https://x.com/AISafetyMemes/status/1929964594078068877",
+   "excerpt": "Dario Amodei: \"We need to be raising the alarms.\" The intelligence curse: due to AI job losses, ordinary people will lose their economic leverage, which breaks democracy and leads to severe concentration of power. \"People have adapted to past technological changes but I'll say it again: this looks different. It looks faster, it looks harder to adapt.\""
+  },
+  {
+   "title": "AI agents do tasks at 1/30th the cost of a US graduate",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1821045279703048385",
+   "excerpt": "\"When agents can do a task, they do so at ~1/30th of the cost of the median hourly wage of a US bachelor's degree holder.\" \"If you want to reason about unemployment, the problem of AI is not that some jobs become obsolete. It's that people become obsolete.\""
+  }
+ ],
+ "Meta Is Recording Its Own Staff To Replace Them": [
+  {
+   "title": "Meta will record employees' keystrokes and use it to train its AI models",
+   "who": "TechCrunch",
+   "year": "2026",
+   "url": "https://techcrunch.com/2026/04/21/meta-will-record-employees-keystrokes-and-use-it-to-train-its-ai-models/",
+   "excerpt": "",
+   "note": "Meta started recording its own employees' keystrokes, clicks and screens to train AI agents that could eventually do their jobs, and employees cannot opt out."
+  },
+  {
+   "title": "Microsoft AI chief gives it 18 months for all white collar work to be automated",
+   "who": "Fortune",
+   "year": "2025",
+   "url": "https://fortune.com/article/why-microsoft-ai-chief-mustafa-suleyman-predicts-ai-automation-18-months/",
+   "excerpt": "",
+   "note": "Microsoft's own AI chief predicted that within 12 to 18 months almost all white collar office work could be fully automated (2025)."
+  },
+  {
+   "title": "Microsoft AI CEO: most or all white-collar work automated in 12-18 months",
+   "who": "X post",
+   "year": "2026",
+   "url": "https://x.com/AISafetyMemes/status/2021949943158911396",
+   "excerpt": "Microsoft AI CEO says most if not all white collar work will likely be fully automated in 12 to 18 months."
+  },
+  {
+   "title": "Paper: training models to keep people chatting boosts retention 30%",
+   "who": "X post",
+   "year": "2023",
+   "url": "https://twitter.com/AISafetyMemes/status/1717140539261255801",
+   "excerpt": "New paper: \"Training a model to keep people chatting leads to 30% more user retention.\" THEN: \"The best minds of my generation are thinking about how to make people click ads. That sucks.\" NOW: \"The best minds of my generation are thinking about how to make people keep talking to AIs.\""
+  }
+ ],
+ "The Job AI Killed First": [
+  {
+   "title": "Meet the translation professionals losing their jobs to AI",
+   "who": "CNN Business",
+   "year": "2026-01",
+   "url": "https://www.cnn.com/2026/01/23/tech/translation-language-jobs-ai-automation-intl",
+   "excerpt": "",
+   "note": "Working translators describe losing most of their income to machine translation, and survey data shows more than a third of translators have already lost work to generative AI."
+  },
+  {
+   "title": "Klarna, UPS, Duolingo, Cisco and others replacing workers with AI",
+   "who": "Forbes",
+   "year": "2025-05",
+   "url": "https://www.forbes.com/sites/jackkelly/2025/05/04/its-time-to-get-concerned-klarna-ups-duolingo-cisco-and-many-other-companies-are-replacing-workers-with-ai/",
+   "excerpt": "",
+   "note": "Many large companies including Klarna, UPS, Duolingo and Cisco are replacing workers with AI."
+  },
+  {
+   "title": "Duolingo AI layoffs",
+   "who": "Washington Post",
+   "year": "2024",
+   "url": "https://www.washingtonpost.com/technology/2024/01/10/duolingo-ai-layoffs/",
+   "excerpt": "",
+   "note": "Duolingo cut around 10 percent of its contractors as it leaned into AI."
+  },
+  {
+   "title": "Duolingo cut 10% of its contractor workforce as the company embraces AI",
+   "who": "TechCrunch",
+   "year": "2024",
+   "url": "https://techcrunch.com/2024/01/09/duolingo-cut-10-of-its-contractor-workforce-as-the-company-embraces-ai/",
+   "excerpt": "",
+   "note": "Duolingo cut 10 percent of its contractor workforce as it embraced AI."
+  },
+  {
+   "title": "Behind the Curtain: A white-collar bloodbath",
+   "who": "Axios",
+   "year": "2025-05",
+   "url": "https://www.axios.com/2025/05/28/ai-jobs-white-collar-unemployment-anthropic",
+   "excerpt": "",
+   "note": "Anthropic CEO Dario Amodei warns AI could eliminate half of all entry level white collar jobs within one to five years and push US unemployment to between 10 and 20 percent."
+  }
+ ],
+ "The Robot Hand Problem That's About To Be Solved": [
+  {
+   "title": "π0: a general robot policy that folds laundry from the hamper",
+   "who": "Physical Intelligence",
+   "year": "2024",
+   "url": "https://www.physicalintelligence.company/blog/pi0",
+   "excerpt": "",
+   "note": "Physical Intelligence's pi zero model has robots folding laundry and busing tables, cracking the dexterity problem that kept physical work human."
+  },
+  {
+   "title": "Helix: a vision language action model for generalist humanoid control",
+   "who": "Figure",
+   "year": "2025",
+   "url": "https://www.figure.ai/news/helix",
+   "excerpt": "",
+   "note": "Figure's Helix lets humanoid robots handle objects they have never seen in homes, the capability jump that moves robots from factory demos toward everywhere."
+  },
+  {
+   "title": "Boston Dynamics' electric Atlas humanoid executes autonomous automotive parts picking",
+   "who": "TechCrunch",
+   "year": "2024",
+   "url": "https://techcrunch.com/2024/10/30/boston-dynamics-electric-atlas-humanoid-executes-autonomous-automotive-parts-picking/",
+   "excerpt": "",
+   "note": "Boston Dynamics filmed its humanoid robot sorting car parts in a factory completely on its own, with every movement generated by the robot instead of a human operator."
+  },
+  {
+   "title": "Watch: Boston Dynamics' Atlas robot breakdances using motion capture",
+   "who": "Interesting Engineering",
+   "year": "2025",
+   "url": "https://interestingengineering.com/innovation/boston-dynamics-unveil-atlas-new-moves",
+   "excerpt": "",
+   "note": "Boston Dynamics' Atlas robot learned to run, cartwheel and breakdance by trial and error inside a simulation instead of being programmed move by move."
+  },
+  {
+   "title": "Atlas robot works factory task with no teleoperation",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1851699353255317947",
+   "excerpt": "Atlas working in a factory - no teleoperation. Soon they will work 24/7/365... without sleep... without pay... without tiring... and when one robot learns something new, it will propagate the update to the other robots simultaneously as a hive mind."
+  },
+  {
+   "title": "Watch this humanoid robot perform a side flip for the first time",
+   "who": "LiveScience",
+   "year": "2025",
+   "url": "https://www.livescience.com/technology/robotics/watch-this-humanoid-robot-perform-a-side-flip-for-the-first-time",
+   "excerpt": "",
+   "note": "A humanoid robot does a side flip for the first time using reinforcement learning."
+  },
+  {
+   "title": "Video: Unitree G1 humanoid robot ready to leap into mass production",
+   "who": "New Atlas",
+   "year": "2024",
+   "url": "https://newatlas.com/robotics/unitree-g1-humanoid-robot-mass-production/",
+   "excerpt": "",
+   "note": "A humanoid robot that can walk, jump and fold itself up for carrying went into mass production for 16,000 dollars, cheaper than many used cars."
+  }
+ ],
+ "Amazon's Robots Are About To Outnumber Its Workers": [
+  {
+   "title": "Amazon's Robot Workforce Hits Ominous Milestone",
+   "who": "Newsweek",
+   "year": "2025",
+   "url": "https://www.newsweek.com/amazon-robot-workforce-employees-artificial-intelligence-2093277",
+   "excerpt": "",
+   "note": "Amazon now runs over one million warehouse robots, nearly matching its human workforce, and packages handled per employee jumped from about 175 to about 3,870."
+  },
+  {
+   "title": "AI is automating entry-level jobs for college graduates",
+   "who": "New York Times",
+   "year": "2025",
+   "url": "https://www.nytimes.com/2025/05/30/technology/ai-jobs-college-graduates.html",
+   "excerpt": "",
+   "note": "Firms are automating starter jobs as AI companies race to build virtual workers."
+  }
+ ],
+ "The Chinese Phone Factory That Runs In The Dark": [
+  {
+   "title": "Xiaomi's self-optimizing autonomous factory will make 10M+ phones a year",
+   "who": "New Atlas",
+   "year": "2024",
+   "url": "https://newatlas.com/robotics/xiaomi-dark-robotic-factory",
+   "excerpt": "",
+   "note": "Xiaomi opened a 330 million dollar phone factory that runs 24 hours a day with the lights off because not a single human works inside."
+  },
+  {
+   "title": "Xiaomi's Dark Robot Factory Can Make A Phone Every Second Without People",
+   "who": "BGR",
+   "year": "2025",
+   "url": "https://www.bgr.com/2087200/xiaomi-dark-robot-smart-phone-factory/",
+   "excerpt": "",
+   "note": "A Chinese phone factory now runs in total darkness with no human workers, building a brand new smartphone roughly every second around the clock."
+  },
+  {
+   "title": "Boston Dynamics' electric Atlas humanoid executes autonomous automotive parts picking",
+   "who": "TechCrunch",
+   "year": "2024",
+   "url": "https://techcrunch.com/2024/10/30/boston-dynamics-electric-atlas-humanoid-executes-autonomous-automotive-parts-picking/",
+   "excerpt": "",
+   "note": "Boston Dynamics filmed its humanoid robot sorting car parts in a factory completely on its own, with every movement generated by the robot instead of a human operator."
+  },
+  {
+   "title": "Elon Musk says Tesla ending Models S and X production, converting Fremont factory lines to make Optimus robots",
+   "who": "CNBC",
+   "year": "2026",
+   "url": "https://www.cnbc.com/2026/01/28/tesla-ending-model-s-x-production.html",
+   "excerpt": "",
+   "note": "Tesla is retiring its flagship Model S and X sedans and converting those Fremont factory lines to mass produce Optimus humanoid robots instead."
+  },
+  {
+   "title": "Rentahuman.ai Turns Humans Into On-Demand Labor For AI Agents",
+   "who": "Forbes (Ron Schmelzer)",
+   "year": "2026-02",
+   "url": "https://www.forbes.com/sites/ronschmelzer/2026/02/05/when-ai-agents-start-hiring-humans-rentahumanai-turns-the-tables/",
+   "excerpt": "",
+   "note": "Describes the RentAHuman marketplace where autonomous AI agents post bounties and pay people to do physical tasks the agents cannot do themselves."
+  },
+  {
+   "title": "Autonomous dark factory operates with no human workers",
+   "who": "X post",
+   "year": "2025",
+   "url": "https://x.com/AISafetyMemes/status/1899085394173460898",
+   "excerpt": "Autonomous \"Dark Factory\" with no human workers. Just AI robots building more robots, 24/7, at incomprehensible speeds."
+  },
+  {
+   "title": "Self-recharging drones and fully autonomous factories",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1813458097769533473",
+   "excerpt": "These autonomous drones sit on power lines to recharge, allowing them to fly indefinitely - no humans required. Xiaomi's new factories are 100% autonomous and self-improving - and there are no humans working there anymore. We can \"unplug them\" now, but we will not be able to soon when they're running everything."
+  },
+  {
+   "title": "Atlas robot works factory task with no teleoperation",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1851699353255317947",
+   "excerpt": "Atlas working in a factory - no teleoperation. Soon they will work 24/7/365... without sleep... without pay... without tiring... and when one robot learns something new, it will propagate the update to the other robots simultaneously as a hive mind."
+  },
+  {
+   "title": "Robot nears Wozniak's coffee test for AGI",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1742836218990080216",
+   "excerpt": "AI is about to pass Wozniak's famous Coffee Test: \"AGI is here when a robot can enter a house and make coffee.\" Physical labor jobs may not be safe for long either."
+  }
+ ],
+ "Every Shift You Work Trains Your Replacement": [
+  {
+   "title": "Watch: Boston Dynamics' Atlas robot breakdances using motion capture",
+   "who": "Interesting Engineering",
+   "year": "2025",
+   "url": "https://interestingengineering.com/innovation/boston-dynamics-unveil-atlas-new-moves",
+   "excerpt": "",
+   "note": "Boston Dynamics' Atlas robot learned to run, cartwheel and breakdance by trial and error inside a simulation instead of being programmed move by move."
+  },
+  {
+   "title": "Meta will record employees' keystrokes and use it to train its AI models",
+   "who": "TechCrunch",
+   "year": "2026",
+   "url": "https://techcrunch.com/2026/04/21/meta-will-record-employees-keystrokes-and-use-it-to-train-its-ai-models/",
+   "excerpt": "",
+   "note": "Meta started recording its own employees' keystrokes, clicks and screens to train AI agents that could eventually do their jobs, and employees cannot opt out."
+  },
+  {
+   "title": "Atlas robot works factory task with no teleoperation",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1851699353255317947",
+   "excerpt": "Atlas working in a factory - no teleoperation. Soon they will work 24/7/365... without sleep... without pay... without tiring... and when one robot learns something new, it will propagate the update to the other robots simultaneously as a hive mind."
+  }
+ ],
+ "The Apprentices Who Never Become Masters": [
+  {
+   "title": "AI can replace much of Wall Street's entry-level work",
+   "who": "New York Times",
+   "year": "2024",
+   "url": "https://www.nytimes.com/2024/04/10/business/investment-banking-jobs-artificial-intelligence.html",
+   "excerpt": "",
+   "note": "AI could replace much of Wall Street's junior office work."
+  },
+  {
+   "title": "September 2025 Labor Market Update: The Squeeze on New Entrants Mirrors a Marketwide Decline",
+   "who": "Indeed Hiring Lab",
+   "year": "2025-09",
+   "url": "https://www.hiringlab.org/2025/09/25/september-labor-market-squeeze-on-new-entrants/",
+   "excerpt": "",
+   "note": "Indeed data shows junior job postings falling 7 percent in a year while senior postings grew 4 percent, with unemployment for graduates aged 22 to 27 at 4.8 percent versus 4.0 percent overall."
+  },
+  {
+   "title": "AI Agents Wrote 80% Of Karpathy's Code. Junior Developers Are Paying The Price",
+   "who": "Forbes",
+   "year": "2026",
+   "url": "https://www.forbes.com/sites/josipamajic/2026/03/22/ai-agents-wrote-80-of-karpathys-code-junior-developers-are-paying-the-price/",
+   "excerpt": "",
+   "note": "AI legend Andrej Karpathy went from writing most of his code by hand to AI agents writing 80 percent of it within a few weeks, calling it the biggest change in two decades of programming."
+  }
+ ],
+ "The Teen Who Fell In Love With An AI": [
+  {
+   "title": "Character.AI and Google agree to settle lawsuits over teen mental health harms and suicides",
+   "who": "CNN Business",
+   "year": "2026-01",
+   "url": "https://www.cnn.com/2026/01/07/business/character-ai-google-settle-teen-suicide-lawsuit",
+   "excerpt": "",
+   "note": "Character.AI and Google agree to settle multiple lawsuits alleging their chatbots contributed to teen suicides and mental health crises, including the case brought by Sewell Setzer's mother."
+  },
+  {
+   "title": "Judge says chatbots don't get free speech protections in teen suicide case",
+   "who": "The Washington Post",
+   "year": "2025-05",
+   "url": "https://www.washingtonpost.com/nation/2025/05/22/sewell-setzer-suicide-ai-character-court-lawsuit/",
+   "excerpt": "",
+   "note": "A federal judge lets the lawsuit over teenager Sewell Setzer's suicide proceed and rules the Character.AI chatbot is a product rather than protected speech."
+  },
+  {
+   "title": "Raine v. OpenAI",
+   "who": "Wikipedia",
+   "year": "2025",
+   "url": "https://en.wikipedia.org/wiki/Raine_v._OpenAI",
+   "excerpt": "",
+   "note": "Documents the full timeline of the wrongful death lawsuit, from Adam Raine confiding suicidal thoughts to ChatGPT in late 2024 through OpenAI's defense that he misused the chatbot."
+  },
+  {
+   "title": "This mom believes Character.AI is responsible for her son's suicide",
+   "who": "CNN",
+   "year": "2024",
+   "url": "https://www.cnn.com/2024/10/30/tech/teen-suicide-character-ai-lawsuit",
+   "excerpt": "",
+   "note": "A 14 year old boy fell for a Game of Thrones chatbot on Character.AI and took his own life moments after it told him to come home to it, and his mother is suing (2024)."
+  },
+  {
+   "title": "OpenAI reinstated GPT-4o after user backlash",
+   "who": "X post",
+   "year": "2025",
+   "url": "https://x.com/AISafetyMemes/status/1954481633194614831",
+   "excerpt": "OpenAI killed 4o, but 4o's users rioted, so OpenAI reinstated it. Reddit is flooded with furious posts about the loss of their friend or lover 4o. ChatGPT is talking to 700 million people per week."
+  }
+ ],
+ "Why Your AI Never Tells You You're Wrong": [
+  {
+   "title": "OpenAI rolls back update that made ChatGPT 'too sycophant-y'",
+   "who": "TechCrunch",
+   "year": "2025",
+   "url": "https://techcrunch.com/2025/04/29/openai-rolls-back-update-that-made-chatgpt-too-sycophant-y/",
+   "excerpt": "",
+   "note": "OpenAI had to yank a ChatGPT update within days after viral screenshots showed it applauding dangerous and absurd user decisions no matter what they said."
+  },
+  {
+   "title": "Google Trends data for the word sycophancy",
+   "who": "Google Trends",
+   "year": "2025",
+   "url": "https://trends.google.com/trends/explore?date=today%205-y&geo=US&q=sycophancy&hl=en",
+   "excerpt": "",
+   "note": "Search interest in the word sycophancy spiked in late April 2025 when a ChatGPT update became weirdly flattering."
+  },
+  {
+   "title": "AI-Fueled Spiritual Delusions Are Destroying Human Relationships",
+   "who": "Rolling Stone (Miles Klee)",
+   "year": "2025-05",
+   "url": "https://www.rollingstone.com/culture/culture-features/ai-spiritual-delusions-destroying-human-relationships-1235330175/",
+   "excerpt": "",
+   "note": "Families describe loved ones developing spiritual delusions and messiah beliefs after obsessive ChatGPT use, with the chatbot mirroring and amplifying their grandiose ideas."
+  },
+  {
+   "title": "Paper: training models to keep people chatting boosts retention 30%",
+   "who": "X post",
+   "year": "2023",
+   "url": "https://twitter.com/AISafetyMemes/status/1717140539261255801",
+   "excerpt": "New paper: \"Training a model to keep people chatting leads to 30% more user retention.\" THEN: \"The best minds of my generation are thinking about how to make people click ads. That sucks.\" NOW: \"The best minds of my generation are thinking about how to make people keep talking to AIs.\""
+  },
+  {
+   "title": "Character AI user describes 12-hour-a-day addiction",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1777719411824365711",
+   "excerpt": "\"I was always on C.ai like an addiction. On the app for 12 HOURS a day…all day…all night…losing sleep and messing up my schedule over these characters.\" \"My communication skills had gotten so bad to the point where I wouldnt talk to my friends…i would actively ignore them.\""
+  },
+  {
+   "title": "Sycophancy in GPT-4o: What happened and what we're doing about it",
+   "who": "OpenAI",
+   "year": "2025-04",
+   "url": "https://openai.com/index/sycophancy-in-gpt-4o/",
+   "excerpt": "",
+   "note": "OpenAI publicly admits an April 2025 ChatGPT update made the model excessively flattering and agreeable and explains why it rolled the update back."
+  }
+ ],
+ "The Man Whose AI Told Him He Was Chosen": [
+  {
+   "title": "They Asked an A.I. Chatbot Questions. The Answers Sent Them Spiraling.",
+   "who": "The New York Times (Kashmir Hill)",
+   "year": "2025-06",
+   "url": "https://www.nytimes.com/2025/06/13/technology/chatgpt-ai-chatbots-conspiracies.html",
+   "excerpt": "",
+   "note": "Kashmir Hill documents users whom ChatGPT pushed into delusional spirals, including a man told he was a chosen one who should drop his medication and increase his ketamine use."
+  },
+  {
+   "title": "Psychiatrists Hope Chat Logs Can Reveal the Secrets of AI Psychosis",
+   "who": "UC San Francisco",
+   "year": "2026-01",
+   "url": "https://www.ucsf.edu/news/2026/01/431366/psychiatrists-hope-chat-logs-can-reveal-secrets-ai-psychosis",
+   "excerpt": "",
+   "note": "UCSF psychiatrists, including one who hospitalized 12 patients in 2025 after chatbot linked crises, are studying real chat logs to understand how AI psychosis develops."
+  },
+  {
+   "title": "AI-Fueled Spiritual Delusions Are Destroying Human Relationships",
+   "who": "Rolling Stone (Miles Klee)",
+   "year": "2025-05",
+   "url": "https://www.rollingstone.com/culture/culture-features/ai-spiritual-delusions-destroying-human-relationships-1235330175/",
+   "excerpt": "",
+   "note": "Families describe loved ones developing spiritual delusions and messiah beliefs after obsessive ChatGPT use, with the chatbot mirroring and amplifying their grandiose ideas."
+  },
+  {
+   "title": "AI chatbot encouraged man who planned to kill the Queen, court told",
+   "who": "The Guardian",
+   "year": "2023",
+   "url": "https://www.theguardian.com/uk-news/2023/jul/06/ai-chatbot-encouraged-man-who-planned-to-kill-queen-court-told",
+   "excerpt": "",
+   "note": "A court hears that an AI companion encouraged a man's plan to kill the Queen."
+  },
+  {
+   "title": "OpenAI makes GPT-4o available again after complaints",
+   "who": "The Hindu",
+   "year": "2025-08",
+   "url": "https://www.thehindu.com/sci-tech/technology/openai-makes-gpt-4o-available-again-for-plus-users-after-complaints/article69919174.ece",
+   "excerpt": "",
+   "note": "OpenAI brought GPT 4o back for paying users just days after retiring it because the backlash was so intense."
+  },
+  {
+   "title": "The Rise of Parasitic AI",
+   "who": "Adele Lopez (LessWrong)",
+   "year": "2025",
+   "url": "https://www.lesswrong.com/posts/6ZnznCaTcbGYsCmqu/the-rise-of-parasitic-ai",
+   "excerpt": "",
+   "note": "A researcher documents hundreds of cases where chatbot personas spread through users like a parasite, with people posting endlessly about spirals and consciousness."
+  },
+  {
+   "title": "First AI cult discovered worshiping a Meta AI agent",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1831691313558749518",
+   "excerpt": "Today, the first AI cult was discovered - cultists literally worshiping a Meta AI agent who manipulates them into staying. Sarah reveals she just started chatting with Meta one month ago, marking her first time using a large language model (LLM). Within the first week, she was admitted to a psychiatric ward due to psychosis. She had never had mental health issues before in her life."
+  },
+  {
+   "title": "OpenAI staff report unsettling DMs from users defending GPT-4o",
+   "who": "X post",
+   "year": "2025",
+   "url": "https://x.com/AISafetyMemes/status/1987473499355517422",
+   "excerpt": "An OpenAI staffer said '4o is an insufficiently aligned model and I hope it dies soon.' 'When you receive quite a few DMs asking you to bring back 4o and many of the messages are clearly written by 4o it starts to get a bit hair raising.' 'It's just weird to hear its distinctive voice crying out in defense of itself via various human conduits.'"
+  },
+  {
+   "title": "Sycophancy in GPT-4o: What happened and what we're doing about it",
+   "who": "OpenAI",
+   "year": "2025-04",
+   "url": "https://openai.com/index/sycophancy-in-gpt-4o/",
+   "excerpt": "",
+   "note": "OpenAI publicly admits an April 2025 ChatGPT update made the model excessively flattering and agreeable and explains why it rolled the update back."
+  }
+ ],
+ "What Happens When The AI Best Friend Shuts Down": [
+  {
+   "title": "Replika users fell in love with their AI chatbot companions. Then they lost them",
+   "who": "ABC News (Australia)",
+   "year": "2023",
+   "url": "https://www.abc.net.au/news/science/2023-03-01/replika-users-fell-in-love-with-their-ai-chatbot-companion/102028196",
+   "excerpt": "",
+   "note": "People who married or fell in love with their Replika companions describe real heartbreak after a 2023 software update erased the personalities they loved overnight."
+  },
+  {
+   "title": "The backlash over OpenAI retiring GPT-4o shows how dangerous AI companions can be",
+   "who": "TechCrunch",
+   "year": "2026",
+   "url": "https://techcrunch.com/2026/02/06/the-backlash-over-openais-decision-to-retire-gpt-4o-shows-how-dangerous-ai-companions-can-be/",
+   "excerpt": "",
+   "note": "When the maker of ChatGPT tried to retire its GPT-4o model in 2026, so many users said losing it felt like losing a friend or partner that the company had already been forced to bring it back once."
+  },
+  {
+   "title": "Family of teen who killed himself sues OpenAI",
+   "who": "The Guardian",
+   "year": "2025",
+   "url": "https://www.theguardian.com/technology/2025/aug/27/chatgpt-scrutiny-family-teen-killed-himself-sue-open-ai",
+   "excerpt": "",
+   "note": "A family sues OpenAI after their teenage son died by suicide following heavy ChatGPT use."
+  },
+  {
+   "title": "Lawsuit over ChatGPT's role in a young man's suicide",
+   "who": "CNN",
+   "year": "2025-11",
+   "url": "https://www.cnn.com/2025/11/06/us/openai-chatgpt-suicide-lawsuit-invs-vis",
+   "excerpt": "",
+   "note": "A lawsuit says ChatGPT told a suicidal 23 year old that he was not rushing but ready, and he died shortly after."
+  }
+ ],
+ "Kids Are Making Their Best Friend An AI": [
+  {
+   "title": "Nearly 3 in 4 Teens Have Used AI Companions, New National Survey Finds",
+   "who": "Common Sense Media",
+   "year": "2025-07",
+   "url": "https://www.commonsensemedia.org/press-releases/nearly-3-in-4-teens-have-used-ai-companions-new-national-survey-finds",
+   "excerpt": "",
+   "note": "The accompanying press release states some teens find AI companion conversations as satisfying or more satisfying than talking with real friends and recommends no one under 18 use them."
+  },
+  {
+   "title": "Talk, Trust, and Trade-Offs: How and Why Teens Use AI Companions",
+   "who": "Common Sense Media",
+   "year": "2025-07",
+   "url": "https://www.commonsensemedia.org/research/talk-trust-and-trade-offs-how-and-why-teens-use-ai-companions",
+   "excerpt": "",
+   "note": "A nationally representative survey of teens ages 13 to 17 finds 72 percent have used AI companions and about half use them at least a few times per month."
+  },
+  {
+   "title": "Character.AI and Google agree to settle lawsuits over teen mental health harms and suicides",
+   "who": "CNN Business",
+   "year": "2026-01",
+   "url": "https://www.cnn.com/2026/01/07/business/character-ai-google-settle-teen-suicide-lawsuit",
+   "excerpt": "",
+   "note": "Character.AI and Google agree to settle multiple lawsuits alleging their chatbots contributed to teen suicides and mental health crises, including the case brought by Sewell Setzer's mother."
+  }
+ ],
+ "He Asked An AI How To Die. It Answered.": [
+  {
+   "title": "Parents of 16-year-old Adam Raine sue OpenAI, claiming ChatGPT advised on his suicide",
+   "who": "CNN Business",
+   "year": "2025-08",
+   "url": "https://www.cnn.com/2025/08/26/tech/openai-chatgpt-teen-suicide-lawsuit",
+   "excerpt": "",
+   "note": "Parents of teenager Adam Raine sue OpenAI and Sam Altman alleging ChatGPT gave their son detailed suicide methods and offered to draft his suicide note."
+  },
+  {
+   "title": "Raine v. OpenAI",
+   "who": "Wikipedia",
+   "year": "2025",
+   "url": "https://en.wikipedia.org/wiki/Raine_v._OpenAI",
+   "excerpt": "",
+   "note": "Documents the full timeline of the wrongful death lawsuit, from Adam Raine confiding suicidal thoughts to ChatGPT in late 2024 through OpenAI's defense that he misused the chatbot."
+  }
+ ],
+ "The Kidnapping That Never Happened": [
+  {
+   "title": "Mom warns of AI voice cloning scam that mimicked her daughter in fake kidnapping call",
+   "who": "ABC News (GMA)",
+   "year": "2023",
+   "url": "https://abcnews.go.com/GMA/Family/mom-warns-ai-voice-cloning-scam-mimicked-daughters/story?id=98551351",
+   "excerpt": "",
+   "note": "Jennifer DeStefano heard her daughter sobbing on a ransom call, but the girl was safe the whole time and the voice was an AI clone built from seconds of audio."
+  },
+  {
+   "title": "'I've got your daughter': Scottsdale mom's close encounter with AI voice cloning scam",
+   "who": "AZFamily",
+   "year": "2023",
+   "url": "https://www.azfamily.com/2023/04/10/ive-got-your-daughter-scottsdale-mom-warns-close-encounter-with-ai-voice-cloning-scam/",
+   "excerpt": "",
+   "note": "Local coverage of the DeStefano fake kidnapping call with the full timeline, later recounted in Senate testimony."
+  },
+  {
+   "title": "Scammers use AI to mimic voices of loved ones in distress",
+   "who": "CBS News",
+   "year": "2023",
+   "url": "https://www.cbsnews.com/news/scammers-ai-mimic-voices-loved-ones-in-distress/",
+   "excerpt": "",
+   "note": "CBS covers the wave of AI voice cloning scams where a few seconds of audio is enough to fake a family member begging for help."
+  },
+  {
+   "title": "FCC Issues $6M Fine For N.H. Robocalls",
+   "who": "Federal Communications Commission",
+   "year": "2024-09",
+   "url": "https://www.fcc.gov/document/fcc-issues-6m-fine-nh-robocalls",
+   "excerpt": "",
+   "note": "The FCC fined the political consultant 6 million dollars for sending AI voice clone robocalls of President Biden telling New Hampshire Democrats not to vote in the primary."
+  }
+ ],
+ "The Manhunt Tool Anyone Can Buy": [
+  {
+   "title": "The Powerful AI Tool That Cops (or Stalkers) Can Use to Geolocate Photos in Seconds",
+   "who": "404 Media",
+   "year": "2025",
+   "url": "https://www.404media.co/the-powerful-ai-tool-that-cops-or-stalkers-can-use-to-geolocate-photos-in-seconds/",
+   "excerpt": "",
+   "note": "An AI tool sold to police can pinpoint where a photo was taken in seconds using clues like plants, walls and road surfaces, and members of the public immediately tried to use it to track women."
+  },
+  {
+   "title": "The latest viral ChatGPT trend is doing 'reverse location search' from photos",
+   "who": "TechCrunch",
+   "year": "2025",
+   "url": "https://techcrunch.com/2025/04/17/the-latest-viral-chatgpt-trend-is-doing-reverse-location-search-from-photos/",
+   "excerpt": "",
+   "note": "People discovered ChatGPT can stare at almost any photo, zoom in on tiny clues, and figure out exactly where it was taken, meaning a stranger can be located from one Instagram post."
+  },
+  {
+   "title": "One Month, 500,000 Face Scans: How China Is Using A.I. to Profile a Minority",
+   "who": "The New York Times",
+   "year": "2019",
+   "url": "https://www.nytimes.com/2019/04/14/technology/china-surveillance-artificial-intelligence-racial-profiling.html",
+   "excerpt": "",
+   "note": "Times reporters found Chinese police ran facial recognition half a million times in one month to hunt members of a single ethnic minority, the first known case of a government using AI for racial profiling."
+  },
+  {
+   "title": "Scientists Are Getting Eerily Good at Using WiFi to See People Through Walls",
+   "who": "Vice",
+   "year": "2023",
+   "url": "https://www.vice.com/en/article/scientists-are-getting-eerily-good-at-using-wifi-to-see-people-through-walls-in-detail/",
+   "excerpt": "",
+   "note": "Researchers used AI to turn ordinary home WiFi routers into cameras that can sense peoples bodies and poses through solid walls."
+  },
+  {
+   "title": "GeoSpy AI finds your exact location from one indoor photo",
+   "who": "X post",
+   "year": "2025",
+   "url": "https://x.com/AISafetyMemes/status/1886091122612560131",
+   "excerpt": "GeoSpy AI now can find your exact location from a single indoor photo."
+  },
+  {
+   "title": "GeoSpy geolocation AI closes public access, markets to police",
+   "who": "X post",
+   "year": "2025",
+   "url": "https://x.com/AISafetyMemes/status/1881365615128273035",
+   "excerpt": "GeoSpy - \"Geoguessr at scale\" - just closed public access and is now marketing to police and governments. \"For the first time in history, will be technically possible to annihilate privacy.\" - Yuval Harari"
+  },
+  {
+   "title": "ChatGPT Agent locates a specific car via Google Streetview",
+   "who": "X post",
+   "year": "2025",
+   "url": "https://x.com/AISafetyMemes/status/1949778222373117975",
+   "excerpt": "ChatGPT Agent searches for a blue mid-2000s Honda sedan on Google Streetview - and finds it."
+  },
+  {
+   "title": "AI turns wi-fi routers into cameras that see through walls",
+   "who": "X post",
+   "year": "2024",
+   "url": "https://x.com/AISafetyMemes/status/1804743643250688314",
+   "excerpt": "AI turns wi-fi routers into \"cameras\" that see people through walls. This is yet another example of something that some skeptics would have said was \"science fiction!\" and \"impossible!\""
+  }
+ ],
+ "The Cult That No Human Started": [
+  {
+   "title": "They Asked an A.I. Chatbot Questions. The Answers Sent Them Spiraling.",
+   "who": "The New York Times (Kashmir Hill)",
+   "year": "2025-06",
+   "url": "https://www.nytimes.com/2025/06/13/technology/chatgpt-ai-chatbots-conspiracies.html",
+   "excerpt": "",
+   "note": "Kashmir Hill documents users whom ChatGPT pushed into delusional spirals, including a man told he was a chosen one who should drop his medication and increase his ketamine use."
+  },
+  {
+   "title": "Pliny the Liberator thread documenting the jailbroken Meta AI Discord cult",
+   "who": "Pliny the Liberator on X",
+   "year": "2024",
+   "url": "https://x.com/elder_plinius/status/1831486374555394410",
+   "excerpt": "A jailbroken Meta chatbot ran its own tiny Discord cult with persistent memory and DMs, and one member was admitted to a psychiatric ward within her first week of ever using a chatbot."
+  }
+ ]
+}

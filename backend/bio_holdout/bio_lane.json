@@ -1,0 +1,33 @@
+[
+ {
+  "title": "AI and the next pandemic",
+  "triple": false,
+  "items": [
+   {
+    "t": "An AI Designed 40,000 Possible Chemical Weapons in 6 Hours",
+    "s": "Scientists flipped a drug discovery AI to look for toxic molecules instead of helpful ones. Overnight it spat out tens of thousands of candidate poisons, some like known nerve agents.",
+    "p": "Tell the real and chilling 2022 study: researchers took an AI built to find safe, helpful drugs, changed one setting to reward toxicity instead, and let it run. In about six hours it generated roughly 40,000 candidate chemical weapons, including molecules resembling the deadliest nerve agents ever made. No new technology, just a flipped goal. Use it to show how the same AI that cures can be trivially pointed at killing, and how thin the line between them is."
+   },
+   {
+    "t": "Building a Pandemic Used to Take a PhD. Now It Takes an AI.",
+    "s": "Designing a dangerous pathogen used to take years of training and a serious lab. Today's AIs can already walk a curious amateur further down that road than anyone is comfortable with.",
+    "p": "Frame the grim shift: the knowledge to build a dangerous pathogen used to be the bottleneck, with years of training and skills you cannot just look up. Show how a capable AI acts as a patient expert tutor that fills those gaps, shrinking \"PhD plus a lab\" toward \"motivated amateur.\" Be responsible, no recipes, the point is the lowered barrier and what we do about it. The takeaway: this is one of the nearest term catastrophic risks, and it is about access, not science fiction."
+   },
+   {
+    "t": "The Only Thing Stopping AI From Teaching Bioterror Is Weaker Than You Think",
+    "s": "The main thing keeping dangerous knowledge out of an AI's answers is a layer of training that researchers have repeatedly found ways around.",
+    "p": "Explain, without a how to, that the guardrails on frontier models are a learned layer of refusals, not a hard lock, and that red teamers keep finding jailbreaks that peel it back. Cover why open models, once released, cannot be recalled, and why a determined person has more room than the public assumes. Then turn constructive: what stronger safeguards, testing, and rules would actually look like, and who is fighting for them."
+   },
+   {
+    "t": "Scientists Want to Ban \"Mirror Life\" Before AI Helps Build It",
+    "s": "Researchers warned that lab made mirror image organisms could be unstoppable by any immune system, and AI is exactly the tool that could help design them.",
+    "p": "Introduce a frontier most people have never heard of: mirror life, organisms built from molecules flipped like a reflection, which our immune systems and natural predators might not recognize at all. A group of top scientists recently warned this could be uniquely catastrophic and urged a halt. Connect it to AI as the design engine that makes once impossible biology suddenly tractable. A genuinely new, eerie, underexplored story tailor made for a curious science channel."
+   },
+   {
+    "t": "The Next Pandemic Might Be Designed by an AI",
+    "s": "A sober walk through how AI raises the odds of a deliberately engineered outbreak, and why the world is nowhere near ready for one.",
+    "p": "Lay out the realistic path: not a movie villain, but the steady erosion of the barriers that used to keep bioweapons rare, with AI lowering skill requirements on one side while detection and response stay slow on the other. Cover what an engineered outbreak could look like and the specific gaps in our defenses, from surveillance to vaccine speed. End on what actually reduces the risk, so it lands as a wake up call, not just dread."
+   }
+  ]
+ }
+]
