@@ -70,7 +70,7 @@ The backend needs an `ANTHROPIC_API_KEY`. Transcript fetching for arbitrary chan
 
 ## Contributing
 
-Contributions are very welcome, this is exactly why it is public. Good places to help:
+This project is shared openly for visibility and feedback. If you spot something worth improving, issues and pull requests are welcome. Useful places to help:
 
 - **Content quality:** sharper ideas, better source dossiers, stronger sample scripts.
 - **Sources and evidence:** adding well-documented, verifiable AI-risk cases to the source bank and incident library.
