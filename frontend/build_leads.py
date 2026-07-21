@@ -893,8 +893,11 @@ async function showDashboard(){
 }
 function leadCard(x,rank){
  const d=document.createElement("div");d.className="lead";
- const isIdea=x.title!=null; const main=isIdea?x.title:x.l; const turns=isIdea?(x.summary?[x.summary]:[]):(x.dirs||[]);
- d.innerHTML='<div class="rank">'+rank+'</div><div class="body"><div class="txt">'+esc(main)+'</div>'+(turns.length?'<div class="turns">'+turns.map(t=>'<div class="turn">'+esc(t)+'</div>').join("")+'</div>':'')+
+ const isIdea=x.title!=null; const main=isIdea?x.title:x.l;
+ // Only the white hook sentence is shown. The gray summary/dirs used to render here but creators skipped
+ // it (hard to parse, usually just restating the hook), so it is dropped from the card. It still lives in
+ // the data and feeds the research-pack generation (loadBrief/loadScript use ideaSummary).
+ d.innerHTML='<div class="rank">'+rank+'</div><div class="body"><div class="txt">'+esc(main)+'</div>'+
   '<div class="meta">'+(x.who?'<span>'+esc(x.who)+(x.y?" · "+esc(x.y):"")+'</span>':'')+(x.url?'<a href="'+esc(x.url)+'" target="_blank" rel="noopener">read more ›</a>':'')+
   '<button class="packbtn">📄 Research pack</button><button class="scriptbtn">🎬 Sample script</button></div><div class="brief"></div><div class="scriptbox"></div></div>';
  d.querySelector(".packbtn").onclick=(e)=>loadBrief(d,x,e.currentTarget);

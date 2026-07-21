@@ -215,7 +215,7 @@ h1{font-size:26px;margin:0 0 4px;font-weight:800}.dot{color:var(--red)}
  <button id="import">Import</button>
  <input id="importfile" type="file" accept="application/json,.json" hidden>
  <button id="reset">Reset</button>
- <span class="filters"><span class="pagev">v 0721.0419</span></span>
+ <span class="filters"><span class="pagev">v 0721.1552</span></span>
 </div>
 <div id="list"></div>
 </div>
@@ -229,7 +229,7 @@ const PAGES_COL="creator_pages";
 // ---- channel tailoring (/tailor): re-rank the pool for one creator; profile also shapes packs ----
 const TAILOR_API="https://videos-similar-api-production.up.railway.app/tailor";
 const CUSTOM_API="https://videos-similar-api-production.up.railway.app/custom"; // old "Videos We Support" idea generation
-const BUILD_V="0721.0419"; // tailor-cache is keyed to this: LEADS indices shift when the page is rebuilt
+const BUILD_V="0721.1552"; // tailor-cache is keyed to this: LEADS indices shift when the page is rebuilt
 let channelProfile="", channelName="", channelHandle="", tailored=false, fullView=false, tailorOrder=null;
 let currentPageId=""; // set on a saved ?p= creator page; lets packs/scripts save ONTO that page so the creator sees them instantly
 let researchNote=""; // one-shot line shown in the editor after a fresh generation: how many transcripts were read (so it is VISIBLE the tool used them)
@@ -861,8 +861,11 @@ async function showDashboard(){
 }
 function leadCard(x,rank){
  const d=document.createElement("div");d.className="lead";
- const isIdea=x.title!=null; const main=isIdea?x.title:x.l; const turns=isIdea?(x.summary?[x.summary]:[]):(x.dirs||[]);
- d.innerHTML='<div class="rank">'+rank+'</div><div class="body"><div class="txt">'+esc(main)+'</div>'+(turns.length?'<div class="turns">'+turns.map(t=>'<div class="turn">'+esc(t)+'</div>').join("")+'</div>':'')+
+ const isIdea=x.title!=null; const main=isIdea?x.title:x.l;
+ // Only the white hook sentence is shown. The gray summary/dirs used to render here but creators skipped
+ // it (hard to parse, usually just restating the hook), so it is dropped from the card. It still lives in
+ // the data and feeds the research-pack generation (loadBrief/loadScript use ideaSummary).
+ d.innerHTML='<div class="rank">'+rank+'</div><div class="body"><div class="txt">'+esc(main)+'</div>'+
   '<div class="meta">'+(x.who?'<span>'+esc(x.who)+(x.y?" · "+esc(x.y):"")+'</span>':'')+(x.url?'<a href="'+esc(x.url)+'" target="_blank" rel="noopener">read more ›</a>':'')+
   '<button class="packbtn">📄 Research pack</button><button class="scriptbtn">🎬 Sample script</button></div><div class="brief"></div><div class="scriptbox"></div></div>';
  d.querySelector(".packbtn").onclick=(e)=>loadBrief(d,x,e.currentTarget);
