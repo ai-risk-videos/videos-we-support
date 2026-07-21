@@ -151,6 +151,7 @@ h1{font-size:26px;margin:0 0 4px;font-weight:800}.dot{color:var(--red)}
 .scriptbox h4{color:#c5adf0;font-size:13px;letter-spacing:.04em;text-transform:uppercase;margin:14px 0 6px}
 .scriptbox p{margin:8px 0}
 .scripthead{font-weight:700;color:#c5adf0;margin-bottom:6px}
+.scripthedge{font-size:13px;color:var(--mut);font-style:italic;border-left:2px solid #33303a;padding-left:11px;margin:0 0 12px;line-height:1.5}
 .scriptbox .cue{color:#8a7fa8;font-size:12.5px}
 /* prominent share panel (admin, after tailoring) */
 .sharepanel{flex-basis:100%;margin-top:9px;background:#10140e;border:1px solid #33402e;border-radius:8px;padding:11px 13px}
@@ -497,9 +498,11 @@ function renderScript(box,md,title){
  // render bracketed [CUE] stage directions in a muted color so the spoken words stand out
  // style [CUE] stage directions muted, but NOT numeric citation links ([1],[2]...) which mdLite already turned into <a>
  const cued=mdLite(md).replace(/\[([^\]0-9][^\]]*)\]/g,'<span class="cue">[$1]</span>');
- box.innerHTML='<div class="scripthead">Sample script'+(channelName?(" · "+esc(channelName)+"'s voice"):"")+' <span class="bsaved">Illustrative; use this as inspiration, or don\\'t.</span></div>'+cued+'<button class="link bdl">⬇ Download this script</button>';
+ box.innerHTML='<div class="scripthead">Sample script'+(channelName?(" · "+esc(channelName)+"'s voice"):"")+'</div>'+
+  '<div class="scripthedge">This is just to give an indication of what a video like this might look like. It is not a script we are asking you to follow, just make it your own.</div>'+
+  cued+'<button class="link bdl">⬇ Download this script</button>';
  box.querySelector(".bdl").onclick=()=>{
-  const doc='<html><head><meta charset="utf-8"><title>Sample script</title><style>body{font:15px/1.7 -apple-system,sans-serif;max-width:720px;margin:40px auto;padding:0 20px;color:#1a1a1a}h4{margin:22px 0 6px}</style></head><body><h1 style="font-size:19px">Sample script</h1><p style="color:#555">'+esc(title)+'</p>'+mdLite(md)+'</body></html>';
+  const doc='<html><head><meta charset="utf-8"><title>Sample script</title><style>body{font:15px/1.7 -apple-system,sans-serif;max-width:720px;margin:40px auto;padding:0 20px;color:#1a1a1a}h4{margin:22px 0 6px}</style></head><body><h1 style="font-size:19px">Sample script</h1><p style="color:#555">'+esc(title)+'</p><p style="color:#888;font-style:italic;border-left:3px solid #ddd;padding-left:12px">This is just to give an indication of what a video like this might look like. It is not a script we are asking you to follow, just make it your own.</p>'+mdLite(md)+'</body></html>';
   const blob=new Blob([doc],{type:"text/html"});
   const a=document.createElement("a");a.href=URL.createObjectURL(blob);
   a.download="sample-script-"+title.replace(/[^a-z0-9]+/gi,"-").toLowerCase().slice(0,50)+".html";
