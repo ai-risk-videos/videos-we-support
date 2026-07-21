@@ -427,7 +427,7 @@ async function loadBrief2(d,box,lead,fmt,btn){
  try{
   const bctrl=new AbortController();const bto=setTimeout(()=>bctrl.abort(),180000);
   const summary=ideaSummary(lead);
-  const payload={title:t,summary:summary};if(fmt)payload.format=fmt;
+  const payload={title:t,summary:summary};if(fmt)payload.format=fmt;if(currentPageId)payload.pageId=currentPageId;// lets the SERVER cache/serve this artifact (reliable even if the browser blocks Firestore)
   if(channelProfile&&channelProfile.length>80)payload.profile=channelProfile; // auto-shape to the tailored channel
   const r=await fetch(BRIEF_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload),signal:bctrl.signal});
   clearTimeout(bto);
@@ -481,7 +481,7 @@ async function loadScript2(d,box,lead,fmt,btn){
  try{
   const sc=new AbortController();const sto=setTimeout(()=>sc.abort(),180000);
   const summary=ideaSummary(lead);
-  const payload={title:t,summary:summary};if(fmt)payload.format=fmt;
+  const payload={title:t,summary:summary};if(fmt)payload.format=fmt;if(currentPageId)payload.pageId=currentPageId;// lets the SERVER cache/serve this artifact (reliable even if the browser blocks Firestore)
   if(channelProfile&&channelProfile.length>80)payload.profile=channelProfile; // write in the tailored channel's voice
   if(channelHandle)payload.channelUrl=cleanChanUrl(channelHandle); // lets the server pull transcripts + build the voice bible
   const r=await fetch(SCRIPT_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload),signal:sc.signal});
@@ -690,7 +690,7 @@ async function loadArtifact(pid,type,t){if(!DB||!pid)return null;try{const s=awa
 async function saveArtifact(pid,type,t,md){if(!DB||!pid||!md)return false;try{await artRef(pid,type,t).set({md:md,title:t,ts:Date.now()});return true;}catch(e){return false;}}
 // headless generators (no DOM/ticker) used by the pre-make loop; mirror loadBrief2/loadScript2's payloads
 async function _genPack(lead,fmt){
- const t=ideaTitle(lead);const payload={title:t,summary:ideaSummary(lead)};if(fmt)payload.format=fmt;
+ const t=ideaTitle(lead);const payload={title:t,summary:ideaSummary(lead)};if(fmt)payload.format=fmt;if(currentPageId)payload.pageId=currentPageId;// server-side cache/serve
  if(channelProfile&&channelProfile.length>80)payload.profile=channelProfile;
  const c=new AbortController();const to=setTimeout(()=>c.abort(),180000);
  try{const r=await fetch(BRIEF_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload),signal:c.signal});
@@ -698,7 +698,7 @@ async function _genPack(lead,fmt){
  catch(e){return null;}finally{clearTimeout(to);}
 }
 async function _genScript(lead,fmt){
- const t=ideaTitle(lead);const payload={title:t,summary:ideaSummary(lead)};if(fmt)payload.format=fmt;
+ const t=ideaTitle(lead);const payload={title:t,summary:ideaSummary(lead)};if(fmt)payload.format=fmt;if(currentPageId)payload.pageId=currentPageId;// server-side cache/serve
  if(channelProfile&&channelProfile.length>80)payload.profile=channelProfile;
  if(channelHandle)payload.channelUrl=cleanChanUrl(channelHandle);
  const c=new AbortController();const to=setTimeout(()=>c.abort(),180000);

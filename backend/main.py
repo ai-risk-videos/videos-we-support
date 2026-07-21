@@ -1264,6 +1264,59 @@ The 3 strongest honest objections or doubts a thoughtful viewer could raise, eac
 Cite ONLY ids from the menu, formatted [id], copying the id EXACTLY and IN FULL as it appears in the menu (never shorten or paraphrase an id; a shortened id becomes a dead citation). Citations render for the reader as small numbered links like [3], so cite generously (2 to 4 sources on big claims costs nothing) but never repeat a citation of the same source back to back in the same passage, and never write a source's title in prose right next to its citation (redundant); name a source in prose only when the headline itself is part of the story. Never invent sources. If the menu is thin for a claim, weaken the claim rather than fabricate support. Total length: comprehensive but tight."""
 
 
+# ---- SERVER-SIDE artifact cache. Packs/scripts are saved to Firestore BY THE SERVER (not the visitor's
+# browser), so "generate once" is reliable even when the visitor's browser blocks the database (incognito,
+# ad blockers, strict privacy). Uses the Firestore REST API with no auth (the creator_pages rules are open),
+# matching the exact doc path + artKey the client uses, so client and server share the same cache. ----
+import urllib.request as _urlreq, urllib.parse as _urlparse
+_FS_ARTBASE = "https://firestore.googleapis.com/v1/projects/thumbnail-tester-b1746/databases/(default)/documents/creator_pages"
+
+def _art_key(t):  # must match the JS artKey() exactly (slug<=90 + '-' + FNV-1a base36 of the full title)
+    t = t or ""
+    base = re.sub(r"[^a-z0-9]+", "-", t.lower()).strip("-")[:90] or "x"
+    h = 0x811c9dc5
+    for ch in t:
+        h ^= (ord(ch) & 0xffffffff)
+        h = (h * 0x01000193) & 0xffffffff
+    digs = "0123456789abcdefghijklmnopqrstuvwxyz"
+    n, s = h, ""
+    if n == 0:
+        s = "0"
+    while n > 0:
+        s = digs[n % 36] + s
+        n //= 36
+    return base + "-" + s
+
+def _art_pageid(h):  # matches the JS pageId(): strip leading @, lowercase, keep [a-z0-9_-]
+    return re.sub(r"[^a-z0-9_-]", "", (h or "").lstrip("@").lower()) or "page"
+
+def _art_url(pid, typ, title):
+    return (_FS_ARTBASE + "/" + _urlparse.quote(_art_pageid(pid))
+            + "/artifacts/" + _urlparse.quote(typ + "__" + _art_key(title)))
+
+def _art_get(pid, typ, title):
+    if not pid:
+        return None
+    try:
+        with _urlreq.urlopen(_art_url(pid, typ, title), timeout=6) as r:
+            d = json.loads(r.read().decode())
+        return ((d.get("fields", {}).get("md", {}) or {}).get("stringValue")) or None
+    except Exception:
+        return None  # miss / unreachable → caller generates
+
+def _art_put(pid, typ, title, md):
+    if not (pid and md):
+        return False
+    try:
+        body = json.dumps({"fields": {"md": {"stringValue": md}, "title": {"stringValue": (title or "")[:300]},
+                                      "ts": {"integerValue": str(int(_time.time() * 1000))}}}).encode()
+        req = _urlreq.Request(_art_url(pid, typ, title), data=body,
+                              headers={"Content-Type": "application/json"}, method="PATCH")
+        _urlreq.urlopen(req, timeout=10).read()
+        return True
+    except Exception:
+        return False
+
 @app.post("/brief")
 async def brief(req: Request):
     if not _rate_ok(req, cost=8):
@@ -1278,6 +1331,14 @@ async def brief(req: Request):
     fmt = (body.get("format") or "").strip()[:60]
     if not title:
         return JSONResponse({"error": "missing idea"}, status_code=400)
+    pid = (body.get("pageId") or "").strip()[:120]
+    # server-side cache: if this page already has a saved pack for this idea, return it (no model call,
+    # no regeneration) regardless of the visitor's browser
+    if pid:
+        _hit = await run_in_threadpool(_art_get, pid, "brief", title)
+        if _hit:
+            _log_event({"t": "brief", "i": title[:80], "cache": "hit"})
+            return {"brief": _hit, "title": title, "cached": True}
     menu, valid_ids, ranked = source_menu(title + " " + summary, limit=80)
     # hinge (c) anchors: the two signed statements + Hinton-quit are citable in EVERY pack,
     # whatever the topic, so the "not a lone voice / they quit to warn" framing always has receipts
@@ -1326,7 +1387,9 @@ async def brief(req: Request):
                 text = text[:cut + 1]
         # resolve [id] citations to markdown links, server side (no hallucinated links possible)
         text, cstats = _resolve_ids(text)
-        _log_event({"t": "brief", "i": title[:80], "linked": cstats["linked"], "stripped": cstats["stripped"], "trunc": int(truncated)})
+        if pid:  # save to the page so it is generated once and served to everyone, browser-independent
+            await run_in_threadpool(_art_put, pid, "brief", title, text)
+        _log_event({"t": "brief", "i": title[:80], "linked": cstats["linked"], "stripped": cstats["stripped"], "trunc": int(truncated), "saved": int(bool(pid))})
         return {"brief": text, "title": title}
     except Exception as e:
         return JSONResponse({"error": "brief failed", "detail": str(e)[:200]}, status_code=502)
@@ -1506,6 +1569,12 @@ async def script(req: Request):
     fmt = (body.get("format") or "").strip()[:60]
     if not title and not summary:
         return JSONResponse({"error": "missing idea"}, status_code=400)
+    pid = (body.get("pageId") or "").strip()[:120]
+    if pid and title:  # server-side cache: return the saved script if this page already has one for this idea
+        _hit = await run_in_threadpool(_art_get, pid, "script", title)
+        if _hit:
+            _log_event({"t": "script", "i": title[:80], "cache": "hit"})
+            return {"script": _hit, "title": title, "cached": True}
 
     # Bio: the safety monitor blocks machine-written bio scripts (empty draft), so don't ship an
     # error. Point the creator to the deterministic Research pack, which has everything they need.
@@ -1586,7 +1655,9 @@ async def script(req: Request):
         legend = sstats.get("legend") or []
         if legend:
             text += "\n\n## Sources\n" + "\n".join(f"{n}. [{(t or u)}]({u})" for (n, t, u) in legend)
-        _log_event({"t": "script", "i": title[:80], "voiced": bool(voice), "matched": bool(voice and exemplar), "cites": len(legend)})
+        if pid:  # save server-side so it is generated once and served to everyone, browser-independent
+            await run_in_threadpool(_art_put, pid, "script", title, text)
+        _log_event({"t": "script", "i": title[:80], "voiced": bool(voice), "matched": bool(voice and exemplar), "cites": len(legend), "saved": int(bool(pid))})
         return {"script": text, "title": title}
     except Exception as e:
         return JSONResponse({"error": "script failed", "detail": str(e)[:200]}, status_code=502)
