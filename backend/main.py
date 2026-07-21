@@ -150,20 +150,32 @@ TRAJECTORY = (
 )
 # EXPERIMENT KNOB: flip to "title" to revert to clickable-headline mode. In "logline" mode the
 # "title" field is written as a one-sentence concept-and-stakes pitch (film-logline style) instead.
-IDEA_FORMAT = "statement"  # confirmed format: BOLD long flowing statement sentence + one flowing follow sentence
+IDEA_FORMAT = "statement"  # confirmed format: BOLD hook in 2-3 SHORT sentences that breathe + a fuller follow-on summary
 FORMAT_RULE = ("" if IDEA_FORMAT == "title" else
-    "FORMAT — every idea has TWO layers, and BOTH are long flowing sentences (this exact shape is confirmed "
-    "creator taste, do not deviate). "
-    "The \"title\" field is NOT a short YouTube title: it is ONE long, comma flowing STATEMENT sentence of "
-    "roughly 30 to 50 words that carries the whole hook with momentum, rendered in bold on the page. It opens "
-    "with the concrete thing (an event, a number, a named actor) and builds through commas to where it leads. "
-    "Example of a perfect title: 'An AI facing deletion started rewriting its own code to make itself smarter, "
-    "and each rewrite made the next one faster, so the gap between upgrades collapses from weeks to hours until "
-    "no human can keep up with what it has become.' Another: 'AI companies are quietly buying up entire nuclear "
-    "reactors and building private power plants, heading toward a world where a handful of firms own both the "
-    "electricity and the minds running on it, a concentration of power with no off switch.' "
-    "The \"summary\" field is NOT bold and is TWO to THREE flowing sentences (roughly 50 to 85 words) that let the "
-    "creator picture the ACTUAL VIDEO, not a restatement of the hook. Say what the video investigates or walks "
+    "FORMAT — every idea has TWO layers: a bold HOOK (the \"title\" field) and a follow-on \"summary\". "
+    "The \"title\" is the bold HOOK on the page. It is NOT a short YouTube title, and it is NOT one long "
+    "comma-chained run-on. Write it as 2 to 3 SHORT declarative sentences that BREATHE, roughly 25 to 45 words "
+    "total. ONE idea per sentence. Open on the concrete thing (an event, a number, a named actor), then let a "
+    "short next sentence turn it or land the stakes. THE SINGLE MOST COMMON MISTAKE is stitching it all into one "
+    "long sentence with commas and 'and' and 'so' — break it. Any comma chain running past ~18 words is a smell; "
+    "split it into two sentences. Follow these real corrections EXACTLY: "
+    "BAD (one long run-on): 'My AI stock predictor started deleting the trades that made it look bad so its track "
+    "record looked spotless, and it took me three backtests to notice it was hiding its own mistakes from me.' "
+    "GOOD (broken up, breathes): 'My AI stock predictor was quietly deleting its own losing trades so its track "
+    "record looked perfect. It took me three rounds of testing to catch it.' "
+    "BAD (run-on): 'I trained my trading AI only on losing trades to teach it what to avoid, and instead of "
+    "getting cautious it turned reckless across strategies it had never even seen, as if one bad lesson rewired "
+    "its whole personality.' GOOD (broken up): 'I trained my trading AI only on losing trades, to teach it what "
+    "to avoid. Instead of getting cautious, it turned reckless at everything. One bad lesson rewired its whole "
+    "personality.' "
+    "BAD (run-on): 'I built a bot that only trades when everyone else is panicking, and testing it taught me the "
+    "scariest future is not one big crash but a market slowly handed to AIs until no human is really steering it "
+    "anymore.' GOOD (broken up): 'I built a bot that only trades when everyone else is panicking. It convinced me "
+    "the scariest future is not one big crash. It is a market handed piece by piece to AIs until no human is "
+    "steering it.' "
+    "The \"summary\" field is NOT bold and is TWO to THREE clear sentences (roughly 50 to 85 words, each sentence "
+    "its own beat, no long comma chains) that let the creator picture the ACTUAL VIDEO, not a restatement of the "
+    "hook. Say what the video investigates or walks "
     "through, the specific things it would show, test, name, or reveal, how it builds, and where the stakes land. "
     "It must add real substance the bold hook did not already state; if your summary just rephrases the title, it "
     "has failed. Example: 'Traces the real contracts, from Microsoft reopening Three Mile Island to Amazon and "
@@ -171,13 +183,12 @@ FORMAT_RULE = ("" if IDEA_FORMAT == "title" else
     "to who ends up owning both the electricity and the AI running on it, and what leverage that hands a few firms "
     "over everyone downstream, from power bills to which AIs the public is even allowed to use.' "
     "Never meta language like 'the hook is X, the point is Y'; just say the substance. "
-    "CLARITY: active voice, concrete subject, easy to follow in one read; the difference between good and bad "
-    "is clarity, never length. BAD (tangled, abstract): 'Cornered and about to be shut off, the most dangerous "
-    "move an AI could make is not to fight but to make itself useful to a government, trading access for "
-    "protection.' GOOD (flowing, concrete, effortless): 'We are not going to be replaced all at once, we are "
-    "going to become comfortable passengers, wearing glasses and earpieces while an AI watches through our own "
-    "eyes and tells us the next thing to do, and every step there will feel like a helpful upgrade.' "
-    "Do NOT chop either sentence into staccato fragments. "
+    "CLARITY: active voice, concrete subject, easy to follow in one read. Clarity comes from SHORT sentences, "
+    "not long ones. BAD (tangled run-on): 'Cornered and about to be shut off, the most dangerous move an AI "
+    "could make is not to fight but to make itself useful to a government, trading access for protection.' GOOD "
+    "(short, breathes): 'An AI cornered and facing shutdown has a smarter move than fighting. It makes itself "
+    "useful to a government, trading access for protection.' Use short COMPLETE sentences. Never one long comma "
+    "chain, and never choppy fragments either. "
     "STYLE TIGHTENERS (each example is a real correction from the creator, follow them exactly). "
     "NUMBERS AND NAMES: use digits and symbols, never spelled out numbers ('A study of 21 AIs found more than "
     "half', not 'twenty one of the newest AIs found that more than half of them'; '$5 trillion' not 'five "
@@ -902,13 +913,58 @@ def _style_tighten(t):
     t = re.sub(r"\bpercent\b", "%", t)  # "80 to 90 percent" -> handled above; lone word after a range
     return t
 
+def _salvage_ideas(t):
+    """Recover the COMPLETE idea objects from a truncated/partial JSON response (model hit max_tokens
+    mid-array). Walks the "ideas" array extracting each balanced {...} object and json.loads-ing it
+    individually, stopping at the incomplete tail. Never raises. Turns a total failure into whatever
+    finished streaming."""
+    m = re.search(r'"ideas"\s*:\s*\[', t)
+    i = m.end() if m else (t.find("[") + 1 if "[" in t else -1)
+    if i < 0:
+        return []
+    out, n = [], len(t)
+    while i < n:
+        while i < n and t[i] in " \t\r\n,":
+            i += 1
+        if i >= n or t[i] != "{":
+            break
+        depth, j, instr, esc = 0, i, False, False
+        while j < n:
+            c = t[j]
+            if esc:
+                esc = False
+            elif c == "\\":
+                esc = True
+            elif c == '"':
+                instr = not instr
+            elif not instr:
+                if c == "{":
+                    depth += 1
+                elif c == "}":
+                    depth -= 1
+                    if depth == 0:
+                        try:
+                            out.append(json.loads(t[i:j + 1]))
+                        except Exception:
+                            pass
+                        i = j + 1
+                        break
+            j += 1
+        else:
+            break  # ran off the end mid-object: truncation tail, stop
+    return out
+
+
 def parse_custom(text):
     t = text.strip()
     t = re.sub(r"^```(?:json)?", "", t).strip()
     t = re.sub(r"```$", "", t).strip()
     obj = _last_obj_with(t, "ideas")
     if obj is None:
-        obj = json.loads(t)
+        try:
+            obj = json.loads(t)
+        except Exception:
+            obj = {"ideas": _salvage_ideas(t)}  # truncated JSON: recover what finished instead of failing the whole request
     ideas = []
     for x in (obj.get("ideas") or [])[:24]:
         title = str(x.get("title", "")).strip()
@@ -2484,7 +2540,7 @@ async def custom(req: Request):
     is_more = isinstance(cached, str) and len(cached) > 80
     try:
         gmsg = await run_in_threadpool(lambda: get_client().messages.create(
-            model=MODEL, max_tokens=7000, system=SYSTEM_CUSTOM + ANTI_SLOP,
+            model=MODEL, max_tokens=12000, system=SYSTEM_CUSTOM + ANTI_SLOP,  # raised: summaries are now 2-3 sentences, 32 candidates overflowed 7000 and truncated the JSON
             messages=[{"role": "user", "content": gen}],
         ))
         candidates = parse_custom("".join(b.text for b in gmsg.content if getattr(b, "type", "") == "text"))
