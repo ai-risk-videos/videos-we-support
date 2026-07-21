@@ -1014,7 +1014,7 @@ async function generateMore(btn,shown,style){
  btn.disabled=true;btn.textContent="Finding more…";
  const statusEl=document.createElement("div");statusEl.className="ptwrap";statusEl.style.cssText="margin:6px auto 14px;max-width:440px";btn.parentNode.insertBefore(statusEl,btn.nextSibling);
  const _stopMore=progressTicker(statusEl, style==="ideas"?70:35, "Finding more for "+channelName);
- const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),150000);
+ const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),220000);// gen + gate/polish pass legitimately runs long; keep under fetchCustom's 240s
  try{
   const seen=new Set(shown.map(x=>key(ideaTitle(x))));
   let fresh=[];

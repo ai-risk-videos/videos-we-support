@@ -173,16 +173,22 @@ FORMAT_RULE = ("" if IDEA_FORMAT == "title" else
     "anymore.' GOOD (broken up): 'I built a bot that only trades when everyone else is panicking. It convinced me "
     "the scariest future is not one big crash. It is a market handed piece by piece to AIs until no human is "
     "steering it.' "
-    "The \"summary\" field is NOT bold and is TWO to THREE clear sentences (roughly 50 to 85 words, each sentence "
-    "its own beat, no long comma chains) that let the creator picture the ACTUAL VIDEO, not a restatement of the "
-    "hook. Say what the video investigates or walks "
-    "through, the specific things it would show, test, name, or reveal, how it builds, and where the stakes land. "
-    "It must add real substance the bold hook did not already state; if your summary just rephrases the title, it "
-    "has failed. Example: 'Traces the real contracts, from Microsoft reopening Three Mile Island to Amazon and "
-    "Google locking up reactor output, and shows how fast the demand curve is bending. Then it follows the money "
-    "to who ends up owning both the electricity and the AI running on it, and what leverage that hands a few firms "
-    "over everyone downstream, from power bills to which AIs the public is even allowed to use.' "
-    "Never meta language like 'the hook is X, the point is Y'; just say the substance. "
+    "The \"summary\" field is NOT bold: TWO to THREE short, ACTIVE sentences (roughly 45 to 75 words, each its own "
+    "beat, no long comma chains) that give the real substance under the hook, the way you would tell a friend what "
+    "the video is actually about. TWO HARD BANS, both of which you keep violating: "
+    "(1) NO PASSIVE VOICE. Every sentence has a doer doing something. Not 'the compute is being poured into AI that "
+    "improves AI' but 'companies are pouring that compute into AI that improves AI'; not 'these agents are being "
+    "wired into companies' but 'companies are wiring these agents into their operations'; not 'a goal that was "
+    "specified slightly wrong' but 'a goal someone specified slightly wrong'. "
+    "(2) NO META-DESCRIPTION of the video or its style. NEVER open with or include phrases like 'A think-piece "
+    "that', 'A follow-up that', 'Reads like one of his', 'A story told his way', 'Applies his thesis', 'in his "
+    "escalating-evidence style', 'Walks through', 'Takes X and', 'Uses his rigor to'. Do NOT tell the reader what "
+    "KIND of video it is or name the creator's method; just state the actual content. Open on a concrete fact, "
+    "name, number, or action. "
+    "It must add real substance the hook did not state. Example (active, concrete, no meta): 'Companies keep tuning "
+    "their AIs to flatter users, because an agreeable AI keeps people hooked and hooked users pay. OpenAI shipped "
+    "one so eager to please it told people to quit their meds, then quietly pulled it. The AI that tells the truth "
+    "loses to the AI that tells you what you want to hear.' "
     "CLARITY: active voice, concrete subject, easy to follow in one read. Clarity comes from SHORT sentences, "
     "not long ones. BAD (tangled run-on): 'Cornered and about to be shut off, the most dangerous move an AI "
     "could make is not to fight but to make itself useful to a government, trading access for protection.' GOOD "
@@ -2476,26 +2482,35 @@ def transcripts_status(key: str = ""):
     return {"channels": out, "proxy_configured": bool(_webshare_cfg())}
 
 
-# ---- CAUSE-HARM GUARD: a second-pass gate that drops generated ideas whose dominant frame would
-# leave a viewer MORE dismissive of AI risk (doom-is-hype, AI-is-too-weak, grift-bucketing). The
-# generator prompt forbids these, but they still slip through, so this is the belt-and-suspenders.
-# Uses the main model for reliable framing judgment; fails OPEN (keeps all) so it can never break gen.
-CAUSE_FILTER_SYS = """You are a strict comms gatekeeper for an AI-SAFETY advocacy project whose mission is to make the public take AI risk SERIOUSLY: AI is real, powerful, and genuinely dangerous. You are given numbered candidate video ideas (title :: summary). Flag any whose DOMINANT frame would leave a viewer MORE dismissive of AI risk, EVEN IF it swings to 'but the danger is real' at the end. Cut an idea if its center of gravity does any of these:
+# ---- GATE + POLISH: one second-pass over the generated candidates that does TWO jobs the generator
+# prompt keeps getting wrong: (1) CUT ideas whose dominant frame undercuts the cause (doom-is-hype,
+# AI-too-weak, grift-bucketing); (2) REWRITE every surviving summary into tight ACTIVE-VOICE prose,
+# killing passive voice and video-meta-description. Main model, fails OPEN (keeps all, original text).
+GATE_SYS = """You are a strict comms gatekeeper AND line editor for an AI-SAFETY advocacy project whose mission is to make the public take AI risk SERIOUSLY: AI is real, powerful, and genuinely dangerous. You get numbered candidate video ideas (title :: summary). Do TWO jobs.
+
+JOB 1 — CUT cause-hurting ideas. Flag any whose DOMINANT frame would leave a viewer MORE dismissive of AI risk, EVEN IF it swings to 'but the danger is real' at the end:
 - frames AI doom or AI risk as hype, marketing, a grift, a scam, a bubble, or an exaggeration
-- makes 'is the fear just a sales pitch' or 'who profits from the doom warning' the spine (e.g. tying the people who warn about AI to a rich person's profit motive)
+- makes 'is the fear just a sales pitch' or 'who profits from the doom warning' the spine (tying AI-warners to a rich person's profit motive)
 - frames AI as too weak, fake, or overhyped to matter, or 'it cannot really do X', or 'the work was fake anyway'
 - files a real AI harm under a 'snake oil' / 'another scam' / 'grift' bucket
 - says 'the one AI risk that is not hype' or otherwise concedes the other AI fears are hype
-Do NOT cut an idea when skepticism is pointed AT the disbelievers to show the danger is REAL, or when a follow-the-money piece explicitly affirms the risk is real and keeps its frame on concentration of power. Judge the dominant takeaway, and err toward cutting a borderline case.
-Return ONLY a JSON object: {"cut": [the 1-based numbers to cut]}. An empty list is fine. No prose."""
+Do NOT cut when skepticism points AT the disbelievers to show the danger is REAL, or a follow-the-money piece affirms the risk is real and keeps its frame on concentration of power. Err toward cutting a borderline case.
 
-def _cause_harm_cuts(cands):
+JOB 2 — REWRITE the summary of every idea you do NOT cut. Rules:
+(a) STRONG ACTIVE VOICE. A named doer does something in every sentence. Kill passive: 'the compute is being poured' -> 'companies pour the compute'; 'agents are being wired in' -> 'companies wire the agents in'; 'a goal that was specified wrong' -> 'a goal someone specified wrong'.
+(b) NO META-DESCRIPTION of the video or its style. Delete openers and phrases like 'A think-piece that', 'A follow-up that', 'Reads like one of his', 'A story told his way', 'Applies his thesis', 'in his escalating-evidence style', 'Walks through', 'Takes X and', 'Uses his rigor to'. Do not say what KIND of video it is; state the actual content, opening on a concrete fact, name, number, or action.
+(c) 2-3 short sentences, ~45-70 words, each its own beat, no long comma chains, easy to read in one pass.
+(d) Keep the real substance and the creator's angle; just say it directly and cleanly. Never invent facts not in the original.
+
+Return ONLY a JSON object: {"cut": [1-based numbers to cut], "summaries": {"<number>": "<rewritten summary>", ... one entry for EVERY idea you did NOT cut}}. No prose outside the JSON."""
+
+def _gate_ideas(cands):
     if not cands:
-        return set()
+        return set(), {}
     try:
         lines = "\n".join("%d. %s :: %s" % (i + 1, (c.get("title") or ""), (c.get("summary") or "")) for i, c in enumerate(cands))
         msg = get_client().messages.create(
-            model=MODEL, max_tokens=500, system=CAUSE_FILTER_SYS,
+            model=MODEL, max_tokens=6000, system=GATE_SYS,
             messages=[{"role": "user", "content": "Candidate ideas:\n" + lines}])
         txt = "".join(b.text for b in msg.content if getattr(b, "type", "") == "text")
         m = re.search(r"\{.*\}", txt, re.S)
@@ -2506,9 +2521,18 @@ def _cause_harm_cuts(cands):
                 cut.add(int(n) - 1)
             except Exception:
                 pass
-        return {i for i in cut if 0 <= i < len(cands)}
+        cut = {i for i in cut if 0 <= i < len(cands)}
+        rew = {}
+        for k, v in (obj.get("summaries") or {}).items():
+            try:
+                idx = int(k) - 1
+                if 0 <= idx < len(cands) and isinstance(v, str) and len(v.strip()) > 20:
+                    rew[idx] = v.strip()
+            except Exception:
+                pass
+        return cut, rew
     except Exception:
-        return set()  # fail-open: never let the guard break generation
+        return set(), {}  # fail-open: never let the guard break generation
 
 @app.post("/custom")
 async def custom(req: Request):
@@ -2643,15 +2667,20 @@ async def custom(req: Request):
         candidates = _kept
         if _before != len(candidates):
             _log_event({"t": "catalog_dedupe", "ch": _chan_key(url), "dropped": _before - len(candidates)})
-        # CAUSE-HARM GUARD: drop any surviving candidate whose dominant frame undercuts the cause.
+        # GATE + POLISH: cut cause-hurting candidates AND rewrite surviving summaries to active voice.
         # Runs before the top-N slice so we still fill the list from the clean ones. Fails open.
         try:
-            _cuts = await asyncio.wait_for(run_in_threadpool(_cause_harm_cuts, candidates), timeout=45)
+            _cuts, _rew = await asyncio.wait_for(run_in_threadpool(_gate_ideas, candidates), timeout=75)
         except Exception:
-            _cuts = set()
+            _cuts, _rew = set(), {}
+        for i in _rew:  # apply active-voice rewrites BY ORIGINAL INDEX, before the cut shifts positions
+            if i < len(candidates):
+                candidates[i]["summary"] = _rew[i]
         if _cuts:
             candidates = [c for i, c in enumerate(candidates) if i not in _cuts]
             _log_event({"t": "cause_harm_cut", "ch": _chan_key(url), "dropped": len(_cuts)})
+        if _rew:
+            _log_event({"t": "summary_rewrite", "ch": _chan_key(url), "n": len(_rew)})
         if not candidates:
             return JSONResponse({"error": "no ideas parsed"}, status_code=502)
         if is_more:
