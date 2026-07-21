@@ -2617,6 +2617,87 @@ def _activate_summaries(ideas):
     except Exception:
         return {}  # fail-open
 
+def _build_gen_prompt(profile, titles, exclude, rejected):
+    """The exact idea-generation user prompt /custom sends. Extracted so /compare can run the
+    IDENTICAL prompt through a different model (apples-to-apples)."""
+    gen = "Strategist profile of the creator:\n" + profile
+    if titles:
+        gen += "\n\nTheir recent video titles (match this phrasing and energy):\n" + "\n".join("- " + t for t in titles[:25])
+    if exclude:
+        gen += "\n\nAlready suggested (do NOT repeat or closely overlap these):\n" + "\n".join("- " + e for e in exclude)
+    if rejected:
+        gen += ("\n\nThe curator REJECTED these ideas for this channel (they did not like them). Learn from it: "
+                "steer away from their angle, framing, and subject. Do NOT resurface these or close variants:\n"
+                + "\n".join("- " + e for e in rejected))
+    gen += "\n\nBrainstorm and return the JSON object with your 32 strongest candidate ideas."
+    gen += seed_block(5) + anchor_block(5)
+    gen += ("\n\nMOST IMPORTANT, this OVERRIDES the anchor and seed guidance above: the creator profile is your PRIMARY driver; the anchors and seeds are secondary inspiration, NOT a checklist to work through. Most of your ideas should NOT start from a listed anchor. "
+            "REFRACT EVERY IDEA THROUGH THIS CREATOR'S LENS. Relevance is NOT about the topic, it is about the TREATMENT. Do not hand back a famous AI risk headline lightly dressed up for them. Take a real AI risk mechanism and investigate it the exact way THIS creator investigates their usual subjects: their obsessions, their method, their recurring thesis, the questions they always ask, the enemies they always name, the format they use. A great idea reads like an episode they are already itching to make, where the AI angle lives inside their world and their worldview, not bolted onto it. The profile ends with an AI RISK ANGLES section it wrote specifically for this creator, build on that spirit. "
+            "CRITICAL GUARDRAIL when refracting: borrow the creator's METHOD (their rigor, their follow-the-money, their debunking instinct, their skepticism), and POINT IT AT A REAL AI DANGER to expose it. NEVER point their skepticism AT the AI-risk concern itself. For a grift-hunter or debunker, the trap is an idea like 'is AI doom just a grift' or 'AI cannot really do the job' — that turns their tools against our own cause and is an automatic cut (see the CARDINAL SIN failure above). The right refraction for a skeptic is: they bring their bullshit detector, and what they find is that the danger is real, bigger and better documented than the hype, and that is the shock. Their skepticism should land ON the reader's disbelief, dismantling it, not on the threat. "
+            "The real test for every idea: could ONLY this creator make it, or could a hundred other AI channels run the same idea? If a hundred others could, either cut it or RE-ENTER it through this creator's specific method so it becomes theirs. A famous AI risk event (a model resisting shutdown, an executive quitting, a chatbot lawsuit, an AI firm buying power plants) told the generic way is the exact failure to avoid no matter how important the event is; it reads as untailored and it is what makes the whole list feel irrelevant. "
+            "The LARGE MAJORITY of your ideas, at least two thirds, must arise from AND be told through the creator's own world, domain, expertise, and method, never a general AI risk headline with a tacked on connection; every connection must be load bearing. The remaining ideas may reach wider across the risk space, but each must still sound unmistakably like THIS creator, not a generic AI channel.")
+    return gen
+
+def _openai_ideas(system, user, model):
+    """Run the same idea-gen prompt through an OpenAI model via the REST API (key from the server env,
+    never from the client). Returns (ideas, error_or_None)."""
+    key = os.environ.get("OPENAI_API_KEY", "")
+    if not key:
+        return [], "OPENAI_API_KEY is not set on the server. Add it in Railway (Variables), same place as ANTHROPIC_API_KEY."
+    try:
+        payload = json.dumps({"model": model, "messages": [
+            {"role": "system", "content": system}, {"role": "user", "content": user}]}).encode()
+        req = _urlreq.Request("https://api.openai.com/v1/chat/completions", data=payload,
+                              headers={"Content-Type": "application/json", "Authorization": "Bearer " + key}, method="POST")
+        with _urlreq.urlopen(req, timeout=200) as r:
+            d = json.loads(r.read().decode())
+        txt = d["choices"][0]["message"]["content"]
+        return parse_custom(txt), None
+    except Exception as e:
+        detail = str(e)[:400]
+        try:  # surface OpenAI's own error body (e.g. wrong model id, needs a different param)
+            detail = e.read().decode()[:400]
+        except Exception:
+            pass
+        return [], detail
+
+@app.post("/compare")
+async def compare(req: Request):
+    """Admin-gated A/B: run the IDENTICAL idea-gen prompt for one channel through Opus and an OpenAI
+    model, return both sets side by side. OpenAI key comes from the server env, never the client."""
+    try:
+        body = await req.json()
+    except Exception:
+        return JSONResponse({"error": "bad json"}, status_code=400)
+    if body.get("key") != EVENTS_KEY:
+        return JSONResponse({"error": "bad key"}, status_code=403)
+    url = re.sub(r"[?#].*$", "", (body.get("channelUrl") or "").strip())
+    gpt_model = (body.get("model") or "gpt-5.6").strip()
+    if not url:
+        return JSONResponse({"error": "missing channelUrl"}, status_code=400)
+    try:
+        prof = await asyncio.wait_for(run_in_threadpool(fetch_channel, url), timeout=90)
+    except Exception:
+        return JSONResponse({"error": "channel read timed out"}, status_code=504)
+    if not prof or not prof.get("recent"):
+        return JSONResponse({"error": "could not read channel"}, status_code=502)
+    profile = await _build_profile(prof)
+    titles = prof.get("recent") or []
+    gen = _build_gen_prompt(profile, titles, [], [])
+    sysp = SYSTEM_CUSTOM + ANTI_SLOP
+    opus_ideas, opus_err = [], None
+    try:
+        om = await run_in_threadpool(lambda: get_client().messages.create(
+            model=MODEL, max_tokens=12000, system=sysp, messages=[{"role": "user", "content": gen}]))
+        opus_ideas = parse_custom("".join(b.text for b in om.content if getattr(b, "type", "") == "text"))
+    except Exception as e:
+        opus_err = str(e)[:300]
+    gpt_ideas, gpt_err = await run_in_threadpool(_openai_ideas, sysp, gen, gpt_model)
+    _log_event({"t": "compare", "ch": _chan_key(url), "opus": len(opus_ideas), "gpt": len(gpt_ideas), "gpt_err": bool(gpt_err)})
+    return {"channel": prof.get("channel", ""), "transcripts": len(prof.get("transcripts") or []),
+            "opus_model": MODEL, "gpt_model": gpt_model,
+            "opus": opus_ideas, "gpt": gpt_ideas, "opus_err": opus_err, "gpt_err": gpt_err}
+
 @app.post("/custom")
 async def custom(req: Request):
     try:
@@ -2679,22 +2760,7 @@ async def custom(req: Request):
     if not profile:
         return JSONResponse({"error": "Could not analyze that channel. Try again."}, status_code=502)
 
-    gen = "Strategist profile of the creator:\n" + profile
-    if titles:
-        gen += "\n\nTheir recent video titles (match this phrasing and energy):\n" + "\n".join("- " + t for t in titles[:25])
-    if exclude:
-        gen += "\n\nAlready suggested (do NOT repeat or closely overlap these):\n" + "\n".join("- " + e for e in exclude)
-    if rejected:
-        gen += ("\n\nThe curator REJECTED these ideas for this channel (they did not like them). Learn from it: "
-                "steer away from their angle, framing, and subject. Do NOT resurface these or close variants:\n"
-                + "\n".join("- " + e for e in rejected))
-    gen += "\n\nBrainstorm and return the JSON object with your 32 strongest candidate ideas."
-    gen += seed_block(5) + anchor_block(5)
-    gen += ("\n\nMOST IMPORTANT, this OVERRIDES the anchor and seed guidance above: the creator profile is your PRIMARY driver; the anchors and seeds are secondary inspiration, NOT a checklist to work through. Most of your ideas should NOT start from a listed anchor. "
-            "REFRACT EVERY IDEA THROUGH THIS CREATOR'S LENS. Relevance is NOT about the topic, it is about the TREATMENT. Do not hand back a famous AI risk headline lightly dressed up for them. Take a real AI risk mechanism and investigate it the exact way THIS creator investigates their usual subjects: their obsessions, their method, their recurring thesis, the questions they always ask, the enemies they always name, the format they use. A great idea reads like an episode they are already itching to make, where the AI angle lives inside their world and their worldview, not bolted onto it. The profile ends with an AI RISK ANGLES section it wrote specifically for this creator, build on that spirit. "
-            "CRITICAL GUARDRAIL when refracting: borrow the creator's METHOD (their rigor, their follow-the-money, their debunking instinct, their skepticism), and POINT IT AT A REAL AI DANGER to expose it. NEVER point their skepticism AT the AI-risk concern itself. For a grift-hunter or debunker, the trap is an idea like 'is AI doom just a grift' or 'AI cannot really do the job' — that turns their tools against our own cause and is an automatic cut (see the CARDINAL SIN failure above). The right refraction for a skeptic is: they bring their bullshit detector, and what they find is that the danger is real, bigger and better documented than the hype, and that is the shock. Their skepticism should land ON the reader's disbelief, dismantling it, not on the threat. "
-            "The real test for every idea: could ONLY this creator make it, or could a hundred other AI channels run the same idea? If a hundred others could, either cut it or RE-ENTER it through this creator's specific method so it becomes theirs. A famous AI risk event (a model resisting shutdown, an executive quitting, a chatbot lawsuit, an AI firm buying power plants) told the generic way is the exact failure to avoid no matter how important the event is; it reads as untailored and it is what makes the whole list feel irrelevant. "
-            "The LARGE MAJORITY of your ideas, at least two thirds, must arise from AND be told through the creator's own world, domain, expertise, and method, never a general AI risk headline with a tacked on connection; every connection must be load bearing. The remaining ideas may reach wider across the risk space, but each must still sound unmistakably like THIS creator, not a generic AI channel.")
+    gen = _build_gen_prompt(profile, titles, exclude, rejected)
     is_more = isinstance(cached, str) and len(cached) > 80
     try:
         gmsg = await run_in_threadpool(lambda: get_client().messages.create(
