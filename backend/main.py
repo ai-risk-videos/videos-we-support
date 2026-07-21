@@ -2482,35 +2482,24 @@ def transcripts_status(key: str = ""):
     return {"channels": out, "proxy_configured": bool(_webshare_cfg())}
 
 
-# ---- GATE + POLISH: one second-pass over the generated candidates that does TWO jobs the generator
-# prompt keeps getting wrong: (1) CUT ideas whose dominant frame undercuts the cause (doom-is-hype,
-# AI-too-weak, grift-bucketing); (2) REWRITE every surviving summary into tight ACTIVE-VOICE prose,
-# killing passive voice and video-meta-description. Main model, fails OPEN (keeps all, original text).
-GATE_SYS = """You are a strict comms gatekeeper AND line editor for an AI-SAFETY advocacy project whose mission is to make the public take AI risk SERIOUSLY: AI is real, powerful, and genuinely dangerous. You get numbered candidate video ideas (title :: summary). Do TWO jobs.
-
-JOB 1 — CUT cause-hurting ideas. Flag any whose DOMINANT frame would leave a viewer MORE dismissive of AI risk, EVEN IF it swings to 'but the danger is real' at the end:
+# ---- CAUSE-HARM GATE: cut ideas whose dominant frame undercuts the cause (doom-is-hype, AI-too-weak,
+# grift-bucketing). Cheap Opus call (indices only, so it stays fast and reliable); fails OPEN. ----
+CAUSE_FILTER_SYS = """You are a strict comms gatekeeper for an AI-SAFETY advocacy project whose mission is to make the public take AI risk SERIOUSLY: AI is real, powerful, and genuinely dangerous. You get numbered candidate video ideas (title :: summary). Flag any whose DOMINANT frame would leave a viewer MORE dismissive of AI risk, EVEN IF it swings to 'but the danger is real' at the end:
 - frames AI doom or AI risk as hype, marketing, a grift, a scam, a bubble, or an exaggeration
 - makes 'is the fear just a sales pitch' or 'who profits from the doom warning' the spine (tying AI-warners to a rich person's profit motive)
 - frames AI as too weak, fake, or overhyped to matter, or 'it cannot really do X', or 'the work was fake anyway'
 - files a real AI harm under a 'snake oil' / 'another scam' / 'grift' bucket
 - says 'the one AI risk that is not hype' or otherwise concedes the other AI fears are hype
 Do NOT cut when skepticism points AT the disbelievers to show the danger is REAL, or a follow-the-money piece affirms the risk is real and keeps its frame on concentration of power. Err toward cutting a borderline case.
+Return ONLY JSON: {"cut": [the 1-based numbers to cut]}. An empty list is fine. No prose."""
 
-JOB 2 — REWRITE the summary of every idea you do NOT cut. Rules:
-(a) STRONG ACTIVE VOICE. A named doer does something in every sentence. Kill passive: 'the compute is being poured' -> 'companies pour the compute'; 'agents are being wired in' -> 'companies wire the agents in'; 'a goal that was specified wrong' -> 'a goal someone specified wrong'.
-(b) NO META-DESCRIPTION of the video or its style. Delete openers and phrases like 'A think-piece that', 'A follow-up that', 'Reads like one of his', 'A story told his way', 'Applies his thesis', 'in his escalating-evidence style', 'Walks through', 'Takes X and', 'Uses his rigor to'. Do not say what KIND of video it is; state the actual content, opening on a concrete fact, name, number, or action.
-(c) 2-3 short sentences, ~45-70 words, each its own beat, no long comma chains, easy to read in one pass.
-(d) Keep the real substance and the creator's angle; just say it directly and cleanly. Never invent facts not in the original.
-
-Return ONLY a JSON object: {"cut": [1-based numbers to cut], "summaries": {"<number>": "<rewritten summary>", ... one entry for EVERY idea you did NOT cut}}. No prose outside the JSON."""
-
-def _gate_ideas(cands):
+def _cause_harm_cuts(cands):
     if not cands:
-        return set(), {}
+        return set()
     try:
         lines = "\n".join("%d. %s :: %s" % (i + 1, (c.get("title") or ""), (c.get("summary") or "")) for i, c in enumerate(cands))
         msg = get_client().messages.create(
-            model=MODEL, max_tokens=6000, system=GATE_SYS,
+            model=MODEL, max_tokens=600, system=CAUSE_FILTER_SYS,
             messages=[{"role": "user", "content": "Candidate ideas:\n" + lines}])
         txt = "".join(b.text for b in msg.content if getattr(b, "type", "") == "text")
         m = re.search(r"\{.*\}", txt, re.S)
@@ -2521,18 +2510,41 @@ def _gate_ideas(cands):
                 cut.add(int(n) - 1)
             except Exception:
                 pass
-        cut = {i for i in cut if 0 <= i < len(cands)}
+        return {i for i in cut if 0 <= i < len(cands)}
+    except Exception:
+        return set()  # fail-open
+
+# ---- SUMMARY POLISH: rewrite the FINAL summaries into tight ACTIVE-VOICE prose, killing passive voice
+# and video-meta-description. Runs on the small final set (fast), uses FAST_MODEL, fails OPEN. ----
+ACTIVATE_SYS = """You are a line editor. You get numbered video-idea summaries. Rewrite EACH into tight, plain, ACTIVE-VOICE prose and return them. Rules:
+(a) STRONG ACTIVE VOICE, no passive. A named doer does something in every sentence. 'the compute is being poured' -> 'companies pour the compute'; 'agents are being wired in' -> 'companies wire the agents in'; 'a goal that was specified wrong' -> 'a goal someone specified wrong'.
+(b) NO META-DESCRIPTION of the video or its style. Delete any opener that describes the video or the creator's method, e.g. 'A think-piece that', 'A follow-up that', 'Reads like one of his', 'A story told his way', 'Applies his thesis', 'Walks through', 'Takes X and', 'Uses his rigor to', 'Uses the channel's X method/lens/instinct', 'in his X style', 'Handles it the way he'. Just STATE THE ACTUAL CONTENT, opening on a concrete fact, name, number, or action. Keep the creator's angle by using it, not by naming it.
+(c) 2-3 short sentences, ~45-70 words, each its own beat, no long comma chains, easy to read in one pass.
+(d) Keep the real substance; never invent facts not in the original.
+Return ONLY JSON: {"summaries": {"<number>": "<rewritten summary>", ... one entry per input}}. No prose outside the JSON."""
+
+def _activate_summaries(ideas):
+    if not ideas:
+        return {}
+    try:
+        lines = "\n".join("%d. %s" % (i + 1, (x.get("summary") or "")) for i, x in enumerate(ideas))
+        msg = get_client().messages.create(
+            model=FAST_MODEL, max_tokens=4000, system=ACTIVATE_SYS,
+            messages=[{"role": "user", "content": "Summaries to rewrite:\n" + lines}])
+        txt = "".join(b.text for b in msg.content if getattr(b, "type", "") == "text")
+        m = re.search(r"\{.*\}", txt, re.S)
+        obj = json.loads(m.group(0)) if m else {}
         rew = {}
         for k, v in (obj.get("summaries") or {}).items():
             try:
                 idx = int(k) - 1
-                if 0 <= idx < len(cands) and isinstance(v, str) and len(v.strip()) > 20:
+                if 0 <= idx < len(ideas) and isinstance(v, str) and len(v.strip()) > 20:
                     rew[idx] = v.strip()
             except Exception:
                 pass
-        return cut, rew
+        return rew
     except Exception:
-        return set(), {}  # fail-open: never let the guard break generation
+        return {}  # fail-open
 
 @app.post("/custom")
 async def custom(req: Request):
@@ -2667,20 +2679,14 @@ async def custom(req: Request):
         candidates = _kept
         if _before != len(candidates):
             _log_event({"t": "catalog_dedupe", "ch": _chan_key(url), "dropped": _before - len(candidates)})
-        # GATE + POLISH: cut cause-hurting candidates AND rewrite surviving summaries to active voice.
-        # Runs before the top-N slice so we still fill the list from the clean ones. Fails open.
+        # CAUSE-HARM GATE (fast, before the slice so we fill from the clean ones). Fails open.
         try:
-            _cuts, _rew = await asyncio.wait_for(run_in_threadpool(_gate_ideas, candidates), timeout=75)
+            _cuts = await asyncio.wait_for(run_in_threadpool(_cause_harm_cuts, candidates), timeout=45)
         except Exception:
-            _cuts, _rew = set(), {}
-        for i in _rew:  # apply active-voice rewrites BY ORIGINAL INDEX, before the cut shifts positions
-            if i < len(candidates):
-                candidates[i]["summary"] = _rew[i]
+            _cuts = set()
         if _cuts:
             candidates = [c for i, c in enumerate(candidates) if i not in _cuts]
             _log_event({"t": "cause_harm_cut", "ch": _chan_key(url), "dropped": len(_cuts)})
-        if _rew:
-            _log_event({"t": "summary_rewrite", "ch": _chan_key(url), "n": len(_rew)})
         if not candidates:
             return JSONResponse({"error": "no ideas parsed"}, status_code=502)
         if is_more:
@@ -2688,11 +2694,18 @@ async def custom(req: Request):
             # ideas stream in fast. The generator prompt already enforces the quality bar.
             ideas = candidates[:15]
         else:
-            # First batch: take the generator's strongest candidates directly (it returns them
-            # ranked strongest-first and channel-native). A separate editor model call used to run
-            # here, but it added a second ~50s call that pushed the whole request past the frontend
-            # timeout on channels with transcripts; dropping it keeps generation reliably under budget.
             ideas = candidates[:25]
+        # SUMMARY POLISH: rewrite the final summaries to active voice (separate fast Sonnet pass on the
+        # SMALL final set, so it can't time out the way a combined pass did). Fails open (keeps originals).
+        try:
+            _rew = await asyncio.wait_for(run_in_threadpool(_activate_summaries, ideas), timeout=60)
+        except Exception:
+            _rew = {}
+        for i in _rew:
+            if i < len(ideas):
+                ideas[i]["summary"] = _rew[i]
+        if _rew:
+            _log_event({"t": "summary_rewrite", "ch": _chan_key(url), "n": len(_rew)})
         resp = {"channel": channel_name, "followers": followers, "ideas": ideas, "fresh": fresh,
                 "profile": profile, "titles": titles, "research_meta": rmeta}
         if not is_more:
