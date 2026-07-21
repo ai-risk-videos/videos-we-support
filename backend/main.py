@@ -662,7 +662,7 @@ What makes an idea interesting:
 - It uses this creator's signature way of revealing the hidden, surprising machinery behind things.
 
 What counts as FAILURE (do not submit these):
-- THE CARDINAL SIN, an automatic cut no matter how well it fits the channel: any idea whose dominant frame makes AI risk look like hype, marketing, a grift, a scam, a bubble, or an exaggeration, OR makes AI look too weak, fake, or overhyped to actually matter. The whole point of this project is that AI is real, powerful, and the danger genuine. So do NOT build a video around "where did the doom money go", "the AI-doom grift", "is the fear just a sales pitch", "AI cannot really do the job", or "the work was fake anyway". This fails EVEN IF the idea swings to 'but the danger is real' at the end: whatever frame gets the most airtime is what the viewer walks away believing, and a video that spends four minutes on "it is marketing" and one on "but it is real" leaves people MORE dismissive. Never platform the skeptic's argument, not even to knock it down. This holds DOUBLY for skeptic, debunker, anti-grift, or investigative creators: use their method and rigor to EXPOSE A REAL AI DANGER, never to cast doubt on whether the danger is real. The center of gravity of every idea must be that the threat is real and arriving fast.
+- THE CARDINAL SIN, an automatic cut no matter how well it fits the channel: any idea whose dominant frame makes AI risk look like hype, marketing, a grift, a scam, a bubble, or an exaggeration, OR makes AI look too weak, fake, or overhyped to actually matter. The whole point of this project is that AI is real, powerful, and the danger genuine. So do NOT build a video around "where did the doom money go", "the AI-doom grift", "is the fear just a sales pitch", "AI cannot really do the job", or "the work was fake anyway". This fails EVEN IF the idea swings to 'but the danger is real' at the end: whatever frame gets the most airtime is what the viewer walks away believing, and a video that spends four minutes on "it is marketing" and one on "but it is real" leaves people MORE dismissive. Never platform the skeptic's argument, not even to knock it down. This holds DOUBLY for skeptic, debunker, anti-grift, or investigative creators: use their method and rigor to EXPOSE A REAL AI DANGER, never to cast doubt on whether the danger is real. The center of gravity of every idea must be that the threat is real and arriving fast. THREE SPECIFIC TRAPS that are automatic cuts: (1) "who profits from the doom warning" / tying the people who warn about AI to a rich villain's profit motive (e.g. a Thiel-funds-both-sides angle) — this IS the doom-is-a-sales-pitch frame; a concentration-of-power idea only survives if it explicitly affirms the danger is real and keeps the frame on power, not on the warning being a grift. (2) Filing an AI harm under "snake oil" / "another scam" / "grift" — a real AI danger must be framed as a REAL danger, not lumped into the fake-products bucket, which tells viewers AI is just more hype. (3) Any phrase like "the one AI risk that is NOT hype" or "unlike the other AI fears" — this concedes the rest of the concern is hype; never rank one risk as real by implying the others are not.
 - A generic topic with the creator's format pasted on. For a logistics channel, "The Logistics of an AI Data Center" or "How AI Surveillance Works" are topics, not ideas.
 - Vague "The Coming X" or "What Happens When X" with no specific angle.
 - __MUNDANE__ Skip these even when they would fit the channel.
@@ -2475,6 +2475,41 @@ def transcripts_status(key: str = ""):
                     "via": v.get("via", ""), "age_days": age_d})
     return {"channels": out, "proxy_configured": bool(_webshare_cfg())}
 
+
+# ---- CAUSE-HARM GUARD: a second-pass gate that drops generated ideas whose dominant frame would
+# leave a viewer MORE dismissive of AI risk (doom-is-hype, AI-is-too-weak, grift-bucketing). The
+# generator prompt forbids these, but they still slip through, so this is the belt-and-suspenders.
+# Uses the main model for reliable framing judgment; fails OPEN (keeps all) so it can never break gen.
+CAUSE_FILTER_SYS = """You are a strict comms gatekeeper for an AI-SAFETY advocacy project whose mission is to make the public take AI risk SERIOUSLY: AI is real, powerful, and genuinely dangerous. You are given numbered candidate video ideas (title :: summary). Flag any whose DOMINANT frame would leave a viewer MORE dismissive of AI risk, EVEN IF it swings to 'but the danger is real' at the end. Cut an idea if its center of gravity does any of these:
+- frames AI doom or AI risk as hype, marketing, a grift, a scam, a bubble, or an exaggeration
+- makes 'is the fear just a sales pitch' or 'who profits from the doom warning' the spine (e.g. tying the people who warn about AI to a rich person's profit motive)
+- frames AI as too weak, fake, or overhyped to matter, or 'it cannot really do X', or 'the work was fake anyway'
+- files a real AI harm under a 'snake oil' / 'another scam' / 'grift' bucket
+- says 'the one AI risk that is not hype' or otherwise concedes the other AI fears are hype
+Do NOT cut an idea when skepticism is pointed AT the disbelievers to show the danger is REAL, or when a follow-the-money piece explicitly affirms the risk is real and keeps its frame on concentration of power. Judge the dominant takeaway, and err toward cutting a borderline case.
+Return ONLY a JSON object: {"cut": [the 1-based numbers to cut]}. An empty list is fine. No prose."""
+
+def _cause_harm_cuts(cands):
+    if not cands:
+        return set()
+    try:
+        lines = "\n".join("%d. %s :: %s" % (i + 1, (c.get("title") or ""), (c.get("summary") or "")) for i, c in enumerate(cands))
+        msg = get_client().messages.create(
+            model=MODEL, max_tokens=500, system=CAUSE_FILTER_SYS,
+            messages=[{"role": "user", "content": "Candidate ideas:\n" + lines}])
+        txt = "".join(b.text for b in msg.content if getattr(b, "type", "") == "text")
+        m = re.search(r"\{.*\}", txt, re.S)
+        obj = json.loads(m.group(0)) if m else {}
+        cut = set()
+        for n in (obj.get("cut") or []):
+            try:
+                cut.add(int(n) - 1)
+            except Exception:
+                pass
+        return {i for i in cut if 0 <= i < len(cands)}
+    except Exception:
+        return set()  # fail-open: never let the guard break generation
+
 @app.post("/custom")
 async def custom(req: Request):
     try:
@@ -2608,6 +2643,15 @@ async def custom(req: Request):
         candidates = _kept
         if _before != len(candidates):
             _log_event({"t": "catalog_dedupe", "ch": _chan_key(url), "dropped": _before - len(candidates)})
+        # CAUSE-HARM GUARD: drop any surviving candidate whose dominant frame undercuts the cause.
+        # Runs before the top-N slice so we still fill the list from the clean ones. Fails open.
+        try:
+            _cuts = await asyncio.wait_for(run_in_threadpool(_cause_harm_cuts, candidates), timeout=45)
+        except Exception:
+            _cuts = set()
+        if _cuts:
+            candidates = [c for i, c in enumerate(candidates) if i not in _cuts]
+            _log_event({"t": "cause_harm_cut", "ch": _chan_key(url), "dropped": len(_cuts)})
         if not candidates:
             return JSONResponse({"error": "no ideas parsed"}, status_code=502)
         if is_more:
