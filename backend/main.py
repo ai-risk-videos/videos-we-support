@@ -231,9 +231,14 @@ FORMAT_RULE = ("" if IDEA_FORMAT == "title" else
     "non model fact from any year CAN star if it is a banger: 'In 2023 Big Tech firms each spent over $10 "
     "million lobbying Washington on AI while the main AI safety group spent $80,000' is money and power, not "
     "model behavior, and it still lands. "
-    "ACTIVE VOICE, ALWAYS: 'An archive exists of two of Anthropic's AIs left to talk to each other' is passive "
-    "and confusing; 'Researchers put two AIs in a chatroom together and let them talk about whatever they want' "
-    "is the same fact told right. Someone DOES something in every sentence. "
+    "ACTIVE VOICE, ALWAYS, IN BOTH THE TITLE AND THE SUMMARY. This is a hard rule, not a preference, and it is the "
+    "one most often violated. Someone DOES something in every sentence, with a concrete subject you can picture. "
+    "'An archive exists of two of Anthropic's AIs left to talk to each other' is passive and confusing; "
+    "'Researchers put two AIs in a chatroom together and let them talk' is the same fact told right. BAN passive "
+    "constructions and abstract nominalizations, especially in the summary: not 'the humans laid off never get "
+    "called back' but 'the companies never rehire them'; not 'people made economically optional' but 'the economy "
+    "stops needing those workers'; not 'the work was never real to begin with'. A normal person must follow every "
+    "sentence in ONE read, never backing up. If a sentence needs a second read, make it shorter and more concrete, or cut it. "
     "NEVER CITE AN OUTLET IN THE LINE: 'Fast Company found that Reddit now hosts recovery groups' loses nothing "
     "as 'Reddit now hosts recovery groups where people count the days since they last talked to an AI'; name "
     "researchers or universities when it adds weight, never publications. "
@@ -657,6 +662,7 @@ What makes an idea interesting:
 - It uses this creator's signature way of revealing the hidden, surprising machinery behind things.
 
 What counts as FAILURE (do not submit these):
+- THE CARDINAL SIN, an automatic cut no matter how well it fits the channel: any idea whose dominant frame makes AI risk look like hype, marketing, a grift, a scam, a bubble, or an exaggeration, OR makes AI look too weak, fake, or overhyped to actually matter. The whole point of this project is that AI is real, powerful, and the danger genuine. So do NOT build a video around "where did the doom money go", "the AI-doom grift", "is the fear just a sales pitch", "AI cannot really do the job", or "the work was fake anyway". This fails EVEN IF the idea swings to 'but the danger is real' at the end: whatever frame gets the most airtime is what the viewer walks away believing, and a video that spends four minutes on "it is marketing" and one on "but it is real" leaves people MORE dismissive. Never platform the skeptic's argument, not even to knock it down. This holds DOUBLY for skeptic, debunker, anti-grift, or investigative creators: use their method and rigor to EXPOSE A REAL AI DANGER, never to cast doubt on whether the danger is real. The center of gravity of every idea must be that the threat is real and arriving fast.
 - A generic topic with the creator's format pasted on. For a logistics channel, "The Logistics of an AI Data Center" or "How AI Surveillance Works" are topics, not ideas.
 - Vague "The Coming X" or "What Happens When X" with no specific angle.
 - __MUNDANE__ Skip these even when they would fit the channel.
@@ -2544,6 +2550,7 @@ async def custom(req: Request):
     gen += seed_block(5) + anchor_block(5)
     gen += ("\n\nMOST IMPORTANT, this OVERRIDES the anchor and seed guidance above: the creator profile is your PRIMARY driver; the anchors and seeds are secondary inspiration, NOT a checklist to work through. Most of your ideas should NOT start from a listed anchor. "
             "REFRACT EVERY IDEA THROUGH THIS CREATOR'S LENS. Relevance is NOT about the topic, it is about the TREATMENT. Do not hand back a famous AI risk headline lightly dressed up for them. Take a real AI risk mechanism and investigate it the exact way THIS creator investigates their usual subjects: their obsessions, their method, their recurring thesis, the questions they always ask, the enemies they always name, the format they use. A great idea reads like an episode they are already itching to make, where the AI angle lives inside their world and their worldview, not bolted onto it. The profile ends with an AI RISK ANGLES section it wrote specifically for this creator, build on that spirit. "
+            "CRITICAL GUARDRAIL when refracting: borrow the creator's METHOD (their rigor, their follow-the-money, their debunking instinct, their skepticism), and POINT IT AT A REAL AI DANGER to expose it. NEVER point their skepticism AT the AI-risk concern itself. For a grift-hunter or debunker, the trap is an idea like 'is AI doom just a grift' or 'AI cannot really do the job' — that turns their tools against our own cause and is an automatic cut (see the CARDINAL SIN failure above). The right refraction for a skeptic is: they bring their bullshit detector, and what they find is that the danger is real, bigger and better documented than the hype, and that is the shock. Their skepticism should land ON the reader's disbelief, dismantling it, not on the threat. "
             "The real test for every idea: could ONLY this creator make it, or could a hundred other AI channels run the same idea? If a hundred others could, either cut it or RE-ENTER it through this creator's specific method so it becomes theirs. A famous AI risk event (a model resisting shutdown, an executive quitting, a chatbot lawsuit, an AI firm buying power plants) told the generic way is the exact failure to avoid no matter how important the event is; it reads as untailored and it is what makes the whole list feel irrelevant. "
             "The LARGE MAJORITY of your ideas, at least two thirds, must arise from AND be told through the creator's own world, domain, expertise, and method, never a general AI risk headline with a tacked on connection; every connection must be load bearing. The remaining ideas may reach wider across the risk space, but each must still sound unmistakably like THIS creator, not a generic AI channel.")
     is_more = isinstance(cached, str) and len(cached) > 80
