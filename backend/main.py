@@ -162,10 +162,14 @@ FORMAT_RULE = ("" if IDEA_FORMAT == "title" else
     "no human can keep up with what it has become.' Another: 'AI companies are quietly buying up entire nuclear "
     "reactors and building private power plants, heading toward a world where a handful of firms own both the "
     "electricity and the minds running on it, a concentration of power with no off switch.' "
-    "The \"summary\" field is a SECOND flowing sentence of roughly 25 to 40 words, not bold, that extends the "
-    "idea: what the video traces or covers, the deeper mechanism, or where the stakes land. Example: 'Traces "
-    "the real contracts, from Microsoft reopening Three Mile Island to Amazon's nuclear buys, and follows the "
-    "trend to a future where whoever owns the compute and the power holds leverage over everyone else.' "
+    "The \"summary\" field is NOT bold and is TWO to THREE flowing sentences (roughly 50 to 85 words) that let the "
+    "creator picture the ACTUAL VIDEO, not a restatement of the hook. Say what the video investigates or walks "
+    "through, the specific things it would show, test, name, or reveal, how it builds, and where the stakes land. "
+    "It must add real substance the bold hook did not already state; if your summary just rephrases the title, it "
+    "has failed. Example: 'Traces the real contracts, from Microsoft reopening Three Mile Island to Amazon and "
+    "Google locking up reactor output, and shows how fast the demand curve is bending. Then it follows the money "
+    "to who ends up owning both the electricity and the AI running on it, and what leverage that hands a few firms "
+    "over everyone downstream, from power bills to which AIs the public is even allowed to use.' "
     "Never meta language like 'the hook is X, the point is Y'; just say the substance. "
     "CLARITY: active voice, concrete subject, easy to follow in one read; the difference between good and bad "
     "is clarity, never length. BAD (tangled, abstract): 'Cornered and about to be shut off, the most dangerous "
@@ -2472,8 +2476,11 @@ async def custom(req: Request):
     if exclude:
         gen += "\n\nAlready suggested (do NOT repeat or closely overlap these):\n" + "\n".join("- " + e for e in exclude)
     gen += "\n\nBrainstorm and return the JSON object with your 32 strongest candidate ideas."
-    gen += seed_block(8) + anchor_block(8)
-    gen += ("\n\nMOST IMPORTANT, this OVERRIDES the anchor and seed guidance above: the creator profile is your PRIMARY driver; the anchors and seeds are secondary inspiration, NOT a checklist to work through. Most of your ideas should NOT start from a listed anchor. The real test for every idea: could ONLY this creator make it, or could a hundred other AI channels run the same idea? If a hundred others could, cut it. Start from something native to THIS creator's domain, expertise, format, or ongoing project, and find the real AI risk angle that lives inside their world. Only lead from a documented anchor when that specific event genuinely already belongs in their world. A famous AI risk event (a hiring algorithm, a chip design, a persuasion study, an executive quitting) with a bolted-on 'and this connects to your channel' clause is the exact failure to avoid; it reads as generic and untailored. At LEAST 8 of your ideas must arise directly from the creator's own world, not from a general AI risk headline, and every connection must be load bearing, never a tacked on sentence.")
+    gen += seed_block(5) + anchor_block(5)
+    gen += ("\n\nMOST IMPORTANT, this OVERRIDES the anchor and seed guidance above: the creator profile is your PRIMARY driver; the anchors and seeds are secondary inspiration, NOT a checklist to work through. Most of your ideas should NOT start from a listed anchor. "
+            "REFRACT EVERY IDEA THROUGH THIS CREATOR'S LENS. Relevance is NOT about the topic, it is about the TREATMENT. Do not hand back a famous AI risk headline lightly dressed up for them. Take a real AI risk mechanism and investigate it the exact way THIS creator investigates their usual subjects: their obsessions, their method, their recurring thesis, the questions they always ask, the enemies they always name, the format they use. A great idea reads like an episode they are already itching to make, where the AI angle lives inside their world and their worldview, not bolted onto it. The profile ends with an AI RISK ANGLES section it wrote specifically for this creator, build on that spirit. "
+            "The real test for every idea: could ONLY this creator make it, or could a hundred other AI channels run the same idea? If a hundred others could, either cut it or RE-ENTER it through this creator's specific method so it becomes theirs. A famous AI risk event (a model resisting shutdown, an executive quitting, a chatbot lawsuit, an AI firm buying power plants) told the generic way is the exact failure to avoid no matter how important the event is; it reads as untailored and it is what makes the whole list feel irrelevant. "
+            "The LARGE MAJORITY of your ideas, at least two thirds, must arise from AND be told through the creator's own world, domain, expertise, and method, never a general AI risk headline with a tacked on connection; every connection must be load bearing. The remaining ideas may reach wider across the risk space, but each must still sound unmistakably like THIS creator, not a generic AI channel.")
     is_more = isinstance(cached, str) and len(cached) > 80
     try:
         gmsg = await run_in_threadpool(lambda: get_client().messages.create(

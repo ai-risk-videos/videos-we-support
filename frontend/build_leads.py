@@ -56,6 +56,7 @@ h1{font-size:26px;margin:0 0 4px;font-weight:800}.dot{color:var(--red)}
 .killed .txt{text-decoration:line-through}
 .turns{margin-top:5px}
 .turn{color:#9a93a2;font-size:14px;line-height:1.5;padding-left:11px;border-left:2px solid #33303a;margin:3px 0}
+.subtxt{color:#cfc9d6;font-size:15px;line-height:1.6;margin:8px 0 2px}
 .meta{margin-top:5px;font-size:12px;color:var(--mut);display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .packbtn{font:inherit;font-size:11.5px;background:#161c14;color:#9ac47f;border:1px solid #33402e;border-radius:6px;padding:2px 9px;cursor:pointer}
 .packbtn:hover{border-color:#a9d99a;color:#c5e6b3}
@@ -894,10 +895,11 @@ async function showDashboard(){
 function leadCard(x,rank){
  const d=document.createElement("div");d.className="lead";
  const isIdea=x.title!=null; const main=isIdea?x.title:x.l;
- // Only the white hook sentence is shown. The gray summary/dirs used to render here but creators skipped
- // it (hard to parse, usually just restating the hook), so it is dropped from the card. It still lives in
- // the data and feeds the research-pack generation (loadBrief/loadScript use ideaSummary).
- d.innerHTML='<div class="rank">'+rank+'</div><div class="body"><div class="txt">'+esc(main)+'</div>'+
+ // Below the bold hook: a readable "what the video would actually do" paragraph (the summary). Rendered in
+ // a legible secondary color, NOT the old dim gray that people skipped. The generator now writes this as a
+ // substantive 2-3 sentence description, so it adds real context rather than restating the hook.
+ const sub=isIdea?(x.summary||""):((x.dirs||[]).join(" "));
+ d.innerHTML='<div class="rank">'+rank+'</div><div class="body"><div class="txt">'+esc(main)+'</div>'+(sub.trim()?'<div class="subtxt">'+esc(sub)+'</div>':'')+
   '<div class="meta">'+(x.who?'<span>'+esc(x.who)+(x.y?" · "+esc(x.y):"")+'</span>':'')+(x.url?'<a href="'+esc(x.url)+'" target="_blank" rel="noopener">read more ›</a>':'')+
   '<button class="packbtn">📄 Research pack</button><button class="scriptbtn">🎬 Sample script</button></div><div class="brief"></div><div class="scriptbox"></div></div>';
  d.querySelector(".packbtn").onclick=(e)=>loadBrief(d,x,e.currentTarget);
