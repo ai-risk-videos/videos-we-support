@@ -181,6 +181,8 @@ h1{font-size:26px;margin:0 0 4px;font-weight:800}.dot{color:var(--red)}
 #curnote{width:100%;background:#0e0d10;border:1px solid var(--line);border-radius:8px;color:var(--ink);font:inherit;font-size:13.5px;padding:9px 12px;resize:vertical;min-height:38px;margin:0 0 14px}
 .editnote{color:var(--mut);font-size:12.5px;margin:0 0 10px}
 .curstep{font-size:12.5px;color:#a9d99a;margin:0 0 8px}
+.rnote{font-size:12.5px;color:#9ac47f;background:rgba(154,196,127,.10);border:1px solid #33402e;border-radius:8px;padding:7px 11px;margin:0 0 10px}
+.rnote.rwarn{color:var(--gold);background:rgba(255,207,77,.10);border-color:#4a4327}
 .ccard{position:relative;padding:13px 15px;border:1px solid var(--line);border-radius:10px;margin:0 0 11px;background:var(--surf)}
 .ccard .ctxt{font-size:16px;line-height:1.5;outline:none}
 .ccard .ctxt[contenteditable]:focus,.ccard .cturn[contenteditable]:focus{background:#161320;border-radius:4px;box-shadow:0 0 0 2px #33303a}
@@ -262,6 +264,7 @@ const CUSTOM_API="https://videos-similar-api-production.up.railway.app/custom"; 
 const BUILD_V="__PV__"; // tailor-cache is keyed to this: LEADS indices shift when the page is rebuilt
 let channelProfile="", channelName="", channelHandle="", tailored=false, fullView=false, tailorOrder=null;
 let currentPageId=""; // set on a saved ?p= creator page; lets packs/scripts save ONTO that page so the creator sees them instantly
+let researchNote=""; // one-shot line shown in the editor after a fresh generation: how many transcripts were read (so it is VISIBLE the tool used them)
 // an "idea" is either a leads-style lead {l,dirs} or an old-style idea {title,summary}; these read both
 function ideaTitle(x){return (x&&(x.title||x.l))||"";}
 function ideaSummary(x){return (x&&(x.summary||((x.dirs||[]).join(" "))))||"";}
@@ -395,7 +398,7 @@ async function loadBrief(d,lead,btn){
  if(currentPageId){const ob=btn.textContent;btn.disabled=true;btn.textContent="…";
   const saved=await loadArtifact(currentPageId,"brief",t);btn.disabled=false;btn.textContent=ob;
   if(saved){briefCache[t]=saved;_bsave(t,saved);renderBrief(box,saved,t);return;}}
- getFormat(fmt=>loadBrief2(d,box,lead,fmt,btn));
+ loadBrief2(d,box,lead,"",btn); // no format prompt: the server shapes the pack from the transcript-derived channel profile it already has
 }
 async function loadBrief2(d,box,lead,fmt,btn){
  if(d._briefLoading)return;d._briefLoading=true;
@@ -449,7 +452,7 @@ async function loadScript(d,lead,btn){
  if(currentPageId){const ob=btn.textContent;btn.disabled=true;btn.textContent="…";
   const saved=await loadArtifact(currentPageId,"script",t);btn.disabled=false;btn.textContent=ob;
   if(saved){scriptCache[t]=saved;_ssave(t,saved);renderScript(box,saved,t);return;}}
- getFormat(fmt=>loadScript2(d,box,lead,fmt,btn));
+ loadScript2(d,box,lead,"",btn); // no format prompt: the server writes in the creator's voice from the transcript-derived profile
 }
 async function loadScript2(d,box,lead,fmt,btn){
  if(d._scriptLoading)return;d._scriptLoading=true;
@@ -778,6 +781,7 @@ function startCurate(ideas,handle,channel,note,profile,style){
  const pb=$("#poolbar");if(pb)pb.style.display="none";
  const list=$("#list");
  list.innerHTML='<div class="curstep">Reviewing the ideas for <b>'+esc(curateChannel)+'</b>. Every change saves automatically.</div>'+
+  (researchNote?'<div class="rnote'+(researchNote[0]==="⚠"?' rwarn':'')+'">'+esc(researchNote)+'</div>':'')+
   '<div class="curbar"><div class="curtitle">'+esc(curTitle())+'</div>'+
   '<span class="saveind ok" id="saveind">All changes saved</span>'+
   '<button class="pubbtn" id="dopublish">Copy the link to send ↗</button>'+
@@ -789,6 +793,7 @@ function startCurate(ideas,handle,channel,note,profile,style){
    '<button class="regenbtn" id="restorever" style="margin-left:auto">↩ Restore a previous version</button></div>'+
   '<textarea id="curnote" placeholder="Optional note to the creator (shown at the top of their page)">'+esc(note||"")+'</textarea>'+
   '<div id="ccards"></div>';
+ researchNote=""; // one-shot: shown only for the fresh generation that set it, not on later edits/restores
  renderCards();
  $("#dopublish").onclick=publishCurrent;
  $("#curcancel").onclick=async()=>{await flushSave();showHome();}; // flush the pending save BEFORE leaving so nothing is dropped
@@ -981,6 +986,9 @@ async function fetchCustom(rawurl){
   const j=await r.json();
   if(j&&Array.isArray(j.ideas)&&j.ideas.length){
    channelName=j.channel||h; channelHandle=h; channelProfile=j.profile||"";
+   const _nt=(j.research_meta&&j.research_meta.transcripts)||0; // make transcript usage VISIBLE (Drew: "is the transcript feature working?")
+   researchNote=_nt>0 ? ("✓ Tailored using "+_nt+" of this channel's video transcripts (their actual words, not just titles).")
+                      : "⚠ No transcripts were available for this channel, so these ideas are based on video titles and descriptions only.";
    if(msg)msg.textContent="";
    startCurate(j.ideas.slice(0,30), h, channelName, "", channelProfile, "ideas");
    return true;

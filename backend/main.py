@@ -96,9 +96,11 @@ RANGE = (
     "and AI systems coordinating with each other; the still unsolved problem of getting a powerful AI to actually want "
     "what we want; why we cannot see or explain what these systems do inside; superhuman persuasion; engineered pandemics; "
     "autonomous weapons and war that escalates faster than humans can react; and whether the AI itself could matter morally. "
-    "A strong set spans SEVERAL distinct mechanisms and angles, never several variations of one idea. An idea does NOT need "
-    "a famous documented event: a vivid, specific, well reasoned scenario or mechanism (gradual disempowerment is a good "
-    "example) counts as concrete as long as it is precise and clearly explained."
+    "A strong set spans SEVERAL distinct mechanisms and angles, never several variations of one idea. HARD DIVERSITY RULE: "
+    "no more than TWO of your ideas may center on the same core mechanism or theme (for example, do not return three or four "
+    "different 'humans gradually hand over control' ideas); if a third variation of one theme appears, cut it and reach into a "
+    "different part of the risk space instead. An idea does NOT need a famous documented event: a vivid, specific, well reasoned "
+    "scenario or mechanism counts as concrete as long as it is precise and clearly explained."
 )
 TRUTH = (
     "GROUNDING, the most important honesty rule. Creators will click through expecting a real story; if an idea "
