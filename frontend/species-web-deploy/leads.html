@@ -152,6 +152,21 @@ h1{font-size:26px;margin:0 0 4px;font-weight:800}.dot{color:var(--red)}
 .curstep{font-size:12.5px;color:#a9d99a;margin:0 0 8px}
 .rnote{font-size:12.5px;color:#9ac47f;background:rgba(154,196,127,.10);border:1px solid #33402e;border-radius:8px;padding:7px 11px;margin:0 0 10px}
 .rnote.rwarn{color:var(--gold);background:rgba(255,207,77,.10);border-color:#4a4327}
+.addrow{display:flex;gap:8px;align-items:flex-start;margin:14px 0 6px}
+.addrow textarea{flex:1;font:inherit;font-size:14px;background:var(--surf);color:var(--ink);border:1px dashed var(--line);border-radius:9px;padding:9px 11px;resize:vertical;min-height:44px}
+.addbtn{font:inherit;font-size:13px;font-weight:700;background:var(--surf);color:#9ac47f;border:1px solid #33402e;border-radius:9px;padding:9px 14px;cursor:pointer;white-space:nowrap}
+.addbtn:hover{border-color:#9ac47f}
+.rejbox{margin:16px 0 8px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.02)}
+.rejbox>summary{cursor:pointer;padding:10px 13px;font-size:13px;font-weight:700;color:var(--mut);list-style:none;display:flex;align-items:center;gap:10px}
+.rejbox>summary::-webkit-details-marker{display:none}
+.rejhint{font-weight:400;font-size:12px;color:#6f6a77}
+.rejcopy{margin-left:auto;font:inherit;font-size:12px;font-weight:700;background:none;border:1px solid var(--line);color:var(--ink);border-radius:7px;padding:5px 10px;cursor:pointer}
+.rejcopy:hover{border-color:var(--gold)}
+#rejlist{padding:2px 13px 12px}
+.rejrow{display:flex;gap:10px;align-items:center;padding:6px 0;border-top:1px solid var(--line)}
+.rejtxt{flex:1;font-size:13px;color:#8f8a97;line-height:1.4}
+.rejrestore{font:inherit;font-size:12px;background:none;border:1px solid var(--line);color:var(--mut);border-radius:7px;padding:3px 9px;cursor:pointer;white-space:nowrap}
+.rejrestore:hover{border-color:#9ac47f;color:#9ac47f}
 .ccard{position:relative;padding:13px 15px;border:1px solid var(--line);border-radius:10px;margin:0 0 11px;background:var(--surf)}
 .ccard .ctxt{font-size:16px;line-height:1.5;outline:none}
 .ccard .ctxt[contenteditable]:focus,.ccard .cturn[contenteditable]:focus{background:#161320;border-radius:4px;box-shadow:0 0 0 2px #33303a}
@@ -216,7 +231,7 @@ h1{font-size:26px;margin:0 0 4px;font-weight:800}.dot{color:var(--red)}
  <button id="import">Import</button>
  <input id="importfile" type="file" accept="application/json,.json" hidden>
  <button id="reset">Reset</button>
- <span class="filters"><span class="pagev">v 0721.1621</span></span>
+ <span class="filters"><span class="pagev">v 0721.1636</span></span>
 </div>
 <div id="list"></div>
 </div>
@@ -230,7 +245,7 @@ const PAGES_COL="creator_pages";
 // ---- channel tailoring (/tailor): re-rank the pool for one creator; profile also shapes packs ----
 const TAILOR_API="https://videos-similar-api-production.up.railway.app/tailor";
 const CUSTOM_API="https://videos-similar-api-production.up.railway.app/custom"; // old "Videos We Support" idea generation
-const BUILD_V="0721.1621"; // tailor-cache is keyed to this: LEADS indices shift when the page is rebuilt
+const BUILD_V="0721.1636"; // tailor-cache is keyed to this: LEADS indices shift when the page is rebuilt
 let channelProfile="", channelName="", channelHandle="", tailored=false, fullView=false, tailorOrder=null;
 let currentPageId=""; // set on a saved ?p= creator page; lets packs/scripts save ONTO that page so the creator sees them instantly
 let researchNote=""; // one-shot line shown in the editor after a fresh generation: how many transcripts were read (so it is VISIBLE the tool used them)
@@ -274,7 +289,7 @@ async function _renderScreen(s){s=s||{v:"home"};
  else if(s.v==="edit"){
   if(inCurate)return; // already in the editor (pushState round-trip) — don't reload over live edits
   let doc=null;try{doc=await loadPageDoc(s.h);}catch(e){}
-  if(doc&&Array.isArray(doc.ideas)&&doc.ideas.length)startCurate(doc.ideas,doc.handle||s.h,doc.channel||doc.handle||s.h,doc.note||"",doc.profile||"",doc.style||"leads");
+  if(doc&&Array.isArray(doc.ideas)&&doc.ideas.length)startCurate(doc.ideas,doc.handle||s.h,doc.channel||doc.handle||s.h,doc.note||"",doc.profile||"",doc.style||"leads",doc.rejected||[]);
   else showHome();}
  else{showHome();}}
 window.addEventListener("popstate",async function(ev){
@@ -590,11 +605,12 @@ async function fetchTailor(rawurl,useCache){
 }
 // ================= publish / curate / dashboard / creator pages =================
 function pageId(h){return (h||"").replace(/^@+/,"").toLowerCase().replace(/[^a-z0-9_-]/g,"")||"page";}
-async function savePage(handle,channel,note,ideas,profile,style){
+async function savePage(handle,channel,note,ideas,profile,style,rejected){
  if(!DB)throw new Error("cloud unavailable");
  const id=pageId(handle);
  const ref=DB.collection(PAGES_COL).doc(id);
  const base={handle:handle||("@"+id),channel:channel||handle||id,note:note||"",ideas:ideas,profile:profile||"",style:style||"leads",updated:Date.now(),v:BUILD_V};
+ if(rejected!==undefined)base.rejected=rejected; // only write the reject pile when the caller manages it; otherwise it is preserved below
  // SAFETY NET: snapshot the PREVIOUS idea set into a version history before overwriting, so no
  // publish / regenerate / autosave can ever permanently destroy ideas. Done inside a TRANSACTION
  // so two tabs (or a flush racing a debounced save) can't clobber each other or lose a version.
@@ -603,10 +619,11 @@ async function savePage(handle,channel,note,ideas,profile,style){
  try{
   await DB.runTransaction(async function(tx){
    const snap=await tx.get(ref);
-   let history=[];
+   let history=[]; let keepRej=(rejected!==undefined)?rejected:[];
    if(snap.exists){
     const p=snap.data()||{};
     history=Array.isArray(p.history)?p.history.slice():[];
+    if(rejected===undefined)keepRej=Array.isArray(p.rejected)?p.rejected:[]; // caller didn't manage it → preserve the existing reject pile (never wipe it via tx.set)
     const prevIdeas=Array.isArray(p.ideas)?p.ideas:[];
     const last=history.length?history[history.length-1]:null;
     const changed=prevIdeas.length && JSON.stringify(prevIdeas)!==JSON.stringify(ideas);
@@ -615,7 +632,7 @@ async function savePage(handle,channel,note,ideas,profile,style){
     if(changed && distinct && spaced){history.push({ideas:prevIdeas,note:p.note||"",style:p.style||"leads",ts:p.updated||Date.now()});}
     if(history.length>12){history=[history[0]].concat(history.slice(history.length-11));} // pin the original + keep the last 11
    }
-   tx.set(ref,Object.assign({},base,{history:history}));
+   tx.set(ref,Object.assign({},base,{history:history,rejected:keepRej}));
   });
  }catch(e){
   // transaction unavailable/offline: merge-set WITHOUT a history key so any existing history is
@@ -692,7 +709,7 @@ async function premakeAll(btn,ideas){
  else if(failed){btn.textContent="⚡ Retry "+failed+" that failed";txt.textContent=done+" of "+total+" saved. "+failed+" couldn't be made (likely rate-limited) — click Retry in a minute.";toast(failed+" didn't save — click Retry");}
  else{btn.textContent="✓ All packs + scripts ready";txt.textContent="Done — all "+total+" saved. The creator sees them instantly.";toast("Pre-made everything for "+esc(channelName));setTimeout(()=>bar.remove(),9000);}
 }
-let curateIdeas=[], curateHandle="", curateChannel="", curateProfile="", curateStyle="leads", curateDirty=false, curateSaveT=null;
+let curateIdeas=[], curateHandle="", curateChannel="", curateProfile="", curateStyle="leads", curateDirty=false, curateSaveT=null, curateRejected=[];
 // ---- autosave: the editor persists every change on its own, so you never lose work and never
 // have to click a "Save". A debounce coalesces rapid edits; savePage() keeps version history. ----
 function _setSaveInd(state){const el=$("#saveind");if(!el)return;
@@ -705,7 +722,7 @@ async function doAutoSave(){
  const ideas=curateIdeas.filter(x=>ideaTitle(x).trim().length>0||ideaSummary(x).trim().length>0); // keep anything with a title OR body; never drop a short title or a mid-edit blank-title card
  if(!ideas.length)return; // never autosave an empty set — that would erase the page
  _setSaveInd("saving");
- try{await savePage(curateHandle,curateChannel,note,ideas,curateProfile,curateStyle);_setSaveInd("saved");}
+ try{await savePage(curateHandle,curateChannel,note,ideas,curateProfile,curateStyle,curateRejected);_setSaveInd("saved");}
  catch(e){_setSaveInd("err");clearTimeout(curateSaveT);curateSaveT=setTimeout(doAutoSave,4000);} // retry on failure
 }
 function scheduleSave(ms){clearTimeout(curateSaveT);curateSaveT=setTimeout(doAutoSave,(ms==null?1400:ms));if($("#saveind"))_setSaveInd("saving");}
@@ -731,7 +748,7 @@ async function showRestore(){
  $("#verlist").querySelectorAll("[data-ver]").forEach(bn=>bn.onclick=()=>{const v=rows[+bn.getAttribute("data-ver")];if(v){startCurate(v.ideas,curateHandle,curateChannel,v.note||"",curateProfile,v.style||curateStyle);toast("Restored a "+((v.ideas||[]).length)+"-idea version");}});
 }
 function curTitle(){return "✏️ Curating "+curateChannel+" — "+curateIdeas.length+" ideas";}
-function startCurate(ideas,handle,channel,note,profile,style){
+function startCurate(ideas,handle,channel,note,profile,style,rejected){
  if(creatorView){ // ?c= shared creator link: show a clean read-only board, NEVER the admin editor
   channelName=channel||channelName; setCreatorHeader(channelName||(handle||"").replace(/^@/,""));
   const list=$("#list");list.innerHTML="";
@@ -742,6 +759,9 @@ function startCurate(ideas,handle,channel,note,profile,style){
  _pushScreen({v:"edit",h:handle||channelHandle||""});
  currentPageId=""; // in the admin editor, not on a saved page → no stray artifact writes should target the last-viewed page
  curateStyle=style||"leads";
+ const _newHandle=handle||channelHandle;
+ if(_newHandle!==curateHandle)curateRejected=[]; // switched to a different page → start a fresh reject pile
+ if(rejected!==undefined)curateRejected=(rejected||[]).filter(Boolean); // opening a saved page → load its reject pile; regenerate passes undefined so the pile is preserved
  curateIdeas=(ideas||[]).map(x=>(x.title!=null)?{title:x.title||"",summary:x.summary||"",url:x.url||"",who:x.who||"",y:x.y||""}:{l:x.l||"",dirs:(x.dirs||[]).slice(0,2),url:x.url||"",who:x.who||"",y:x.y||""});
  curateHandle=handle||channelHandle; curateChannel=channel||channelName||curateHandle; curateProfile=(profile!==undefined&&profile!==null)?profile:channelProfile;
  inCurate=true; curateDirty=false;
@@ -761,12 +781,17 @@ function startCurate(ideas,handle,channel,note,profile,style){
    '<button class="regenbtn" id="regenleads">📚 Use our library</button>'+
    '<button class="regenbtn" id="restorever" style="margin-left:auto">↩ Restore a previous version</button></div>'+
   '<textarea id="curnote" placeholder="Optional note to the creator (shown at the top of their page)">'+esc(note||"")+'</textarea>'+
-  '<div id="ccards"></div>';
+  '<div class="addrow"><textarea id="addidea" rows="2" placeholder="Add your own idea, or paste a news story or a line from their longlist. It becomes an idea here, and gets a research pack + sample script like the rest."></textarea><button class="addbtn" id="addbtn">＋ Add idea</button></div>'+
+  '<div id="ccards"></div>'+
+  '<div id="rejwrap"></div>';
  researchNote=""; // one-shot: shown only for the fresh generation that set it, not on later edits/restores
  renderCards();
+ renderRejected();
  $("#dopublish").onclick=publishCurrent;
  $("#curcancel").onclick=async()=>{await flushSave();showHome();}; // flush the pending save BEFORE leaving so nothing is dropped
  const nb=$("#curnote");if(nb)nb.oninput=()=>{curateDirty=true;scheduleSave();};
+ $("#addbtn").onclick=addOwnIdea;
+ const ai=$("#addidea");if(ai)ai.addEventListener("keydown",e=>{if((e.metaKey||e.ctrlKey)&&e.key==="Enter"){e.preventDefault();addOwnIdea();}});
  $("#regencustom").onclick=()=>regenerate("custom");
  $("#regenleads").onclick=()=>regenerate("leads");
  $("#restorever").onclick=showRestore;
@@ -784,7 +809,8 @@ async function regenerate(mode){
  $("#list").innerHTML='<div class="ptwrap" style="max-width:480px;margin:26px auto"></div>';
  const _stopR=progressTicker($("#list .ptwrap"), mode==="custom"?120:90, (mode==="custom"?"Writing fresh ideas for ":"Ranking our library for ")+ch);
  let ok=false;
- try{ ok = (mode==="custom") ? await fetchCustom(url) : await fetchTailor(url,false); }catch(e){ ok=false; }
+ const _rej=curateRejected.map(ideaTitle).filter(Boolean); // steer the regenerate away from what we already rejected for this channel
+ try{ ok = (mode==="custom") ? await fetchCustom(url,_rej) : await fetchTailor(url,false); }catch(e){ ok=false; }
  _stopR();
  // fetchCustom/fetchTailor rebuild the editor via startCurate on success. On failure, restore the old draft.
  if(!ok){ startCurate(keepIdeas,keepHandle,keepChannel,($("#curnote")&&$("#curnote").value)||"",keepProfile,keepStyle); toast("Could not generate a fresh set — kept your current list."); }
@@ -803,10 +829,47 @@ function renderCards(){
   const i=+card.getAttribute("data-i");
   const tx=card.querySelector(".ctxt");tx.oninput=()=>{curateDirty=true;if(curateIdeas[i].title!=null)curateIdeas[i].title=tx.textContent.trim();else curateIdeas[i].l=tx.textContent.trim();scheduleSave();};
   card.querySelectorAll(".cturn").forEach(t=>{if(t.hasAttribute("data-sum")){t.oninput=()=>{curateDirty=true;curateIdeas[i].summary=t.textContent.trim();scheduleSave();};}else{const j=+t.getAttribute("data-j");t.oninput=()=>{curateDirty=true;curateIdeas[i].dirs[j]=t.textContent.trim();scheduleSave();};}});
-  card.querySelector('[data-act="rm"]').onclick=()=>{curateDirty=true;curateIdeas.splice(i,1);renderCards();scheduleSave();};
+  card.querySelector('[data-act="rm"]').onclick=()=>{curateDirty=true;const rm=curateIdeas.splice(i,1)[0];if(rm&&(ideaTitle(rm).trim()||ideaSummary(rm).trim()))curateRejected.unshift(rm);renderCards();renderRejected();scheduleSave();}; // removed ideas go to the reject pile (kept as signal), not discarded
   card.querySelector('[data-act="up"]').onclick=()=>{if(i>0){curateDirty=true;const a=curateIdeas;const tmp=a[i-1];a[i-1]=a[i];a[i]=tmp;renderCards();scheduleSave();}};
   card.querySelector('[data-act="down"]').onclick=()=>{if(i<curateIdeas.length-1){curateDirty=true;const a=curateIdeas;const tmp=a[i+1];a[i+1]=a[i];a[i]=tmp;renderCards();scheduleSave();}};
  });
+}
+// ---- add your own idea (paste a line from their longlist, or a news story) → becomes an idea card,
+// then gets a research pack + sample script like the generated ones ----
+function addOwnIdea(){
+ const ta=$("#addidea");if(!ta)return;
+ const v=(ta.value||"").trim();
+ if(!v){toast("Type or paste an idea first");return;}
+ // split into a title + summary so a pasted paragraph becomes a proper idea (first sentence/line = hook)
+ let title=v, summary="";
+ const nl=v.indexOf("\n");
+ if(nl>0){title=v.slice(0,nl).trim();summary=v.slice(nl+1).trim();}
+ else{const m=v.match(/^(.{20,150}?[.!?])\s+(\S.*)$/); if(m){title=m[1].trim();summary=m[2].trim();}}
+ if(title.length>220){summary=(title.slice(220).trim()+(summary?(" "+summary):"")).trim();title=title.slice(0,220).trim();}
+ curateIdeas.push({title:title,summary:summary,url:"",who:"",y:""});
+ curateDirty=true; ta.value="";
+ renderCards();
+ const cards=document.querySelectorAll("#ccards .ccard");if(cards.length)cards[cards.length-1].scrollIntoView({behavior:"smooth",block:"center"});
+ toast("Added your idea — publish, then its pack + script are on the page");
+ scheduleSave();
+}
+// ---- reject pile: removed ideas are kept here (not discarded) so we retain the signal of what we did
+// NOT like. Restorable, persisted on the page, and copyable as liked+rejected for feeding to an AI. ----
+function renderRejected(){
+ const w=$("#rejwrap");if(!w)return;
+ const n=curateRejected.length;
+ if(!n){w.innerHTML="";return;}
+ w.innerHTML='<details class="rejbox"><summary>🗑 Rejected ('+n+') <span class="rejhint">kept so we remember what to avoid</span> <button class="rejcopy" id="rejcopy">⧉ Copy liked + rejected</button></summary><div id="rejlist"></div></details>';
+ const list=$("#rejlist");
+ list.innerHTML=curateRejected.map((x,i)=>'<div class="rejrow"><span class="rejtxt">'+esc(ideaTitle(x))+'</span><button class="rejrestore" data-r="'+i+'">↩ restore</button></div>').join("");
+ list.querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{const idx=+b.getAttribute("data-r");const it=curateRejected.splice(idx,1)[0];if(it)curateIdeas.push(it);curateDirty=true;renderCards();renderRejected();scheduleSave();});
+ const cp=$("#rejcopy");if(cp)cp.onclick=(e)=>{e.preventDefault();e.stopPropagation();copyLikedRejected();};
+}
+function copyLikedRejected(){
+ const liked=curateIdeas.filter(x=>ideaTitle(x).trim()).map(x=>"- "+ideaTitle(x));
+ const rej=curateRejected.filter(x=>ideaTitle(x).trim()).map(x=>"- "+ideaTitle(x));
+ const txt="Channel: "+curateChannel+"\n\nVIDEO IDEAS WE LIKED ("+liked.length+"):\n"+liked.join("\n")+"\n\nVIDEO IDEAS WE REJECTED ("+rej.length+"):\n"+rej.join("\n")+"\n\nPlease ideate more in the spirit of the liked ones, and avoid anything like the rejected ones.";
+ navigator.clipboard.writeText(txt).then(()=>toast("Copied "+liked.length+" liked + "+rej.length+" rejected")).catch(()=>toast("Copy failed"));
 }
 async function publishCurrent(){
  if(!curateHandle){toast("No channel on this page");return;} // never write to the shared fallback doc id
@@ -817,7 +880,7 @@ async function publishCurrent(){
  try{
   // Firestore write promises stay PENDING while offline; bound it so the button can never
   // stick on "Publishing…". If it times out the write may still land, so say "couldn't confirm".
-  const id=await withTimeout(savePage(curateHandle,curateChannel,note,ideas,curateProfile,curateStyle),15000);
+  const id=await withTimeout(savePage(curateHandle,curateChannel,note,ideas,curateProfile,curateStyle,curateRejected),15000);
   inCurate=false; // published — draft is safely saved, no more unsaved-work guard
   showPublished(location.origin+location.pathname+"?p="+encodeURIComponent(id),curateChannel,ideas.length);
  }catch(e){toast(String(e&&e.message)==="timeout"?"Couldn't confirm the save — check your connection and try again":"Publish failed — check connection");console.error(e);if(btn){btn.disabled=false;btn.textContent=orig;}}
@@ -857,7 +920,7 @@ async function showDashboard(){
     '<a href="'+esc(link)+'" target="_blank" rel="noopener">Open ↗</a><button data-edit="'+esc(r.id)+'">Edit</button><button data-copy="'+esc(link)+'">⧉ Copy</button></div>';
   }).join("");
   list.querySelectorAll("[data-copy]").forEach(bn=>bn.onclick=()=>{navigator.clipboard.writeText(bn.getAttribute("data-copy")).then(()=>toast("Link copied")).catch(()=>toast("Copy failed"));});
-  list.querySelectorAll("[data-edit]").forEach(bn=>bn.onclick=async()=>{try{const doc=await loadPageDoc(bn.getAttribute("data-edit"));if(doc)startCurate(doc.ideas||[],doc.handle||bn.getAttribute("data-edit"),doc.channel||doc.handle,doc.note||"",doc.profile||"",doc.style||"leads");else toast("That page no longer exists — refresh the list.");}catch(e){toast("Could not open page — check your connection.");}});
+  list.querySelectorAll("[data-edit]").forEach(bn=>bn.onclick=async()=>{try{const doc=await loadPageDoc(bn.getAttribute("data-edit"));if(doc)startCurate(doc.ideas||[],doc.handle||bn.getAttribute("data-edit"),doc.channel||doc.handle,doc.note||"",doc.profile||"",doc.style||"leads",doc.rejected||[]);else toast("That page no longer exists — refresh the list.");}catch(e){toast("Could not open page — check your connection.");}});
  }catch(e){const x=$("#dashbody");if(x)x.textContent="Could not load pages ("+((e&&e.message)||e)+").";console.error(e);}
 }
 function leadCard(x,rank){
@@ -902,7 +965,7 @@ async function renderCreatorPage(id){
   const old=document.querySelector(".editpagebtn");if(old)old.remove();
   const ed=document.createElement("button");ed.className="editpagebtn";ed.textContent="✏️ Edit this page";
   ed.title="Only you see this. Edit, reorder, or remove ideas, then re-publish to the same link.";
-  ed.onclick=()=>{ed.remove();document.body.classList.remove("creator");creatorView=false;const pm2=document.querySelector(".premakebtn");if(pm2)pm2.remove();startCurate(doc.ideas,doc.handle||pageId(id),doc.channel||doc.handle||id,doc.note||"",doc.profile||"",doc.style||"leads");};
+  ed.onclick=()=>{ed.remove();document.body.classList.remove("creator");creatorView=false;const pm2=document.querySelector(".premakebtn");if(pm2)pm2.remove();startCurate(doc.ideas,doc.handle||pageId(id),doc.channel||doc.handle||id,doc.note||"",doc.profile||"",doc.style||"leads",doc.rejected||[]);};
   document.body.appendChild(ed); // fixed top-right, always visible (admin only) — not buried at page bottom
   const oldpm=document.querySelector(".premakebtn");if(oldpm)oldpm.remove();
   const pm=document.createElement("button");pm.className="premakebtn";pm.textContent="⚡ Pre-make packs + scripts";
@@ -944,7 +1007,7 @@ async function generateMore(btn,shown,style){
  }catch(e){btn.textContent=(e&&e.name==="AbortError")?"Took too long — try again":"Couldn't load more — try again";}
  finally{clearTimeout(to);_stopMore();statusEl.remove();btn.disabled=false;} // always re-enable + clear the ticker so nothing sticks
 }
-async function fetchCustom(rawurl){
+async function fetchCustom(rawurl,rejectedTitles){
  const url=cleanChanUrl(rawurl);if(!url){toast("Paste a channel link");return false;}
  const h=handleFromUrl(url);
  const btn=$("#cgen"),msg=$("#cmsg"),orig=btn?btn.textContent:"";
@@ -953,7 +1016,8 @@ async function fetchCustom(rawurl){
  if(msg){msg.className="cmsg";msg.innerHTML='<div class="ptwrap"></div>';_stopC=progressTicker(msg.querySelector(".ptwrap"),120,"Writing fresh ideas");}
  try{
   const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),240000);
-  const r=await fetch(CUSTOM_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({channelUrl:url}),signal:ctrl.signal});
+  const _cbody={channelUrl:url};if(Array.isArray(rejectedTitles)&&rejectedTitles.length)_cbody.rejected=rejectedTitles.slice(0,40); // feed the reject pile so a regenerate steers away from disliked ideas
+  const r=await fetch(CUSTOM_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(_cbody),signal:ctrl.signal});
   clearTimeout(to);
   if(r.status===429){if(msg){msg.className="cmsg err";msg.textContent="Busy right now — wait a minute and try again.";}return false;}
   const j=await r.json();

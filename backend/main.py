@@ -2483,6 +2483,11 @@ async def custom(req: Request):
     if not isinstance(exclude, list):
         exclude = []
     exclude = [str(e).strip() for e in exclude if str(e).strip()][:60]
+    # ideas the curator explicitly REJECTED for this channel — a negative-signal to steer generation away
+    rejected = body.get("rejected") or []
+    if not isinstance(rejected, list):
+        rejected = []
+    rejected = [str(e).strip() for e in rejected if str(e).strip()][:40]
 
     # On "more ideas" the client passes the cached profile back so we skip re-research.
     cached = body.get("profile")
@@ -2531,6 +2536,10 @@ async def custom(req: Request):
         gen += "\n\nTheir recent video titles (match this phrasing and energy):\n" + "\n".join("- " + t for t in titles[:25])
     if exclude:
         gen += "\n\nAlready suggested (do NOT repeat or closely overlap these):\n" + "\n".join("- " + e for e in exclude)
+    if rejected:
+        gen += ("\n\nThe curator REJECTED these ideas for this channel (they did not like them). Learn from it: "
+                "steer away from their angle, framing, and subject. Do NOT resurface these or close variants:\n"
+                + "\n".join("- " + e for e in rejected))
     gen += "\n\nBrainstorm and return the JSON object with your 32 strongest candidate ideas."
     gen += seed_block(5) + anchor_block(5)
     gen += ("\n\nMOST IMPORTANT, this OVERRIDES the anchor and seed guidance above: the creator profile is your PRIMARY driver; the anchors and seeds are secondary inspiration, NOT a checklist to work through. Most of your ideas should NOT start from a listed anchor. "
