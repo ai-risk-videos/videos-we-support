@@ -2645,14 +2645,18 @@ def _openai_ideas(system, user, model):
     if not key:
         return [], "OPENAI_API_KEY is not set on the server. Add it in Railway (Variables), same place as ANTHROPIC_API_KEY."
     try:
+        # cap reasoning (idea-gen is not a deep-reasoning task) + leave room for the 32-idea JSON, so it
+        # returns in time instead of thinking for >175s. reasoning_effort is best-effort; if the model
+        # rejects it the error surfaces and we drop it.
         payload = json.dumps({"model": model, "messages": [
-            {"role": "system", "content": system}, {"role": "user", "content": user}]}).encode()
+            {"role": "system", "content": system}, {"role": "user", "content": user}],
+            "reasoning_effort": "low", "max_completion_tokens": 20000}).encode()
         req = _urlreq.Request("https://api.openai.com/v1/chat/completions", data=payload,
                               headers={"Content-Type": "application/json", "Authorization": "Bearer " + key}, method="POST")
-        with _urlreq.urlopen(req, timeout=175) as r:
+        with _urlreq.urlopen(req, timeout=170) as r:
             d = json.loads(r.read().decode())
-        txt = d["choices"][0]["message"]["content"]
-        return parse_custom(txt), None
+        txt = (d["choices"][0]["message"].get("content") or "")
+        return parse_custom(txt), (None if txt else "empty completion (finish_reason=%s)" % d["choices"][0].get("finish_reason"))
     except Exception as e:
         detail = str(e)[:400]
         try:  # surface OpenAI's own error body (e.g. wrong model id, needs a different param)
