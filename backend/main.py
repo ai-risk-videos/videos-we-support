@@ -2740,6 +2740,88 @@ async def compare(req: Request):
             "opus_model": MODEL, "gpt_model": gpt_model,
             "opus": opus_ideas, "gpt": gpt_ideas, "opus_err": opus_err, "gpt_err": gpt_err}
 
+SYSTEM_WRITEOFF = (
+    "You are a script-idea writer for ONE specific YouTube creator. You are given a strategist profile of them "
+    "and a NUMBERED list of idea concepts. Your job is NOT to brainstorm new ideas. WRITE EACH given concept, in "
+    "order, exactly one entry per concept, as a polished pitch in THIS creator's voice, obsessions, and method. Do "
+    "NOT add, drop, merge, split, or reorder concepts. Refract each concept through the creator's lens so it reads "
+    "like an episode they are already itching to make, but keep it the SAME underlying idea.\n\n"
+    + FORMAT_RULE + "\n\n" + WORDING + "\n\n"
+    "CAUSE SAFETY (hard rule): this is an AI-safety project whose mission is to make people take AI risk seriously. "
+    "AI is real, powerful, and genuinely dangerous. Never write a pitch that leaves a viewer MORE dismissive of AI "
+    "risk: never frame AI as hype, a grift, a bubble, snake oil, or too weak or fake to matter, and never make 'is "
+    "the fear just a sales pitch' the spine. When the creator is a skeptic or debunker, point that skepticism AT the "
+    "reader's disbelief to show the danger is REAL, never at the AI-risk concern itself. Never use the word 'doomer'.\n\n"
+    "Return ONLY JSON: {\"ideas\": [{\"title\": \"<hook>\", \"summary\": \"<summary>\"}, ...]} with EXACTLY one entry "
+    "per input concept, in the same order. No prose outside the JSON.")
+
+@app.post("/writeoff")
+async def writeoff(req: Request):
+    """Admin-gated head-to-head WRITING test: hand BOTH models the SAME fixed idea concepts and have each WRITE
+    them for one channel, so we compare writing quality on identical input (not idea generation). Both sides get
+    the same active-voice cleanup the product uses, so the output reflects shipped quality. Key from server env."""
+    try:
+        body = await req.json()
+    except Exception:
+        return JSONResponse({"error": "bad json"}, status_code=400)
+    if body.get("key") != EVENTS_KEY:
+        return JSONResponse({"error": "bad key"}, status_code=403)
+    url = re.sub(r"[?#].*$", "", (body.get("channelUrl") or "").strip())
+    gpt_model = (body.get("model") or "gpt-5.6-sol").strip()
+    concepts = body.get("concepts") or []
+    if not isinstance(concepts, list):
+        concepts = []
+    concepts = [str(c).strip() for c in concepts if str(c).strip()][:12]
+    if not url:
+        return JSONResponse({"error": "missing channelUrl"}, status_code=400)
+    if not concepts:
+        return JSONResponse({"error": "missing concepts"}, status_code=400)
+    try:
+        prof = await asyncio.wait_for(run_in_threadpool(fetch_channel, url), timeout=90)
+    except Exception:
+        return JSONResponse({"error": "channel read timed out"}, status_code=504)
+    if not prof or not prof.get("recent"):
+        return JSONResponse({"error": "could not read channel"}, status_code=502)
+    profile = await _build_profile(prof)
+    n = len(concepts)
+    concept_block = "\n".join("%d. %s" % (i + 1, c) for i, c in enumerate(concepts))
+    userp = ("Strategist profile of the creator:\n" + profile +
+             "\n\nWrite EACH of these " + str(n) + " idea concepts as a hook + summary for this creator, in order, "
+             "one entry per concept, keeping the same underlying idea:\n" + concept_block)
+    async def _run_opus():
+        try:
+            om = await asyncio.wait_for(run_in_threadpool(lambda: get_client().messages.create(
+                model=MODEL, max_tokens=8000, system=SYSTEM_WRITEOFF,
+                messages=[{"role": "user", "content": userp}])), timeout=190)
+            return parse_custom("".join(b.text for b in om.content if getattr(b, "type", "") == "text")), None
+        except asyncio.TimeoutError:
+            return [], MODEL + " timed out (>190s)"
+        except Exception as e:
+            return [], str(e)[:300]
+    async def _run_gpt():
+        try:
+            return await asyncio.wait_for(run_in_threadpool(_openai_ideas, SYSTEM_WRITEOFF, userp, gpt_model), timeout=190)
+        except asyncio.TimeoutError:
+            return [], gpt_model + " timed out (>190s)"
+        except Exception as e:
+            return [], str(e)[:300]
+    (opus_ideas, opus_err), (gpt_ideas, gpt_err) = await asyncio.gather(_run_opus(), _run_gpt())
+    opus_ideas = (opus_ideas or [])[:n]
+    gpt_ideas = (gpt_ideas or [])[:n]
+    # SAME active-voice cleanup the product runs, on BOTH sides — so this reflects shipped quality, not raw drafts
+    for ideas in (opus_ideas, gpt_ideas):
+        try:
+            _rew = await asyncio.wait_for(run_in_threadpool(_activate_summaries, ideas), timeout=60)
+        except Exception:
+            _rew = {}
+        for i in _rew:
+            if i < len(ideas):
+                ideas[i]["summary"] = _rew[i]
+    _log_event({"t": "writeoff", "ch": _chan_key(url), "n": n, "opus": len(opus_ideas), "gpt": len(gpt_ideas), "gpt_err": bool(gpt_err)})
+    return {"channel": prof.get("channel", ""), "concepts": concepts,
+            "opus_model": MODEL, "gpt_model": gpt_model,
+            "opus": opus_ideas, "gpt": gpt_ideas, "opus_err": opus_err, "gpt_err": gpt_err}
+
 @app.post("/custom")
 async def custom(req: Request):
     try:
