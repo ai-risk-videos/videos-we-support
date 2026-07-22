@@ -2661,6 +2661,34 @@ def _openai_ideas(system, user, model):
             pass
         return [], detail
 
+@app.get("/gptprobe")
+def gptprobe(key: str = "", model: str = "gpt-5.6"):
+    """Fast diagnostic: a trivial OpenAI call to learn how <model> behaves (works? latency? param
+    errors?) without a 3-minute full generation. Gated."""
+    if key != EVENTS_KEY:
+        return JSONResponse({"error": "bad key"}, status_code=403)
+    keyv = os.environ.get("OPENAI_API_KEY", "")
+    if not keyv:
+        return {"ok": False, "err": "OPENAI_API_KEY not set"}
+    t0 = _time.time()
+    payload = json.dumps({"model": model, "messages": [{"role": "user", "content": "Reply with exactly: OK"}],
+                          "max_completion_tokens": 400}).encode()
+    req = _urlreq.Request("https://api.openai.com/v1/chat/completions", data=payload,
+                          headers={"Content-Type": "application/json", "Authorization": "Bearer " + keyv}, method="POST")
+    try:
+        with _urlreq.urlopen(req, timeout=120) as r:
+            d = json.loads(r.read().decode())
+        msg = (d.get("choices", [{}])[0].get("message", {}) or {}).get("content")
+        return {"ok": True, "secs": round(_time.time() - t0, 1), "model": d.get("model"),
+                "sample": (msg or "")[:120], "usage": d.get("usage")}
+    except Exception as e:
+        detail = str(e)[:500]
+        try:
+            detail = e.read().decode()[:500]
+        except Exception:
+            pass
+        return {"ok": False, "secs": round(_time.time() - t0, 1), "err": detail}
+
 @app.post("/compare")
 async def compare(req: Request):
     """Admin-gated A/B: run the IDENTICAL idea-gen prompt for one channel through Opus and an OpenAI
