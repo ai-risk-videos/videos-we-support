@@ -2649,7 +2649,7 @@ def _openai_ideas(system, user, model):
             {"role": "system", "content": system}, {"role": "user", "content": user}]}).encode()
         req = _urlreq.Request("https://api.openai.com/v1/chat/completions", data=payload,
                               headers={"Content-Type": "application/json", "Authorization": "Bearer " + key}, method="POST")
-        with _urlreq.urlopen(req, timeout=200) as r:
+        with _urlreq.urlopen(req, timeout=175) as r:
             d = json.loads(r.read().decode())
         txt = d["choices"][0]["message"]["content"]
         return parse_custom(txt), None
@@ -2685,14 +2685,24 @@ async def compare(req: Request):
     titles = prof.get("recent") or []
     gen = _build_gen_prompt(profile, titles, [], [])
     sysp = SYSTEM_CUSTOM + ANTI_SLOP
-    opus_ideas, opus_err = [], None
-    try:
-        om = await run_in_threadpool(lambda: get_client().messages.create(
-            model=MODEL, max_tokens=12000, system=sysp, messages=[{"role": "user", "content": gen}]))
-        opus_ideas = parse_custom("".join(b.text for b in om.content if getattr(b, "type", "") == "text"))
-    except Exception as e:
-        opus_err = str(e)[:300]
-    gpt_ideas, gpt_err = await run_in_threadpool(_openai_ideas, sysp, gen, gpt_model)
+    # run BOTH models concurrently (sequential summed past the request timeout) and bound each side
+    async def _run_opus():
+        try:
+            om = await asyncio.wait_for(run_in_threadpool(lambda: get_client().messages.create(
+                model=MODEL, max_tokens=12000, system=sysp, messages=[{"role": "user", "content": gen}])), timeout=190)
+            return parse_custom("".join(b.text for b in om.content if getattr(b, "type", "") == "text")), None
+        except asyncio.TimeoutError:
+            return [], MODEL + " timed out (>190s)"
+        except Exception as e:
+            return [], str(e)[:300]
+    async def _run_gpt():
+        try:
+            return await asyncio.wait_for(run_in_threadpool(_openai_ideas, sysp, gen, gpt_model), timeout=190)
+        except asyncio.TimeoutError:
+            return [], gpt_model + " timed out (>190s) — likely a slow reasoning model; may need the /responses API"
+        except Exception as e:
+            return [], str(e)[:300]
+    (opus_ideas, opus_err), (gpt_ideas, gpt_err) = await asyncio.gather(_run_opus(), _run_gpt())
     _log_event({"t": "compare", "ch": _chan_key(url), "opus": len(opus_ideas), "gpt": len(gpt_ideas), "gpt_err": bool(gpt_err)})
     return {"channel": prof.get("channel", ""), "transcripts": len(prof.get("transcripts") or []),
             "opus_model": MODEL, "gpt_model": gpt_model,
