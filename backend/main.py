@@ -2714,8 +2714,20 @@ _MOOD_RX = re.compile(r"\b(quietly|slowly|inexorably|steadily|gradually|impercep
 def _last_sentence(s):
     parts = [p for p in re.split(r'(?<=[.?!])\s+', (s or "").strip()) if p.strip()]
     return parts[-1] if parts else ""
+# (3) FIRST-PERSON METHOD NARRATION in the closer ("I show how...", "I explain what they fear",
+# "I follow the money and trace..."). This surfaced the moment the question-cadence cap pushed the
+# model off rhetorical questions: it fell back to narrating what the video does. Banned in the prompt
+# already, so detect it too. Only METHOD verbs count; a concrete first-person ACTION ("I flew to
+# Taiwan and stood outside the fab") is exactly the creator's voice and must stay.
+_META_I_RX = re.compile(
+    r'\bI\s+(?:show|explain|trace|follow|break\s+down|walk\s+(?:you\s+)?through|dig\s+into|unpack|lay\s+out|'
+    r'map\s+out|examine|explore|look\s+at|ask\s+what|argue|make\s+the\s+case|tell\s+the\s+story)\b', re.I)
+
 def _closer_flawed(summary):
-    return bool(_NOTXY_RX.search(summary or "")) or bool(_MOOD_RX.search(_last_sentence(summary)))
+    close = _last_sentence(summary)
+    return (bool(_NOTXY_RX.search(summary or ""))
+            or bool(_MOOD_RX.search(close))
+            or bool(_META_I_RX.search(close)))
 
 # ---- BATCH-LEVEL cadence enforcement. The prompt keeps drifting back to "end every idea on a rhetorical
 # question" (a review measured 19 of 19 in one batch, 'What happens when' 13 times in another), which reads
@@ -2786,7 +2798,14 @@ def _ratio_bad(text):
 RATIO_FIX_SYS = """You are a fact checker fixing ONE arithmetic error per line. Each numbered line is a video-idea summary that states a ratio which contradicts the two numbers in its own text. You are told the correct ratio. Rewrite ONLY the ratio phrase so it matches the arithmetic, and change NOTHING else: keep every number, name, date, hedge, and the sentence order exactly. Use a round, plain phrasing a viewer can follow, for example 'more than a hundred to one'. Keep it easy to read, no em dashes.
 Return ONLY JSON: {"summaries": {"<number>": "<corrected summary>", ...}} using the SAME numbers you were given. No prose."""
 
-CLOSER_FIX_SYS = """You are a line editor. Each numbered line is one video summary whose LAST sentence may have one of two flaws: (1) the tired 'not X, it is Y' contrast construction, e.g. 'The danger is not an enemy. It is being outmatched.', 'It isn't X, it's Y', 'not just X, but Y'; or (2) an agentless MOOD closer that leans on a mood adverb and an abstract noun doing a vague verb, e.g. 'The squeeze just quietly tightens.', 'Control slips away quietly.', 'The shared sense of what is real slowly dissolves.'. Rewrite ONLY to fix that flaw: for (1) state it as a direct positive claim; for (2) name a concrete actor doing or facing something and drop the mood adverb. Change NOTHING ELSE: keep every fact, the length, active voice, plain wording, and do not add an em dash. If a line has neither flaw, return it unchanged. Return ONLY JSON: {"summaries": {"<number>": "<rewritten>", ...}} using the SAME numbers you were given. No prose."""
+CLOSER_FIX_SYS = """You are a line editor. Each numbered line is one video summary whose LAST sentence may have one of three flaws:
+(1) the tired 'not X, it is Y' contrast construction, e.g. 'The danger is not an enemy. It is being outmatched.', 'It isn't X, it's Y', 'not just X, but Y';
+(2) an agentless MOOD closer leaning on a mood adverb and an abstract noun doing a vague verb, e.g. 'The squeeze just quietly tightens.', 'Control slips away quietly.', 'The shared sense of what is real slowly dissolves.';
+(3) FIRST-PERSON METHOD NARRATION, describing what the video does instead of stating the content, e.g. 'I show how a small experiment points to a bigger world.', 'I explain what they actually fear, step by step.', 'I follow who really decides.', 'I trace where the money goes.'
+Rewrite ONLY to fix that flaw: for (1) state it as a direct positive claim; for (2) name a concrete actor doing or facing something and drop the mood adverb; for (3) DELETE the 'I show/I explain/I trace' framing and state the actual finding or stake as a fact, e.g. 'I explain what they actually fear, step by step.' becomes 'They fear an AI that hides what it wants until it is too late to switch off.'
+IMPORTANT for (3): a concrete first-person ACTION is the creator's real voice and must be KEPT, e.g. 'I flew to Taiwan and stood outside the fab' or 'I gave an AI my calendar for a month'. Only remove first person when it narrates the VIDEO's method rather than something the person did in the world.
+The closer must still point forward to where this is heading. Change NOTHING ELSE: keep every fact, name, number and hedge, the length, active voice, plain wording, about a 5th grade reading level, and do not add an em dash. If a line has none of the three flaws, return it unchanged.
+Return ONLY JSON: {"summaries": {"<number>": "<rewritten>", ...}} using the SAME numbers you were given. No prose."""
 
 def _activate_summaries(ideas):
     if not ideas:
