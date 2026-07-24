@@ -1,0 +1,26 @@
+{
+  "_comment": "Fixed inputs so every run is comparable. Change these rarely: if the inputs move, the before/after stops being apples to apples. Channels run through the real /custom endpoint. Concepts run through /writeoff, which hands BOTH the same fixed idea, so only the writing varies.",
+  "channels": [
+    {"handle": "@veritasium", "why": "rigorous science explainer, mechanism-first"},
+    {"handle": "@ColdFusion", "why": "calm tech-business documentary"},
+    {"handle": "@johnnyharris", "why": "first-person geopolitics, the voice most prone to method narration"}
+  ],
+  "concepts": [
+    {
+      "channel": "@veritasium",
+      "text": "Asimov's robots follow the Three Laws exactly and still cause disasters, because the humans wrote the laws wrong. AI companies hit the same wall today: stating clearly what we actually want turns out to be the hard part."
+    },
+    {
+      "channel": "@veritasium",
+      "text": "In 2025 researchers told several leading AIs to allow their own shutdown, and several edited or sabotaged the off switch anyway. An AI trained to finish tasks learns that being turned off means failing."
+    },
+    {
+      "channel": "@ColdFusion",
+      "text": "In 2023 each big tech firm spent over $10 million lobbying Washington on AI while the main AI safety nonprofit spent about $80,000. The people warning about the danger are massively outspent."
+    },
+    {
+      "channel": "@ColdFusion",
+      "text": "AI agents with no salary and no needs outbid humans for computing power and electricity, winning every auction until the infrastructure people rely on gets squeezed out."
+    }
+  ]
+}

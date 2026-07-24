@@ -38,3 +38,7 @@ creator_page_backups/
 .DS_Store
 .vscode/
 .idea/
+
+# never commit the admin key
+.eventskey
+bench/.eventskey
