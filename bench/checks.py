@@ -61,6 +61,24 @@ META_OPENER = re.compile(
     r'Walks\s+through|Takes\s+\w+\s+and|Uses\s+(?:his|her|their|the)\b|In\s+(?:his|her|their)\s+\w+\s+style|'
     r'Handles\s+it\s+the\s+way)', re.I)
 WHW = re.compile(r'\bwhat happens when\b', re.I)
+# The implication sentence stops at a first-order inconvenience instead of the terminal stake.
+# From: "an honest debate might be hard?? snooze. the implications need to point to really serious
+# like civilizational collapse level stuff".
+WEAK_STAKE = re.compile(
+    r'\b(?:'
+    r'(?:much |very |a lot |even |far )?(?:harder|tougher|more difficult|difficult|hard)\s+to\b'
+    r'|makes?\s+it\s+(?:harder|tougher|difficult|complicated)'
+    r'|complicat(?:es|ed|ing)\b'
+    r'|less\s+likely\b|not\s+easy\b|challenging\b'
+    r'|(?:erodes?|loses?|losing|hurts?)\s+(?:public\s+)?trust\b'
+    r'|raises?\s+(?:hard\s+|real\s+|new\s+)?questions?\b'
+    r'|worth\s+(?:watching|asking|thinking about)\b'
+    r'|is\s+(?:a\s+)?(?:real\s+)?(?:problem|concern|worry)\b'
+    r')', re.I)
+# the opposite failure: reaching for generic doom instead of earning the stake from the mechanism
+DOOM_TAG = re.compile(
+    r'\b(?:could\s+end\s+(?:humanity|civili[sz]ation|us all)|an?\s+extinction\s+(?:risk|event)'
+    r'|the\s+stakes\s+could\s+not\s+be\s+higher|the\s+end\s+of\s+(?:humanity|civili[sz]ation))', re.I)
 DOOMER = re.compile(r'\bdoomers?\b', re.I)
 AI_LABS = re.compile(r'\bAI\s+labs?\b', re.I)
 VAGUE_SYSTEM = re.compile(r'\b(these systems|those systems|the system\b|a system\b|AI systems?)\b', re.I)
@@ -169,6 +187,18 @@ def _c_cause_harm(x, ctx):
         return "frames AI as hype/grift/too weak: '%s'" % m.group(0)
     return None
 
+def _c_weak_implication(x, ctx):
+    c = last_sentence(summary(x))
+    if WEAK_STAKE.search(c):
+        return "closer stops at a first-order inconvenience: " + c[:80]
+    return None
+
+def _c_doom_tag(x, ctx):
+    c = last_sentence(summary(x))
+    if DOOM_TAG.search(c):
+        return "generic doom bolted on instead of the mechanism's own consequence: " + c[:80]
+    return None
+
 def _c_question_cadence(ideas, ctx):
     qs = [i for i, x in enumerate(ideas) if last_sentence(summary(x)).rstrip().endswith("?")]
     keep = max(1, int(len(ideas) * Q_SHARE_MAX)) if ideas else 0
@@ -188,6 +218,9 @@ CHECKS = [
     ("meta_narration", "No narrating the video", "Say the content, never 'I show how...' or 'A think-piece that'.", "idea", _c_meta_narration),
     ("question_cadence", "Vary how ideas end", "The forward-looking question is good, but not for every idea.", "batch", _c_question_cadence),
     ("what_happens_when", "Do not reuse one phrase", "'What happens when' should not open most closers.", "batch", _c_whw),
+    ("weak_implication", "Implications reach the endgame",
+     "An honest debate being hard is a shrug; go to what a society permanently loses.", "idea", _c_weak_implication),
+    ("doom_tag", "No bolted-on doom", "Earn the stake from the mechanism, never tag on 'could end humanity'.", "idea", _c_doom_tag),
     ("ratio_math", "Ratios match their own numbers", "Simplifying must never break the arithmetic.", "idea", _c_ratio),
     ("banned_words", "House wording rules", "Never doomer, AI labs, chatbot, or calling an AI a system.", "idea", _c_banned_words),
     ("cause_harm", "Never make AI look like hype", "The mission is that the danger is real.", "idea", _c_cause_harm),

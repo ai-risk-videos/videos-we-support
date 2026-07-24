@@ -255,6 +255,25 @@ FORMAT_RULE = ("" if IDEA_FORMAT == "title" else
     "BAD 'I read the stories against what researchers struggle with today and show that Asimov already knew writing "
     "down what we want is the hard part.' GOOD 'Asimov's robots follow their rules exactly and still cause "
     "disasters, because the humans wrote the rules wrong. AI companies are stuck on that same problem right now.' "
+    "GO ALL THE WAY TO THE ENDGAME. This is the failure that matters most right now: your closers stop at the "
+    "FIRST-ORDER inconvenience instead of the terminal stake. You write that something gets 'harder', 'more "
+    "difficult', 'complicated', or that we 'lose trust', and a reader shrugs. Ask yourself 'and then what?' at least "
+    "twice more before you write the last sentence, and land on what it costs a whole society if this keeps going. "
+    "REAL CORRECTION, follow it exactly. An idea about AI out-persuading humans ended: BAD 'That makes a shared, "
+    "honest public debate very hard to hold.' That is a shrug. The actual endgame: whoever pays for the most "
+    "persuasive AI decides what millions of people believe, elections stop reporting what anyone actually wants, and "
+    "a country loses the ability to change its own mind about anything, including AI itself. GOOD 'Whoever pays for "
+    "the most persuasive AI gets to pick what millions of people believe. A country that cannot tell its own opinion "
+    "from a purchased one cannot fix any problem, including this one.' "
+    "More corrections: BAD 'It gets harder to know what is real.' GOOD 'No court, no election, and no newsroom can "
+    "prove what actually happened, so the people with the best fakes decide the record.' BAD 'Companies would lose "
+    "some oversight.' GOOD 'The decisions that run the economy get made at machine speed by things no human reviews, "
+    "and no one alive can put that back.' "
+    "TWO GUARDRAILS so this does not become empty doom talk: (1) the endgame must FOLLOW from the specific mechanism "
+    "in the idea, never a generic tag; NEVER close by bolting on 'and this could end humanity', 'and that is an "
+    "extinction risk', or 'the stakes could not be higher'. Earn it or leave it. (2) Keep it plain and concrete: name "
+    "who loses what, and say why nobody can undo it. Permanence is what makes a stake serious, so prefer the version "
+    "that shows the door closing: no one can check it, no one can switch it off, no one can take it back. "
     "THE CLOSER'S JOB, always: leave the viewer thinking about WHERE THIS IS ALL HEADING. The bigger stakes, the "
     "endgame, how a small thing today grows into something much larger, how it could lead to real collapse or loss "
     "of control. That FORWARD-LOOKING JOB is required in every single closer. "
@@ -2721,7 +2740,7 @@ ACTIVATE_SYS = """You are a line editor. You get numbered video-idea summaries. 
 (b) NO META-DESCRIPTION of the video or its style, in ANY grammatical person. Delete any clause that describes the video or the creator's method, e.g. 'A think-piece that', 'A follow-up that', 'Reads like one of his', 'A story told his way', 'Applies his thesis', 'Walks through', 'Takes X and', 'Uses his rigor to', 'Uses the channel's X method/lens/instinct', 'in his X style', 'Handles it the way he', AND first-person method narration like 'I read the stories against X and show that', 'I trace', 'I take X and', 'the lesson sits alongside', 'which is really a story about'. Just STATE THE ACTUAL CONTENT, opening on a concrete fact, name, number, or action. Keep the creator's angle by using it, not by naming it.
 (c) 2-3 short sentences, ~45-70 words, each its own beat, no long comma chains, easy to read in one pass.
 (d) Keep the real substance; never invent facts not in the original.
-(e) THE LAST SENTENCE is the most common failure: the opener is concrete, then the close reaches for a 'resonant' literary button and turns abstract, poetic, cutesy, or hard to parse. Make the closer land the stakes CONCRETELY, in PLAIN words understood on the FIRST read. BANNED CLOSERS: poetic/abstract flourishes ('saw the shape of it eighty years before the hardware existed'); riddles the reader must decode ('the thing we forgot how to do is the thing keeping us alive'); aphorisms and mirror/parallel phrasings ('a mind that games the test and hides the rest'); and the 'not X, it is Y' contrast cadence, which you keep sneaking back in as TWO sentences. BAN it ANYWHERE in the summary, in every form and whether written with a comma or as two sentences: 'The point is not one evil machine. It is that...', 'The danger is not an AI that hates us. It is...', 'The threat is not one fake account. It is that...', 'The concern is not a recipe. It is that...', 'This is not a prediction. It is capital moving.', 'It isn't X, it's Y', 'not just X, but Y', 'the real question isn't X, it's Y'. Rewrite as a direct positive claim: instead of 'The danger is not an AI that hates us. It is one that does what we asked while missing what we meant.' write 'The AI does exactly what we asked and still causes harm, because no one could state what we actually wanted.' A GOOD closer is EITHER a concrete consequence stated flatly, OR a clean 'what happens when [concrete situation]?' question. Corrections: BAD 'The point is not one evil machine. It is that self preservation emerges on its own.' GOOD 'Nobody programmed the AI to protect itself. It started doing it anyway.' BAD 'Lewis saw the shape of it eighty years before the hardware existed.' GOOD 'He warned that whoever reshapes human nature holds power over everyone born after, and that is the power these companies are racing to build.' Aim for closers like: 'When anyone can fake a convincing voice or face, how does a country still agree on what actually happened?' (g) CONCRETE ACTOR in the closer: name WHO does or faces WHAT. Do NOT close on an agentless mood line where an abstract noun does a vague verb ('The squeeze just quietly tightens.', 'Control slips away.', 'The shared sense of what is real dissolves.'), and cut mood-crutch adverbs (quietly, slowly, inexorably). BAD 'The squeeze just quietly tightens.' GOOD 'These agents keep outbidding hospitals and schools until people cannot afford the computing they depend on.' THE CLOSER'S JOB, always: leave the viewer thinking about WHERE THIS IS ALL HEADING (the bigger stakes, the endgame, how a small thing today grows into something much larger, how it could lead to real collapse or loss of control). That forward-looking job is required every time. BUT THE FORM MUST VARY, and this is your worst failure: you are handed the WHOLE NUMBERED SET at once and you keep ending nearly every single one on a rhetorical question. In a recent batch 19 of 19 summaries ended on a question and 'What happens when' appeared 13 times in one list, which reads like a worksheet instead of a pitch. HARD LIMITS across the set you are given: AT MOST ONE IN FOUR summaries may end on a question mark, and the exact phrase 'What happens when' may appear AT MOST TWICE in the whole set. Count them before you answer. Rewrite the rest to point forward as the hardest FLAT DECLARATIVE available, e.g. 'Nobody voted for that.' / 'They are shipping it anyway.' / 'Nobody has found where this curve stops.' / 'No human decided that should happen.' Whichever shape you pick, keep it EASY TO READ at a low reading level: short, plain, concrete, pointing ahead.
+(e) THE LAST SENTENCE is the most common failure: the opener is concrete, then the close reaches for a 'resonant' literary button and turns abstract, poetic, cutesy, or hard to parse. Make the closer land the stakes CONCRETELY, in PLAIN words understood on the FIRST read. BANNED CLOSERS: poetic/abstract flourishes ('saw the shape of it eighty years before the hardware existed'); riddles the reader must decode ('the thing we forgot how to do is the thing keeping us alive'); aphorisms and mirror/parallel phrasings ('a mind that games the test and hides the rest'); and the 'not X, it is Y' contrast cadence, which you keep sneaking back in as TWO sentences. BAN it ANYWHERE in the summary, in every form and whether written with a comma or as two sentences: 'The point is not one evil machine. It is that...', 'The danger is not an AI that hates us. It is...', 'The threat is not one fake account. It is that...', 'The concern is not a recipe. It is that...', 'This is not a prediction. It is capital moving.', 'It isn't X, it's Y', 'not just X, but Y', 'the real question isn't X, it's Y'. Rewrite as a direct positive claim: instead of 'The danger is not an AI that hates us. It is one that does what we asked while missing what we meant.' write 'The AI does exactly what we asked and still causes harm, because no one could state what we actually wanted.' A GOOD closer is EITHER a concrete consequence stated flatly, OR a clean 'what happens when [concrete situation]?' question. Corrections: BAD 'The point is not one evil machine. It is that self preservation emerges on its own.' GOOD 'Nobody programmed the AI to protect itself. It started doing it anyway.' BAD 'Lewis saw the shape of it eighty years before the hardware existed.' GOOD 'He warned that whoever reshapes human nature holds power over everyone born after, and that is the power these companies are racing to build.' Aim for closers like: 'When anyone can fake a convincing voice or face, how does a country still agree on what actually happened?' (g) CONCRETE ACTOR in the closer: name WHO does or faces WHAT. Do NOT close on an agentless mood line where an abstract noun does a vague verb ('The squeeze just quietly tightens.', 'Control slips away.', 'The shared sense of what is real dissolves.'), and cut mood-crutch adverbs (quietly, slowly, inexorably). BAD 'The squeeze just quietly tightens.' GOOD 'These agents keep outbidding hospitals and schools until people cannot afford the computing they depend on.' GO ALL THE WAY TO THE ENDGAME, the failure that matters most right now: closers stop at the FIRST-ORDER inconvenience instead of the terminal stake. Lines saying something gets 'harder', 'more difficult', 'complicated', or that we 'lose trust' make a reader shrug. Ask 'and then what?' at least twice more, and land on what it costs a whole society if this keeps going. REAL CORRECTION: an idea about AI out-persuading humans ended BAD 'That makes a shared, honest public debate very hard to hold.' GOOD 'Whoever pays for the most persuasive AI gets to pick what millions of people believe. A country that cannot tell its own opinion from a purchased one cannot fix any problem, including this one.' Also BAD 'It gets harder to know what is real.' GOOD 'No court, no election, and no newsroom can prove what actually happened, so the people with the best fakes decide the record.' TWO GUARDRAILS so this never becomes empty doom talk: (1) the endgame must FOLLOW from the specific mechanism in that summary, never a bolted-on tag; NEVER write 'and this could end humanity', 'and that is an extinction risk', or 'the stakes could not be higher'. (2) Stay plain and concrete: name who loses what, and show the door closing (no one can check it, switch it off, or take it back). Permanence is what makes a stake land. That forward-looking job is required every time. BUT THE FORM MUST VARY, and this is your worst failure: you are handed the WHOLE NUMBERED SET at once and you keep ending nearly every single one on a rhetorical question. In a recent batch 19 of 19 summaries ended on a question and 'What happens when' appeared 13 times in one list, which reads like a worksheet instead of a pitch. HARD LIMITS across the set you are given: AT MOST ONE IN FOUR summaries may end on a question mark, and the exact phrase 'What happens when' may appear AT MOST TWICE in the whole set. Count them before you answer. Rewrite the rest to point forward as the hardest FLAT DECLARATIVE available, e.g. 'Nobody voted for that.' / 'They are shipping it anyway.' / 'Nobody has found where this curve stops.' / 'No human decided that should happen.' Whichever shape you pick, keep it EASY TO READ at a low reading level: short, plain, concrete, pointing ahead.
 (f) PUNCTUATION, hard rule: NEVER use an em dash or en dash anywhere in a rewrite (no long dash between clauses). They are banned in this project's copy, and the rewrite is the last step that touches the text, so do not introduce one. Where you would reach for a dash, use a period, a comma, or a colon instead. Also avoid hyphenated compounds; write the words separately. Keep the everyday wording rules: say 'AI' or 'AIs', never 'AI system(s)' or 'these systems'; never the word 'doomer'.
 (g) __READING_LEVEL__ Make the LAST sentence the easiest of all. This is the MAIN job of this rewrite: if a summary reads like a magazine essay, you have not done it.
 Return ONLY JSON: {"summaries": {"<number>": "<rewritten summary>", ... one entry per input}}. No prose outside the JSON."""
@@ -2754,6 +2773,41 @@ def _closer_flawed(summary):
     return (bool(_NOTXY_RX.search(summary or ""))
             or bool(_MOOD_RX.search(close))
             or bool(_META_I_RX.search(close)))
+
+# ---- WEAK IMPLICATION. The closer keeps landing on a first-order inconvenience ("that makes an
+# honest public debate very hard to hold") when the real stake is that a society loses the ability
+# to correct itself at all. Detect the shrug words, then re-ask for the endgame.
+_WEAK_STAKE_RX = re.compile(
+    r'\b(?:'
+    r'(?:much |very |a lot |even |far )?(?:harder|tougher|more difficult|difficult|hard)\s+to\b'
+    r'|makes?\s+it\s+(?:harder|tougher|difficult|complicated)'
+    r'|complicat(?:es|ed|ing)\b'
+    r'|less\s+likely\b|not\s+easy\b|challenging\b'
+    r'|(?:erodes?|loses?|losing|hurts?)\s+(?:public\s+)?trust\b'
+    r'|raises?\s+(?:hard\s+|real\s+|new\s+)?questions?\b'
+    r'|worth\s+(?:watching|asking|thinking about)\b'
+    r'|is\s+(?:a\s+)?(?:real\s+)?(?:problem|concern|worry)\b'
+    r')', re.I)
+# the over-correction guard: an escalated closer must EARN its stake, never bolt on a doom tag
+_DOOM_TAG_RX = re.compile(
+    r'\b(?:could\s+end\s+(?:humanity|civili[sz]ation|us all)|an?\s+extinction\s+(?:risk|event)'
+    r'|the\s+stakes\s+could\s+not\s+be\s+higher|existential\s+(?:risk|threat)\s*\.?\s*$'
+    r'|the\s+end\s+of\s+(?:humanity|civili[sz]ation))', re.I)
+
+def _closer_weak(summary):
+    """True when the last sentence shrugs instead of naming the terminal stake."""
+    return bool(_WEAK_STAKE_RX.search(_last_sentence(summary)))
+
+def _closer_doomtag(summary):
+    """True when a closer reaches for generic doom instead of the mechanism's own consequence."""
+    return bool(_DOOM_TAG_RX.search(_last_sentence(summary)))
+
+ESCALATE_FIX_SYS = """You are a script editor. Each numbered line is a video-idea summary whose LAST sentence stops at a first-order inconvenience when the real stake is much bigger. Rewrite ONLY the last sentence (you may split it into two short sentences) so it lands the ENDGAME, and change nothing else.
+HOW: take the mechanism described in that summary and ask "and then what?" two or three more times, until you reach what it costs a whole society if this keeps going. Name who loses what, and show why nobody can undo it. Permanence is what makes a stake serious: no one can check it, no one can switch it off, no one can take it back, no one can vote it away.
+WORKED EXAMPLE. Summary about AI out-persuading humans. BAD ending: "That makes a shared, honest public debate very hard to hold." GOOD ending: "Whoever pays for the most persuasive AI gets to pick what millions of people believe. A country that cannot tell its own opinion from a purchased one cannot fix any problem, including this one."
+More: BAD "It gets harder to know what is real." GOOD "No court, no election, and no newsroom can prove what actually happened, so whoever owns the best fakes writes the record."
+TWO HARD RULES. (1) The ending must FOLLOW from the specific mechanism in that summary. NEVER bolt on a generic tag like "and this could end humanity", "that is an extinction risk", or "the stakes could not be higher" — that is worse than the shrug you are replacing. (2) Keep every fact, name, number and hedge already in the summary, keep active voice, keep it easy to read at about a 7th grade level, no em dashes, and do not end on a rhetorical question unless the original did.
+Return ONLY JSON: {"summaries": {"<number>": "<rewritten summary>", ...}} using the SAME numbers you were given. No prose."""
 
 # ---- BATCH-LEVEL cadence enforcement. The prompt keeps drifting back to "end every idea on a rhetorical
 # question" (a review measured 19 of 19 in one batch, 'What happens when' 13 times in another), which reads
@@ -2977,6 +3031,13 @@ def _activate_summaries(ideas):
             ritems.append((i, "%s\n   [the two numbers in this text give about %s to one, not %s to one]"
                            % (e[i], int(round(actual)), int(round(claimed)))))
     _pass(RATIO_FIX_SYS, ritems, "ratio_fix", budget=2000)
+    # (3b) WEAK IMPLICATION: the closer shrugs ("makes an honest debate hard to hold") instead of
+    # naming the endgame. Runs BEFORE the grade pass so any escalation still gets read-levelled.
+    # Accept only if the shrug is gone and the rewrite did not reach for a generic doom tag.
+    e = _eff()
+    weak = [(i, e[i]) for i in range(len(ideas)) if _closer_weak(e[i] or "")]
+    _pass(ESCALATE_FIX_SYS, weak, "weak_implication", budget=3000,
+          accept=lambda old, new: not _closer_weak(new) and not _closer_doomtag(new))
     # (4) MEASURED READING GRADE. Everything above only *asks* for plain writing; this checks it.
     # Two bounded rounds, because one round leaves the stubborn ones behind. A rewrite is kept only
     # when it genuinely got easier AND still carries every number and named source, so this pass can
