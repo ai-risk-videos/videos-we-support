@@ -2369,15 +2369,33 @@ def events(key: str = "", n: int = 300):
 # ---- server-side pre-generation cache: personal links resolve instantly, teammates get
 # the SAME ideas (deterministic across devices), and organic generations warm it too ----
 PREGEN_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pregen.json")
+# Bump this whenever the writing rules change in a way that makes older cached ideas WRONG for the
+# current bar (reading level, cadence, fact discipline). pregen.json is committed to the repo, so it
+# ships with every deploy and CANNOT go stale on its own: entries stamped with an older version are
+# ignored and regenerated. This exists because @kurzgesagt and @fireship silently served ideas from
+# before the reading-level work (measured grade 14.1 and 25.1) while fresh channels were at 7.
+GEN_VERSION = 3
 _PREGEN = None
 def _pregen():
+    """Cached payloads for the CURRENT GEN_VERSION only. Older entries are dropped on load so a
+    stale pre-baked channel can never out-rank a fresh generation."""
     global _PREGEN
     if _PREGEN is None:
         try:
             with open(PREGEN_PATH, encoding="utf-8") as f:
-                _PREGEN = json.load(f)
+                raw = json.load(f)
         except Exception:
-            _PREGEN = {}
+            raw = {}
+        kept, dropped = {}, []
+        for k, v in (raw.items() if isinstance(raw, dict) else []):
+            if isinstance(v, dict) and int(v.get("gen_version") or 0) >= GEN_VERSION:
+                kept[k] = v
+            else:
+                dropped.append(k)
+        if dropped:
+            _log_event({"t": "pregen_stale_dropped", "n": len(dropped), "ch": dropped[:5],
+                        "need": GEN_VERSION})
+        _PREGEN = kept
     return _PREGEN
 
 def _chan_key(u):
@@ -2388,6 +2406,8 @@ def _chan_key(u):
 
 def _pregen_store(url, payload):
     try:
+        if isinstance(payload, dict):
+            payload = dict(payload, gen_version=GEN_VERSION)  # stamp so a later rules change invalidates it
         _pregen()[_chan_key(url)] = payload
         # atomic write (tmp + os.replace): a crash mid-dump must never truncate pregen.json and
         # silently wipe every warmed channel (matches _transcripts_store).
