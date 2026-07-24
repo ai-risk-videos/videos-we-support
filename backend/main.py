@@ -3044,7 +3044,10 @@ def _activate_summaries(ideas):
     # simplify but can never quietly cost us a fact (the failure the earlier review found).
     def _grade_ok(old, new):
         return _fk_grade(new) < _fk_grade(old) - 0.3 and _keeps_substance(old, new)
-    for _round in range(2):
+    # 3 rounds, not 2: the endgame-escalation pass above deliberately makes closers bigger, which
+    # costs reading grade, so the level pass needs another bite. Budget-guarded, and the accept
+    # check still refuses any rewrite that loses a fact or fails to get easier.
+    for _round in range(3):
         e = _eff()
         hard = [(i, "%s\n   [this reads at grade %s; bring it to about %s]"
                  % (e[i], _fk_grade(e[i] or ""), int(GRADE_TARGET)))
