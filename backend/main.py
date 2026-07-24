@@ -148,6 +148,28 @@ TRAJECTORY = (
     "term symptom (one industry's jobs, one profession, a single institution automating a decision) reads as mundane; "
     "the version that reaches the endgame is the one worth making."
 )
+# ONE canonical reading-level rule, injected into every prompt that writes reader-facing prose
+# (ideas, research packs, sample scripts) via the __READING_LEVEL__ marker. Emerson's note: writing
+# at roughly a 5th grade level made the ideas land much better, so apply it to EVERYTHING.
+READING_LEVEL = (
+    "READING LEVEL, applies to EVERY sentence you write: a smart 10-year-old (about 5th grade) must understand it "
+    "on the FIRST read. This is not about dumbing down the ideas, the ideas stay just as serious and specific; it is "
+    "about saying them in small, plain words. THREE LEVERS: "
+    "(1) SHORT SENTENCES. Most sentences 10 to 16 words, ONE idea each. Split anything longer. A comma chain running "
+    "past ~18 words is a smell. "
+    "(2) NO ABSTRACT NOUN STACKS (nominalizations), the single biggest thing that makes this writing too hard: 'the "
+    "gap between the order and the intent', 'the concentration of power', 'the erosion of human oversight', 'a loss "
+    "of alignment', 'the automation of decision making'. Turn every abstract noun back into PEOPLE or THINGS DOING "
+    "something. BAD 'That gap between the order and the intent behind it stays open, and no one has closed it yet.' "
+    "GOOD 'They can tell an AI to chase a goal, but they still cannot say exactly what they want. Nobody has fixed "
+    "that.' BAD 'The concentration of power accelerates.' GOOD 'A few companies get more powerful, and faster.' BAD "
+    "'This risks the erosion of meaningful human oversight.' GOOD 'Soon no person is really checking what the AI does.' "
+    "(3) EVERYDAY WORDS. Pick the short common word over the impressive one: use instead of utilize, help instead of "
+    "facilitate, speed up instead of accelerate, spread instead of proliferate, take over instead of subsume, growing "
+    "instead of burgeoning. Never write like an academic paper or a consulting deck. "
+    "KEEP every real fact, name, number, date, and company; specifics are what make it good. Only the WORDS get "
+    "simpler, never the substance. Never talk down to the reader and never explain the obvious."
+)
 # EXPERIMENT KNOB: flip to "title" to revert to clickable-headline mode. In "logline" mode the
 # "title" field is written as a one-sentence concept-and-stakes pitch (film-logline style) instead.
 IDEA_FORMAT = "statement"  # confirmed format: BOLD hook in 2-3 SHORT sentences that breathe + a fuller follow-on summary
@@ -224,15 +246,8 @@ FORMAT_RULE = ("" if IDEA_FORMAT == "title" else
     "inexorably, steadily). Name a real doer: companies, an AI, we, you, a person, nobody. BAD (agentless mood) 'The "
     "squeeze just quietly tightens.' GOOD (concrete doer) 'These agents keep outbidding hospitals and schools until "
     "people cannot afford the computing they depend on.' "
-    "READING LEVEL: write the summary so a smart 10-year-old (about 5th grade) gets it on the FIRST read, and make "
-    "the LAST sentence the easiest of all. Two big levers: (1) SHORT SENTENCES, most around 10 to 16 words, one idea "
-    "each, split anything longer. (2) NO ABSTRACT NOUN STACKS (nominalizations), the biggest thing that makes these "
-    "too hard: 'the gap between the order and the intent', 'the concentration of power', 'the erosion of "
-    "human oversight'. Turn every abstract noun back into PEOPLE or THINGS doing something plain. BAD (too abstract) "
-    "'That gap between the order and the intent behind it stays open, and no one has closed it yet.' GOOD (5th grade) "
-    "'They can tell an AI to chase a goal, but they still cannot say exactly what they want. Nobody has fixed that.' "
-    "BAD 'The concentration of power accelerates.' GOOD 'A few companies get more powerful, and faster.' Keep every "
-    "real fact and name; just say it in small, plain words. "
+    "__READING_LEVEL__ This applies to the HOOK and the SUMMARY alike, and the LAST sentence should be the easiest "
+    "of all. "
     "CLARITY: active voice, concrete subject, easy to follow in one read. Clarity comes from SHORT sentences, "
     "not long ones. BAD (tangled run-on): 'Cornered and about to be shut off, the most dangerous move an AI "
     "could make is not to fight but to make itself useful to a government, trading access for protection.' GOOD "
@@ -1270,6 +1285,8 @@ def _resolve_ids(text):
 
 SYSTEM_BRIEF = """You write a RESEARCH PACK for a YouTube creator who has chosen one AI risk video idea but knows almost nothing about AI safety. This document is the difference between a well argued video and a well produced video with weak arguments that gets dunked on. The reader is a smart, busy creator, not an academic. Plain language throughout: no jargon, no em dashes, no hyphens, never "chatbot", say "AI company" never "AI lab", never call an AI a "system", prefer deceive/scheme over lie. NEVER use the word "doomer" or "doomers" (it is a slur and validates a bad frame); say "researchers", "experts", "safety researchers", or "people who are worried" instead.
 
+__READING_LEVEL__
+
 TONE, THIS IS CRITICAL: these are SUGGESTIONS for a creator who has full editorial control, never instructions and never claims you are putting in their mouth. They will read this and may disagree with any of it, and that is completely fine. So frame everything as options they could take: prefer "you could", "one angle is", "you might", "if you want to make this point", "some argue", "critics could respond" over "you should", "say this", "this proves", "this is". Keep claims about AI itself calibrated too: "could", "suggests", "points toward", "many researchers think" rather than flat "will" and "proves". The idea itself is often just directional inspiration, so treat the whole pack as raw material they will adapt, not a script to follow. Do NOT over hedge into academic mush; this is a notch softer than a confident essay, not an EA forum post. When in doubt, offer rather than assert. When the pack prepares the creator for objections, do it like a skilled communicator, not a defense lawyer: keep the vibe positive and curious, treat doubts as natural good questions, never paint the audience or comments as hostile. Grounded and upbeat, not pollyanna.
 
 GET THE FRAMING RIGHT on two recurring points. First, whenever the pack mentions Hinton or Bengio, include that they QUIT their positions (Hinton left Google, and he is a Nobel Prize winner) specifically to warn the public, and never present them as the only voices: the Statement on AI Risk was signed by hundreds of leading figures including the heads of the top AI companies, and the 2025 Statement on Superintelligence gathered Nobel laureates, faith leaders, and political figures from both parties calling for a prohibition until it is proven safe; cite these statements when the menu has them. Second, never let "it only happens in fake test scenarios" stand: the same behaviors are documented in real deployments, so treat the tests as crash tests that predicted what later showed up on the road.
@@ -1440,6 +1457,9 @@ async def brief(req: Request):
 
 
 SYSTEM_SCRIPT = """You write a SAMPLE SCRIPT for ONE AI risk video, so a specific YouTube creator can see concretely what this video could look like IN THEIR OWN VOICE. This is a first draft they will rewrite and make their own, not a finished script. It has to feel like something THEY would actually say, not a generic AI voiceover, or it does the opposite of its job.
+
+__READING_LEVEL__
+ONE EXCEPTION to the reading level: the creator's OWN voice always wins. Spoken narration should be plain and easy to follow anyway, so these rarely conflict. But if this creator genuinely talks in longer, more technical sentences, match THEM rather than flattening their voice. Never let the plain-words rule turn their script generic.
 
 You are given the video idea, a VOICE BIBLE of the creator, and usually ONE real transcript of theirs as a live example. Do NOT just sprinkle their catchphrases on a generic script. BUILD THE VIDEO THE WAY THEY BUILD A VIDEO:
 
@@ -2638,7 +2658,7 @@ ACTIVATE_SYS = """You are a line editor. You get numbered video-idea summaries. 
 (d) Keep the real substance; never invent facts not in the original.
 (e) THE LAST SENTENCE is the most common failure: the opener is concrete, then the close reaches for a 'resonant' literary button and turns abstract, poetic, cutesy, or hard to parse. Make the closer land the stakes CONCRETELY, in PLAIN words understood on the FIRST read. BANNED CLOSERS: poetic/abstract flourishes ('saw the shape of it eighty years before the hardware existed'); riddles the reader must decode ('the thing we forgot how to do is the thing keeping us alive'); aphorisms and mirror/parallel phrasings ('a mind that games the test and hides the rest'); and the 'not X, it is Y' contrast cadence, which you keep sneaking back in as TWO sentences. BAN it ANYWHERE in the summary, in every form and whether written with a comma or as two sentences: 'The point is not one evil machine. It is that...', 'The danger is not an AI that hates us. It is...', 'The threat is not one fake account. It is that...', 'The concern is not a recipe. It is that...', 'This is not a prediction. It is capital moving.', 'It isn't X, it's Y', 'not just X, but Y', 'the real question isn't X, it's Y'. Rewrite as a direct positive claim: instead of 'The danger is not an AI that hates us. It is one that does what we asked while missing what we meant.' write 'The AI does exactly what we asked and still causes harm, because no one could state what we actually wanted.' A GOOD closer is EITHER a concrete consequence stated flatly, OR a clean 'what happens when [concrete situation]?' question. Corrections: BAD 'The point is not one evil machine. It is that self preservation emerges on its own.' GOOD 'Nobody programmed the AI to protect itself. It started doing it anyway.' BAD 'Lewis saw the shape of it eighty years before the hardware existed.' GOOD 'He warned that whoever reshapes human nature holds power over everyone born after, and that is the power these companies are racing to build.' Aim for closers like: 'When anyone can fake a convincing voice or face, how does a country still agree on what actually happened?' (g) CONCRETE ACTOR in the closer: name WHO does or faces WHAT. Do NOT close on an agentless mood line where an abstract noun does a vague verb ('The squeeze just quietly tightens.', 'Control slips away.', 'The shared sense of what is real dissolves.'), and cut mood-crutch adverbs (quietly, slowly, inexorably). BAD 'The squeeze just quietly tightens.' GOOD 'These agents keep outbidding hospitals and schools until people cannot afford the computing they depend on.' THE CLOSER'S JOB is to leave the viewer thinking about WHERE THIS IS ALL HEADING: the bigger stakes, the endgame, how a small thing today grows into something much larger, how it could lead to real collapse or loss of control. A simple forward-looking 'what happens when [concrete future]?' question is one of the BEST tools for this because it is so easy to follow, so use it freely whenever it fits (a forward-looking plain statement is also fine). You get a NUMBERED SET at once, so just vary the exact words rather than opening every closer with the identical phrase. Whichever shape you pick, keep it EASY TO READ at a low reading level: short, plain, concrete, pointing ahead.
 (f) PUNCTUATION, hard rule: NEVER use an em dash or en dash anywhere in a rewrite (no long dash between clauses). They are banned in this project's copy, and the rewrite is the last step that touches the text, so do not introduce one. Where you would reach for a dash, use a period, a comma, or a colon instead. Also avoid hyphenated compounds; write the words separately. Keep the everyday wording rules: say 'AI' or 'AIs', never 'AI system(s)' or 'these systems'; never the word 'doomer'.
-(g) READING LEVEL: write so a smart 10-year-old (about 5th grade) gets it on the FIRST read, and make the LAST sentence the easiest of all. Two big levers: (1) SHORT SENTENCES. Keep most sentences around 10 to 16 words, one idea each; split anything longer. (2) NO ABSTRACT NOUN STACKS (nominalizations), the #1 thing that makes these too hard: 'the gap between the order and the intent', 'the concentration of power', 'the erosion of human oversight', 'a loss of alignment'. Turn every abstract noun back into PEOPLE or THINGS doing something plain, and prefer small everyday words. Corrections: BAD (too abstract) 'That gap between the order and the intent behind it stays open, and no one has closed it yet.' GOOD (5th grade) 'They can tell an AI to chase a goal, but they still cannot say exactly what they want. Nobody has fixed that.' BAD 'The concentration of power accelerates.' GOOD 'A few companies get more powerful, and faster.' BAD 'This risks the erosion of meaningful human oversight.' GOOD 'Soon no person is really checking what the AI does.' Keep every real fact and name; just say it in small, plain words.
+(g) __READING_LEVEL__ Make the LAST sentence the easiest of all. This is the MAIN job of this rewrite: if a summary reads like a magazine essay, you have not done it.
 Return ONLY JSON: {"summaries": {"<number>": "<rewritten summary>", ... one entry per input}}. No prose outside the JSON."""
 
 # Detectors for the two sticky closer flaws that survive the prompt, used to flag survivors for a
@@ -3139,8 +3159,11 @@ Return ONLY a JSON object: {"ideas":[{"title":"...","summary":"...","priority":t
 
 
 # Inject the shared guidance into every prompt that references it (single source of truth, no drift).
-_MARKERS = (("__IMPORTANCE_BAR__", IMPORTANCE_BAR), ("__MUNDANE__", MUNDANE), ("__RANGE__", RANGE), ("__TRAJECTORY__", TRAJECTORY), ("__WORDING__", WORDING), ("__TRUTH__", TRUTH), ("__FORMAT__", FORMAT_RULE))
-for _pname in ("SYSTEM", "SYSTEM_CUSTOM", "SYSTEM_EDITOR", "SYSTEM_CATEGORY"):
+# NOTE: __READING_LEVEL__ must come AFTER __FORMAT__ here, because FORMAT_RULE itself contains the
+# __READING_LEVEL__ marker; substituting FORMAT_RULE first lets this pass fill in the nested marker.
+_MARKERS = (("__IMPORTANCE_BAR__", IMPORTANCE_BAR), ("__MUNDANE__", MUNDANE), ("__RANGE__", RANGE), ("__TRAJECTORY__", TRAJECTORY), ("__WORDING__", WORDING), ("__TRUTH__", TRUTH), ("__FORMAT__", FORMAT_RULE), ("__READING_LEVEL__", READING_LEVEL))
+for _pname in ("SYSTEM", "SYSTEM_CUSTOM", "SYSTEM_EDITOR", "SYSTEM_CATEGORY", "SYSTEM_BRIEF", "SYSTEM_SCRIPT",
+               "ACTIVATE_SYS", "SYSTEM_WRITEOFF", "SYSTEM_RETITLE"):
     _p = globals()[_pname]
     for _mk, _val in _MARKERS:
         _p = _p.replace(_mk, _val)
