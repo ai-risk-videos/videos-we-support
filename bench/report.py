@@ -99,6 +99,37 @@ def build(after_path, before_path):
         pair_html = ("<div class='note'>No matched fixed-idea pairs yet. They appear once two runs "
                      "both include the concept half (needs EVENTS_KEY).</div>")
 
+    # THE MAIN EVENT: the whole old batch next to the whole new batch, for each channel. Fresh runs
+    # produce different ideas, so these are not paired line by line and are not meant to be. The
+    # point is to read both lists and judge whether the batch as a whole got better.
+    def idea_li(x, n):
+        g = checks.reading_grade(x.get("summary", ""))
+        return ("<li><div class='ihead'><span class='inum'>%d</span><span class='ig'>grade %s</span></div>"
+                "<p class='ihk'>%s</p><p class='ism'>%s</p></li>"
+                % (n, g, esc(x.get("title")), esc(x.get("summary"))))
+
+    batches = ""
+    if before:
+        bmap, amap = group_map(before), group_map(after)
+        for k, ag in amap.items():
+            if ag["kind"] != "channel":
+                continue
+            bg = bmap.get(k)
+            if not bg or not bg["ideas"]:
+                continue
+            bs, as_ = bg.get("stats") or {}, ag.get("stats") or {}
+            bl = "".join(idea_li(x, i + 1) for i, x in enumerate(bg["ideas"]))
+            al = "".join(idea_li(x, i + 1) for i, x in enumerate(ag["ideas"]))
+            batches += """<div class="batch">
+              <h3 class="chan">%s</h3>
+              <div class="cols">
+                <div class="bcol bad"><div class="bhead">OLD BATCH &middot; %d ideas &middot; median grade %s</div><ol class="ilist">%s</ol></div>
+                <div class="bcol good"><div class="bhead">NEW BATCH &middot; %d ideas &middot; median grade %s</div><ol class="ilist">%s</ol></div>
+              </div></div>""" % (esc(ag["id"]), len(bg["ideas"]), bs.get("grade_median", "-"), bl,
+                                 len(ag["ideas"]), as_.get("grade_median", "-"), al)
+    if not batches:
+        batches = "<div class='note'>Need two runs that both cover the same channel.</div>"
+
     # every current violation, so nothing is hidden behind a count
     viol = ""
     for g in after["groups"]:
@@ -146,6 +177,19 @@ tr:last-child td{border-bottom:0}
 ul.viol{list-style:none;padding:0;margin:0}
 ul.viol li{background:var(--card);border:1px solid var(--edge);border-left:3px solid var(--warn);border-radius:9px;padding:10px 13px;margin:0 0 8px;font-size:13.5px}
 ul.viol .q{color:var(--mut);font-size:12.5px;margin-top:5px;font-style:italic}
+.batch{margin:0 0 30px}
+.bcol{background:var(--card);border:1px solid var(--edge);border-radius:11px;padding:0 0 6px;overflow:hidden}
+.bcol.bad{border-top:3px solid var(--bad)}.bcol.good{border-top:3px solid var(--good)}
+.bhead{font-size:11px;letter-spacing:.09em;font-weight:700;padding:10px 14px;border-bottom:1px solid #1c222b;color:var(--mut)}
+.bcol.bad .bhead{color:var(--bad)}.bcol.good .bhead{color:var(--good)}
+ol.ilist{list-style:none;margin:0;padding:6px 14px 0}
+ol.ilist li{padding:11px 0;border-bottom:1px solid #1a2029}
+ol.ilist li:last-child{border-bottom:0}
+.ihead{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.inum{width:19px;height:19px;border-radius:50%;background:#1d3a63;color:#cfe0ff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.ig{font-size:10.5px;color:var(--mut);font-variant-numeric:tabular-nums}
+.ihk{font-weight:700;font-size:13.6px;margin:0 0 5px;line-height:1.4}
+.ism{color:#c4cdd6;font-size:13px;margin:0}
 .note{background:#12171e;border:1px solid var(--edge);border-radius:10px;padding:12px 14px;color:var(--mut);font-size:13.5px}
 .how{background:#12171e;border:1px solid var(--edge);border-radius:10px;padding:12px 14px;color:var(--mut);font-size:13px;margin-top:26px}
 .how code{color:var(--tx);background:#0b0e13;padding:2px 6px;border-radius:5px}
@@ -156,11 +200,16 @@ ul.viol .q{color:var(--mut);font-size:12.5px;margin-top:5px;font-style:italic}
 <p class="sub">BEFORE: __BTS____BLBL__ &middot; __BSTAT__</p>
 <div class="verdict __VCLS__">__VERDICT__</div>
 
+<h2>The old batch next to the new batch</h2>
+<p class="sub" style="margin-bottom:14px">Read both and judge. These are whole batches from the same channel, so the ideas differ, that is the point: is the new list of ideas better written and better thought out than the old list?</p>
+__BATCHES__
+
+<h2>Same idea, written before and after</h2>
+<p class="sub" style="margin-bottom:14px">Here the model is handed the identical idea both times, so the only thing that changes is the writing.</p>
+__PAIRS__
+
 <h2>Your feedback, as checks</h2>
 <table><tr><th>Rule</th><th>Before</th><th>After</th><th></th></tr>__ROWS__</table>
-
-<h2>Same idea, before and after</h2>
-__PAIRS__
 
 <h2>Everything still failing</h2>
 __VIOL__
@@ -179,6 +228,7 @@ That regenerates this page from two fresh snapshots. New feedback becomes a new 
             .replace("__BLBL__", (" &middot; " + esc(before["label"])) if before and before.get("label") else "")
             .replace("__BSTAT__", statline(before["totals"]["stats"]) if before else "-")
             .replace("__VCLS__", vcls).replace("__VERDICT__", esc(verdict))
+            .replace("__BATCHES__", batches)
             .replace("__ROWS__", rows).replace("__PAIRS__", pair_html).replace("__VIOL__", viol))
 
     open(OUT, "w").write(page)
