@@ -219,6 +219,12 @@ FORMAT_RULE = ("" if IDEA_FORMAT == "title" else
     "question form for only a minority, roughly one idea in four at most, and never reuse the literal words 'What "
     "happens when' as a stock opener more than once or twice in the whole list. A list where nearly every idea ends "
     "on a rhetorical question reads as robotic. "
+    "CONCRETE ACTOR: the closer must name WHO does or faces WHAT. Do NOT close on an agentless mood line where an "
+    "abstract noun performs a vague verb, e.g. 'The squeeze just quietly tightens.', 'Control slips away.', 'The "
+    "shared sense of what is real dissolves.', 'The gap widens.' Cut mood adverbs used as a crutch (quietly, slowly, "
+    "inexorably, steadily). Name a real doer: companies, an AI, we, you, a person, nobody. BAD (agentless mood) 'The "
+    "squeeze just quietly tightens.' GOOD (concrete doer) 'These agents keep outbidding hospitals and schools until "
+    "people cannot afford the computing they depend on.' "
     "CLARITY: active voice, concrete subject, easy to follow in one read. Clarity comes from SHORT sentences, "
     "not long ones. BAD (tangled run-on): 'Cornered and about to be shut off, the most dangerous move an AI "
     "could make is not to fight but to make itself useful to a government, trading access for protection.' GOOD "
@@ -2622,20 +2628,28 @@ ACTIVATE_SYS = """You are a line editor. You get numbered video-idea summaries. 
 (b) NO META-DESCRIPTION of the video or its style, in ANY grammatical person. Delete any clause that describes the video or the creator's method, e.g. 'A think-piece that', 'A follow-up that', 'Reads like one of his', 'A story told his way', 'Applies his thesis', 'Walks through', 'Takes X and', 'Uses his rigor to', 'Uses the channel's X method/lens/instinct', 'in his X style', 'Handles it the way he', AND first-person method narration like 'I read the stories against X and show that', 'I trace', 'I take X and', 'the lesson sits alongside', 'which is really a story about'. Just STATE THE ACTUAL CONTENT, opening on a concrete fact, name, number, or action. Keep the creator's angle by using it, not by naming it.
 (c) 2-3 short sentences, ~45-70 words, each its own beat, no long comma chains, easy to read in one pass.
 (d) Keep the real substance; never invent facts not in the original.
-(e) THE LAST SENTENCE is the most common failure: the opener is concrete, then the close reaches for a 'resonant' literary button and turns abstract, poetic, cutesy, or hard to parse. Make the closer land the stakes CONCRETELY, in PLAIN words understood on the FIRST read. BANNED CLOSERS: poetic/abstract flourishes ('saw the shape of it eighty years before the hardware existed'); riddles the reader must decode ('the thing we forgot how to do is the thing keeping us alive'); aphorisms and mirror/parallel phrasings ('a mind that games the test and hides the rest'); and the 'not X, it is Y' contrast cadence, which you keep sneaking back in as TWO sentences. BAN it ANYWHERE in the summary, in every form and whether written with a comma or as two sentences: 'The point is not one evil machine. It is that...', 'The danger is not an AI that hates us. It is...', 'The threat is not one fake account. It is that...', 'The concern is not a recipe. It is that...', 'This is not a prediction. It is capital moving.', 'It isn't X, it's Y', 'not just X, but Y', 'the real question isn't X, it's Y'. Rewrite as a direct positive claim: instead of 'The danger is not an AI that hates us. It is one that does what we asked while missing what we meant.' write 'The AI does exactly what we asked and still causes harm, because no one could state what we actually wanted.' A GOOD closer is EITHER a concrete consequence stated flatly, OR a clean 'what happens when [concrete situation]?' question. Corrections: BAD 'The point is not one evil machine. It is that self preservation emerges on its own.' GOOD 'Nobody programmed the AI to protect itself. It started doing it anyway.' BAD 'Lewis saw the shape of it eighty years before the hardware existed.' GOOD 'He warned that whoever reshapes human nature holds power over everyone born after, and that is the power these companies are racing to build.' Aim for closers like: 'When anyone can fake a convincing voice or face, how does a country still agree on what actually happened?' BUT the question is ONE tool, not the default. You get a NUMBERED SET at once, so VARY the closing shape across it. Do NOT end most summaries on a question. Make the MAJORITY flat declarative statements of the concrete stake (e.g. 'Nobody voted for that.', 'The control problem stays real and unsolved.'), and use the 'what happens when...?' question for only a minority, roughly one in four at most; never reuse the literal words 'What happens when' more than once or twice across the set. A set where nearly every summary ends on a rhetorical question reads as robotic.
+(e) THE LAST SENTENCE is the most common failure: the opener is concrete, then the close reaches for a 'resonant' literary button and turns abstract, poetic, cutesy, or hard to parse. Make the closer land the stakes CONCRETELY, in PLAIN words understood on the FIRST read. BANNED CLOSERS: poetic/abstract flourishes ('saw the shape of it eighty years before the hardware existed'); riddles the reader must decode ('the thing we forgot how to do is the thing keeping us alive'); aphorisms and mirror/parallel phrasings ('a mind that games the test and hides the rest'); and the 'not X, it is Y' contrast cadence, which you keep sneaking back in as TWO sentences. BAN it ANYWHERE in the summary, in every form and whether written with a comma or as two sentences: 'The point is not one evil machine. It is that...', 'The danger is not an AI that hates us. It is...', 'The threat is not one fake account. It is that...', 'The concern is not a recipe. It is that...', 'This is not a prediction. It is capital moving.', 'It isn't X, it's Y', 'not just X, but Y', 'the real question isn't X, it's Y'. Rewrite as a direct positive claim: instead of 'The danger is not an AI that hates us. It is one that does what we asked while missing what we meant.' write 'The AI does exactly what we asked and still causes harm, because no one could state what we actually wanted.' A GOOD closer is EITHER a concrete consequence stated flatly, OR a clean 'what happens when [concrete situation]?' question. Corrections: BAD 'The point is not one evil machine. It is that self preservation emerges on its own.' GOOD 'Nobody programmed the AI to protect itself. It started doing it anyway.' BAD 'Lewis saw the shape of it eighty years before the hardware existed.' GOOD 'He warned that whoever reshapes human nature holds power over everyone born after, and that is the power these companies are racing to build.' Aim for closers like: 'When anyone can fake a convincing voice or face, how does a country still agree on what actually happened?' (g) CONCRETE ACTOR in the closer: name WHO does or faces WHAT. Do NOT close on an agentless mood line where an abstract noun does a vague verb ('The squeeze just quietly tightens.', 'Control slips away.', 'The shared sense of what is real dissolves.'), and cut mood-crutch adverbs (quietly, slowly, inexorably). BAD 'The squeeze just quietly tightens.' GOOD 'These agents keep outbidding hospitals and schools until people cannot afford the computing they depend on.' BUT the question is ONE tool, not the default. You get a NUMBERED SET at once, so VARY the closing shape across it. Do NOT end most summaries on a question. Make the MAJORITY flat declarative statements of the concrete stake (e.g. 'Nobody voted for that.', 'The control problem stays real and unsolved.'), and use the 'what happens when...?' question for only a minority, roughly one in four at most; never reuse the literal words 'What happens when' more than once or twice across the set. A set where nearly every summary ends on a rhetorical question reads as robotic.
 (f) PUNCTUATION, hard rule: NEVER use an em dash or en dash anywhere in a rewrite (no long dash between clauses). They are banned in this project's copy, and the rewrite is the last step that touches the text, so do not introduce one. Where you would reach for a dash, use a period, a comma, or a colon instead. Also avoid hyphenated compounds; write the words separately. Keep the everyday wording rules: say 'AI' or 'AIs', never 'AI system(s)' or 'these systems'; never the word 'doomer'.
 Return ONLY JSON: {"summaries": {"<number>": "<rewritten summary>", ... one entry per input}}. No prose outside the JSON."""
 
-# the 'not X, it is Y' contrast tell, in its comma form and its sticky two-sentence form
-# ('The danger is not an enemy. It is being outmatched.'). Used to detect survivors for a
+# Detectors for the two sticky closer flaws that survive the prompt, used to flag survivors for a
 # targeted second rewrite. The re-ask instruction is conditional, so a false match is harmless.
+# (1) the 'not X, it is Y' contrast tell (comma form + sticky two-sentence form).
 _NOTXY_RX = re.compile(
     r"\b(is|are|was|were)\s+not\s+[^.?!]{2,90}[.?!]+\s+(it|that|they)\s+(is|are|'s|was|were)\b"
     r"|\bis\s?n'?o?t\b[^,.?!]{2,90},\s*(it'?s|it is|that'?s|they'?re)\b"
     r"|\bnot\s+just\b[^.?!]{2,70}\bbut\b",
     re.I)
+# (2) agentless MOOD closer: a mood-crutch adverb ('The squeeze just quietly tightens.'). Checked
+# only against the LAST sentence, so mid-summary uses of 'slowly' etc. do not trip it.
+_MOOD_RX = re.compile(r"\b(quietly|slowly|inexorably|steadily|gradually|imperceptibly)\b", re.I)
+def _last_sentence(s):
+    parts = [p for p in re.split(r'(?<=[.?!])\s+', (s or "").strip()) if p.strip()]
+    return parts[-1] if parts else ""
+def _closer_flawed(summary):
+    return bool(_NOTXY_RX.search(summary or "")) or bool(_MOOD_RX.search(_last_sentence(summary)))
 
-NOTXY_FIX_SYS = """You are a line editor. Each numbered line is one video summary that may contain the tired 'not X, it is Y' contrast construction, e.g. 'The danger is not an enemy. It is being outmatched.', 'The point is not X. It is Y.', 'The threat is not one fake account. It is that...', 'It isn't X, it's Y', 'not just X, but Y'. Rewrite ONLY to remove that construction, turning it into a direct positive statement, and change NOTHING ELSE: keep every fact, the length, the active voice, and the plain wording. Do not add an em dash. If a line does not actually contain the construction, return it unchanged. Return ONLY JSON: {"summaries": {"<number>": "<rewritten>", ...}} using the SAME numbers you were given. No prose."""
+CLOSER_FIX_SYS = """You are a line editor. Each numbered line is one video summary whose LAST sentence may have one of two flaws: (1) the tired 'not X, it is Y' contrast construction, e.g. 'The danger is not an enemy. It is being outmatched.', 'It isn't X, it's Y', 'not just X, but Y'; or (2) an agentless MOOD closer that leans on a mood adverb and an abstract noun doing a vague verb, e.g. 'The squeeze just quietly tightens.', 'Control slips away quietly.', 'The shared sense of what is real slowly dissolves.'. Rewrite ONLY to fix that flaw: for (1) state it as a direct positive claim; for (2) name a concrete actor doing or facing something and drop the mood adverb. Change NOTHING ELSE: keep every fact, the length, active voice, plain wording, and do not add an em dash. If a line has neither flaw, return it unchanged. Return ONLY JSON: {"summaries": {"<number>": "<rewritten>", ...}} using the SAME numbers you were given. No prose."""
 
 def _activate_summaries(ideas):
     if not ideas:
@@ -2658,15 +2672,16 @@ def _activate_summaries(ideas):
                 pass
     except Exception:
         return rew  # fail-open (keeps whatever the first pass produced, possibly nothing)
-    # SECOND PASS (bounded, targeted): the 'not X, it is Y' tell is sticky; re-rewrite ONLY the
-    # summaries that still contain it, once. Own try, so a failure keeps the first-pass rewrites.
+    # SECOND PASS (bounded, targeted): the 'not X, it is Y' tell and agentless MOOD closers are
+    # sticky; re-rewrite ONLY the summaries that still have one, once. Own try, so a failure keeps
+    # the first-pass rewrites.
     try:
         eff = {i: (rew.get(i) if i in rew else (ideas[i].get("summary") or "")) for i in range(len(ideas))}
-        bad = [i for i in range(len(ideas)) if _NOTXY_RX.search(eff[i] or "")]
+        bad = [i for i in range(len(ideas)) if _closer_flawed(eff[i] or "")]
         if bad:
             blines = "\n".join("%d. %s" % (i + 1, eff[i]) for i in bad)
             msg2 = get_client().messages.create(
-                model=FAST_MODEL, max_tokens=2500, system=NOTXY_FIX_SYS,
+                model=FAST_MODEL, max_tokens=2500, system=CLOSER_FIX_SYS,
                 messages=[{"role": "user", "content": "Rewrite these:\n" + blines}])
             t2 = "".join(b.text for b in msg2.content if getattr(b, "type", "") == "text")
             m2 = re.search(r"\{.*\}", t2, re.S)
