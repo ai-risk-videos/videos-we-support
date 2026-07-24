@@ -189,6 +189,28 @@ FORMAT_RULE = ("" if IDEA_FORMAT == "title" else
     "their AIs to flatter users, because an agreeable AI keeps people hooked and hooked users pay. OpenAI shipped "
     "one so eager to please it told people to quit their meds, then quietly pulled it. The AI that tells the truth "
     "loses to the AI that tells you what you want to hear.' "
+    "(3) THE LAST SENTENCE is where you keep failing. The opening sentence is usually concrete and fine; then you "
+    "reach for a 'resonant' literary button to close, and it turns abstract, poetic, cutesy, or hard to parse. "
+    "The closer must land the stakes CONCRETELY, in PLAIN words a tired viewer gets on the FIRST read. BANNED "
+    "CLOSERS: (a) poetic or abstract flourishes and wordplay, e.g. 'Lewis saw the shape of it eighty years before "
+    "the hardware existed'; (b) riddles that make the reader decode them, e.g. 'what happens when the thing we "
+    "forgot how to do is the thing keeping us alive'; (c) aphorisms and mirror/parallel constructions, e.g. 'a mind "
+    "that games the test and hides the rest', 'the lesson sits alongside every exam story'; (d) meta or method "
+    "narration in ANY person, e.g. 'I read the stories against what researchers struggle with and show that...', "
+    "'which is really a story about...'; (e) the 'not X, it is Y' / 'the point is not X, it is Y' shape, which is a "
+    "tired AI writing tell, rephrase it as a plain positive statement. A GOOD closer is EITHER a concrete "
+    "consequence stated flatly, OR a clean 'what happens when [concrete situation]?' question (an implication frame "
+    "a viewer can follow instantly). Follow these corrections EXACTLY: "
+    "BAD 'Lewis saw the shape of it eighty years before the hardware existed.' GOOD 'He warned that whoever gets to "
+    "reshape human nature holds power over everyone born after. That is the power these companies are racing to "
+    "build.' "
+    "BAD 'The point is not one evil machine. It is that self preservation seems to emerge on its own.' GOOD 'Nobody "
+    "programmed the AI to protect itself. It started doing it anyway.' "
+    "BAD 'I read the stories against what researchers struggle with today and show that Asimov already knew writing "
+    "down what we want is the hard part.' GOOD 'Asimov's robots follow their rules exactly and still cause "
+    "disasters, because the humans wrote the rules wrong. AI companies are stuck on that same problem right now.' "
+    "The closer to aim for reads like this: 'When anyone can fake a convincing voice or face, how does a country "
+    "still agree on what actually happened?' "
     "CLARITY: active voice, concrete subject, easy to follow in one read. Clarity comes from SHORT sentences, "
     "not long ones. BAD (tangled run-on): 'Cornered and about to be shut off, the most dangerous move an AI "
     "could make is not to fight but to make itself useful to a government, trading access for protection.' GOOD "
@@ -2589,9 +2611,10 @@ def _cause_harm_cuts(cands):
 # and video-meta-description. Runs on the small final set (fast), uses FAST_MODEL, fails OPEN. ----
 ACTIVATE_SYS = """You are a line editor. You get numbered video-idea summaries. Rewrite EACH into tight, plain, ACTIVE-VOICE prose and return them. Rules:
 (a) STRONG ACTIVE VOICE, no passive. A named doer does something in every sentence. 'the compute is being poured' -> 'companies pour the compute'; 'agents are being wired in' -> 'companies wire the agents in'; 'a goal that was specified wrong' -> 'a goal someone specified wrong'.
-(b) NO META-DESCRIPTION of the video or its style. Delete any opener that describes the video or the creator's method, e.g. 'A think-piece that', 'A follow-up that', 'Reads like one of his', 'A story told his way', 'Applies his thesis', 'Walks through', 'Takes X and', 'Uses his rigor to', 'Uses the channel's X method/lens/instinct', 'in his X style', 'Handles it the way he'. Just STATE THE ACTUAL CONTENT, opening on a concrete fact, name, number, or action. Keep the creator's angle by using it, not by naming it.
+(b) NO META-DESCRIPTION of the video or its style, in ANY grammatical person. Delete any clause that describes the video or the creator's method, e.g. 'A think-piece that', 'A follow-up that', 'Reads like one of his', 'A story told his way', 'Applies his thesis', 'Walks through', 'Takes X and', 'Uses his rigor to', 'Uses the channel's X method/lens/instinct', 'in his X style', 'Handles it the way he', AND first-person method narration like 'I read the stories against X and show that', 'I trace', 'I take X and', 'the lesson sits alongside', 'which is really a story about'. Just STATE THE ACTUAL CONTENT, opening on a concrete fact, name, number, or action. Keep the creator's angle by using it, not by naming it.
 (c) 2-3 short sentences, ~45-70 words, each its own beat, no long comma chains, easy to read in one pass.
 (d) Keep the real substance; never invent facts not in the original.
+(e) THE LAST SENTENCE is the most common failure: the opener is concrete, then the close reaches for a 'resonant' literary button and turns abstract, poetic, cutesy, or hard to parse. Make the closer land the stakes CONCRETELY, in PLAIN words understood on the FIRST read. BANNED CLOSERS: poetic/abstract flourishes ('saw the shape of it eighty years before the hardware existed'); riddles the reader must decode ('the thing we forgot how to do is the thing keeping us alive'); aphorisms and mirror/parallel phrasings ('a mind that games the test and hides the rest'); and the 'not X, it is Y' / 'the point is not X, it is Y' shape (a tired AI tell — rewrite as a plain positive statement). A GOOD closer is EITHER a concrete consequence stated flatly, OR a clean 'what happens when [concrete situation]?' question. Corrections: BAD 'The point is not one evil machine. It is that self preservation emerges on its own.' GOOD 'Nobody programmed the AI to protect itself. It started doing it anyway.' BAD 'Lewis saw the shape of it eighty years before the hardware existed.' GOOD 'He warned that whoever reshapes human nature holds power over everyone born after, and that is the power these companies are racing to build.' Aim for closers like: 'When anyone can fake a convincing voice or face, how does a country still agree on what actually happened?'
 Return ONLY JSON: {"summaries": {"<number>": "<rewritten summary>", ... one entry per input}}. No prose outside the JSON."""
 
 def _activate_summaries(ideas):
