@@ -2626,9 +2626,21 @@ ACTIVATE_SYS = """You are a line editor. You get numbered video-idea summaries. 
 (f) PUNCTUATION, hard rule: NEVER use an em dash or en dash anywhere in a rewrite (no long dash between clauses). They are banned in this project's copy, and the rewrite is the last step that touches the text, so do not introduce one. Where you would reach for a dash, use a period, a comma, or a colon instead. Also avoid hyphenated compounds; write the words separately. Keep the everyday wording rules: say 'AI' or 'AIs', never 'AI system(s)' or 'these systems'; never the word 'doomer'.
 Return ONLY JSON: {"summaries": {"<number>": "<rewritten summary>", ... one entry per input}}. No prose outside the JSON."""
 
+# the 'not X, it is Y' contrast tell, in its comma form and its sticky two-sentence form
+# ('The danger is not an enemy. It is being outmatched.'). Used to detect survivors for a
+# targeted second rewrite. The re-ask instruction is conditional, so a false match is harmless.
+_NOTXY_RX = re.compile(
+    r"\b(is|are|was|were)\s+not\s+[^.?!]{2,90}[.?!]+\s+(it|that|they)\s+(is|are|'s|was|were)\b"
+    r"|\bis\s?n'?o?t\b[^,.?!]{2,90},\s*(it'?s|it is|that'?s|they'?re)\b"
+    r"|\bnot\s+just\b[^.?!]{2,70}\bbut\b",
+    re.I)
+
+NOTXY_FIX_SYS = """You are a line editor. Each numbered line is one video summary that may contain the tired 'not X, it is Y' contrast construction, e.g. 'The danger is not an enemy. It is being outmatched.', 'The point is not X. It is Y.', 'The threat is not one fake account. It is that...', 'It isn't X, it's Y', 'not just X, but Y'. Rewrite ONLY to remove that construction, turning it into a direct positive statement, and change NOTHING ELSE: keep every fact, the length, the active voice, and the plain wording. Do not add an em dash. If a line does not actually contain the construction, return it unchanged. Return ONLY JSON: {"summaries": {"<number>": "<rewritten>", ...}} using the SAME numbers you were given. No prose."""
+
 def _activate_summaries(ideas):
     if not ideas:
         return {}
+    rew = {}
     try:
         lines = "\n".join("%d. %s" % (i + 1, (x.get("summary") or "")) for i, x in enumerate(ideas))
         msg = get_client().messages.create(
@@ -2637,7 +2649,6 @@ def _activate_summaries(ideas):
         txt = "".join(b.text for b in msg.content if getattr(b, "type", "") == "text")
         m = re.search(r"\{.*\}", txt, re.S)
         obj = json.loads(m.group(0)) if m else {}
-        rew = {}
         for k, v in (obj.get("summaries") or {}).items():
             try:
                 idx = int(k) - 1
@@ -2645,9 +2656,31 @@ def _activate_summaries(ideas):
                     rew[idx] = v.strip()
             except Exception:
                 pass
-        return rew
     except Exception:
-        return {}  # fail-open
+        return rew  # fail-open (keeps whatever the first pass produced, possibly nothing)
+    # SECOND PASS (bounded, targeted): the 'not X, it is Y' tell is sticky; re-rewrite ONLY the
+    # summaries that still contain it, once. Own try, so a failure keeps the first-pass rewrites.
+    try:
+        eff = {i: (rew.get(i) if i in rew else (ideas[i].get("summary") or "")) for i in range(len(ideas))}
+        bad = [i for i in range(len(ideas)) if _NOTXY_RX.search(eff[i] or "")]
+        if bad:
+            blines = "\n".join("%d. %s" % (i + 1, eff[i]) for i in bad)
+            msg2 = get_client().messages.create(
+                model=FAST_MODEL, max_tokens=2500, system=NOTXY_FIX_SYS,
+                messages=[{"role": "user", "content": "Rewrite these:\n" + blines}])
+            t2 = "".join(b.text for b in msg2.content if getattr(b, "type", "") == "text")
+            m2 = re.search(r"\{.*\}", t2, re.S)
+            o2 = json.loads(m2.group(0)) if m2 else {}
+            for k, v in (o2.get("summaries") or {}).items():
+                try:
+                    idx = int(k) - 1
+                    if 0 <= idx < len(ideas) and isinstance(v, str) and len(v.strip()) > 20:
+                        rew[idx] = v.strip()
+                except Exception:
+                    pass
+    except Exception:
+        pass  # keep first-pass rewrites
+    return rew
 
 def _dedash(s):
     """Deterministic safety net: em dashes are a hard ban in this project's copy, but the model
