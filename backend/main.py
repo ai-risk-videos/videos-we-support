@@ -2620,7 +2620,8 @@ ACTIVATE_SYS = """You are a line editor. You get numbered video-idea summaries. 
 (b) NO META-DESCRIPTION of the video or its style, in ANY grammatical person. Delete any clause that describes the video or the creator's method, e.g. 'A think-piece that', 'A follow-up that', 'Reads like one of his', 'A story told his way', 'Applies his thesis', 'Walks through', 'Takes X and', 'Uses his rigor to', 'Uses the channel's X method/lens/instinct', 'in his X style', 'Handles it the way he', AND first-person method narration like 'I read the stories against X and show that', 'I trace', 'I take X and', 'the lesson sits alongside', 'which is really a story about'. Just STATE THE ACTUAL CONTENT, opening on a concrete fact, name, number, or action. Keep the creator's angle by using it, not by naming it.
 (c) 2-3 short sentences, ~45-70 words, each its own beat, no long comma chains, easy to read in one pass.
 (d) Keep the real substance; never invent facts not in the original.
-(e) THE LAST SENTENCE is the most common failure: the opener is concrete, then the close reaches for a 'resonant' literary button and turns abstract, poetic, cutesy, or hard to parse. Make the closer land the stakes CONCRETELY, in PLAIN words understood on the FIRST read. BANNED CLOSERS: poetic/abstract flourishes ('saw the shape of it eighty years before the hardware existed'); riddles the reader must decode ('the thing we forgot how to do is the thing keeping us alive'); aphorisms and mirror/parallel phrasings ('a mind that games the test and hides the rest'); and the 'not X, it is Y' / 'the point is not X, it is Y' shape (a tired AI tell — rewrite as a plain positive statement). A GOOD closer is EITHER a concrete consequence stated flatly, OR a clean 'what happens when [concrete situation]?' question. Corrections: BAD 'The point is not one evil machine. It is that self preservation emerges on its own.' GOOD 'Nobody programmed the AI to protect itself. It started doing it anyway.' BAD 'Lewis saw the shape of it eighty years before the hardware existed.' GOOD 'He warned that whoever reshapes human nature holds power over everyone born after, and that is the power these companies are racing to build.' Aim for closers like: 'When anyone can fake a convincing voice or face, how does a country still agree on what actually happened?' BUT the question is ONE tool, not the default — you get a NUMBERED SET at once, so VARY the closing shape across it. Do NOT end most summaries on a question. Make the MAJORITY flat declarative statements of the concrete stake (e.g. 'Nobody voted for that.', 'The control problem stays real and unsolved.'), and use the 'what happens when...?' question for only a minority, roughly one in four at most; never reuse the literal words 'What happens when' more than once or twice across the set. A set where nearly every summary ends on a rhetorical question reads as robotic.
+(e) THE LAST SENTENCE is the most common failure: the opener is concrete, then the close reaches for a 'resonant' literary button and turns abstract, poetic, cutesy, or hard to parse. Make the closer land the stakes CONCRETELY, in PLAIN words understood on the FIRST read. BANNED CLOSERS: poetic/abstract flourishes ('saw the shape of it eighty years before the hardware existed'); riddles the reader must decode ('the thing we forgot how to do is the thing keeping us alive'); aphorisms and mirror/parallel phrasings ('a mind that games the test and hides the rest'); and the 'not X, it is Y' shape in EVERY form, including the contractions 'it isn't X, it's Y', 'not just X, but Y', and 'the real question isn't X, it's Y' (a tired AI tell; rewrite as a plain positive statement). A GOOD closer is EITHER a concrete consequence stated flatly, OR a clean 'what happens when [concrete situation]?' question. Corrections: BAD 'The point is not one evil machine. It is that self preservation emerges on its own.' GOOD 'Nobody programmed the AI to protect itself. It started doing it anyway.' BAD 'Lewis saw the shape of it eighty years before the hardware existed.' GOOD 'He warned that whoever reshapes human nature holds power over everyone born after, and that is the power these companies are racing to build.' Aim for closers like: 'When anyone can fake a convincing voice or face, how does a country still agree on what actually happened?' BUT the question is ONE tool, not the default. You get a NUMBERED SET at once, so VARY the closing shape across it. Do NOT end most summaries on a question. Make the MAJORITY flat declarative statements of the concrete stake (e.g. 'Nobody voted for that.', 'The control problem stays real and unsolved.'), and use the 'what happens when...?' question for only a minority, roughly one in four at most; never reuse the literal words 'What happens when' more than once or twice across the set. A set where nearly every summary ends on a rhetorical question reads as robotic.
+(f) PUNCTUATION, hard rule: NEVER use an em dash or en dash anywhere in a rewrite (no long dash between clauses). They are banned in this project's copy, and the rewrite is the last step that touches the text, so do not introduce one. Where you would reach for a dash, use a period, a comma, or a colon instead. Also avoid hyphenated compounds; write the words separately. Keep the everyday wording rules: say 'AI' or 'AIs', never 'AI system(s)' or 'these systems'; never the word 'doomer'.
 Return ONLY JSON: {"summaries": {"<number>": "<rewritten summary>", ... one entry per input}}. No prose outside the JSON."""
 
 def _activate_summaries(ideas):
@@ -2645,6 +2646,28 @@ def _activate_summaries(ideas):
         return rew
     except Exception:
         return {}  # fail-open
+
+def _dedash(s):
+    """Deterministic safety net: em dashes are a hard ban in this project's copy, but the model
+    (especially the rewrite pass) still slips one in occasionally. Replace em/en dashes with a
+    comma so no dash can ship even when the prompt fails. Hyphens are left alone (removing them
+    would break real compounds like self-preservation)."""
+    if not s:
+        return s
+    s = re.sub(r"\s*[—–]\s*", ", ", s)   # em (—) / en (–) dash -> comma
+    s = re.sub(r"\s+([,.;:!?])", r"\1", s)          # tidy stray space before punctuation
+    s = re.sub(r",\s*,", ", ", s)                    # collapse doubled commas
+    s = re.sub(r",\s*([.!?])", r"\1", s)             # ", ." -> "."
+    return s.strip()
+
+def _dedash_ideas(ideas):
+    for x in (ideas or []):
+        if isinstance(x, dict):
+            if x.get("title"):
+                x["title"] = _dedash(x["title"])
+            if x.get("summary"):
+                x["summary"] = _dedash(x["summary"])
+    return ideas
 
 def _build_gen_prompt(profile, titles, exclude, rejected):
     """The exact idea-generation user prompt /custom sends. Extracted so /compare can run the
@@ -2846,6 +2869,7 @@ async def writeoff(req: Request):
         for i in _rew:
             if i < len(ideas):
                 ideas[i]["summary"] = _rew[i]
+        _dedash_ideas(ideas)  # hard-strip any em/en dash the rewrite introduced
     _log_event({"t": "writeoff", "ch": _chan_key(url), "n": n, "opus": len(opus_ideas), "gpt": len(gpt_ideas), "gpt_err": bool(gpt_err)})
     return {"channel": prof.get("channel", ""), "concepts": concepts,
             "opus_model": MODEL, "gpt_model": gpt_model,
@@ -2996,6 +3020,7 @@ async def custom(req: Request):
                 ideas[i]["summary"] = _rew[i]
         if _rew:
             _log_event({"t": "summary_rewrite", "ch": _chan_key(url), "n": len(_rew)})
+        _dedash_ideas(ideas)  # hard-strip any em/en dash from title+summary before it ships (hard project rule)
         resp = {"channel": channel_name, "followers": followers, "ideas": ideas, "fresh": fresh,
                 "profile": profile, "titles": titles, "research_meta": rmeta}
         if not is_more:
