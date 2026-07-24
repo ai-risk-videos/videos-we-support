@@ -818,6 +818,7 @@ function startCurate(ideas,handle,channel,note,profile,style,rejected){
   '<textarea id="curnote" placeholder="Optional note to the creator (shown at the top of their page)">'+esc(note||"")+'</textarea>'+
   '<div class="addrow"><textarea id="addidea" rows="2" placeholder="Add your own idea, or paste a news story or a line from their longlist. It becomes an idea here, and gets a research pack + sample script like the rest."></textarea><button class="addbtn" id="addbtn">＋ Add idea</button></div>'+
   '<div id="ccards"></div>'+
+  '<button class="morebtn" id="moreideas">＋ Get more ideas (keeps the ones you have)</button>'+
   '<div id="rejwrap"></div>';
  researchNote=""; // one-shot: shown only for the fresh generation that set it, not on later edits/restores
  renderCards();
@@ -829,6 +830,7 @@ function startCurate(ideas,handle,channel,note,profile,style,rejected){
  const ai=$("#addidea");if(ai)ai.addEventListener("keydown",e=>{if((e.metaKey||e.ctrlKey)&&e.key==="Enter"){e.preventDefault();addOwnIdea();}});
  $("#regencustom").onclick=()=>regenerate("custom");
  $("#regenleads").onclick=()=>regenerate("leads");
+ $("#moreideas").onclick=addMoreIdeas;
  $("#restorever").onclick=showRestore;
  scheduleSave(400); // persist the working set immediately so it can never be lost, even before any edit
 }
@@ -849,6 +851,40 @@ async function regenerate(mode){
  _stopR();
  // fetchCustom/fetchTailor rebuild the editor via startCurate on success. On failure, restore the old draft.
  if(!ok){ startCurate(keepIdeas,keepHandle,keepChannel,($("#curnote")&&$("#curnote").value)||"",keepProfile,keepStyle); toast("Could not generate a fresh set — kept your current list."); }
+}
+// APPEND more ideas to the current draft WITHOUT replacing it (regenerate wipes; this keeps your list
+// and selection). Sends the cached profile so the backend skips re-research and returns a fresh batch,
+// plus the current titles as `exclude` so the new ones do not overlap what you already have.
+async function addMoreIdeas(){
+ const url=cleanChanUrl(curateHandle);
+ if(!url){toast("No channel on this draft to add to");return;}
+ const btn=$("#moreideas");const orig=btn?btn.textContent:"";
+ if(btn){btn.disabled=true;btn.textContent="Finding more ideas…";}
+ const norm=t=>(t||"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();
+ const exclude=curateIdeas.map(ideaTitle).filter(Boolean).slice(0,80);
+ const rejected=curateRejected.map(ideaTitle).filter(Boolean).slice(0,40);
+ try{
+  const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),200000);
+  const body={channelUrl:url,exclude:exclude,rejected:rejected,channel:curateChannel};
+  const prof=(curateProfile&&curateProfile.length>80)?curateProfile:((channelProfile&&channelProfile.length>80)?channelProfile:"");
+  if(prof)body.profile=prof; // cached profile → backend "more" path: no re-research, ~15 fresh ideas
+  const r=await fetch(CUSTOM_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body),signal:ctrl.signal});
+  clearTimeout(to);
+  if(r.status===429){toast("Busy right now — wait a minute and try again.");return;}
+  const j=await r.json();
+  if(j&&Array.isArray(j.ideas)&&j.ideas.length){
+   const seen=new Set(curateIdeas.map(x=>norm(ideaTitle(x))));
+   let added=0;
+   j.ideas.forEach(x=>{const t=x.title||"";const k=norm(t);if(!k||seen.has(k))return;seen.add(k);curateIdeas.push({title:t,summary:x.summary||"",url:x.url||"",who:x.who||"",y:x.y||""});added++;});
+   if(added){
+    if(!curateProfile&&j.profile)curateProfile=j.profile; // cache the profile so the NEXT click is fast
+    curateDirty=true;renderCards();scheduleSave();
+    const cards=document.querySelectorAll("#ccards .ccard");if(cards.length>=added)cards[cards.length-added].scrollIntoView({behavior:"smooth",block:"center"});
+    toast("Added "+added+" more ideas below your current list");
+   }else{toast("No genuinely new ideas that time — try once more");}
+  }else{toast((j&&j.error)?j.error:"Could not get more ideas — try again");}
+ }catch(e){toast("Took too long — try again");}
+ finally{if(btn){btn.disabled=false;btn.textContent=orig||"＋ Get more ideas (keeps the ones you have)";}}
 }
 function renderCards(){
  const w=$("#ccards");if(!w)return;
