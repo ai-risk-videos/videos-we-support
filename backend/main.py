@@ -150,13 +150,19 @@ TRAJECTORY = (
 )
 # ONE canonical reading-level rule, injected into every prompt that writes reader-facing prose
 # (ideas, research packs, sample scripts) via the __READING_LEVEL__ marker. Emerson's note: writing
-# at roughly a 5th grade level made the ideas land much better, so apply it to EVERYTHING.
+# at a low reading level made the ideas land much better, so apply it to EVERYTHING. Emerson then
+# calibrated the target: grade 4 is too low, about grade 7 is right.
 READING_LEVEL = (
-    "READING LEVEL, applies to EVERY sentence you write: a smart 10-year-old (about 5th grade) must understand it "
-    "on the FIRST read. This is not about dumbing down the ideas, the ideas stay just as serious and specific; it is "
-    "about saying them in small, plain words. THREE LEVERS: "
-    "(1) SHORT SENTENCES. Most sentences 10 to 16 words, ONE idea each. Split anything longer. A comma chain running "
-    "past ~18 words is a smell. "
+    "READING LEVEL, applies to EVERY sentence you write: aim at ABOUT 7TH GRADE, meaning a bright 12 or 13 year old "
+    "understands it on the FIRST read. This is not about dumbing down the ideas, the ideas stay just as serious and "
+    "specific; it is about saying them in plain words an adult reads without effort. "
+    "THERE IS A FLOOR, and you keep sinking below it: do NOT write at a 4th or 5th grade level. A batch measured at "
+    "grade 3.6 recently, which is too low. Very short choppy sentences and baby vocabulary make a serious subject "
+    "sound unserious and read as if you are talking down to a smart adult. Grade 7 is the target, grade 6 is the "
+    "floor, grade 10 and up is too hard. THREE LEVERS: "
+    "(1) SENTENCE LENGTH. Aim for most sentences around 12 to 20 words, ONE idea each, and VARY them: mix a longer "
+    "explanatory sentence with a short punch. Split anything past ~24 words. A comma chain running past ~24 words is "
+    "a smell. But never produce a run of six-word fragments; that is the failure on the other side. "
     "(2) NO ABSTRACT NOUN STACKS (nominalizations), the single biggest thing that makes this writing too hard: 'the "
     "gap between the order and the intent', 'the concentration of power', 'the erosion of human oversight', 'a loss "
     "of alignment', 'the automation of decision making'. Turn every abstract noun back into PEOPLE or THINGS DOING "
@@ -2750,7 +2756,7 @@ def _question_excess(summaries):
 
 QUESTION_FIX_SYS = """You are a line editor. Each numbered line is one video-idea summary that ends on a rhetorical question. Too many summaries in this batch end that way, so rewrite ONLY the LAST sentence of each into a flat forward-looking DECLARATIVE statement, and change nothing else.
 The closer must still do its job: leave the reader thinking about where this is all heading (the bigger stakes, the endgame, how this grows, how it could lead to collapse or loss of control). Just state it instead of asking it. Good shapes: 'Nobody voted for that.' / 'They are shipping it anyway.' / 'Nobody has found where this curve stops.' / 'No human decided that should happen.' / 'Soon nobody in the room can check its work.'
-HARD RULES: keep every fact, name, number, date and hedge exactly as written; keep the same active voice and plain wording; keep it easy to read at about a 5th grade level; no em dashes; do not add a new claim; do not touch any sentence except the last one; never end the rewritten line with a question mark.
+HARD RULES: keep every fact, name, number, date and hedge exactly as written; keep the same active voice and plain wording; keep it easy to read at about a 7th grade level (plain, but not childish; do not drop to 4th or 5th grade); no em dashes; do not add a new claim; do not touch any sentence except the last one; never end the rewritten line with a question mark.
 Return ONLY JSON: {"summaries": {"<number>": "<rewritten summary>", ...}} using the SAME numbers you were given. No prose."""
 
 # ---- RATIO SANITY. Simplification produced "outspent thousands to one" from $10 million against
@@ -2804,7 +2810,7 @@ CLOSER_FIX_SYS = """You are a line editor. Each numbered line is one video summa
 (3) FIRST-PERSON METHOD NARRATION, describing what the video does instead of stating the content, e.g. 'I show how a small experiment points to a bigger world.', 'I explain what they actually fear, step by step.', 'I follow who really decides.', 'I trace where the money goes.'
 Rewrite ONLY to fix that flaw: for (1) state it as a direct positive claim; for (2) name a concrete actor doing or facing something and drop the mood adverb; for (3) DELETE the 'I show/I explain/I trace' framing and state the actual finding or stake as a fact, e.g. 'I explain what they actually fear, step by step.' becomes 'They fear an AI that hides what it wants until it is too late to switch off.'
 IMPORTANT for (3): a concrete first-person ACTION is the creator's real voice and must be KEPT, e.g. 'I flew to Taiwan and stood outside the fab' or 'I gave an AI my calendar for a month'. Only remove first person when it narrates the VIDEO's method rather than something the person did in the world.
-The closer must still point forward to where this is heading. Change NOTHING ELSE: keep every fact, name, number and hedge, the length, active voice, plain wording, about a 5th grade reading level, and do not add an em dash. If a line has none of the three flaws, return it unchanged.
+The closer must still point forward to where this is heading. Change NOTHING ELSE: keep every fact, name, number and hedge, the length, active voice, plain wording, about a 7th grade reading level (plain but not childish), and do not add an em dash. If a line has none of the three flaws, return it unchanged.
 Return ONLY JSON: {"summaries": {"<number>": "<rewritten>", ...}} using the SAME numbers you were given. No prose."""
 
 def _activate_summaries(ideas):
