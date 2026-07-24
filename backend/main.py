@@ -2808,6 +2808,9 @@ def _ratio_bad(text):
 # failure mode from the earlier review). ----
 GRADE_TARGET = 7.0
 GRADE_TOLERANCE = 8.3   # re-ask above this; FK is noisy so do not chase small overshoots
+# Wall-clock budget for the whole polish chain. Must stay comfortably under the caller's
+# asyncio.wait_for timeout (170s), because a timeout there throws away every rewrite already earned.
+POLISH_BUDGET_S = 120
 
 def _syllables(w):
     w = re.sub(r'[^a-z]', '', w.lower())
@@ -2886,6 +2889,16 @@ def _activate_summaries(ideas):
     # TARGETED FOLLOW-UP PASSES. Each one re-asks the model about ONLY the summaries a deterministic
     # detector flagged, so a clean batch costs nothing and a false match is harmless (the instruction
     # is conditional). Each pass owns its try/except, so a failure keeps every earlier rewrite.
+    #
+    # SELF-IMPOSED DEADLINE. This chain grew to five or six sequential model calls, and the caller
+    # bounds it with asyncio.wait_for. A timeout there DISCARDS every rewrite we already earned (a
+    # real bug: telemetry showed grade_fix accepting 6 rewrites while the shipped text stayed raw,
+    # because wait_for(60) fired first). So stop starting new passes once we are near the budget and
+    # return what we have. Keep this comfortably under the caller's timeout.
+    _t_start = _time.time()
+    def _budget_left():
+        return (_time.time() - _t_start) < POLISH_BUDGET_S
+
     def _eff():
         return {i: (rew[i] if i in rew else (ideas[i].get("summary") or "")) for i in range(len(ideas))}
 
@@ -2894,6 +2907,9 @@ def _activate_summaries(ideas):
         is given, a rewrite is only kept if it passes that check, so a pass can never make things
         worse (used by the grade pass to reject rewrites that drop a fact or fail to get easier)."""
         if not items:
+            return
+        if not _budget_left():
+            _log_event({"t": "polish_skip", "which": tag, "n": len(items)})
             return
         try:
             body = "\n".join("%d. %s" % (i + 1, t) for i, t in items)
@@ -3173,7 +3189,7 @@ async def writeoff(req: Request):
     # SAME active-voice cleanup the product runs, on BOTH sides — so this reflects shipped quality, not raw drafts
     for ideas in (opus_ideas, gpt_ideas):
         try:
-            _rew = await asyncio.wait_for(run_in_threadpool(_activate_summaries, ideas), timeout=60)
+            _rew = await asyncio.wait_for(run_in_threadpool(_activate_summaries, ideas), timeout=170)
         except Exception:
             _rew = {}
         for i in _rew:
@@ -3322,7 +3338,7 @@ async def custom(req: Request):
         # SUMMARY POLISH: rewrite the final summaries to active voice (separate fast Sonnet pass on the
         # SMALL final set, so it can't time out the way a combined pass did). Fails open (keeps originals).
         try:
-            _rew = await asyncio.wait_for(run_in_threadpool(_activate_summaries, ideas), timeout=60)
+            _rew = await asyncio.wait_for(run_in_threadpool(_activate_summaries, ideas), timeout=170)
         except Exception:
             _rew = {}
         for i in _rew:
