@@ -2801,6 +2801,55 @@ def _ratio_bad(text):
         return (claimed, actual)
     return None
 
+# ---- MEASURED READING GRADE. The prompt asks for ~grade 7 but nothing checked it, so hard source
+# material sailed through at grade 9 to 12 (Emerson: "almost all of these are way higher than grade
+# 7?"). Compute Flesch-Kincaid here, re-ask about only the summaries that miss, and ACCEPT the rewrite
+# only if it actually got easier AND kept every number and named source (guards the substance-loss
+# failure mode from the earlier review). ----
+GRADE_TARGET = 7.0
+GRADE_TOLERANCE = 8.3   # re-ask above this; FK is noisy so do not chase small overshoots
+
+def _syllables(w):
+    w = re.sub(r'[^a-z]', '', w.lower())
+    if not w:
+        return 0
+    n = len(re.findall(r'[aeiouy]+', w))
+    if w.endswith('e') and n > 1:
+        n -= 1
+    return max(1, n)
+
+def _fk_grade(text):
+    """Flesch-Kincaid grade level. 0 when there is nothing measurable."""
+    sents = [s for s in re.split(r'[.?!]+', text or "") if s.strip()]
+    words = re.findall(r"[A-Za-z]+", text or "")
+    if not sents or not words:
+        return 0.0
+    syl = sum(_syllables(w) for w in words)
+    return round(0.39 * (len(words) / len(sents)) + 11.8 * (syl / len(words)) - 15.59, 1)
+
+_NUM_RX = re.compile(r'\d[\d,.%]*')
+_NAME_RX = re.compile(r'\b(?:[A-Z][a-z]{2,}(?:\s+[A-Z][a-z]{2,})?|[A-Z]{2,}\d*)\b')
+
+def _keeps_substance(old, new):
+    """True when `new` still carries every number and capitalised name that `old` had. Sentence-initial
+    words are ignored for names (they capitalise for grammar, not identity)."""
+    def nums(t):
+        return {m.group(0).rstrip('.,') for m in _NUM_RX.finditer(t or "")}
+    def names(t):
+        t = re.sub(r'(?<=[.?!])\s+([A-Z])', lambda m: " " + m.group(1).lower(), " " + (t or ""))
+        t = re.sub(r'^\s*([A-Z])', lambda m: m.group(1).lower(), t)
+        return {m.group(0) for m in _NAME_RX.finditer(t)}
+    return nums(old) <= nums(new) and names(old) <= names(new)
+
+GRADE_FIX_SYS = """You are a plain-language editor. Each numbered line is a video-idea summary that reads too HARD, and you are told its measured reading grade. Rewrite each to land at about GRADE 7 (a bright 12 or 13 year old reads it once and gets it), without losing anything real.
+HOW to bring the grade down, in order of effect:
+1. SPLIT long sentences. Aim for 12 to 18 words each, one idea per sentence. Most of the grade comes from sentence length.
+2. Replace long abstract words with short everyday ones: proprietary -> a trade secret they will not show; concentrates -> ends up; consequential -> important; capability -> what it can do; specializing -> picking jobs; transacting -> buying and selling; commodity -> something you buy; immunity from oversight -> nobody can regulate them; uplift -> real help.
+3. Break up abstract noun stacks into people or things doing something.
+WHAT YOU MUST NOT DO, this is the hard part: keep EVERY number, date, percentage, dollar figure, company name, product name, researcher name and organisation name EXACTLY as written (OpenAI, Anthropic, Palisade Research, METR, o3, 2025). Never swap a named source for "researchers" or "a company". Never drop a hedge (almost, nearly, about, may, could). Never weaken or overstate a claim, and never invent a fact to make a sentence flow. Some words cannot be simplified because they ARE the subject (pension funds, index funds, bioweapon, neurons); keep those and shorten the sentences around them instead.
+Keep the same number of sentences or add one, keep active voice, no em dashes, and do not end on a rhetorical question if the original did not.
+Return ONLY JSON: {"summaries": {"<number>": "<rewritten>", ...}} using the SAME numbers you were given. No prose."""
+
 RATIO_FIX_SYS = """You are a fact checker fixing ONE arithmetic error per line. Each numbered line is a video-idea summary that states a ratio which contradicts the two numbers in its own text. You are told the correct ratio. Rewrite ONLY the ratio phrase so it matches the arithmetic, and change NOTHING else: keep every number, name, date, hedge, and the sentence order exactly. Use a round, plain phrasing a viewer can follow, for example 'more than a hundred to one'. Keep it easy to read, no em dashes.
 Return ONLY JSON: {"summaries": {"<number>": "<corrected summary>", ...}} using the SAME numbers you were given. No prose."""
 
@@ -2840,8 +2889,10 @@ def _activate_summaries(ideas):
     def _eff():
         return {i: (rew[i] if i in rew else (ideas[i].get("summary") or "")) for i in range(len(ideas))}
 
-    def _pass(system, items, tag, budget=2500):
-        """items: [(index, line_text)]. Applies accepted rewrites into `rew`."""
+    def _pass(system, items, tag, budget=2500, accept=None):
+        """items: [(index, line_text)]. Applies accepted rewrites into `rew`. When `accept(old,new)`
+        is given, a rewrite is only kept if it passes that check, so a pass can never make things
+        worse (used by the grade pass to reject rewrites that drop a fact or fail to get easier)."""
         if not items:
             return
         try:
@@ -2852,16 +2903,23 @@ def _activate_summaries(ideas):
             t = "".join(b.text for b in m.content if getattr(b, "type", "") == "text")
             mm = re.search(r"\{.*\}", t, re.S)
             obj = json.loads(mm.group(0)) if mm else {}
-            n = 0
+            n = rej = 0
             for k, v in (obj.get("summaries") or {}).items():
                 try:
                     idx = int(k) - 1
-                    if 0 <= idx < len(ideas) and isinstance(v, str) and len(v.strip()) > 20:
-                        rew[idx] = v.strip(); n += 1
+                    if not (0 <= idx < len(ideas) and isinstance(v, str) and len(v.strip()) > 20):
+                        continue
+                    new = v.strip()
+                    if accept is not None:
+                        old = rew[idx] if idx in rew else (ideas[idx].get("summary") or "")
+                        if not accept(old, new):
+                            rej += 1
+                            continue
+                    rew[idx] = new; n += 1
                 except Exception:
                     pass
-            if n:
-                _log_event({"t": "polish_pass", "which": tag, "n": n})
+            if n or rej:
+                _log_event({"t": "polish_pass", "which": tag, "n": n, "rejected": rej})
         except Exception:
             pass  # keep whatever earlier passes produced
 
@@ -2883,6 +2941,20 @@ def _activate_summaries(ideas):
             ritems.append((i, "%s\n   [the two numbers in this text give about %s to one, not %s to one]"
                            % (e[i], int(round(actual)), int(round(claimed)))))
     _pass(RATIO_FIX_SYS, ritems, "ratio_fix", budget=2000)
+    # (4) MEASURED READING GRADE. Everything above only *asks* for plain writing; this checks it.
+    # Two bounded rounds, because one round leaves the stubborn ones behind. A rewrite is kept only
+    # when it genuinely got easier AND still carries every number and named source, so this pass can
+    # simplify but can never quietly cost us a fact (the failure the earlier review found).
+    def _grade_ok(old, new):
+        return _fk_grade(new) < _fk_grade(old) - 0.3 and _keeps_substance(old, new)
+    for _round in range(2):
+        e = _eff()
+        hard = [(i, "%s\n   [this reads at grade %s; bring it to about %s]"
+                 % (e[i], _fk_grade(e[i] or ""), int(GRADE_TARGET)))
+                for i in range(len(ideas)) if _fk_grade(e[i] or "") > GRADE_TOLERANCE]
+        if not hard:
+            break
+        _pass(GRADE_FIX_SYS, hard, "grade_fix_r%d" % (_round + 1), budget=3000, accept=_grade_ok)
     return rew
 
 def _dedash(s):
