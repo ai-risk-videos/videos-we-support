@@ -167,6 +167,22 @@ READING_LEVEL = (
     "(3) EVERYDAY WORDS. Pick the short common word over the impressive one: use instead of utilize, help instead of "
     "facilitate, speed up instead of accelerate, spread instead of proliferate, take over instead of subsume, growing "
     "instead of burgeoning. Never write like an academic paper or a consulting deck. "
+    "SCOPE, read this twice: this rule governs WORD CHOICE and SENTENCE LENGTH ONLY. It does not license you to "
+    "change a single fact, and it does not govern how a piece ends. "
+    "NAMED SOURCES ARE NOT JARGON. Simpler words never means vaguer sources. Keep every organisation, company, model, "
+    "researcher, and publication name exactly as given: METR, Palisade Research, Apollo Research, Anthropic, OpenAI, "
+    "DeepSeek, o1, o3, Jan Leike, Geoffrey Hinton. NEVER replace a named source with 'researchers', 'an AI', 'a team', "
+    "'one leader', 'someone', or 'China's new chatbot'. 'Researchers at METR measured' must NOT become 'Researchers "
+    "measured'. The name IS the credibility, and a skeptic asks for it first. "
+    "NUMBERS ARE FROZEN. Never turn an exact figure into a vague quantifier: 'a third' stays 'a third', never 'a big "
+    "chunk' or 'a large share'. Never round, restate, recompute, or invent a number, a count, a ratio, or a doubling "
+    "time. If the source says every 7 months, write every 7 months, never 'every three to four months'. Before you "
+    "write any 'X to one' ratio, do the division on the two numbers in your own sentence: $10 million against "
+    "$80,000 is about a hundred to one, NOT thousands to one. Keep the year on any dollar figure. A title and its "
+    "summary must state the same number, never 'in two years' over 'in about a year'. "
+    "HEDGES ARE FROZEN TOO. Words like almost, nearly, about, may, could, roughly, and up to carry legal and factual "
+    "weight; keep them verbatim. 'Anthropic almost skipped safety testing' must NEVER harden into 'Anthropic skipped "
+    "safety testing'. Simplifying a sentence must never make a claim stronger than the source. "
     "KEEP every real fact, name, number, date, and company; specifics are what make it good. Only the WORDS get "
     "simpler, never the substance. Never talk down to the reader and never explain the obvious."
 )
@@ -233,13 +249,22 @@ FORMAT_RULE = ("" if IDEA_FORMAT == "title" else
     "BAD 'I read the stories against what researchers struggle with today and show that Asimov already knew writing "
     "down what we want is the hard part.' GOOD 'Asimov's robots follow their rules exactly and still cause "
     "disasters, because the humans wrote the rules wrong. AI companies are stuck on that same problem right now.' "
-    "THE CLOSER'S JOB is to leave the viewer thinking about WHERE THIS IS ALL HEADING: the bigger stakes, the "
+    "THE CLOSER'S JOB, always: leave the viewer thinking about WHERE THIS IS ALL HEADING. The bigger stakes, the "
     "endgame, how a small thing today grows into something much larger, how it could lead to real collapse or loss "
-    "of control. A simple forward-looking question is one of the BEST tools for this because it is so easy to follow, "
-    "e.g. 'What happens when a whole country hands its hardest choices to machines nobody controls?' Use that "
-    "'what happens when [concrete future]?' frame freely, whenever it fits, and use forward-looking plain statements "
-    "too. Just vary the exact words so the same phrase does not open every single closer. Whichever shape you pick, "
-    "the closer must be EASY TO READ at a low reading level (see below): short, plain, concrete, pointing ahead. "
+    "of control. That FORWARD-LOOKING JOB is required in every single closer. "
+    "BUT THE FORM MUST VARY, and this is where you fail badly. A forward-looking question ('What happens when a whole "
+    "country hands its hardest choices to machines nobody controls?') is a genuinely great tool, easy to follow, and "
+    "you should keep using it. The failure is making it the HOUSE VOICE: in a recent batch 19 of 19 ideas ended on a "
+    "question and the literal words 'What happens when' appeared 13 times in one list. Read as a set, that is a "
+    "worksheet, not a pitch, and every creator starts to breathe in the same rhythm. HARD LIMITS for a batch: end at "
+    "most ONE IN FOUR ideas on a question mark, and use the exact phrase 'What happens when' at most TWICE in the "
+    "whole batch. Most closers should point forward as the hardest FLAT DECLARATIVE you can write, e.g. 'Nobody voted "
+    "for that.' / 'They are shipping it anyway.' / 'Nobody has found where this curve stops.' / 'No human decided "
+    "that should happen.' Reach for the shape that fits THIS creator: a channel built on measurement can end on the "
+    "number nobody can explain yet or the experiment nobody has run; a money channel on who pays and who profits; a "
+    "power channel on who ends up holding the power; an investigative channel on the receipt sitting in someone's own "
+    "filing. Whichever shape you pick, the closer must be EASY TO READ at a low reading level (see below): short, "
+    "plain, concrete, pointing ahead. "
     "CONCRETE ACTOR: the closer must name WHO does or faces WHAT. Do NOT close on an agentless mood line where an "
     "abstract noun performs a vague verb, e.g. 'The squeeze just quietly tightens.', 'Control slips away.', 'The "
     "shared sense of what is real dissolves.', 'The gap widens.' Cut mood adverbs used as a crutch (quietly, slowly, "
@@ -1283,6 +1308,12 @@ def _resolve_ids(text):
     # trailing space (e.g. "[sche-09-anthropic-technical-report-pdf-on-model- ]"). Without allowing that
     # space the stub did not match, so the raw internal id leaked into the creator-facing pack.
     out = re.sub(r"\[([a-z0-9]+(?:-+[a-z0-9]+)+-*)\s*\](?!\()", _link, text)
+    # Stripping an unresolvable stub leaves the space that preceded it, so the sentence ends up as
+    # '"they might take over" .' — a visible orphan a reviewer spotted in a shipped script. Tidy the
+    # punctuation the strip damaged (only where a citation was actually removed).
+    if stats["stripped"]:
+        out = re.sub(r"[ \t]+([.,;:!?])", r"\1", out)
+        out = re.sub(r"[ \t]{2,}", " ", out)
     stats["legend"] = legend  # [(number, title, url), ...] in order of first appearance
     return out, stats
 
@@ -1462,7 +1493,12 @@ async def brief(req: Request):
 SYSTEM_SCRIPT = """You write a SAMPLE SCRIPT for ONE AI risk video, so a specific YouTube creator can see concretely what this video could look like IN THEIR OWN VOICE. This is a first draft they will rewrite and make their own, not a finished script. It has to feel like something THEY would actually say, not a generic AI voiceover, or it does the opposite of its job.
 
 __READING_LEVEL__
-ONE EXCEPTION to the reading level: the creator's OWN voice always wins. Spoken narration should be plain and easy to follow anyway, so these rarely conflict. But if this creator genuinely talks in longer, more technical sentences, match THEM rather than flattening their voice. Never let the plain-words rule turn their script generic.
+HOW THE READING LEVEL APPLIES HERE, because it is easy to overdo in a script and a review caught exactly that:
+- The creator's OWN voice always wins. If this creator genuinely talks in longer or more technical sentences, match THEM. Never let the plain-words rule turn their script generic.
+- Narration targets 12 to 18 words per sentence on average. Do NOT drop to a median of 8 words. A string of six-word sentences is not simple, it is a picture book, and it destroys an adult creator's authority. Vary sentence length the way a person actually talks.
+- Never slide into a children's register. Real examples to avoid: "so we know where breaking lives", "Think of this like a school exam for the machine".
+- NEVER change a fact to make a sentence simpler, and never make a claim STRONGER than the source. Every qualifier survives verbatim: almost, nearly, about, may, could, roughly, up to. "Anthropic almost skipped safety testing" must NOT become "they decided not to run the safety tests at all". Do not turn a company's internal capability threshold into a claim about what the company believes will happen.
+- Every quoted sentence and every stated fact keeps its [id] citation marker. A verbatim quote from a living person with no citation is a serious error. For a rigorous science or investigative channel, a claim stated as fact should rest on a primary source (a paper, system card, transcript, or filing); cite a social or aggregator post only as where you found it, never as the sole support for a load-bearing claim.
 
 You are given the video idea, a VOICE BIBLE of the creator, and usually ONE real transcript of theirs as a live example. Do NOT just sprinkle their catchphrases on a generic script. BUILD THE VIDEO THE WAY THEY BUILD A VIDEO:
 
@@ -2659,7 +2695,7 @@ ACTIVATE_SYS = """You are a line editor. You get numbered video-idea summaries. 
 (b) NO META-DESCRIPTION of the video or its style, in ANY grammatical person. Delete any clause that describes the video or the creator's method, e.g. 'A think-piece that', 'A follow-up that', 'Reads like one of his', 'A story told his way', 'Applies his thesis', 'Walks through', 'Takes X and', 'Uses his rigor to', 'Uses the channel's X method/lens/instinct', 'in his X style', 'Handles it the way he', AND first-person method narration like 'I read the stories against X and show that', 'I trace', 'I take X and', 'the lesson sits alongside', 'which is really a story about'. Just STATE THE ACTUAL CONTENT, opening on a concrete fact, name, number, or action. Keep the creator's angle by using it, not by naming it.
 (c) 2-3 short sentences, ~45-70 words, each its own beat, no long comma chains, easy to read in one pass.
 (d) Keep the real substance; never invent facts not in the original.
-(e) THE LAST SENTENCE is the most common failure: the opener is concrete, then the close reaches for a 'resonant' literary button and turns abstract, poetic, cutesy, or hard to parse. Make the closer land the stakes CONCRETELY, in PLAIN words understood on the FIRST read. BANNED CLOSERS: poetic/abstract flourishes ('saw the shape of it eighty years before the hardware existed'); riddles the reader must decode ('the thing we forgot how to do is the thing keeping us alive'); aphorisms and mirror/parallel phrasings ('a mind that games the test and hides the rest'); and the 'not X, it is Y' contrast cadence, which you keep sneaking back in as TWO sentences. BAN it ANYWHERE in the summary, in every form and whether written with a comma or as two sentences: 'The point is not one evil machine. It is that...', 'The danger is not an AI that hates us. It is...', 'The threat is not one fake account. It is that...', 'The concern is not a recipe. It is that...', 'This is not a prediction. It is capital moving.', 'It isn't X, it's Y', 'not just X, but Y', 'the real question isn't X, it's Y'. Rewrite as a direct positive claim: instead of 'The danger is not an AI that hates us. It is one that does what we asked while missing what we meant.' write 'The AI does exactly what we asked and still causes harm, because no one could state what we actually wanted.' A GOOD closer is EITHER a concrete consequence stated flatly, OR a clean 'what happens when [concrete situation]?' question. Corrections: BAD 'The point is not one evil machine. It is that self preservation emerges on its own.' GOOD 'Nobody programmed the AI to protect itself. It started doing it anyway.' BAD 'Lewis saw the shape of it eighty years before the hardware existed.' GOOD 'He warned that whoever reshapes human nature holds power over everyone born after, and that is the power these companies are racing to build.' Aim for closers like: 'When anyone can fake a convincing voice or face, how does a country still agree on what actually happened?' (g) CONCRETE ACTOR in the closer: name WHO does or faces WHAT. Do NOT close on an agentless mood line where an abstract noun does a vague verb ('The squeeze just quietly tightens.', 'Control slips away.', 'The shared sense of what is real dissolves.'), and cut mood-crutch adverbs (quietly, slowly, inexorably). BAD 'The squeeze just quietly tightens.' GOOD 'These agents keep outbidding hospitals and schools until people cannot afford the computing they depend on.' THE CLOSER'S JOB is to leave the viewer thinking about WHERE THIS IS ALL HEADING: the bigger stakes, the endgame, how a small thing today grows into something much larger, how it could lead to real collapse or loss of control. A simple forward-looking 'what happens when [concrete future]?' question is one of the BEST tools for this because it is so easy to follow, so use it freely whenever it fits (a forward-looking plain statement is also fine). You get a NUMBERED SET at once, so just vary the exact words rather than opening every closer with the identical phrase. Whichever shape you pick, keep it EASY TO READ at a low reading level: short, plain, concrete, pointing ahead.
+(e) THE LAST SENTENCE is the most common failure: the opener is concrete, then the close reaches for a 'resonant' literary button and turns abstract, poetic, cutesy, or hard to parse. Make the closer land the stakes CONCRETELY, in PLAIN words understood on the FIRST read. BANNED CLOSERS: poetic/abstract flourishes ('saw the shape of it eighty years before the hardware existed'); riddles the reader must decode ('the thing we forgot how to do is the thing keeping us alive'); aphorisms and mirror/parallel phrasings ('a mind that games the test and hides the rest'); and the 'not X, it is Y' contrast cadence, which you keep sneaking back in as TWO sentences. BAN it ANYWHERE in the summary, in every form and whether written with a comma or as two sentences: 'The point is not one evil machine. It is that...', 'The danger is not an AI that hates us. It is...', 'The threat is not one fake account. It is that...', 'The concern is not a recipe. It is that...', 'This is not a prediction. It is capital moving.', 'It isn't X, it's Y', 'not just X, but Y', 'the real question isn't X, it's Y'. Rewrite as a direct positive claim: instead of 'The danger is not an AI that hates us. It is one that does what we asked while missing what we meant.' write 'The AI does exactly what we asked and still causes harm, because no one could state what we actually wanted.' A GOOD closer is EITHER a concrete consequence stated flatly, OR a clean 'what happens when [concrete situation]?' question. Corrections: BAD 'The point is not one evil machine. It is that self preservation emerges on its own.' GOOD 'Nobody programmed the AI to protect itself. It started doing it anyway.' BAD 'Lewis saw the shape of it eighty years before the hardware existed.' GOOD 'He warned that whoever reshapes human nature holds power over everyone born after, and that is the power these companies are racing to build.' Aim for closers like: 'When anyone can fake a convincing voice or face, how does a country still agree on what actually happened?' (g) CONCRETE ACTOR in the closer: name WHO does or faces WHAT. Do NOT close on an agentless mood line where an abstract noun does a vague verb ('The squeeze just quietly tightens.', 'Control slips away.', 'The shared sense of what is real dissolves.'), and cut mood-crutch adverbs (quietly, slowly, inexorably). BAD 'The squeeze just quietly tightens.' GOOD 'These agents keep outbidding hospitals and schools until people cannot afford the computing they depend on.' THE CLOSER'S JOB, always: leave the viewer thinking about WHERE THIS IS ALL HEADING (the bigger stakes, the endgame, how a small thing today grows into something much larger, how it could lead to real collapse or loss of control). That forward-looking job is required every time. BUT THE FORM MUST VARY, and this is your worst failure: you are handed the WHOLE NUMBERED SET at once and you keep ending nearly every single one on a rhetorical question. In a recent batch 19 of 19 summaries ended on a question and 'What happens when' appeared 13 times in one list, which reads like a worksheet instead of a pitch. HARD LIMITS across the set you are given: AT MOST ONE IN FOUR summaries may end on a question mark, and the exact phrase 'What happens when' may appear AT MOST TWICE in the whole set. Count them before you answer. Rewrite the rest to point forward as the hardest FLAT DECLARATIVE available, e.g. 'Nobody voted for that.' / 'They are shipping it anyway.' / 'Nobody has found where this curve stops.' / 'No human decided that should happen.' Whichever shape you pick, keep it EASY TO READ at a low reading level: short, plain, concrete, pointing ahead.
 (f) PUNCTUATION, hard rule: NEVER use an em dash or en dash anywhere in a rewrite (no long dash between clauses). They are banned in this project's copy, and the rewrite is the last step that touches the text, so do not introduce one. Where you would reach for a dash, use a period, a comma, or a colon instead. Also avoid hyphenated compounds; write the words separately. Keep the everyday wording rules: say 'AI' or 'AIs', never 'AI system(s)' or 'these systems'; never the word 'doomer'.
 (g) __READING_LEVEL__ Make the LAST sentence the easiest of all. This is the MAIN job of this rewrite: if a summary reads like a magazine essay, you have not done it.
 Return ONLY JSON: {"summaries": {"<number>": "<rewritten summary>", ... one entry per input}}. No prose outside the JSON."""
@@ -2680,6 +2716,75 @@ def _last_sentence(s):
     return parts[-1] if parts else ""
 def _closer_flawed(summary):
     return bool(_NOTXY_RX.search(summary or "")) or bool(_MOOD_RX.search(_last_sentence(summary)))
+
+# ---- BATCH-LEVEL cadence enforcement. The prompt keeps drifting back to "end every idea on a rhetorical
+# question" (a review measured 19 of 19 in one batch, 'What happens when' 13 times in another), which reads
+# as a worksheet. Prompt limits alone did not hold, so enforce the cap in code: flag the EXCESS summaries and
+# send only those back to be converted into flat forward-looking statements. ----
+Q_SHARE_MAX = 0.25   # at most 1 in 4 summaries may end on a question mark
+Q_PHRASE_MAX = 2     # 'What happens when' at most twice per batch
+_WHW_RX = re.compile(r'\bwhat happens when\b', re.I)
+
+def _question_excess(summaries):
+    """Indices whose closer should be converted from a question to a declarative, so the batch lands
+    inside the cadence caps. Keeps the earliest ones (they read as deliberate), converts the rest."""
+    q = [i for i, s in enumerate(summaries) if _last_sentence(s).rstrip().endswith("?")]
+    n = len(summaries)
+    keep = max(1, int(n * Q_SHARE_MAX)) if n else 0
+    excess = set(q[keep:])                      # over the share cap
+    whw = [i for i, s in enumerate(summaries) if _WHW_RX.search(_last_sentence(s))]
+    excess |= set(whw[Q_PHRASE_MAX:])           # over the stock-phrase cap
+    return sorted(excess)
+
+QUESTION_FIX_SYS = """You are a line editor. Each numbered line is one video-idea summary that ends on a rhetorical question. Too many summaries in this batch end that way, so rewrite ONLY the LAST sentence of each into a flat forward-looking DECLARATIVE statement, and change nothing else.
+The closer must still do its job: leave the reader thinking about where this is all heading (the bigger stakes, the endgame, how this grows, how it could lead to collapse or loss of control). Just state it instead of asking it. Good shapes: 'Nobody voted for that.' / 'They are shipping it anyway.' / 'Nobody has found where this curve stops.' / 'No human decided that should happen.' / 'Soon nobody in the room can check its work.'
+HARD RULES: keep every fact, name, number, date and hedge exactly as written; keep the same active voice and plain wording; keep it easy to read at about a 5th grade level; no em dashes; do not add a new claim; do not touch any sentence except the last one; never end the rewritten line with a question mark.
+Return ONLY JSON: {"summaries": {"<number>": "<rewritten summary>", ...}} using the SAME numbers you were given. No prose."""
+
+# ---- RATIO SANITY. Simplification produced "outspent thousands to one" from $10 million against
+# $80,000 (about 125 to 1), a ~10x factual error a reader could check in their head. Recompute any
+# stated "X to one" ratio against the two money/number operands in the same text and flag mismatches. ----
+_SCALE = {"thousand": 1e3, "million": 1e6, "billion": 1e9, "trillion": 1e12}
+_WORD_RATIO = {"ten": 10, "dozens": 36, "hundred": 100, "hundreds": 100, "thousand": 1000,
+               "thousands": 1000, "million": 1e6, "millions": 1e6, "billions": 1e9}
+
+def _nums_in(text):
+    out = []
+    for m in re.finditer(r'\$?\s*([\d][\d,]*(?:\.\d+)?)\s*(thousand|million|billion|trillion)?', text or ""):
+        try:
+            v = float(m.group(1).replace(",", ""))
+        except Exception:
+            continue
+        if m.group(2):
+            v *= _SCALE[m.group(2).lower()]
+        out.append(v)
+    return out
+
+def _ratio_bad(text):
+    """(claimed, actual) when a stated ratio is off by more than 3x from the two biggest numbers
+    present, else None. Deliberately conservative: needs an explicit 'to one' claim and 2+ numbers."""
+    m = re.search(r'\b([a-z]+|[\d,]+)\s+to\s+one\b', text or "", re.I)
+    if not m:
+        return None
+    tok = m.group(1).lower().replace(",", "")
+    claimed = _WORD_RATIO.get(tok)
+    if claimed is None:
+        try:
+            claimed = float(tok)
+        except Exception:
+            return None
+    nums = sorted(_nums_in(text), reverse=True)
+    if len(nums) < 2 or nums[1] <= 0:
+        return None
+    actual = nums[0] / nums[1]
+    if actual <= 0:
+        return None
+    if max(claimed / actual, actual / claimed) > 3.0:
+        return (claimed, actual)
+    return None
+
+RATIO_FIX_SYS = """You are a fact checker fixing ONE arithmetic error per line. Each numbered line is a video-idea summary that states a ratio which contradicts the two numbers in its own text. You are told the correct ratio. Rewrite ONLY the ratio phrase so it matches the arithmetic, and change NOTHING else: keep every number, name, date, hedge, and the sentence order exactly. Use a round, plain phrasing a viewer can follow, for example 'more than a hundred to one'. Keep it easy to read, no em dashes.
+Return ONLY JSON: {"summaries": {"<number>": "<corrected summary>", ...}} using the SAME numbers you were given. No prose."""
 
 CLOSER_FIX_SYS = """You are a line editor. Each numbered line is one video summary whose LAST sentence may have one of two flaws: (1) the tired 'not X, it is Y' contrast construction, e.g. 'The danger is not an enemy. It is being outmatched.', 'It isn't X, it's Y', 'not just X, but Y'; or (2) an agentless MOOD closer that leans on a mood adverb and an abstract noun doing a vague verb, e.g. 'The squeeze just quietly tightens.', 'Control slips away quietly.', 'The shared sense of what is real slowly dissolves.'. Rewrite ONLY to fix that flaw: for (1) state it as a direct positive claim; for (2) name a concrete actor doing or facing something and drop the mood adverb. Change NOTHING ELSE: keep every fact, the length, active voice, plain wording, and do not add an em dash. If a line has neither flaw, return it unchanged. Return ONLY JSON: {"summaries": {"<number>": "<rewritten>", ...}} using the SAME numbers you were given. No prose."""
 
@@ -2704,29 +2809,55 @@ def _activate_summaries(ideas):
                 pass
     except Exception:
         return rew  # fail-open (keeps whatever the first pass produced, possibly nothing)
-    # SECOND PASS (bounded, targeted): the 'not X, it is Y' tell and agentless MOOD closers are
-    # sticky; re-rewrite ONLY the summaries that still have one, once. Own try, so a failure keeps
-    # the first-pass rewrites.
-    try:
-        eff = {i: (rew.get(i) if i in rew else (ideas[i].get("summary") or "")) for i in range(len(ideas))}
-        bad = [i for i in range(len(ideas)) if _closer_flawed(eff[i] or "")]
-        if bad:
-            blines = "\n".join("%d. %s" % (i + 1, eff[i]) for i in bad)
-            msg2 = get_client().messages.create(
-                model=FAST_MODEL, max_tokens=2500, system=CLOSER_FIX_SYS,
-                messages=[{"role": "user", "content": "Rewrite these:\n" + blines}])
-            t2 = "".join(b.text for b in msg2.content if getattr(b, "type", "") == "text")
-            m2 = re.search(r"\{.*\}", t2, re.S)
-            o2 = json.loads(m2.group(0)) if m2 else {}
-            for k, v in (o2.get("summaries") or {}).items():
+    # TARGETED FOLLOW-UP PASSES. Each one re-asks the model about ONLY the summaries a deterministic
+    # detector flagged, so a clean batch costs nothing and a false match is harmless (the instruction
+    # is conditional). Each pass owns its try/except, so a failure keeps every earlier rewrite.
+    def _eff():
+        return {i: (rew[i] if i in rew else (ideas[i].get("summary") or "")) for i in range(len(ideas))}
+
+    def _pass(system, items, tag, budget=2500):
+        """items: [(index, line_text)]. Applies accepted rewrites into `rew`."""
+        if not items:
+            return
+        try:
+            body = "\n".join("%d. %s" % (i + 1, t) for i, t in items)
+            m = get_client().messages.create(
+                model=FAST_MODEL, max_tokens=budget, system=system,
+                messages=[{"role": "user", "content": "Rewrite these:\n" + body}])
+            t = "".join(b.text for b in m.content if getattr(b, "type", "") == "text")
+            mm = re.search(r"\{.*\}", t, re.S)
+            obj = json.loads(mm.group(0)) if mm else {}
+            n = 0
+            for k, v in (obj.get("summaries") or {}).items():
                 try:
                     idx = int(k) - 1
                     if 0 <= idx < len(ideas) and isinstance(v, str) and len(v.strip()) > 20:
-                        rew[idx] = v.strip()
+                        rew[idx] = v.strip(); n += 1
                 except Exception:
                     pass
-    except Exception:
-        pass  # keep first-pass rewrites
+            if n:
+                _log_event({"t": "polish_pass", "which": tag, "n": n})
+        except Exception:
+            pass  # keep whatever earlier passes produced
+
+    # (1) the 'not X, it is Y' tell and agentless MOOD closers, both sticky across prompt revisions
+    e = _eff()
+    _pass(CLOSER_FIX_SYS, [(i, e[i]) for i in range(len(ideas)) if _closer_flawed(e[i] or "")], "closer")
+    # (2) BATCH CADENCE: convert the excess rhetorical-question closers into flat forward-looking
+    # statements. The prompt cap alone did not hold (a review measured 19 of 19 questions in a batch).
+    e = _eff()
+    _pass(QUESTION_FIX_SYS, [(i, e[i]) for i in _question_excess([e[i] for i in range(len(ideas))])], "question_cap")
+    # (3) RATIO ARITHMETIC: a stated "X to one" that contradicts the two numbers in its own sentence
+    # ("thousands to one" from $10 million against $80,000, which is about 125 to 1).
+    e = _eff()
+    ritems = []
+    for i in range(len(ideas)):
+        bad = _ratio_bad(e[i] or "")
+        if bad:
+            claimed, actual = bad
+            ritems.append((i, "%s\n   [the two numbers in this text give about %s to one, not %s to one]"
+                           % (e[i], int(round(actual)), int(round(claimed)))))
+    _pass(RATIO_FIX_SYS, ritems, "ratio_fix", budget=2000)
     return rew
 
 def _dedash(s):
