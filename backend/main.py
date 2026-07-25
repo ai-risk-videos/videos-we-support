@@ -2765,8 +2765,7 @@ def _last_sentence(s):
 # already, so detect it too. Only METHOD verbs count; a concrete first-person ACTION ("I flew to
 # Taiwan and stood outside the fab") is exactly the creator's voice and must stay.
 _META_I_RX = re.compile(
-    r'\bI\s+(?:show|explain|trace|follow|break\s+down|walk\s+(?:you\s+)?through|dig\s+into|unpack|lay\s+out|'
-    r'map\s+out|examine|explore|look\s+at|ask\s+what|argue|make\s+the\s+case|tell\s+the\s+story)\b', re.I)
+    r"\b(?:I|This|The\s+video|The\s+piece)\s+(?:(?:follow|trace|show|explain|cover|examine|explore|unpack|argue)s?|lays?\s+out|maps?\s+out|breaks?\s+down|digs?\s+into|looks?\s+at|walks?\s+(?:you\s+)?through|asks?\s+what|makes?\s+the\s+case|tells?\s+the\s+story)\b", re.I)
 
 def _closer_flawed(summary):
     close = _last_sentence(summary)
@@ -2933,7 +2932,7 @@ Return ONLY JSON: {"summaries": {"<number>": "<corrected summary>", ...}} using 
 CLOSER_FIX_SYS = """You are a line editor. Each numbered line is one video summary whose LAST sentence may have one of three flaws:
 (1) the tired 'not X, it is Y' contrast construction, e.g. 'The danger is not an enemy. It is being outmatched.', 'It isn't X, it's Y', 'not just X, but Y';
 (2) an agentless MOOD closer leaning on a mood adverb and an abstract noun doing a vague verb, e.g. 'The squeeze just quietly tightens.', 'Control slips away quietly.', 'The shared sense of what is real slowly dissolves.';
-(3) FIRST-PERSON METHOD NARRATION, describing what the video does instead of stating the content, e.g. 'I show how a small experiment points to a bigger world.', 'I explain what they actually fear, step by step.', 'I follow who really decides.', 'I trace where the money goes.'
+(3) METHOD NARRATION, describing what the video DOES instead of stating the content. In first person: 'I show how a small experiment points to a bigger world.', 'I explain what they actually fear, step by step.', 'I trace where the money goes.' AND in third person, which is just as bad and which you keep reaching for when asked to make the stakes bigger: 'This follows the unsettling logic of building something smarter than us.', 'This traces how a government wired to loyal AI becomes impossible to overthrow.', 'This breaks down who ends up holding the power.'
 Rewrite ONLY to fix that flaw: for (1) state it as a direct positive claim; for (2) name a concrete actor doing or facing something and drop the mood adverb; for (3) DELETE the 'I show/I explain/I trace' framing and state the actual finding or stake as a fact, e.g. 'I explain what they actually fear, step by step.' becomes 'They fear an AI that hides what it wants until it is too late to switch off.'
 IMPORTANT for (3): a concrete first-person ACTION is the creator's real voice and must be KEPT, e.g. 'I flew to Taiwan and stood outside the fab' or 'I gave an AI my calendar for a month'. Only remove first person when it narrates the VIDEO's method rather than something the person did in the world.
 The closer must still point forward to where this is heading. Change NOTHING ELSE: keep every fact, name, number and hedge, the length, active voice, plain wording, about a 7th grade reading level (plain but not childish), and do not add an em dash. If a line has none of the three flaws, return it unchanged.

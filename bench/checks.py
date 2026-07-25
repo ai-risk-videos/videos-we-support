@@ -54,8 +54,7 @@ NOTXY = re.compile(
     r"|\bnot\s+just\b[^.?!]{2,70}\bbut\b", re.I)
 MOOD = re.compile(r'\b(quietly|slowly|inexorably|steadily|gradually|imperceptibly)\b', re.I)
 META_I = re.compile(
-    r'\bI\s+(?:show|explain|trace|follow|break\s+down|walk\s+(?:you\s+)?through|dig\s+into|unpack|'
-    r'lay\s+out|map\s+out|examine|explore|look\s+at|ask\s+what|argue|make\s+the\s+case|tell\s+the\s+story)\b', re.I)
+    r"\b(?:I|This|The\s+video|The\s+piece)\s+(?:(?:follow|trace|show|explain|cover|examine|explore|unpack|argue)s?|lays?\s+out|maps?\s+out|breaks?\s+down|digs?\s+into|looks?\s+at|walks?\s+(?:you\s+)?through|asks?\s+what|makes?\s+the\s+case|tells?\s+the\s+story)\b", re.I)
 META_OPENER = re.compile(
     r'^\s*(?:A\s+(?:think[- ]piece|follow[- ]up|story|deep[- ]dive|video|film)\b|Reads\s+like|Applies\s+(?:his|her|their)|'
     r'Walks\s+through|Takes\s+\w+\s+and|Uses\s+(?:his|her|their|the)\b|In\s+(?:his|her|their)\s+\w+\s+style|'
