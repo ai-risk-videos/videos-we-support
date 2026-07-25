@@ -120,6 +120,21 @@ def main():
             "stats": checks.stats(all_ideas),
         },
     }
+    # REFUSE to save a broken run. A laptop going to sleep mid-run timed every job out, and the
+    # snapshot still got written with 0 ideas, which would then become the "before" or "after" of
+    # the next comparison and silently corrupt it. A snapshot is evidence: only save a real one.
+    ok_groups = [g for g in groups if g["ideas"]]
+    if not ok_groups:
+        print("\nAll %d jobs failed (network drop, sleep, or the API is down). NOT saving a snapshot,"
+              " because an empty one would poison the next before/after." % len(groups))
+        for g in groups:
+            if g["error"]:
+                print("   %s: %s" % (g["id"], g["error"]))
+        return None
+    if len(ok_groups) < len(groups):
+        print("\nWARNING: %d of %d jobs failed; saving a PARTIAL snapshot. Compare with care."
+              % (len(groups) - len(ok_groups), len(groups)))
+
     os.makedirs(RUNS, exist_ok=True)
     path = os.path.join(RUNS, time.strftime("%Y%m%d-%H%M%S") + ".json")
     json.dump(snap, open(path, "w"), ensure_ascii=False, indent=1)

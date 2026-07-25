@@ -22,10 +22,19 @@ def esc(s):
 
 
 def pick():
+    """Newest two USABLE snapshots. A run that produced no ideas (network drop, machine asleep) is
+    not evidence, so it never gets picked as a before or an after."""
     files = sorted(glob.glob(os.path.join(RUNS, "*.json")))
-    if len(files) < 2:
-        return (files[0] if files else None), None
-    return files[-1], files[-2]
+    good = []
+    for f in files:
+        try:
+            if (json.load(open(f)).get("totals") or {}).get("ideas", 0) > 0:
+                good.append(f)
+        except Exception:
+            pass
+    if len(good) < 2:
+        return (good[0] if good else None), None
+    return good[-1], good[-2]
 
 
 def group_map(snap):

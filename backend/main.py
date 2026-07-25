@@ -149,9 +149,9 @@ TRAJECTORY = (
     "the version that reaches the endgame is the one worth making."
 )
 # ONE canonical reading-level rule, injected into every prompt that writes reader-facing prose
-# (ideas, research packs, sample scripts) via the __READING_LEVEL__ marker. Emerson's note: writing
-# at a low reading level made the ideas land much better, so apply it to EVERYTHING. Emerson then
-# calibrated the target: grade 4 is too low, about grade 7 is right.
+# (ideas, research packs, sample scripts) via the __READING_LEVEL__ marker. Curator feedback: a low
+# reading level made the ideas land much better, so apply it to EVERYTHING. The target was then
+# calibrated: grade 4 is too low, about grade 7 is right.
 READING_LEVEL = (
     "READING LEVEL, applies to EVERY sentence you write: aim at ABOUT 7TH GRADE, meaning a bright 12 or 13 year old "
     "understands it on the FIRST read. This is not about dumbing down the ideas, the ideas stay just as serious and "
@@ -2876,7 +2876,7 @@ def _ratio_bad(text):
     return None
 
 # ---- MEASURED READING GRADE. The prompt asks for ~grade 7 but nothing checked it, so hard source
-# material sailed through at grade 9 to 12 (Emerson: "almost all of these are way higher than grade
+# material sailed through at grade 9 to 12 (curator: "almost all of these are way higher than grade
 # 7?"). Compute Flesch-Kincaid here, re-ask about only the summaries that miss, and ACCEPT the rewrite
 # only if it actually got easier AND kept every number and named source (guards the substance-loss
 # failure mode from the earlier review). ----
