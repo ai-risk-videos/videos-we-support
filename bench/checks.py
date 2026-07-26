@@ -11,6 +11,7 @@ A check is (key, title, feedback, scope, fn):
 `ctx` carries the whole batch so idea-level checks can still see their neighbours.
 """
 import re
+import datetime as _dt
 
 # ---------------------------------------------------------------- text helpers
 def summary(x):
@@ -60,6 +61,21 @@ META_OPENER = re.compile(
     r'Walks\s+through|Takes\s+\w+\s+and|Uses\s+(?:his|her|their|the)\b|In\s+(?:his|her|their)\s+\w+\s+style|'
     r'Handles\s+it\s+the\s+way)', re.I)
 WHW = re.compile(r'\bwhat happens when\b', re.I)
+
+# RECENCY. Feedback: "it constantly brings up things from like years ago when there are way better
+# and more interesting things that have happened since then." Root cause was that the anchor bank
+# was sampled evenly across years. Pre-2015 dates are left alone on purpose: a historical parallel
+# (Asimov, a 1907 bridge collapse) is a legitimate FRAME. What counts as stale is AI-era evidence
+# that is two or more years old when something newer would make the same point.
+YEAR = re.compile(r'\b(20\d\d)\b')
+STALE_SHARE_MAX = 0.25      # at most a quarter of a batch may lean on stale AI evidence
+
+def cited_years(x):
+    return [int(y) for y in YEAR.findall(both(x))]
+
+def stale_years(x, now_year=None):
+    now_year = now_year or _dt.date.today().year
+    return [y for y in cited_years(x) if 2018 <= y <= now_year - 2]
 # The implication sentence stops at a first-order inconvenience instead of the terminal stake.
 # From: "an honest debate might be hard?? snooze. the implications need to point to really serious
 # like civilizational collapse level stuff".
@@ -198,6 +214,13 @@ def _c_doom_tag(x, ctx):
         return "generic doom bolted on instead of the mechanism's own consequence: " + c[:80]
     return None
 
+def _c_recency(ideas, ctx):
+    hits = [i for i, x in enumerate(ideas) if stale_years(x)]
+    keep = max(1, int(len(ideas) * STALE_SHARE_MAX)) if ideas else 0
+    return [(i, "leans on %s evidence when the batch already has %d of %d ideas doing that"
+             % ("/".join(str(y) for y in sorted(set(stale_years(ideas[i])))), len(hits), len(ideas)))
+            for i in hits[keep:]]
+
 def _c_question_cadence(ideas, ctx):
     qs = [i for i, x in enumerate(ideas) if last_sentence(summary(x)).rstrip().endswith("?")]
     keep = max(1, int(len(ideas) * Q_SHARE_MAX)) if ideas else 0
@@ -220,6 +243,8 @@ CHECKS = [
     ("weak_implication", "Implications reach the endgame",
      "An honest debate being hard is a shrug; go to what a society permanently loses.", "idea", _c_weak_implication),
     ("doom_tag", "No bolted-on doom", "Earn the stake from the mechanism, never tag on 'could end humanity'.", "idea", _c_doom_tag),
+    ("recency", "Use recent AI evidence",
+     "It keeps surfacing things from years ago when better things have happened since.", "batch", _c_recency),
     ("ratio_math", "Ratios match their own numbers", "Simplifying must never break the arithmetic.", "idea", _c_ratio),
     ("banned_words", "House wording rules", "Never doomer, AI labs, chatbot, or calling an AI a system.", "idea", _c_banned_words),
     ("cause_harm", "Never make AI look like hype", "The mission is that the danger is real.", "idea", _c_cause_harm),
@@ -253,4 +278,5 @@ def stats(ideas):
         "grade_mean": round(sum(gs) / len(gs), 1) if gs else 0,
         "named_source_pct": round(100 * named / len(ideas)) if ideas else 0,
         "question_pct": round(100 * qs / len(ideas)) if ideas else 0,
+        "stale_evidence_pct": round(100 * sum(1 for x in ideas if stale_years(x)) / len(ideas)) if ideas else 0,
     }

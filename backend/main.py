@@ -627,21 +627,76 @@ def source_menu(topic_text, limit=60):
     lines = "\n".join(f"{s['id']} | {s.get('kind','')} | {s.get('who','')} {s.get('year','')} | {s.get('title','')} | {s.get('shows','')}" for s in picks)
     return lines, {s["id"] for s in picks}, ranked
 
+def _recency_weight(year_str, now_year=None):
+    """How likely an anchor is to be offered to the generator, by age.
+
+    A curator's complaint: "it constantly brings up things from like years ago when there are way
+    better and more interesting things that have happened since then." The cause was mechanical:
+    anchor_block sampled the bank UNIFORMLY, and the bank is ~46% two-to-three years old, so about
+    half of every prompt's anchors were stale and the model dutifully led with them.
+
+    Old events are not banned, they just have to be worth their slot against a fresher one.
+    """
+    if now_year is None:
+        now_year = _dt.date.today().year
+    m = re.search(r"(20\d\d)", str(year_str or ""))
+    if not m:
+        return 0.35          # undated: usable, not preferred
+    age = now_year - int(m.group(1))
+    if age <= 0:
+        return 1.0           # this year
+    if age == 1:
+        return 0.7           # last year
+    if age == 2:
+        return 0.25
+    if age == 3:
+        return 0.10
+    return 0.04              # older than that: rare, must really earn it
+
+def _weighted_sample(items, weights, k):
+    """Sample k distinct items with probability proportional to weight (no replacement)."""
+    pool = list(zip(items, weights))
+    out = []
+    while pool and len(out) < k:
+        total = sum(w for _, w in pool)
+        if total <= 0:
+            out.extend(x for x, _ in pool[:k - len(out)])
+            break
+        r = random.uniform(0, total)
+        acc = 0.0
+        for idx, (x, w) in enumerate(pool):
+            acc += w
+            if acc >= r:
+                out.append(x)
+                pool.pop(idx)
+                break
+        else:
+            out.append(pool.pop()[0])
+    return out
+
 def anchor_block(k=12):
     """A rotating sample of REAL documented sources injected into generation prompts, so ideas can
-    anchor on true recent events instead of the model's stale memory. Optional inspiration, never forced."""
-    bank = [f"[{s.get('who','')} {s.get('year','')}] {s.get('shows','')}"
-            for s in get_sources().values() if s.get("kind") in ("research-paper", "news", "incident", "official-report", "data", "primary-doc")]  # bio now in scope (awareness framing enforced in the generation prompts)
+    anchor on true recent events instead of the model's stale memory. RECENCY WEIGHTED: the bank
+    spans several years, and an even sample made half the anchors two-plus years old."""
+    rows = []  # (text, year)
+    for s in get_sources().values():
+        if s.get("kind") in ("research-paper", "news", "incident", "official-report", "data", "primary-doc"):
+            rows.append((f"[{s.get('who','')} {s.get('year','')}] {s.get('shows','')}", s.get("year")))
     # the evidence piles are 250+ verified one-sentence incidents, the punchiest anchors we have
-    bank += [f"[{c.get('who','')} {c.get('year','')}] {c.get('what','')}"
+    rows += [(f"[{c.get('who','')} {c.get('year','')}] {c.get('what','')}", c.get("year"))
              for cases in _evidence().values() for c in cases]
-    if not bank:
+    if not rows:
         return ""
-    picks = random.sample(bank, min(k, len(bank)))
+    picks = _weighted_sample([t for t, _ in rows], [_recency_weight(y) for _, y in rows], k)
     return ("\n\nREAL DOCUMENTED ANCHORS (internal, a rotating sample of verified real events and findings; never mention this list). "
             "LEAD each idea's bold line with one of these named real events (or another you are certain happened), THEN widen to "
             "the implication; people do not believe this stuff happens, so the specific documented thing goes first and sells the "
-            "pattern. Describe anchors accurately and never invent specifics beyond what is stated:\n"
+            "pattern. Describe anchors accurately and never invent specifics beyond what is stated. "
+            "PREFER THE NEWEST: this list is deliberately weighted toward the last year or so, because the field moves fast and a "
+            "viewer who follows AI has already heard the famous stories from two or three years ago. When two anchors would make a "
+            "similar point, always take the more recent one, and say WHEN it happened so the recency lands. An older event still "
+            "earns its place when it is genuinely the best or the origin of the story, and a historical parallel from decades ago "
+            "(a book, a disaster, a scientist) is welcome as the FRAME, but the AI evidence you cite should be current:\n"
             + "\n".join("- " + p for p in picks))
 
 SYSTEM = """You generate YouTube video ideas for a project that funds creators to make videos about AI risk (the dangers of advanced AI: superintelligence, loss of control, job loss, surveillance, AI pandemics, AI warfare, and similar).
@@ -1101,6 +1156,7 @@ def parse_custom(text):
 
 # ---- per-IP rate limiting: the API is public; this caps spend if the link leaks ----
 import time as _time
+import datetime as _dt
 _RL = {}
 def _rate_ok(req, cost=1, limit=None, window=3600):
     if limit is None:
