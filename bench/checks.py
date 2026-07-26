@@ -75,6 +75,10 @@ YEAR = re.compile(r'\b(20\d\d)\b')
 # that judgement. It is a PROXY: it reads the opening for a named actor or a dated/attributed event,
 # so it will miss an unnamed-but-real incident and can be fooled by a name used abstractly. Treat a
 # move in this number as a signal, and read the openings when it matters.
+# MEASURED AGAINST A MODEL CLASSIFIER: on one 68-idea batch the classifier said 47% event-first
+# and this regex said 21%; after a prompt fix the classifier said 62% and the regex 23%. So the
+# regex UNDERCOUNTS badly and its absolute value is close to meaningless. It is here as a cheap
+# tripwire. When this quality actually matters, have a model classify the openings.
 PROPER = re.compile(
     r'\b(OpenAI|Anthropic|Google|DeepMind|Meta|Microsoft|METR|Palisade|Apollo|DeepSeek|Nvidia|Tesla|'
     r'Amazon|Apple|Stargate|Gemini|Claude|ChatGPT|Pentagon|Congress|Colorado|Hinton|Altman|Amodei|'
@@ -82,12 +86,13 @@ PROPER = re.compile(
     r'Department of Justice|Supreme Court|FDA|FBI|EU|UK|China)\b')
 # a specific doer, even when unnamed, if paired with something that actually occurred
 DOER = re.compile(r'\b(researchers?|scientists?|a study|one study|engineers?|a team|lawyers?|parents?|'
-                  r'a court|regulators?|a judge|prosecutors?|users?|employees?|a company)\b', re.I)
+                  r'a court|regulators?|a judge|prosecutors?|users?|employees?|a company|an AI|the AI|one AI|a model|the model|a studio boss|an executive)\b', re.I)
 HAPPENED = re.compile(
     r'\b(caught|found|sued|quit|resigned|released|shipped|published|admitted|discovered|refused|tested|'
     r'built|paid|hired|fired|leaked|warned|reported|announced|scored|beat|retired|pulled|dropped|gave up|'
     r'went to court|walked out|took down|almost took|told|asked|ran|measured|tracked|trained|handed|'
-    r'set up|made a rule|filed|signed|pledged|froze|blocked|banned|'
+    r'set up|made a rule|filed|signed|pledged|froze|blocked|banned|spent|used|settled|sued|'
+    r'flew|beat|won|lost|learned|escaped|copied|deleted|culled|designed|invented|'
     r'had to (?:publish|pull|issue|ship|release|apologi[sz]e|stop|add|change))\b', re.I)
 WHEN = re.compile(r'\b(20\d\d|last (?:year|month|week|spring|summer|fall|winter)|this (?:year|month)|'
                   r'in (?:January|February|March|April|May|June|July|August|September|October|November|December))\b', re.I)
