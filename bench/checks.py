@@ -68,6 +68,48 @@ WHW = re.compile(r'\bwhat happens when\b', re.I)
 # (Asimov, a 1907 bridge collapse) is a legitimate FRAME. What counts as stale is AI-era evidence
 # that is two or more years old when something newer would make the same point.
 YEAR = re.compile(r'\b(20\d\d)\b')
+
+# EVENT-FIRST OPENINGS. Feedback: "more of the video ideas need to lead with some interesting real
+# thing that happened." A model classified a 68-idea sample at 47% event-first; the rest opened on a
+# general claim ("We still cannot see inside the AIs we're building"). This heuristic approximates
+# that judgement. It is a PROXY: it reads the opening for a named actor or a dated/attributed event,
+# so it will miss an unnamed-but-real incident and can be fooled by a name used abstractly. Treat a
+# move in this number as a signal, and read the openings when it matters.
+PROPER = re.compile(
+    r'\b(OpenAI|Anthropic|Google|DeepMind|Meta|Microsoft|METR|Palisade|Apollo|DeepSeek|Nvidia|Tesla|'
+    r'Amazon|Apple|Stargate|Gemini|Claude|ChatGPT|Pentagon|Congress|Colorado|Hinton|Altman|Amodei|'
+    r'Sutskever|Bengio|Leike|Musk|Redwood|Epoch|Waymo|Boston Dynamics|Justice Department|'
+    r'Department of Justice|Supreme Court|FDA|FBI|EU|UK|China)\b')
+# a specific doer, even when unnamed, if paired with something that actually occurred
+DOER = re.compile(r'\b(researchers?|scientists?|a study|one study|engineers?|a team|lawyers?|parents?|'
+                  r'a court|regulators?|a judge|prosecutors?|users?|employees?|a company)\b', re.I)
+HAPPENED = re.compile(
+    r'\b(caught|found|sued|quit|resigned|released|shipped|published|admitted|discovered|refused|tested|'
+    r'built|paid|hired|fired|leaked|warned|reported|announced|scored|beat|retired|pulled|dropped|gave up|'
+    r'went to court|walked out|took down|almost took|told|asked|ran|measured|tracked|trained|handed|'
+    r'set up|made a rule|filed|signed|pledged|froze|blocked|banned|'
+    r'had to (?:publish|pull|issue|ship|release|apologi[sz]e|stop|add|change))\b', re.I)
+WHEN = re.compile(r'\b(20\d\d|last (?:year|month|week|spring|summer|fall|winter)|this (?:year|month)|'
+                  r'in (?:January|February|March|April|May|June|July|August|September|October|November|December))\b', re.I)
+HYPOTHETICAL = re.compile(r'^\s*(imagine|picture|think about|suppose|what if|consider)\b', re.I)
+
+EVENT_FIRST_MIN = 0.60      # at least this share of a batch should open on a real occurrence
+
+def opening(x):
+    """The first sentence of the hook, falling back to the summary for bare-noun-phrase titles."""
+    h = sentences(hook(x))
+    if h and len(re.findall(r"[A-Za-z]+", h[0])) >= 4:
+        return h[0]
+    s2 = sentences(summary(x))
+    return (h[0] if h else "") if not s2 else s2[0]
+
+def opens_on_event(x):
+    o = opening(x)
+    if not o or HYPOTHETICAL.match(o):
+        return False
+    named = bool(PROPER.search(o)) or bool(DOER.search(o))
+    occurred = bool(HAPPENED.search(o)) or bool(WHEN.search(o))
+    return named and occurred
 STALE_SHARE_MAX = 0.25      # at most a quarter of a batch may lean on stale AI evidence
 
 def cited_years(x):
@@ -221,6 +263,13 @@ def _c_recency(ideas, ctx):
              % ("/".join(str(y) for y in sorted(set(stale_years(ideas[i])))), len(hits), len(ideas)))
             for i in hits[keep:]]
 
+def _c_event_first(ideas, ctx):
+    """Batch check: too many ideas opening on an abstraction instead of a real occurrence."""
+    weak = [i for i, x in enumerate(ideas) if not opens_on_event(x)]
+    allowed = int(len(ideas) * (1 - EVENT_FIRST_MIN))
+    return [(i, "opens on a general claim, not something that happened: " + opening(ideas[i])[:80])
+            for i in weak[allowed:]]
+
 def _c_question_cadence(ideas, ctx):
     qs = [i for i, x in enumerate(ideas) if last_sentence(summary(x)).rstrip().endswith("?")]
     keep = max(1, int(len(ideas) * Q_SHARE_MAX)) if ideas else 0
@@ -243,6 +292,8 @@ CHECKS = [
     ("weak_implication", "Implications reach the endgame",
      "An honest debate being hard is a shrug; go to what a society permanently loses.", "idea", _c_weak_implication),
     ("doom_tag", "No bolted-on doom", "Earn the stake from the mechanism, never tag on 'could end humanity'.", "idea", _c_doom_tag),
+    ("event_first", "Lead with a real thing that happened",
+     "More ideas need to open on an actual event, not a general claim.", "batch", _c_event_first),
     ("recency", "Use recent AI evidence",
      "It keeps surfacing things from years ago when better things have happened since.", "batch", _c_recency),
     ("ratio_math", "Ratios match their own numbers", "Simplifying must never break the arithmetic.", "idea", _c_ratio),
@@ -279,4 +330,5 @@ def stats(ideas):
         "named_source_pct": round(100 * named / len(ideas)) if ideas else 0,
         "question_pct": round(100 * qs / len(ideas)) if ideas else 0,
         "stale_evidence_pct": round(100 * sum(1 for x in ideas if stale_years(x)) / len(ideas)) if ideas else 0,
+        "event_first_pct": round(100 * sum(1 for x in ideas if opens_on_event(x)) / len(ideas)) if ideas else 0,
     }
