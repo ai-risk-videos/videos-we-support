@@ -142,6 +142,41 @@ HYPOTHETICAL = re.compile(r'^\s*(imagine|picture|think about|suppose|what if|con
 
 EVENT_FIRST_MIN = 0.60      # at least this share of a batch should open on a real occurrence
 
+# PAPER-FIRST. Feedback on a real pitch: "starting off with a paper is boring! starting off with an
+# incident or something interesting, a fact, a stat, something that will intrigue people, THEN
+# talking about how it portends gradual disempowerment."
+# The distinction is NOT "no researchers". "Researchers dropped 1000 AI agents into Minecraft" is an
+# incident and is fine. What is boring is opening on a DOCUMENT existing, or on people ARGUING:
+# "The gradual disempowerment paper makes a chilling argument", "Six researchers laid out how...".
+# Something HAPPENED beats someone SAID.
+_DOC_SUBJECT = re.compile(
+    r"^\s*(?:in\s+\d{4},?\s+)?(?:the|a|an|one|this|that|new|recent)?\s*"
+    r"(?:[a-z]+\s+){0,3}?(paper|study|report|analysis|preprint|essay|framework|thesis|argument|"
+    r"survey|manifesto)\b", re.I)
+_ARGUE_VERB = re.compile(
+    r"\b(?:makes?\s+(?:a|the)\s+(?:\w+\s+)?(?:argument|case)|argues?|argued|laid?\s+out|lays\s+out|"
+    r"outlines?|outlined|proposes?|proposed|describes?|described|contends?|posits?|concludes?)\b", re.I)
+_RESEARCHER_SUBJ = re.compile(
+    r"^\s*(?:six|five|four|three|two|a\s+group\s+of|a\s+team\s+of|\d+)?\s*"
+    r"(?:researchers?|scientists?|academics?|authors?|experts?)\b", re.I)
+
+def opens_on_paper(x):
+    """True when the opening leads with a document existing, or with people arguing a position,
+    rather than with something that happened or a number that lands."""
+    o = opening(x)
+    if not o:
+        return False
+    if _DOC_SUBJECT.match(o):
+        return True
+    if _RESEARCHER_SUBJ.match(o) and _ARGUE_VERB.search(o):
+        return True
+    return False
+
+def _c_paper_first(ideas, ctx):
+    hits = [i for i, x in enumerate(ideas) if opens_on_paper(x)]
+    return [(i, "opens on a paper or an argument, not on something that happened: " + opening(ideas[i])[:80])
+            for i in hits]
+
 # CLOSER SAMENESS. Every rule I add becomes the next monoculture: banning abstract closers produced
 # rhetorical questions, capping those produced method narration, and demanding catastrophe produced
 # permanence phrasing ("no one can undo it", "nobody can take it back", 3 ideas ending on the exact
@@ -224,9 +259,22 @@ WEAK_STAKE = re.compile(
     r'|(?:weakens|erodes|frays|blurs)\s*\.\s*$'
     r')', re.I)
 # the opposite failure: reaching for generic doom instead of earning the stake from the mechanism
+# Narrowed: naming extinction is now WANTED when the chain earns it ("the implications need to point
+# to AND THIS COULD DESTROY THE FUCKING WORLD level vibes"). Only contentless filler is a defect.
 DOOM_TAG = re.compile(
-    r'\b(?:could\s+end\s+(?:humanity|civili[sz]ation|us all)|an?\s+extinction\s+(?:risk|event)'
-    r'|the\s+stakes\s+could\s+not\s+be\s+higher|the\s+end\s+of\s+(?:humanity|civili[sz]ation))', re.I)
+    r'\bthe\s+stakes\s+could\s+not\s+be\s+higher\b'
+    r'|^\s*(?:and\s+)?(?:this|that)\s+is\s+an?\s+existential\s+(?:risk|threat)\s*\.\s*$'
+    r'|^\s*(?:and\s+)?(?:this|that)\s+could\s+end\s+(?:humanity|civili[sz]ation)\s*\.\s*$', re.I)
+
+# The stake is described with a word too small for it. "a disaster" is what you call a car crash.
+SMALL_WORD = re.compile(
+    r'\b(?:an?\s+)?(?:disaster|crisis|catastrophe\s+of\s+sorts|problem|mess|serious\s+trouble|'
+    r'setback|headache|nightmare\s+scenario)\b', re.I)
+# ending on a seminar prompt instead of an outcome
+PHILOSOPHICAL = re.compile(
+    r'\b(?:the\s+real\s+question\s+is|the\s+question\s+becomes|raises?\s+the\s+question\s+of\s+what|'
+    r'what\s+(?:it\s+)?means?\s+to\s+be\s+human|what\s+a\s+society\s+does\s+when|'
+    r'what\s+we\s+owe|forces?\s+us\s+to\s+ask)\b', re.I)
 DOOMER = re.compile(r'\bdoomers?\b', re.I)
 AI_LABS = re.compile(r'\bAI\s+labs?\b', re.I)
 VAGUE_SYSTEM = re.compile(r'\b(these systems|those systems|the system\b|a system\b|AI systems?)\b', re.I)
@@ -364,6 +412,20 @@ def _c_event_first(ideas, ctx):
     return [(i, "opens on a general claim, not something that happened: " + opening(ideas[i])[:80])
             for i in weak[allowed:]]
 
+def _c_small_word(x, ctx):
+    c = last_sentence(summary(x))
+    m = SMALL_WORD.search(c)
+    if m:
+        return "stake described with a word too small for it ('%s'): %s" % (m.group(0), c[:70])
+    return None
+
+def _c_philosophical(x, ctx):
+    c = last_sentence(summary(x))
+    m = PHILOSOPHICAL.search(c)
+    if m:
+        return "ends on a seminar prompt, not an outcome ('%s'): %s" % (m.group(0), c[:70])
+    return None
+
 def _c_question_cadence(ideas, ctx):
     qs = [i for i, x in enumerate(ideas) if last_sentence(summary(x)).rstrip().endswith("?")]
     keep = max(1, int(len(ideas) * Q_SHARE_MAX)) if ideas else 0
@@ -388,6 +450,12 @@ CHECKS = [
     ("doom_tag", "No bolted-on doom", "Earn the stake from the mechanism, never tag on 'could end humanity'.", "idea", _c_doom_tag),
     ("event_first", "Lead with a real thing that happened",
      "More ideas need to open on an actual event, not a general claim.", "batch", _c_event_first),
+    ("small_word", "Words big enough for the stake",
+     "'A disaster' is what you call a car crash; say what is actually lost.", "idea", _c_small_word),
+    ("philosophical", "End on an outcome, not a musing",
+     "'The real question is what a society does when...' is a boring philosophical frame.", "idea", _c_philosophical),
+    ("paper_first", "Do not open on a paper",
+     "Starting off with a paper is boring; open on an incident, a fact, or a stat.", "batch", _c_paper_first),
     ("closer_variety", "Vary how the stakes land",
      "The endings started rhyming: too many 'nobody can undo it' closers.", "batch", _c_closer_variety),
     ("recency", "Use recent AI evidence",
