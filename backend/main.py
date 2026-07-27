@@ -2842,6 +2842,7 @@ _NOTXY_RX = re.compile(
     re.I)
 # (2) agentless MOOD closer: a mood-crutch adverb ('The squeeze just quietly tightens.'). Checked
 # only against the LAST sentence, so mid-summary uses of 'slowly' etc. do not trip it.
+DASH_RX = re.compile(r'[\u2014\u2013]')
 _MOOD_RX = re.compile(r"\b(quietly|slowly|inexorably|steadily|gradually|imperceptibly)\b", re.I)
 def _last_sentence(s):
     parts = [p for p in re.split(r'(?<=[.?!])\s+', (s or "").strip()) if p.strip()]
@@ -3086,6 +3087,25 @@ def _activate_summaries(ideas):
     def _eff():
         return {i: (rew[i] if i in rew else (ideas[i].get("summary") or "")) for i in range(len(ideas))}
 
+    def _introduces_flaw(old, new):
+        """True when a rewrite ADDS a banned pattern the original did not have.
+
+        The passes run in a fixed order and later ones rewrite the same sentences, so the grade and
+        escalation passes were quietly undoing the closer pass: a run with zero 'not X, it is Y' came
+        back with five, and 'The video traces...' reappeared after being stripped. Nothing re-checked
+        at the end. This makes every pass do-no-harm: it may fix its own target, but it can never hand
+        back text that is newly broken in some other way."""
+        checks = (_NOTXY_RX.search, _META_I_RX.search,
+                  lambda t: _MOOD_RX.search(_last_sentence(t)),
+                  lambda t: DASH_RX.search(t), _creator_meta)
+        for fn in checks:
+            try:
+                if fn(new) and not fn(old):
+                    return True
+            except Exception:
+                pass
+        return False
+
     def _pass(system, items, tag, budget=2500, accept=None):
         """items: [(index, line_text)]. Applies accepted rewrites into `rew`. When `accept(old,new)`
         is given, a rewrite is only kept if it passes that check, so a pass can never make things
@@ -3110,11 +3130,14 @@ def _activate_summaries(ideas):
                     if not (0 <= idx < len(ideas) and isinstance(v, str) and len(v.strip()) > 20):
                         continue
                     new = v.strip()
-                    if accept is not None:
-                        old = rew[idx] if idx in rew else (ideas[idx].get("summary") or "")
-                        if not accept(old, new):
-                            rej += 1
-                            continue
+                    old = rew[idx] if idx in rew else (ideas[idx].get("summary") or "")
+                    # every pass is do-no-harm, on top of its own accept test
+                    if _introduces_flaw(old, new):
+                        rej += 1
+                        continue
+                    if accept is not None and not accept(old, new):
+                        rej += 1
+                        continue
                     rew[idx] = new; n += 1
                 except Exception:
                     pass
