@@ -67,10 +67,13 @@ def build(after_path, before_path):
     net_better = net_worse = 0
     for key, title, feedback, _scope, _fn in checks.CHECKS:
         a = after["totals"]["violations"].get(key, 0)
-        b = before["totals"]["violations"].get(key, 0) if before else None
+        # A check added AFTER the older snapshot was taken has no "before" number. Defaulting it to 0
+        # made every new rule look like a fresh regression (event_first showed "0 -> 30, worse" on the
+        # run where it was introduced). Show it as new and keep it out of the improved/worse tally.
+        b = (before["totals"]["violations"].get(key) if before else None)
         if b is None:
-            cell, cls = "<td class='n'>-</td>", "n"
-            delta = ""
+            cell, cls = "<td class='n new'>new</td>", "n"
+            delta = "<span class='newrule'>first measured</span>"
         else:
             if a < b:
                 cls, delta, = "good", "&darr; better"
@@ -170,7 +173,8 @@ h4{font-size:13px;color:var(--acc);margin:18px 0 8px;text-transform:uppercase;le
 table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--edge);border-radius:11px;overflow:hidden}
 th,td{padding:10px 13px;text-align:left;font-size:14px;border-bottom:1px solid #1c222b}
 th{color:var(--mut);font-size:11.5px;text-transform:uppercase;letter-spacing:.05em}
-td.n{text-align:center;font-variant-numeric:tabular-nums}
+td.n{text-align:center;font-variant-numeric:tabular-nums}td.new{color:var(--acc)}
+.newrule{color:var(--acc);font-size:12px}
 td.good{color:var(--good);font-weight:700}td.warn{color:var(--warn);font-weight:700}
 tr:last-child td{border-bottom:0}
 .fb{display:block;color:var(--mut);font-size:12.5px;font-weight:400;margin-top:2px}

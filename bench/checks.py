@@ -59,7 +59,14 @@ META_I = re.compile(
 META_OPENER = re.compile(
     r'^\s*(?:A\s+(?:think[- ]piece|follow[- ]up|story|deep[- ]dive|video|film)\b|Reads\s+like|Applies\s+(?:his|her|their)|'
     r'Walks\s+through|Takes\s+\w+\s+and|Uses\s+(?:his|her|their|the)\b|In\s+(?:his|her|their)\s+\w+\s+style|'
-    r'Handles\s+it\s+the\s+way)', re.I)
+    r'Handles\s+it\s+the\s+way'
+    # naming the creator's taste instead of saying something about the world:
+    # "Veritasium loves a slow-burn fragility story about a system we all depend on."
+    r"|[A-Z][A-Za-z']+\s+(?:loves|likes|thrives\s+on|is\s+known\s+for|specialises\s+in|"
+    r"specializes\s+in|is\s+at\s+(?:his|her|their)\s+best|does\s+(?:his|her|their)\s+best)"
+    r"|Perfect\s+for\s+[A-Z]"
+    r"|This\s+is\s+[A-Z][A-Za-z']*(?:'s)?\s+(?:kind\s+of|style|territory|wheelhouse)"
+    r"|[A-Z][A-Za-z']+'s\s+audience\s+(?:will|would|loves))", re.I)
 WHW = re.compile(r'\bwhat happens when\b', re.I)
 
 # RECENCY. Feedback: "it constantly brings up things from like years ago when there are way better
@@ -136,6 +143,11 @@ WEAK_STAKE = re.compile(
     r'|raises?\s+(?:hard\s+|real\s+|new\s+)?questions?\b'
     r'|worth\s+(?:watching|asking|thinking about)\b'
     r'|is\s+(?:a\s+)?(?:real\s+)?(?:problem|concern|worry)\b'
+    # stops at a mid-level harm: an abstract good simply degrading, with no next rung.
+    # "When you cannot tell what a human actually made, proof itself gets weaker."
+    r'|(?:proof|evidence|truth|trust|accountability|oversight|consensus|the\s+record)'
+    r'\s*(?:itself\s*)?(?:gets|grows|becomes|is)\s+(?:weaker|murkier|shakier|less\b)'
+    r'|(?:weakens|erodes|frays|blurs)\s*\.\s*$'
     r')', re.I)
 # the opposite failure: reaching for generic doom instead of earning the stake from the mechanism
 DOOM_TAG = re.compile(
