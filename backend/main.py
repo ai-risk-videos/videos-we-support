@@ -707,7 +707,15 @@ def anchor_block(k=12):
     spans several years, and an even sample made half the anchors two-plus years old."""
     rows = []  # (text, year)
     for s in get_sources().values():
-        if s.get("kind") in ("research-paper", "news", "incident", "official-report", "data", "primary-doc"):
+        # WHY THIS LIST IS WIDE: it used to allow only papers, news and official reports, which made
+        # 685 of 1,524 curated sources (45%) invisible to the generator, including every tweet. That is
+        # exactly where the wild, viral, recent material lives. Two examples the curator named as the
+        # most interesting incidents in the whole bank, an AI trying to kill an employee to avoid
+        # shutdown and Mythos agents killing each other over resources, are both kind="tweet" and could
+        # never be offered as anchors. The generator was left reaching for benchmark rates and system
+        # card statistics because those were the only things it could see.
+        if s.get("kind") in ("research-paper", "news", "incident", "official-report", "data",
+                             "primary-doc", "tweet", "blog", "expert-quote", "video", "scenario"):
             rows.append((f"[{s.get('who','')} {s.get('year','')}] {s.get('shows','')}", s.get("year")))
     # the evidence piles are 250+ verified one-sentence incidents, the punchiest anchors we have
     rows += [(f"[{c.get('who','')} {c.get('year','')}] {c.get('what','')}", c.get("year"))
