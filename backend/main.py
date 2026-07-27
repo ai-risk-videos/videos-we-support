@@ -3572,9 +3572,10 @@ async def custom(req: Request):
         if not candidates:
             return JSONResponse({"error": "no ideas parsed"}, status_code=502)
         if is_more:
-            # Follow-up batches (the page auto-loads these): skip the editor pass so more
-            # ideas stream in fast. The generator prompt already enforces the quality bar.
-            ideas = candidates[:15]
+            # Follow-up batches: the generator already produced 32 candidates and we were binning 17
+            # of them. The curator needs 20-30 KEEPERS on the page, so raw yield per call matters more
+            # than shaving seconds. Return nearly all of them and let the curator cut.
+            ideas = candidates[:28]
         else:
             ideas = candidates[:25]
         # SUMMARY POLISH: rewrite the final summaries to active voice (separate fast Sonnet pass on the

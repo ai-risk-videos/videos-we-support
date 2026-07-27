@@ -184,6 +184,7 @@ h1{font-size:26px;margin:0 0 4px;font-weight:800}.dot{color:var(--red)}
 .pagenote{background:#141b12;border:1px solid #33402e;border-radius:10px;padding:13px 16px;margin:0 0 18px;color:#cfd8c8;font-size:14.5px;line-height:1.55;white-space:pre-wrap}
 .morebtn{display:block;margin:22px auto 8px;font:inherit;font-size:14px;font-weight:700;background:var(--surf);color:#9ac47f;border:1px solid #33402e;border-radius:9px;padding:12px 20px;cursor:pointer}
 .morebtn:hover{border-color:#9ac47f}
+.morebtn.working{border-color:#9ac47f;background:#1d2a18;cursor:pointer}
 .editpagebtn{position:fixed;top:12px;right:12px;z-index:60;font:inherit;font-size:12.5px;font-weight:800;background:var(--gold);color:#0b0a0c;border:none;border-radius:20px;padding:9px 16px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.5)}
 .editpagebtn:hover{filter:brightness(1.08)}
 @media(max-width:640px){.editpagebtn{top:8px;right:8px;font-size:12px;padding:8px 13px}}
@@ -232,7 +233,7 @@ h1{font-size:26px;margin:0 0 4px;font-weight:800}.dot{color:var(--red)}
  <button id="import">Import</button>
  <input id="importfile" type="file" accept="application/json,.json" hidden>
  <button id="reset">Reset</button>
- <span class="filters"><span class="pagev">v 0727.0631</span></span>
+ <span class="filters"><span class="pagev">v 0727.1946</span></span>
 </div>
 <div id="list"></div>
 </div>
@@ -246,7 +247,7 @@ const PAGES_COL="creator_pages";
 // ---- channel tailoring (/tailor): re-rank the pool for one creator; profile also shapes packs ----
 const TAILOR_API="https://videos-similar-api-production.up.railway.app/tailor";
 const CUSTOM_API="https://videos-similar-api-production.up.railway.app/custom"; // old "Videos We Support" idea generation
-const BUILD_V="0727.0631"; // tailor-cache is keyed to this: LEADS indices shift when the page is rebuilt
+const BUILD_V="0727.1946"; // tailor-cache is keyed to this: LEADS indices shift when the page is rebuilt
 let channelProfile="", channelName="", channelHandle="", tailored=false, fullView=false, tailorOrder=null;
 let currentPageId=""; // set on a saved ?p= creator page; lets packs/scripts save ONTO that page so the creator sees them instantly
 let researchNote=""; // one-shot line shown in the editor after a fresh generation: how many transcripts were read (so it is VISIBLE the tool used them)
@@ -786,7 +787,7 @@ function startCurate(ideas,handle,channel,note,profile,style,rejected){
   '<textarea id="curnote" placeholder="Optional note to the creator (shown at the top of their page)">'+esc(note||"")+'</textarea>'+
   '<div class="addrow"><textarea id="addidea" rows="2" placeholder="Add your own idea, or paste a news story or a line from their longlist. It becomes an idea here, and gets a research pack + sample script like the rest."></textarea><button class="addbtn" id="addbtn">＋ Add idea</button></div>'+
   '<div id="ccards"></div>'+
-  '<button class="morebtn" id="moreideas">＋ Get more ideas (keeps the ones you have)</button>'+
+  '<button class="morebtn" id="moreideas">＋ Get 50 more ideas (keeps the ones you have)</button>'+
   '<div id="rejwrap"></div>';
  researchNote=""; // one-shot: shown only for the fresh generation that set it, not on later edits/restores
  renderCards();
@@ -823,36 +824,77 @@ async function regenerate(mode){
 // APPEND more ideas to the current draft WITHOUT replacing it (regenerate wipes; this keeps your list
 // and selection). Sends the cached profile so the backend skips re-research and returns a fresh batch,
 // plus the current titles as `exclude` so the new ones do not overlap what you already have.
+// Bulk "more ideas". The goal is 20-30 KEEPERS on a creator's page, so the curator needs to see far
+// more than that and cut. One generation call takes ~200s and returns at most ~28, and asking a
+// single call for 50 would blow the client timeout, so this runs SEVERAL rounds back to back,
+// appending each batch as it lands. Rounds are sequential on purpose: the backend is one instance
+// and parallel generations make each other time out.
+const MORE_TARGET = 50;      // how many NEW ideas one click tries to add
+const MORE_MAX_ROUNDS = 4;   // hard stop, so a dry channel cannot loop forever
+let moreCancel = false;
+
 async function addMoreIdeas(){
  const url=cleanChanUrl(curateHandle);
  if(!url){toast("No channel on this draft to add to");return;}
- const btn=$("#moreideas");const orig=btn?btn.textContent:"";
- if(btn){btn.disabled=true;btn.textContent="Finding more ideas…";}
+ const btn=$("#moreideas");const orig="＋ Get more ideas (keeps the ones you have)";
  const norm=t=>(t||"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();
- const exclude=curateIdeas.map(ideaTitle).filter(Boolean).slice(0,80);
- const rejected=curateRejected.map(ideaTitle).filter(Boolean).slice(0,40);
+ moreCancel=false;
+ let added=0, round=0, dry=0;
+ const setLabel=t=>{if(btn)btn.textContent=t;};
+ if(btn){btn.disabled=false;btn.classList.add("working");}
+ setLabel("Finding ideas… 0 of "+MORE_TARGET+"  (click to stop)");
+ // while it runs the button becomes a stop control, so a 10 minute job is never a trap
+ const stopper=()=>{moreCancel=true;setLabel("Stopping after this batch…");};
+ if(btn){btn.onclick=stopper;}
  try{
-  const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),200000);
-  const body={channelUrl:url,exclude:exclude,rejected:rejected,channel:curateChannel};
-  const prof=(curateProfile&&curateProfile.length>80)?curateProfile:((channelProfile&&channelProfile.length>80)?channelProfile:"");
-  if(prof)body.profile=prof; // cached profile → backend "more" path: no re-research, ~15 fresh ideas
-  const r=await fetch(CUSTOM_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body),signal:ctrl.signal});
-  clearTimeout(to);
-  if(r.status===429){toast("Busy right now — wait a minute and try again.");return;}
-  const j=await r.json();
-  if(j&&Array.isArray(j.ideas)&&j.ideas.length){
+  while(added<MORE_TARGET && round<MORE_MAX_ROUNDS && !moreCancel){
+   round++;
+   setLabel("Finding ideas… "+added+" of "+MORE_TARGET+", batch "+round+"  (click to stop)");
+   let j=null;
+   try{
+    const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),285000);
+    const body={channelUrl:url,
+                exclude:curateIdeas.map(ideaTitle).filter(Boolean).slice(0,120),
+                rejected:curateRejected.map(ideaTitle).filter(Boolean).slice(0,40),
+                channel:curateChannel};
+    const prof=(curateProfile&&curateProfile.length>80)?curateProfile:((channelProfile&&channelProfile.length>80)?channelProfile:"");
+    if(prof)body.profile=prof; // cached profile -> the fast "more" path, no re-research
+    const r=await fetch(CUSTOM_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body),signal:ctrl.signal});
+    clearTimeout(to);
+    if(r.status===429){toast("Busy right now. Keeping the "+added+" found so far.");break;}
+    j=await r.json();
+   }catch(e){
+    // one slow batch should not throw away the batches that already worked
+    toast("A batch timed out. Keeping the "+added+" ideas found so far.");
+    break;
+   }
+   if(!(j&&Array.isArray(j.ideas)&&j.ideas.length)){dry++;if(dry>=2)break;continue;}
    const seen=new Set(curateIdeas.map(x=>norm(ideaTitle(x))));
-   let added=0;
-   j.ideas.forEach(x=>{const t=x.title||"";const k=norm(t);if(!k||seen.has(k))return;seen.add(k);curateIdeas.push({title:t,summary:x.summary||"",url:x.url||"",who:x.who||"",y:x.y||""});added++;});
-   if(added){
-    if(!curateProfile&&j.profile)curateProfile=j.profile; // cache the profile so the NEXT click is fast
-    curateDirty=true;renderCards();scheduleSave();
-    const cards=document.querySelectorAll("#ccards .ccard");if(cards.length>=added)cards[cards.length-added].scrollIntoView({behavior:"smooth",block:"center"});
-    toast("Added "+added+" more ideas below your current list");
-   }else{toast("No genuinely new ideas that time — try once more");}
-  }else{toast((j&&j.error)?j.error:"Could not get more ideas — try again");}
- }catch(e){toast("Took too long — try again");}
- finally{if(btn){btn.disabled=false;btn.textContent=orig||"＋ Get more ideas (keeps the ones you have)";}}
+   let newThisRound=0;
+   j.ideas.forEach(x=>{
+    const t=x.title||"";const k=norm(t);
+    if(!k||seen.has(k))return;
+    seen.add(k);
+    curateIdeas.push({title:t,summary:x.summary||"",url:x.url||"",who:x.who||"",y:x.y||""});
+    newThisRound++;
+   });
+   if(!curateProfile&&j.profile)curateProfile=j.profile;
+   if(newThisRound===0){dry++;if(dry>=2)break;continue;}
+   dry=0;added+=newThisRound;
+   // paint after EVERY batch so the curator can start reading while the rest generate
+   curateDirty=true;renderCards();scheduleSave();
+   toast("Added "+newThisRound+" more ("+added+" this run)");
+  }
+ } finally {
+  if(btn){btn.disabled=false;btn.classList.remove("working");btn.textContent=orig;btn.onclick=addMoreIdeas;}
+ }
+ if(added){
+  const cards=document.querySelectorAll("#ccards .ccard");
+  if(cards.length>=added)cards[cards.length-added].scrollIntoView({behavior:"smooth",block:"center"});
+  toast("Done: "+added+" new ideas added. You now have "+curateIdeas.length+".");
+ } else {
+  toast("No genuinely new ideas came back. Try once more, or reject a few to steer it.");
+ }
 }
 function renderCards(){
  const w=$("#ccards");if(!w)return;
