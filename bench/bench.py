@@ -75,6 +75,12 @@ def run_concepts(handle, items, key):
 
 
 def main():
+    # a 15-minute sequential run that prints nothing looks hung; line-buffer so each job
+    # reports the moment it finishes
+    try:
+        sys.stdout.reconfigure(line_buffering=True)
+    except Exception:
+        pass
     ap = argparse.ArgumentParser()
     ap.add_argument("--label", default="", help="what changed since last time")
     ap.add_argument("--channels-only", action="store_true")
@@ -91,11 +97,17 @@ def main():
             for handle, items in by.items():
                 jobs.append((run_concepts, (handle, items, key)))
         else:
-            print("  (no EVENTS_KEY found, skipping the fixed-concept half)")
+            print("  (no EVENTS_KEY found, skipping the fixed-concept half)", flush=True)
 
-    print("running %d jobs against %s ..." % (len(jobs), API))
+    print("running %d jobs against %s (sequential, expect roughly %d minutes) ..."
+          % (len(jobs), API, max(1, round(len(jobs) * 3.2))))
     groups = []
-    with ThreadPoolExecutor(max_workers=6) as ex:
+    # SEQUENTIAL on purpose. One /custom takes ~220s alone; the backend is a single Railway
+    # instance, so running several at once makes each one slower until some blow past the
+    # 280s client timeout (measured: 2 of 5 failed at 6 workers AND at 3). A run that takes
+    # 12 minutes and completes is worth more than a fast one that returns a partial snapshot,
+    # because a partial snapshot makes the before/after untrustworthy.
+    with ThreadPoolExecutor(max_workers=1) as ex:
         futs = [ex.submit(fn, *args) for fn, args in jobs]
         for f in futs:
             g = f.result()
@@ -129,16 +141,21 @@ def main():
               " because an empty one would poison the next before/after." % len(groups))
         for g in groups:
             if g["error"]:
-                print("   %s: %s" % (g["id"], g["error"]))
+                print("   %s: %s" % (g["id"], g["error"]), flush=True)
         return None
     if len(ok_groups) < len(groups):
-        print("\nWARNING: %d of %d jobs failed; saving a PARTIAL snapshot. Compare with care."
+        # Record it IN the file. A partial run has fewer ideas, so it also has fewer violations, and
+        # silently using it as a baseline makes the next comparison look like an improvement.
+        snap["partial"] = True
+        snap["failed_jobs"] = [g["id"] for g in groups if not g["ideas"]]
+        print("\nWARNING: %d of %d jobs failed; saving a PARTIAL snapshot. It is marked partial, so"
+              " it will not be used as a before/after baseline."
               % (len(groups) - len(ok_groups), len(groups)))
 
     os.makedirs(RUNS, exist_ok=True)
     path = os.path.join(RUNS, time.strftime("%Y%m%d-%H%M%S") + ".json")
     json.dump(snap, open(path, "w"), ensure_ascii=False, indent=1)
-    print("\nsaved %s" % path)
+    print("\nsaved %s" % path, flush=True)
     v = snap["totals"]["violations"]
     print("ideas %d | median grade %s | violations: %s"
           % (snap["totals"]["ideas"], snap["totals"]["stats"]["grade_median"],

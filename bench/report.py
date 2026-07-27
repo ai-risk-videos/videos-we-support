@@ -28,7 +28,8 @@ def pick():
     good = []
     for f in files:
         try:
-            if (json.load(open(f)).get("totals") or {}).get("ideas", 0) > 0:
+            snap = json.load(open(f))
+            if (snap.get("totals") or {}).get("ideas", 0) > 0 and not snap.get("partial"):
                 good.append(f)
         except Exception:
             pass
