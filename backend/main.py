@@ -3237,9 +3237,16 @@ def _dedash_ideas(ideas):
                 x["summary"] = _dedash(x["summary"])
     return ideas
 
-def _build_gen_prompt(profile, titles, exclude, rejected):
+def _build_gen_prompt(profile, titles, exclude, rejected, more=False):
     """The exact idea-generation user prompt /custom sends. Extracted so /compare can run the
-    IDENTICAL prompt through a different model (apples-to-apples)."""
+    IDENTICAL prompt through a different model (apples-to-apples).
+
+    `more=True` is a FOLLOW-UP round, and it needs a much wider draw. Measured: a follow-up asking
+    for 32 candidates against 24 already-shown titles returned 5 usable ideas, because 19 were
+    near-duplicates of what the model had already produced and the rehash filter binned them. The
+    model converges on the same corner of the risk space when it sees the same profile and a small
+    anchor sample. So a follow-up asks for more candidates, sees more seeds and anchors, and is told
+    explicitly to go somewhere it has not been."""
     gen = "Strategist profile of the creator:\n" + profile
     if titles:
         gen += "\n\nTheir recent video titles (match this phrasing and energy):\n" + "\n".join("- " + t for t in titles[:25])
@@ -3249,8 +3256,16 @@ def _build_gen_prompt(profile, titles, exclude, rejected):
         gen += ("\n\nThe curator REJECTED these ideas for this channel (they did not like them). Learn from it: "
                 "steer away from their angle, framing, and subject. Do NOT resurface these or close variants:\n"
                 + "\n".join("- " + e for e in rejected))
-    gen += "\n\nBrainstorm and return the JSON object with your 32 strongest candidate ideas."
-    gen += seed_block(5) + anchor_block(5)
+    gen += ("\n\nBrainstorm and return the JSON object with your %d strongest candidate ideas."
+            % (60 if more else 32))
+    gen += seed_block(9 if more else 5) + anchor_block(14 if more else 5)
+    if more:
+        gen += ("\n\nTHIS IS A FOLLOW-UP ROUND and the curator has already seen the list above. Reaching for "
+                "the same stories again in new wording is the failure mode here: those get thrown away as "
+                "duplicates and the curator gets nothing. Deliberately go somewhere you have NOT been. Pick "
+                "different mechanisms, different institutions, different parts of the risk space, and lean on "
+                "the anchors above that you did not use last time. If an obvious idea is already on the list, "
+                "skip it entirely rather than re-angling it.")
     gen += ("\n\nMOST IMPORTANT, this OVERRIDES the anchor and seed guidance above: the creator profile is your PRIMARY driver; the anchors and seeds are secondary inspiration, NOT a checklist to work through. Most of your ideas should NOT start from a listed anchor. "
             "REFRACT EVERY IDEA THROUGH THIS CREATOR'S LENS. Relevance is NOT about the topic, it is about the TREATMENT. Do not hand back a famous AI risk headline lightly dressed up for them. Take a real AI risk mechanism and investigate it the exact way THIS creator investigates their usual subjects: their obsessions, their method, their recurring thesis, the questions they always ask, the enemies they always name, the format they use. A great idea reads like an episode they are already itching to make, where the AI angle lives inside their world and their worldview, not bolted onto it. The profile ends with an AI RISK ANGLES section it wrote specifically for this creator, build on that spirit. "
             "CRITICAL GUARDRAIL when refracting: borrow the creator's METHOD (their rigor, their follow-the-money, their debunking instinct, their skepticism), and POINT IT AT A REAL AI DANGER to expose it. NEVER point their skepticism AT the AI-risk concern itself. For a grift-hunter or debunker, the trap is an idea like 'is AI doom just a grift' or 'AI cannot really do the job' — that turns their tools against our own cause and is an automatic cut (see the CARDINAL SIN failure above). The right refraction for a skeptic is: they bring their bullshit detector, and what they find is that the danger is real, bigger and better documented than the hype, and that is the shock. Their skepticism should land ON the reader's disbelief, dismantling it, not on the threat. "
@@ -3505,11 +3520,11 @@ async def custom(req: Request):
     if not profile:
         return JSONResponse({"error": "Could not analyze that channel. Try again."}, status_code=502)
 
-    gen = _build_gen_prompt(profile, titles, exclude, rejected)
     is_more = isinstance(cached, str) and len(cached) > 80
+    gen = _build_gen_prompt(profile, titles, exclude, rejected, more=is_more)
     try:
         gmsg = await run_in_threadpool(lambda: get_client().messages.create(
-            model=MODEL, max_tokens=12000, system=SYSTEM_CUSTOM + ANTI_SLOP,  # raised: summaries are now 2-3 sentences, 32 candidates overflowed 7000 and truncated the JSON
+            model=MODEL, max_tokens=(20000 if is_more else 12000), system=SYSTEM_CUSTOM + ANTI_SLOP,  # raised: summaries are now 2-3 sentences, 32 candidates overflowed 7000 and truncated the JSON
             messages=[{"role": "user", "content": gen}],
         ))
         candidates = parse_custom("".join(b.text for b in gmsg.content if getattr(b, "type", "") == "text"))
