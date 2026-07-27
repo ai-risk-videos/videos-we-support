@@ -233,7 +233,7 @@ h1{font-size:26px;margin:0 0 4px;font-weight:800}.dot{color:var(--red)}
  <button id="import">Import</button>
  <input id="importfile" type="file" accept="application/json,.json" hidden>
  <button id="reset">Reset</button>
- <span class="filters"><span class="pagev">v 0727.2011</span></span>
+ <span class="filters"><span class="pagev">v 0727.2017</span></span>
 </div>
 <div id="list"></div>
 </div>
@@ -247,7 +247,7 @@ const PAGES_COL="creator_pages";
 // ---- channel tailoring (/tailor): re-rank the pool for one creator; profile also shapes packs ----
 const TAILOR_API="https://videos-similar-api-production.up.railway.app/tailor";
 const CUSTOM_API="https://videos-similar-api-production.up.railway.app/custom"; // old "Videos We Support" idea generation
-const BUILD_V="0727.2011"; // tailor-cache is keyed to this: LEADS indices shift when the page is rebuilt
+const BUILD_V="0727.2017"; // tailor-cache is keyed to this: LEADS indices shift when the page is rebuilt
 let channelProfile="", channelName="", channelHandle="", tailored=false, fullView=false, tailorOrder=null;
 let currentPageId=""; // set on a saved ?p= creator page; lets packs/scripts save ONTO that page so the creator sees them instantly
 let researchNote=""; // one-shot line shown in the editor after a fresh generation: how many transcripts were read (so it is VISIBLE the tool used them)
@@ -836,7 +836,7 @@ let moreCancel = false;
 async function addMoreIdeas(){
  const url=cleanChanUrl(curateHandle);
  if(!url){toast("No channel on this draft to add to");return;}
- const btn=$("#moreideas");const orig="＋ Get more ideas (keeps the ones you have)";
+ const btn=$("#moreideas");const orig="＋ Get 50 more ideas (keeps the ones you have)";  // must match the markup, or the button loses its label after one run
  const norm=t=>(t||"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();
  moreCancel=false;
  let added=0, round=0, dry=0;

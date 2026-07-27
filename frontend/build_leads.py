@@ -868,7 +868,7 @@ let moreCancel = false;
 async function addMoreIdeas(){
  const url=cleanChanUrl(curateHandle);
  if(!url){toast("No channel on this draft to add to");return;}
- const btn=$("#moreideas");const orig="＋ Get more ideas (keeps the ones you have)";
+ const btn=$("#moreideas");const orig="＋ Get 50 more ideas (keeps the ones you have)";  // must match the markup, or the button loses its label after one run
  const norm=t=>(t||"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();
  moreCancel=false;
  let added=0, round=0, dry=0;
