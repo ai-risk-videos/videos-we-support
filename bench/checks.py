@@ -69,6 +69,41 @@ META_OPENER = re.compile(
     r"|[A-Z][A-Za-z']+'s\s+audience\s+(?:will|would|loves))", re.I)
 WHW = re.compile(r'\bwhat happens when\b', re.I)
 
+# CREATOR-FLATTERY / PAST-WORK META, ANYWHERE in the summary, not just at the start.
+# META_OPENER is anchored with ^, which is why "ColdFusion loves this structural lesson" and
+# "You covered how animals scale with size" survived the fix that was supposed to kill exactly this.
+# Feedback: "i also don't love these meta sentences ... just keep saying interesting things about
+# real things that happened."
+_ORG_NAMES = {
+    'openai', 'anthropic', 'google', 'deepmind', 'meta', 'microsoft', 'metr', 'palisade', 'apollo',
+    'deepseek', 'nvidia', 'tesla', 'amazon', 'apple', 'gemini', 'claude', 'chatgpt', 'reddit',
+    'bloomberg', 'stanford', 'congress', 'replit', 'ginkgo', 'dropbox', 'spacex', 'moltbook',
+}
+# "<Name> loves / has traced / viewers / audience" — the creator named as a person with tastes
+_NAME_META = re.compile(
+    r"\b([A-Z][A-Za-z']{2,})\s+(?:loves|likes|thrives\s+on|is\s+known\s+for|specialises\s+in|"
+    r"specializes\s+in|has\s+traced|traced|has\s+covered|always\s+\w+s)\b")
+_NAME_AUDIENCE = re.compile(r"\b([A-Z][A-Za-z']{2,})\s+(?:viewers|fans|audience)\b")
+# talking to the creator about their own back catalogue
+_YOUR_WORK = re.compile(
+    r"\b(?:you\s+(?:covered|showed|made|traced|explored|explained|already\s+\w+ed)"
+    r"|your\s+(?:other\s+|previous\s+|past\s+|earlier\s+)?(?:videos?|episodes?|work|channel|series)"
+    r"|this\s+channel(?:'s)?\s+\w+)\b", re.I)
+
+def creator_meta(x):
+    """The offending phrase when a summary talks about the CREATOR instead of the world, else None.
+    A named AI company doing something real ('Anthropic has traced...') is content, not flattery, so
+    known org names are excluded from the name patterns."""
+    t = summary(x)
+    m = _YOUR_WORK.search(t)
+    if m:
+        return m.group(0)
+    for rx in (_NAME_META, _NAME_AUDIENCE):
+        for m in rx.finditer(t):
+            if m.group(1).lower() not in _ORG_NAMES:
+                return m.group(0)
+    return None
+
 # RECENCY. Feedback: "it constantly brings up things from like years ago when there are way better
 # and more interesting things that have happened since then." Root cause was that the anchor bank
 # was sampled evenly across years. Pre-2015 dates are left alone on purpose: a historical parallel
@@ -106,6 +141,45 @@ WHEN = re.compile(r'\b(20\d\d|last (?:year|month|week|spring|summer|fall|winter)
 HYPOTHETICAL = re.compile(r'^\s*(imagine|picture|think about|suppose|what if|consider)\b', re.I)
 
 EVENT_FIRST_MIN = 0.60      # at least this share of a batch should open on a real occurrence
+
+# CLOSER SAMENESS. Every rule I add becomes the next monoculture: banning abstract closers produced
+# rhetorical questions, capping those produced method narration, and demanding catastrophe produced
+# permanence phrasing ("no one can undo it", "nobody can take it back", 3 ideas ending on the exact
+# words "does not want to go"). This check does not ban a phrasing, it measures REPETITION, so the
+# fix for a hit is variety rather than a new prohibition.
+_LOCKIN = re.compile(
+    r"\b(?:no\s?(?:body|one|\s+vote|\s+law|\s+government)|cannot|can\s+not|never|not\s+easily)\b"
+    r"[^.?!]{0,45}\b(?:undo|undone|take\s+(?:it|that|them)\s+back|reverse|put\s+.{0,12}back|opt\s+out|"
+    r"pull\s+the\s+reins|switch\s+it\s+off|turn\s+it\s+off|stop\s+it|where\s+.{0,12}stops)\b", re.I)
+CLOSER_ECHO_MAX = 2          # the same ending, word for word, at most twice in a batch
+LOCKIN_SHARE_MAX = 0.25      # at most a quarter of a batch may close on the permanence move
+
+def _closer_tail(x, n=4):
+    w = re.findall(r"[a-z]+", last_sentence(summary(x)).lower())
+    return " ".join(w[-n:]) if len(w) >= n else " ".join(w)
+
+def closer_repeats(ideas):
+    """[(index, reason)] for closers that repeat an ending, or pile onto one closing move."""
+    out = []
+    seen = {}
+    for i, x in enumerate(ideas):
+        t = _closer_tail(x)
+        if not t:
+            continue
+        seen.setdefault(t, []).append(i)
+    for tail, idxs in seen.items():
+        if len(idxs) > CLOSER_ECHO_MAX:
+            for i in idxs[CLOSER_ECHO_MAX:]:
+                out.append((i, "%d ideas in this batch end on the same words: '...%s'" % (len(idxs), tail)))
+    lock = [i for i, x in enumerate(ideas) if _LOCKIN.search(last_sentence(summary(x)))]
+    allowed = max(1, int(len(ideas) * LOCKIN_SHARE_MAX)) if ideas else 0
+    for i in lock[allowed:]:
+        out.append((i, "%d of %d ideas close on the same 'nobody can undo it' move; vary the ending"
+                    % (len(lock), len(ideas))))
+    return out
+
+def _c_closer_variety(ideas, ctx):
+    return closer_repeats(ideas)
 
 def opening(x):
     """The first sentence of the hook, falling back to the summary for bare-noun-phrase titles."""
@@ -228,6 +302,9 @@ def _c_meta_narration(x, ctx):
         return "closer narrates the video ('I show/explain...'): " + c[:70]
     if META_OPENER.search(summary(x)):
         return "summary opens by describing the video, not the content"
+    cm = creator_meta(x)
+    if cm:
+        return "talks about the creator instead of the world: '%s'" % cm
     return None
 
 def _c_grade(x, ctx):
@@ -311,6 +388,8 @@ CHECKS = [
     ("doom_tag", "No bolted-on doom", "Earn the stake from the mechanism, never tag on 'could end humanity'.", "idea", _c_doom_tag),
     ("event_first", "Lead with a real thing that happened",
      "More ideas need to open on an actual event, not a general claim.", "batch", _c_event_first),
+    ("closer_variety", "Vary how the stakes land",
+     "The endings started rhyming: too many 'nobody can undo it' closers.", "batch", _c_closer_variety),
     ("recency", "Use recent AI evidence",
      "It keeps surfacing things from years ago when better things have happened since.", "batch", _c_recency),
     ("ratio_math", "Ratios match their own numbers", "Simplifying must never break the arithmetic.", "idea", _c_ratio),

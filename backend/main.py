@@ -224,6 +224,7 @@ FORMAT_RULE = ("" if IDEA_FORMAT == "title" else
     "improves AI' but 'companies are pouring that compute into AI that improves AI'; not 'these agents are being "
     "wired into companies' but 'companies are wiring these agents into their operations'; not 'a goal that was "
     "specified slightly wrong' but 'a goal someone specified slightly wrong'. "
+    "NEVER TALK ABOUT THE CREATOR, only about the world. Banned in every position, not just the opening: naming their taste ('Veritasium loves a slow-burn fragility story', 'ColdFusion loves this structural lesson'), citing their back catalogue ('You covered how animals scale', 'the exact shape of the failures in your other videos', 'ColdFusion has traced this through Dropbox filings'), or addressing their audience ('what ColdFusion viewers should worry about'). The creator can see for themselves that it fits them; saying so wastes the sentence and reads like a pitch deck. Just keep saying interesting things about real things that happened. Match their world by CHOOSING that subject, never by announcing the match. "
     "(2) NO META-DESCRIPTION of the video or its style. NEVER open with or include phrases like 'A think-piece "
     "that', 'A follow-up that', 'Reads like one of his', 'A story told his way', 'Applies his thesis', 'in his "
     "escalating-evidence style', 'Walks through', 'Takes X and', 'Uses his rigor to'. Do NOT tell the reader what "
@@ -2822,6 +2823,7 @@ def _cause_harm_cuts(cands):
 # and video-meta-description. Runs on the small final set (fast), uses FAST_MODEL, fails OPEN. ----
 ACTIVATE_SYS = """You are a line editor. You get numbered video-idea summaries. Rewrite EACH into tight, plain, ACTIVE-VOICE prose and return them. Rules:
 (a) STRONG ACTIVE VOICE, no passive. A named doer does something in every sentence. 'the compute is being poured' -> 'companies pour the compute'; 'agents are being wired in' -> 'companies wire the agents in'; 'a goal that was specified wrong' -> 'a goal someone specified wrong'.
+(b2) NEVER TALK ABOUT THE CREATOR, anywhere in the summary, not just the first sentence. Delete any clause that names their taste ('Veritasium loves a slow-burn fragility story', 'ColdFusion loves this structural lesson'), cites their past videos ('You covered how animals scale', 'the failures in your other videos', 'ColdFusion has traced this through Dropbox filings'), or addresses their audience ('what ColdFusion viewers should worry about'). Replace it with the actual content. Keep the fit by keeping the SUBJECT, never by announcing the fit.
 (b) NO META-DESCRIPTION of the video or its style, in ANY grammatical person. Delete any clause that describes the video or the creator's method, e.g. 'A think-piece that', 'A follow-up that', 'Reads like one of his', 'A story told his way', 'Applies his thesis', 'Walks through', 'Takes X and', 'Uses his rigor to', 'Uses the channel's X method/lens/instinct', 'in his X style', 'Handles it the way he', AND first-person method narration like 'I read the stories against X and show that', 'I trace', 'I take X and', 'the lesson sits alongside', 'which is really a story about'. Just STATE THE ACTUAL CONTENT, opening on a concrete fact, name, number, or action. Keep the creator's angle by using it, not by naming it.
 (c) 2-3 short sentences, ~45-70 words, each its own beat, no long comma chains, easy to read in one pass.
 (d) Keep the real substance; never invent facts not in the original.
@@ -2852,11 +2854,34 @@ def _last_sentence(s):
 _META_I_RX = re.compile(
     r"\b(?:I|This|The\s+video|The\s+piece)\s+(?:(?:follow|trace|show|explain|cover|examine|explore|unpack|argue)s?|lays?\s+out|maps?\s+out|breaks?\s+down|digs?\s+into|looks?\s+at|walks?\s+(?:you\s+)?through|asks?\s+what|makes?\s+the\s+case|tells?\s+the\s+story)\b", re.I)
 
+_ORG_OK = {"openai","anthropic","google","deepmind","meta","microsoft","metr","palisade","apollo",
+           "deepseek","nvidia","tesla","amazon","apple","gemini","claude","chatgpt","reddit","bloomberg",
+           "stanford","congress","replit","ginkgo","dropbox","spacex"}
+_CREATOR_TASTE_RX = re.compile(
+    r"\b([A-Z][A-Za-z']{2,})\s+(?:loves|likes|thrives\s+on|is\s+known\s+for|has\s+traced|traced|"
+    r"has\s+covered|viewers|fans|audience)\b")
+_YOUR_WORK_RX = re.compile(
+    r"\b(?:you\s+(?:covered|showed|made|traced|explored|explained)"
+    r"|your\s+(?:other\s+|previous\s+|past\s+|earlier\s+)?(?:videos?|episodes?|work|channel|series))\b", re.I)
+
+def _creator_meta(text):
+    """Talking about the CREATOR rather than the world. Known AI orgs are excluded, because
+    'Anthropic has traced...' is content while 'ColdFusion has traced...' is flattery."""
+    if _YOUR_WORK_RX.search(text or ""):
+        return True
+    for m in _CREATOR_TASTE_RX.finditer(text or ""):
+        if m.group(1).lower() not in _ORG_OK:
+            return True
+    return False
+
 def _closer_flawed(summary):
     close = _last_sentence(summary)
     return (bool(_NOTXY_RX.search(summary or ""))
             or bool(_MOOD_RX.search(close))
-            or bool(_META_I_RX.search(close)))
+            or bool(_META_I_RX.search(close))
+            # anywhere in the summary, not just the closer: the anchored check let
+            # "ColdFusion loves this structural lesson" through mid-paragraph
+            or _creator_meta(summary or ""))
 
 # ---- WEAK IMPLICATION. The closer keeps landing on a first-order inconvenience ("that makes an
 # honest public debate very hard to hold") when the real stake is that a society loses the ability
@@ -3017,6 +3042,7 @@ Return ONLY JSON: {"summaries": {"<number>": "<corrected summary>", ...}} using 
 CLOSER_FIX_SYS = """You are a line editor. Each numbered line is one video summary whose LAST sentence may have one of three flaws:
 (1) the tired 'not X, it is Y' contrast construction, e.g. 'The danger is not an enemy. It is being outmatched.', 'It isn't X, it's Y', 'not just X, but Y';
 (2) an agentless MOOD closer leaning on a mood adverb and an abstract noun doing a vague verb, e.g. 'The squeeze just quietly tightens.', 'Control slips away quietly.', 'The shared sense of what is real slowly dissolves.';
+(4) TALKING ABOUT THE CREATOR instead of the world: naming their taste ('ColdFusion loves this structural lesson'), citing their past videos ('You covered how animals scale', 'your other videos'), or addressing their audience ('what ColdFusion viewers should worry about'). Delete the clause and state the actual content instead.
 (3) METHOD NARRATION, describing what the video DOES instead of stating the content. In first person: 'I show how a small experiment points to a bigger world.', 'I explain what they actually fear, step by step.', 'I trace where the money goes.' AND in third person, which is just as bad and which you keep reaching for when asked to make the stakes bigger: 'This follows the unsettling logic of building something smarter than us.', 'This traces how a government wired to loyal AI becomes impossible to overthrow.', 'This breaks down who ends up holding the power.'
 Rewrite ONLY to fix that flaw: for (1) state it as a direct positive claim; for (2) name a concrete actor doing or facing something and drop the mood adverb; for (3) DELETE the 'I show/I explain/I trace' framing and state the actual finding or stake as a fact, e.g. 'I explain what they actually fear, step by step.' becomes 'They fear an AI that hides what it wants until it is too late to switch off.'
 IMPORTANT for (3): a concrete first-person ACTION is the creator's real voice and must be KEPT, e.g. 'I flew to Taiwan and stood outside the fab' or 'I gave an AI my calendar for a month'. Only remove first person when it narrates the VIDEO's method rather than something the person did in the world.
