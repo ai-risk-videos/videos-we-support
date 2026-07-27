@@ -845,7 +845,7 @@ async function regenerate(mode){
  const keepIdeas=curateIdeas.slice(), keepHandle=curateHandle, keepChannel=curateChannel, keepProfile=curateProfile, keepStyle=curateStyle;
  inCurate=false; // intentional replace — don't fire the leave-draft guard mid-generation
  $("#list").innerHTML='<div class="ptwrap" style="max-width:480px;margin:26px auto"></div>';
- const _stopR=progressTicker($("#list .ptwrap"), mode==="custom"?120:90, (mode==="custom"?"Writing fresh ideas for ":"Ranking our library for ")+ch);
+ const _stopR=progressTicker($("#list .ptwrap"), mode==="custom"?260:90, (mode==="custom"?"Writing fresh ideas for ":"Ranking our library for ")+ch);
  let ok=false;
  const _rej=curateRejected.map(ideaTitle).filter(Boolean); // steer the regenerate away from what we already rejected for this channel
  try{ ok = (mode==="custom") ? await fetchCustom(url,_rej) : await fetchTailor(url,false); }catch(e){ ok=false; }
@@ -1126,9 +1126,11 @@ async function fetchCustom(rawurl,rejectedTitles){
  const btn=$("#cgen"),msg=$("#cmsg"),orig=btn?btn.textContent:"";
  if(btn){btn.disabled=true;btn.textContent="Generating…";}
  let _stopC=function(){};
- if(msg){msg.className="cmsg";msg.innerHTML='<div class="ptwrap"></div>';_stopC=progressTicker(msg.querySelector(".ptwrap"),120,"Writing fresh ideas");}
+ if(msg){msg.className="cmsg";msg.innerHTML='<div class="ptwrap"></div>';_stopC=progressTicker(msg.querySelector(".ptwrap"),260,"Writing fresh ideas");}
  try{
-  const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),240000);
+  // measured 281s for a cold generation once the polish chain grew; a 240s abort was killing calls
+  // that the server went on to complete. 330s with a live progress bar beats a false failure.
+  const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),330000);
   const _cbody={channelUrl:url};if(Array.isArray(rejectedTitles)&&rejectedTitles.length)_cbody.rejected=rejectedTitles.slice(0,40); // feed the reject pile so a regenerate steers away from disliked ideas
   const r=await fetch(CUSTOM_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(_cbody),signal:ctrl.signal});
   clearTimeout(to);
