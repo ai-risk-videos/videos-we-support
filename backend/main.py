@@ -3257,7 +3257,7 @@ def _build_gen_prompt(profile, titles, exclude, rejected, more=False):
                 "steer away from their angle, framing, and subject. Do NOT resurface these or close variants:\n"
                 + "\n".join("- " + e for e in rejected))
     gen += ("\n\nBrainstorm and return the JSON object with your %d strongest candidate ideas."
-            % (60 if more else 32))
+            % (40 if more else 32))
     gen += seed_block(9 if more else 5) + anchor_block(14 if more else 5)
     if more:
         gen += ("\n\nTHIS IS A FOLLOW-UP ROUND and the curator has already seen the list above. Reaching for "
@@ -3524,7 +3524,7 @@ async def custom(req: Request):
     gen = _build_gen_prompt(profile, titles, exclude, rejected, more=is_more)
     try:
         gmsg = await run_in_threadpool(lambda: get_client().messages.create(
-            model=MODEL, max_tokens=(20000 if is_more else 12000), system=SYSTEM_CUSTOM + ANTI_SLOP,  # raised: summaries are now 2-3 sentences, 32 candidates overflowed 7000 and truncated the JSON
+            model=MODEL, max_tokens=(15000 if is_more else 12000), system=SYSTEM_CUSTOM + ANTI_SLOP,  # raised: summaries are now 2-3 sentences, 32 candidates overflowed 7000 and truncated the JSON
             messages=[{"role": "user", "content": gen}],
         ))
         candidates = parse_custom("".join(b.text for b in gmsg.content if getattr(b, "type", "") == "text"))
