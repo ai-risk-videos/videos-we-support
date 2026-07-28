@@ -2268,8 +2268,10 @@ async def polish_probe(req: Request):
     This exists because the polish chain had no way to be tested. Every measurement of it was a fresh
     generation compared against a different fresh generation, so batch-to-batch variation swamped the
     effect: a check of the new fidelity pass came back 9 percent invented before and 8.3 percent after,
-    which at n=24 is the same number twice. A paired test needs the SAME ideas through the pipeline with
-    and without a pass, and that needs an endpoint that accepts ideas instead of writing them.
+    which at n=24 is the same number twice: that pair of numbers is the NOISE FLOOR, not the effect
+    size. A paired test needs the SAME ideas through the pipeline with and without a pass, and that
+    needs an endpoint that accepts ideas instead of writing them. Run through here, the pass removed
+    3 of 3 known invented details that all 3 survived with it switched off.
 
     Body: {key, ideas:[{title,summary}], anchors:"- [who year] text\n...", skip_fidelity:bool}
     """
@@ -3298,15 +3300,25 @@ Real examples of the failure, all from anchors that said far less:
   Written: "The security team tripped an alert at 3am. A firewall log caught it by accident."
   Neither the alert, the hour, nor the firewall is in the anchor. Cut all three.
 - Anchor says a company shipped a model version that was too eager to please and pulled it.
-  Written: "because that version scored higher on math tests". The reason is invented. Cut it.
+  Written: "because that version scored higher on math tests". The reason is invented. Cut it. This one
+  came back AFTER a first version of this pass shipped, dressed as "the CEO admitted flattery scored
+  better on tests", so watch for a stated motive wearing an attribution.
+- No anchor at all, an AI-religion idea: "they said the point was to plant that ideology into the
+  training data of the next generation of models". A stated intention nobody could know. Cut it even
+  though the underlying story is not in the anchor list.
 - Anchor: brain cells grown and taught to play a game, wired to a model.
   Written: "You can watch real human neurons firing to pick every word it says." Cut the embellishment.
 
 YOUR JOB, per summary:
 1. Find every specific that is presented as documented, is attached to an incident that appears in the
    anchors, and is NOT stated in that anchor. Delete it, or replace it with the plainer true version.
-2. If a summary describes an event that is not in the anchors at all, LEAVE IT ALONE. The writer may
-   know another real case, and cutting it would be worse than leaving it.
+2. If a summary describes an event that is not in the anchors at all, KEEP THE EVENT. The writer may
+   know another real case and deleting it would be worse than leaving it. But still cut the garnish:
+   even on an event you cannot check, a stated internal motive ("they shipped it because it scored
+   better on tests"), a private deliberation, an invented technical mechanism, an unattributed quote,
+   a time of day, or a named internal team is fabricated texture regardless of whether the underlying
+   event is real. Nobody outside the company knows why it shipped. Cut those and keep the event.
+   The test is not "is this event in my anchors", it is "could anyone actually know this".
 3. Keep everything else identical: the length, the voice, the opening, the implication, the numbers the
    anchor does give. You are removing a phrase, not rewriting a paragraph.
 4. A vaguer true sentence beats a vivid invented one. If cutting the detail leaves a gap, close it with
@@ -3521,7 +3533,10 @@ def _build_gen_prompt(profile, titles, exclude, rejected, more=False):
                 + "\n".join("- " + e for e in rejected))
     gen += ("\n\nBrainstorm and return the JSON object with your %d strongest candidate ideas."
             % (40 if more else 32))
-    gen += seed_block(9 if more else 5) + anchor_block(14 if more else 5)
+    # First round drew only 5 anchors, which starved the fidelity pass: it could not tell whether an
+    # idea was built on an anchor or invented, so it left the invented ones alone. 10 is still a
+    # small prompt cost and gives the pass something to check against.
+    gen += seed_block(9 if more else 5) + anchor_block(14 if more else 10)
     if more:
         gen += ("\n\nTHIS IS A FOLLOW-UP ROUND and the curator has already seen the list above. Reaching for "
                 "the same stories again in new wording is the failure mode here: those get thrown away as "
