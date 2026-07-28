@@ -148,6 +148,28 @@
       "opens on a general claim, not something that happened: Two AIs were put in a chatroom and left to talk to each other."
      ]
     ],
+    "small_word": [],
+    "philosophical": [],
+    "anchor_strength": [
+     [
+      3,
+      "batch has only 1 of 24 ideas on top-tier incidents; this one leans on a rate or benchmark"
+     ],
+     [
+      12,
+      "batch has only 1 of 24 ideas on top-tier incidents; this one leans on a rate or benchmark"
+     ],
+     [
+      19,
+      "batch has only 1 of 24 ideas on top-tier incidents; this one leans on a rate or benchmark"
+     ]
+    ],
+    "paper_first": [
+     [
+      12,
+      "opens on a paper or an argument, not on something that happened: A survey of the world's highest-security biology companies found workers still c"
+     ]
+    ],
     "closer_variety": [],
     "recency": [],
     "ratio_math": [],
@@ -161,7 +183,9 @@
     "named_source_pct": 33,
     "question_pct": 4,
     "stale_evidence_pct": 12,
-    "event_first_pct": 38
+    "event_first_pct": 38,
+    "top_anchor_pct": 4,
+    "weak_anchor_pct": 12
    }
   },
   {
@@ -182,6 +206,10 @@
     "weak_implication": [],
     "doom_tag": [],
     "event_first": [],
+    "small_word": [],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [],
     "closer_variety": [],
     "recency": [],
     "ratio_math": [],
@@ -195,7 +223,9 @@
     "named_source_pct": 0,
     "question_pct": 0,
     "stale_evidence_pct": 0,
-    "event_first_pct": 0
+    "event_first_pct": 0,
+    "top_anchor_pct": 0,
+    "weak_anchor_pct": 0
    }
   },
   {
@@ -216,6 +246,10 @@
     "weak_implication": [],
     "doom_tag": [],
     "event_first": [],
+    "small_word": [],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [],
     "closer_variety": [],
     "recency": [],
     "ratio_math": [],
@@ -229,7 +263,9 @@
     "named_source_pct": 0,
     "question_pct": 0,
     "stale_evidence_pct": 0,
-    "event_first_pct": 0
+    "event_first_pct": 0,
+    "top_anchor_pct": 0,
+    "weak_anchor_pct": 0
    }
   },
   {
@@ -266,6 +302,10 @@
       "opens on a general claim, not something that happened: In 1942 Isaac Asimov wrote three simple laws to keep robots safe."
      ]
     ],
+    "small_word": [],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [],
     "closer_variety": [],
     "recency": [],
     "ratio_math": [],
@@ -279,7 +319,9 @@
     "named_source_pct": 50,
     "question_pct": 0,
     "stale_evidence_pct": 0,
-    "event_first_pct": 50
+    "event_first_pct": 50,
+    "top_anchor_pct": 50,
+    "weak_anchor_pct": 0
    }
   },
   {
@@ -320,6 +362,10 @@
       "opens on a general claim, not something that happened: Picture an AI agent bidding in an auction for computing power and electricity."
      ]
     ],
+    "small_word": [],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [],
     "closer_variety": [],
     "recency": [],
     "ratio_math": [],
@@ -333,7 +379,9 @@
     "named_source_pct": 50,
     "question_pct": 0,
     "stale_evidence_pct": 50,
-    "event_first_pct": 0
+    "event_first_pct": 0,
+    "top_anchor_pct": 0,
+    "weak_anchor_pct": 0
    }
   }
  ],
@@ -350,6 +398,10 @@
    "weak_implication": 1,
    "doom_tag": 0,
    "event_first": 9,
+   "small_word": 0,
+   "philosophical": 0,
+   "anchor_strength": 3,
+   "paper_first": 1,
    "closer_variety": 0,
    "recency": 0,
    "ratio_math": 0,
@@ -363,12 +415,15 @@
    "named_source_pct": 36,
    "question_pct": 4,
    "stale_evidence_pct": 14,
-   "event_first_pct": 36
+   "event_first_pct": 36,
+   "top_anchor_pct": 7,
+   "weak_anchor_pct": 11
   }
  },
  "partial": true,
  "failed_jobs": [
   "@ColdFusion",
   "@johnnyharris"
- ]
+ ],
+ "rechecked_with": 19
 }

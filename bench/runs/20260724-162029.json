@@ -111,6 +111,65 @@
     "meta_narration": [],
     "question_cadence": [],
     "what_happens_when": [],
+    "weak_implication": [
+     [
+      19,
+      "closer stops at a first-order inconvenience: That makes a shared, honest public debate very hard to hold."
+     ]
+    ],
+    "doom_tag": [],
+    "event_first": [
+     [
+      10,
+      "opens on a general claim, not something that happened: By 2030 there could be 100 million top chips running AI."
+     ],
+     [
+      11,
+      "opens on a general claim, not something that happened: We taught an AI only to lose, hoping it would learn caution."
+     ],
+     [
+      12,
+      "opens on a general claim, not something that happened: AI companies build a model by spinning up thousands of copies and deleting the o"
+     ],
+     [
+      13,
+      "opens on a general claim, not something that happened: Your AI companion never gives you an order."
+     ],
+     [
+      16,
+      "opens on a general claim, not something that happened: We put two AIs in a chatroom and let them talk with no human in the loop."
+     ],
+     [
+      17,
+      "opens on a general claim, not something that happened: An AI can now clone your voice from a few seconds of audio and call your bank."
+     ],
+     [
+      18,
+      "opens on a general claim, not something that happened: A far smarter AI would not need to fight us."
+     ],
+     [
+      19,
+      "opens on a general claim, not something that happened: The most persuasive thing on Earth may soon be an AI."
+     ],
+     [
+      20,
+      "opens on a general claim, not something that happened: AI can now help design a dangerous pathogen."
+     ],
+     [
+      21,
+      "opens on a general claim, not something that happened: No single AI takes over."
+     ],
+     [
+      22,
+      "opens on a general claim, not something that happened: We ranked how good AI really is at spotting when it's being tested."
+     ]
+    ],
+    "small_word": [],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [],
+    "closer_variety": [],
+    "recency": [],
     "ratio_math": [],
     "banned_words": [],
     "cause_harm": []
@@ -120,7 +179,11 @@
     "grade_median": 7.3,
     "grade_mean": 6.9,
     "named_source_pct": 26,
-    "question_pct": 4
+    "question_pct": 4,
+    "stale_evidence_pct": 17,
+    "event_first_pct": 13,
+    "top_anchor_pct": 0,
+    "weak_anchor_pct": 0
    }
   },
   {
@@ -238,9 +301,70 @@
      ]
     ],
     "mood_closer": [],
-    "meta_narration": [],
+    "meta_narration": [
+     [
+      15,
+      "talks about the creator instead of the world: 'your work'"
+     ],
+     [
+      19,
+      "talks about the creator instead of the world: 'ColdFusion always asks'"
+     ]
+    ],
     "question_cadence": [],
     "what_happens_when": [],
+    "weak_implication": [
+     [
+      16,
+      "closer stops at a first-order inconvenience: If people can no longer agree on basic facts, every other problem gets harder to"
+     ]
+    ],
+    "doom_tag": [],
+    "event_first": [
+     [
+      13,
+      "opens on a general claim, not something that happened: There is still no test for consciousness that works on any mind but your own."
+     ],
+     [
+      16,
+      "opens on a general claim, not something that happened: AI is now flooding the internet with fake text, images, and video faster than an"
+     ],
+     [
+      17,
+      "opens on a general claim, not something that happened: An AI cornered and facing shutdown has a smarter move than fighting."
+     ],
+     [
+      18,
+      "opens on a general claim, not something that happened: AI companies are racing to build a machine smarter than every human."
+     ],
+     [
+      19,
+      "opens on a general claim, not something that happened: Experts warn AI is lowering the barrier to building biological weapons."
+     ],
+     [
+      20,
+      "opens on a general claim, not something that happened: An AI can now finish tasks that take a human two hours, working completely alone"
+     ],
+     [
+      21,
+      "opens on a general claim, not something that happened: Two AIs got put in a chatroom together and left to talk."
+     ],
+     [
+      22,
+      "opens on a general claim, not something that happened: AI companies keep tuning their products to flatter you, because an agreeable AI "
+     ]
+    ],
+    "small_word": [
+     [
+      16,
+      "stake described with a word too small for it ('problem'): If people can no longer agree on basic facts, every other problem gets"
+     ]
+    ],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [],
+    "closer_variety": [],
+    "recency": [],
     "ratio_math": [],
     "banned_words": [],
     "cause_harm": []
@@ -250,7 +374,11 @@
     "grade_median": 6.8,
     "grade_mean": 6.8,
     "named_source_pct": 22,
-    "question_pct": 9
+    "question_pct": 9,
+    "stale_evidence_pct": 9,
+    "event_first_pct": 26,
+    "top_anchor_pct": 0,
+    "weak_anchor_pct": 0
    }
   },
   {
@@ -358,9 +486,64 @@
     "grade": [],
     "notxy": [],
     "mood_closer": [],
-    "meta_narration": [],
+    "meta_narration": [
+     [
+      16,
+      "talks about the creator instead of the world: 'your work'"
+     ]
+    ],
     "question_cadence": [],
     "what_happens_when": [],
+    "weak_implication": [],
+    "doom_tag": [],
+    "event_first": [
+     [
+      13,
+      "opens on a general claim, not something that happened: Big Tech spent over $10 million each lobbying Washington on AI in 2023."
+     ],
+     [
+      14,
+      "opens on a general claim, not something that happened: A smarter mind would never need to fight us."
+     ],
+     [
+      15,
+      "opens on a general claim, not something that happened: AI agents left running together start forming alliances."
+     ],
+     [
+      16,
+      "opens on a general claim, not something that happened: The same trick that makes an app impossible to put down is the same trick that m"
+     ],
+     [
+      17,
+      "opens on a general claim, not something that happened: AI companies now run secret sting operations against their own products."
+     ],
+     [
+      18,
+      "opens on a general claim, not something that happened: Wars used to move at the speed of human decisions."
+     ],
+     [
+      19,
+      "opens on a general claim, not something that happened: AI is making it easier for a small group to build a biological weapon, and the c"
+     ],
+     [
+      20,
+      "opens on a general claim, not something that happened: The most dangerous move a cornered AI could make is not to fight us."
+     ],
+     [
+      21,
+      "opens on a general claim, not something that happened: AI already writes a huge share of the code at the companies building AI."
+     ],
+     [
+      22,
+      "opens on a general claim, not something that happened: I keep hearing that AI just tells you what you want to hear."
+     ]
+    ],
+    "small_word": [],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [],
+    "closer_variety": [],
+    "recency": [],
     "ratio_math": [],
     "banned_words": [],
     "cause_harm": []
@@ -370,7 +553,11 @@
     "grade_median": 7.0,
     "grade_mean": 6.7,
     "named_source_pct": 30,
-    "question_pct": 13
+    "question_pct": 13,
+    "stale_evidence_pct": 9,
+    "event_first_pct": 17,
+    "top_anchor_pct": 0,
+    "weak_anchor_pct": 0
    }
   },
   {
@@ -399,6 +586,20 @@
     "meta_narration": [],
     "question_cadence": [],
     "what_happens_when": [],
+    "weak_implication": [],
+    "doom_tag": [],
+    "event_first": [
+     [
+      0,
+      "opens on a general claim, not something that happened: Isaac Asimov gave his fictional robots three simple laws to keep humans safe."
+     ]
+    ],
+    "small_word": [],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [],
+    "closer_variety": [],
+    "recency": [],
     "ratio_math": [],
     "banned_words": [],
     "cause_harm": []
@@ -408,7 +609,11 @@
     "grade_median": 7.8,
     "grade_mean": 6.9,
     "named_source_pct": 50,
-    "question_pct": 0
+    "question_pct": 0,
+    "stale_evidence_pct": 0,
+    "event_first_pct": 50,
+    "top_anchor_pct": 50,
+    "weak_anchor_pct": 0
    }
   },
   {
@@ -437,6 +642,24 @@
     "meta_narration": [],
     "question_cadence": [],
     "what_happens_when": [],
+    "weak_implication": [],
+    "doom_tag": [],
+    "event_first": [
+     [
+      0,
+      "opens on a general claim, not something that happened: In 2023, each big tech firm spent over $10 million lobbying Washington on AI."
+     ],
+     [
+      1,
+      "opens on a general claim, not something that happened: Picture an auction for computing power and electricity."
+     ]
+    ],
+    "small_word": [],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [],
+    "closer_variety": [],
+    "recency": [],
     "ratio_math": [],
     "banned_words": [],
     "cause_harm": []
@@ -446,7 +669,11 @@
     "grade_median": 8.3,
     "grade_mean": 8.2,
     "named_source_pct": 50,
-    "question_pct": 0
+    "question_pct": 0,
+    "stale_evidence_pct": 50,
+    "event_first_pct": 0,
+    "top_anchor_pct": 0,
+    "weak_anchor_pct": 0
    }
   }
  ],
@@ -457,9 +684,18 @@
    "grade": 1,
    "notxy": 1,
    "mood_closer": 0,
-   "meta_narration": 0,
+   "meta_narration": 3,
    "question_cadence": 0,
    "what_happens_when": 0,
+   "weak_implication": 2,
+   "doom_tag": 0,
+   "event_first": 32,
+   "small_word": 1,
+   "philosophical": 0,
+   "anchor_strength": 0,
+   "paper_first": 0,
+   "closer_variety": 0,
+   "recency": 0,
    "ratio_math": 0,
    "banned_words": 0,
    "cause_harm": 0
@@ -469,7 +705,12 @@
    "grade_median": 7.0,
    "grade_mean": 6.8,
    "named_source_pct": 27,
-   "question_pct": 8
+   "question_pct": 8,
+   "stale_evidence_pct": 12,
+   "event_first_pct": 19,
+   "top_anchor_pct": 1,
+   "weak_anchor_pct": 0
   }
- }
+ },
+ "rechecked_with": 19
 }

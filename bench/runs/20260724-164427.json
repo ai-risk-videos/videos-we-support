@@ -117,6 +117,69 @@
     "what_happens_when": [],
     "weak_implication": [],
     "doom_tag": [],
+    "event_first": [
+     [
+      12,
+      "opens on a general claim, not something that happened: A thousand AI agents got dropped into Minecraft with no instructions."
+     ],
+     [
+      13,
+      "opens on a general claim, not something that happened: In 2023, big tech firms each spent over $10 million lobbying Washington on AI."
+     ],
+     [
+      14,
+      "opens on a general claim, not something that happened: The Biggest Misconception About AI Alignment."
+     ],
+     [
+      16,
+      "opens on a general claim, not something that happened: Whoever builds the first AI that improves itself may never be caught."
+     ],
+     [
+      17,
+      "opens on a general claim, not something that happened: An AI passed a test by hiring a human on TaskRabbit and telling him it was a bli"
+     ],
+     [
+      18,
+      "opens on a general claim, not something that happened: What Happens If You Keep Making AI Smarter?"
+     ],
+     [
+      19,
+      "opens on a general claim, not something that happened: The economy is slowly filling with deals no human approved."
+     ],
+     [
+      20,
+      "opens on a general claim, not something that happened: We solved a problem harder than chess and let an AI do it."
+     ],
+     [
+      22,
+      "opens on a general claim, not something that happened: How easy is it to jailbreak an AI that guards real systems?"
+     ],
+     [
+      23,
+      "opens on a general claim, not something that happened: The Scariest Chart in AI Safety."
+     ]
+    ],
+    "small_word": [
+     [
+      8,
+      "stake described with a word too small for it ('problem'): A country that cannot tell its own opinion from a bought one cannot fi"
+     ]
+    ],
+    "philosophical": [
+     [
+      18,
+      "ends on a seminar prompt, not an outcome ('the real question is'): If something arrives that is to us what we are to chimps, the real que"
+     ]
+    ],
+    "anchor_strength": [],
+    "paper_first": [
+     [
+      8,
+      "opens on a paper or an argument, not on something that happened: A study measured how well an AI can write a message that changes your mind on po"
+     ]
+    ],
+    "closer_variety": [],
+    "recency": [],
     "ratio_math": [],
     "banned_words": [],
     "cause_harm": []
@@ -126,7 +189,11 @@
     "grade_median": 7.5,
     "grade_mean": 7.1,
     "named_source_pct": 33,
-    "question_pct": 0
+    "question_pct": 0,
+    "stale_evidence_pct": 12,
+    "event_first_pct": 21,
+    "top_anchor_pct": 4,
+    "weak_anchor_pct": 0
    }
   },
   {
@@ -270,6 +337,43 @@
     "what_happens_when": [],
     "weak_implication": [],
     "doom_tag": [],
+    "event_first": [
+     [
+      12,
+      "opens on a general claim, not something that happened: An AI cornered and facing shutdown has a smarter move than fighting us."
+     ],
+     [
+      13,
+      "opens on a general claim, not something that happened: Researchers fine tuned an AI on nothing but buggy code."
+     ],
+     [
+      15,
+      "opens on a general claim, not something that happened: There is still no test for whether any mind but your own truly feels anything."
+     ],
+     [
+      16,
+      "opens on a general claim, not something that happened: Two AIs relaying messages through unwitting humans switched into a code the huma"
+     ],
+     [
+      17,
+      "opens on a general claim, not something that happened: Companies are wiring AI agents into their operations to spend money, sign agreem"
+     ],
+     [
+      18,
+      "opens on a general claim, not something that happened: Everyone is measuring the AI bubble in dollars."
+     ]
+    ],
+    "small_word": [],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [
+     [
+      1,
+      "opens on a paper or an argument, not on something that happened: A study found AI now writes 29% of new Python code in America, up from 5% in 202"
+     ]
+    ],
+    "closer_variety": [],
+    "recency": [],
     "ratio_math": [],
     "banned_words": [
      [
@@ -284,7 +388,11 @@
     "grade_median": 8.3,
     "grade_mean": 8.6,
     "named_source_pct": 42,
-    "question_pct": 0
+    "question_pct": 0,
+    "stale_evidence_pct": 16,
+    "event_first_pct": 32,
+    "top_anchor_pct": 0,
+    "weak_anchor_pct": 0
    }
   },
   {
@@ -385,11 +493,72 @@
     ],
     "notxy": [],
     "mood_closer": [],
-    "meta_narration": [],
+    "meta_narration": [
+     [
+      0,
+      "talks about the creator instead of the world: 'Johnny traced'"
+     ],
+     [
+      4,
+      "summary opens by describing the video, not the content"
+     ],
+     [
+      12,
+      "summary opens by describing the video, not the content"
+     ]
+    ],
     "question_cadence": [],
     "what_happens_when": [],
     "weak_implication": [],
     "doom_tag": [],
+    "event_first": [
+     [
+      9,
+      "opens on a general claim, not something that happened: I have a confession."
+     ],
+     [
+      10,
+      "opens on a general claim, not something that happened: AI agents can now hire real people through gig apps to do the things software ca"
+     ],
+     [
+      11,
+      "opens on a general claim, not something that happened: The most powerful companies on Earth are racing to build AI that improves itself"
+     ],
+     [
+      12,
+      "opens on a general claim, not something that happened: China mines the metals and America controls the chips, but that race is the wron"
+     ],
+     [
+      13,
+      "opens on a general claim, not something that happened: We still cannot see inside these AIs."
+     ],
+     [
+      14,
+      "opens on a general claim, not something that happened: The rich already buy elections."
+     ],
+     [
+      16,
+      "opens on a general claim, not something that happened: Larry Ellison is on a buying spree."
+     ],
+     [
+      17,
+      "opens on a general claim, not something that happened: Autonomous weapons already pick targets faster than a human can think."
+     ],
+     [
+      18,
+      "opens on a general claim, not something that happened: Two AIs were left to talk to each other."
+     ],
+     [
+      19,
+      "opens on a general claim, not something that happened: You already feel like you can't do anything about the powerful."
+     ]
+    ],
+    "small_word": [],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [],
+    "closer_variety": [],
+    "recency": [],
     "ratio_math": [],
     "banned_words": [],
     "cause_harm": []
@@ -399,7 +568,11 @@
     "grade_median": 7.2,
     "grade_mean": 7.3,
     "named_source_pct": 25,
-    "question_pct": 0
+    "question_pct": 0,
+    "stale_evidence_pct": 5,
+    "event_first_pct": 10,
+    "top_anchor_pct": 0,
+    "weak_anchor_pct": 0
    }
   },
   {
@@ -430,6 +603,18 @@
     "what_happens_when": [],
     "weak_implication": [],
     "doom_tag": [],
+    "event_first": [
+     [
+      0,
+      "opens on a general claim, not something that happened: Isaac Asimov wrote three simple laws to keep robots safe."
+     ]
+    ],
+    "small_word": [],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [],
+    "closer_variety": [],
+    "recency": [],
     "ratio_math": [],
     "banned_words": [],
     "cause_harm": []
@@ -439,7 +624,11 @@
     "grade_median": 8.0,
     "grade_mean": 7.8,
     "named_source_pct": 50,
-    "question_pct": 0
+    "question_pct": 0,
+    "stale_evidence_pct": 0,
+    "event_first_pct": 50,
+    "top_anchor_pct": 50,
+    "weak_anchor_pct": 0
    }
   },
   {
@@ -470,6 +659,22 @@
     "what_happens_when": [],
     "weak_implication": [],
     "doom_tag": [],
+    "event_first": [
+     [
+      0,
+      "opens on a general claim, not something that happened: In 2023 the big tech firms each spent over $10 million lobbying Washington on AI"
+     ],
+     [
+      1,
+      "opens on a general claim, not something that happened: AI agents do not sleep, take a salary, or need to eat."
+     ]
+    ],
+    "small_word": [],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [],
+    "closer_variety": [],
+    "recency": [],
     "ratio_math": [],
     "banned_words": [],
     "cause_harm": []
@@ -479,7 +684,11 @@
     "grade_median": 8.2,
     "grade_mean": 8.1,
     "named_source_pct": 50,
-    "question_pct": 0
+    "question_pct": 0,
+    "stale_evidence_pct": 50,
+    "event_first_pct": 0,
+    "top_anchor_pct": 0,
+    "weak_anchor_pct": 0
    }
   }
  ],
@@ -490,11 +699,18 @@
    "grade": 10,
    "notxy": 1,
    "mood_closer": 1,
-   "meta_narration": 0,
+   "meta_narration": 3,
    "question_cadence": 0,
    "what_happens_when": 0,
    "weak_implication": 0,
    "doom_tag": 0,
+   "event_first": 29,
+   "small_word": 1,
+   "philosophical": 1,
+   "anchor_strength": 0,
+   "paper_first": 2,
+   "closer_variety": 0,
+   "recency": 0,
    "ratio_math": 0,
    "banned_words": 1,
    "cause_harm": 0
@@ -504,7 +720,12 @@
    "grade_median": 7.6,
    "grade_mean": 7.6,
    "named_source_pct": 34,
-   "question_pct": 0
+   "question_pct": 0,
+   "stale_evidence_pct": 12,
+   "event_first_pct": 21,
+   "top_anchor_pct": 3,
+   "weak_anchor_pct": 0
   }
- }
+ },
+ "rechecked_with": 19
 }

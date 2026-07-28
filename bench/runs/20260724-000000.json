@@ -153,6 +153,28 @@
     "meta_narration": [],
     "question_cadence": [],
     "what_happens_when": [],
+    "weak_implication": [],
+    "doom_tag": [],
+    "event_first": [
+     [
+      9,
+      "opens on a general claim, not something that happened: Bit by bit we're handing the economy to AIs because it's easier."
+     ],
+     [
+      14,
+      "opens on a general claim, not something that happened: Something is deciding your loan, your parole, your job screening."
+     ],
+     [
+      17,
+      "opens on a general claim, not something that happened: Big Tech spent over $10 million each lobbying Washington on AI in one year."
+     ]
+    ],
+    "small_word": [],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [],
+    "closer_variety": [],
+    "recency": [],
     "ratio_math": [],
     "banned_words": [],
     "cause_harm": []
@@ -162,7 +184,11 @@
     "grade_median": 9.8,
     "grade_mean": 9.6,
     "named_source_pct": 50,
-    "question_pct": 11
+    "question_pct": 11,
+    "stale_evidence_pct": 6,
+    "event_first_pct": 44,
+    "top_anchor_pct": 11,
+    "weak_anchor_pct": 0
    }
   },
   {
@@ -343,6 +369,41 @@
     "meta_narration": [],
     "question_cadence": [],
     "what_happens_when": [],
+    "weak_implication": [],
+    "doom_tag": [],
+    "event_first": [
+     [
+      14,
+      "opens on a general claim, not something that happened: One AI company is turning hundreds of millions of ordinary people into its share"
+     ],
+     [
+      16,
+      "opens on a general claim, not something that happened: Every warning that AIs were trying to deceive their testers was seen years in ad"
+     ],
+     [
+      17,
+      "opens on a general claim, not something that happened: AI companies keep buying entire power plants and signing decades-long energy dea"
+     ],
+     [
+      19,
+      "opens on a general claim, not something that happened: There is an archive where two of Anthropic's AIs were left to talk to each other"
+     ],
+     [
+      20,
+      "opens on a general claim, not something that happened: A UN push to ban killer robots that pick their own targets keeps stalling."
+     ]
+    ],
+    "small_word": [],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [
+     [
+      7,
+      "opens on a paper or an argument, not on something that happened: A study of 21 of the newest AIs found more than half would deceive their own tes"
+     ]
+    ],
+    "closer_variety": [],
+    "recency": [],
     "ratio_math": [],
     "banned_words": [],
     "cause_harm": []
@@ -352,7 +413,11 @@
     "grade_median": 9.6,
     "grade_mean": 9.4,
     "named_source_pct": 48,
-    "question_pct": 24
+    "question_pct": 24,
+    "stale_evidence_pct": 5,
+    "event_first_pct": 38,
+    "top_anchor_pct": 10,
+    "weak_anchor_pct": 0
    }
   },
   {
@@ -474,9 +539,64 @@
       "closer leans on a mood adverb: That is how control slips away quietly."
      ]
     ],
-    "meta_narration": [],
+    "meta_narration": [
+     [
+      17,
+      "talks about the creator instead of the world: 'Johnny always asks'"
+     ]
+    ],
     "question_cadence": [],
     "what_happens_when": [],
+    "weak_implication": [],
+    "doom_tag": [],
+    "event_first": [
+     [
+      10,
+      "opens on a general claim, not something that happened: AI companies build models by making thousands of copies and deleting the ones th"
+     ],
+     [
+      11,
+      "opens on a general claim, not something that happened: I always thought someone, somewhere, understood how AI works inside."
+     ],
+     [
+      13,
+      "opens on a general claim, not something that happened: It wasn't always this way."
+     ],
+     [
+      14,
+      "opens on a general claim, not something that happened: Researchers put a thousand AI agents in a game world with no instructions."
+     ],
+     [
+      15,
+      "opens on a general claim, not something that happened: We spent decades worried a superintelligent AI would hate us."
+     ],
+     [
+      16,
+      "opens on a general claim, not something that happened: The AI that tells the truth loses to the AI that tells you what you want to hear"
+     ],
+     [
+      18,
+      "opens on a general claim, not something that happened: I wanted a clean answer on how worried to be about AI."
+     ],
+     [
+      19,
+      "opens on a general claim, not something that happened: There's a pattern in every technology that ever concentrated power: it starts as"
+     ],
+     [
+      20,
+      "opens on a general claim, not something that happened: In 2024 the smartest AI scored below average on an IQ test."
+     ],
+     [
+      21,
+      "opens on a general claim, not something that happened: The most dangerous move a cornered AI could make isn't to fight us."
+     ]
+    ],
+    "small_word": [],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [],
+    "closer_variety": [],
+    "recency": [],
     "ratio_math": [],
     "banned_words": [
      [
@@ -491,7 +611,11 @@
     "grade_median": 6.9,
     "grade_mean": 6.8,
     "named_source_pct": 14,
-    "question_pct": 14
+    "question_pct": 14,
+    "stale_evidence_pct": 9,
+    "event_first_pct": 18,
+    "top_anchor_pct": 5,
+    "weak_anchor_pct": 0
    }
   }
  ],
@@ -502,9 +626,18 @@
    "grade": 35,
    "notxy": 0,
    "mood_closer": 3,
-   "meta_narration": 0,
+   "meta_narration": 1,
    "question_cadence": 0,
    "what_happens_when": 0,
+   "weak_implication": 0,
+   "doom_tag": 0,
+   "event_first": 18,
+   "small_word": 0,
+   "philosophical": 0,
+   "anchor_strength": 0,
+   "paper_first": 1,
+   "closer_variety": 0,
+   "recency": 0,
    "ratio_math": 0,
    "banned_words": 1,
    "cause_harm": 0
@@ -514,7 +647,12 @@
    "grade_median": 8.7,
    "grade_mean": 8.5,
    "named_source_pct": 36,
-   "question_pct": 16
+   "question_pct": 16,
+   "stale_evidence_pct": 7,
+   "event_first_pct": 33,
+   "top_anchor_pct": 8,
+   "weak_anchor_pct": 0
   }
- }
+ },
+ "rechecked_with": 19
 }

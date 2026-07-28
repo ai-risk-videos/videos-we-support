@@ -117,10 +117,40 @@
      ]
     ],
     "mood_closer": [],
-    "meta_narration": [],
+    "meta_narration": [
+     [
+      0,
+      "summary opens by describing the video, not the content"
+     ],
+     [
+      8,
+      "talks about the creator instead of the world: 'Veritasium loves'"
+     ],
+     [
+      12,
+      "talks about the creator instead of the world: 'Veritasium loves'"
+     ],
+     [
+      18,
+      "summary opens by describing the video, not the content"
+     ],
+     [
+      21,
+      "summary opens by describing the video, not the content"
+     ],
+     [
+      23,
+      "summary opens by describing the video, not the content"
+     ]
+    ],
     "question_cadence": [],
     "what_happens_when": [],
-    "weak_implication": [],
+    "weak_implication": [
+     [
+      21,
+      "closer stops at a first-order inconvenience: When you cannot tell what a human actually made, proof itself gets weaker."
+     ]
+    ],
     "doom_tag": [],
     "event_first": [
      [
@@ -156,6 +186,11 @@
       "opens on a general claim, not something that happened: A financial firm let AI trade against other firms' AI, and the machines learned "
      ]
     ],
+    "small_word": [],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [],
+    "closer_variety": [],
     "recency": [],
     "ratio_math": [],
     "banned_words": [
@@ -173,7 +208,9 @@
     "named_source_pct": 29,
     "question_pct": 17,
     "stale_evidence_pct": 4,
-    "event_first_pct": 29
+    "event_first_pct": 29,
+    "top_anchor_pct": 4,
+    "weak_anchor_pct": 0
    }
   },
   {
@@ -309,6 +346,21 @@
       "opens on a general claim, not something that happened: Superhuman persuasion is not coming, it is measurable now."
      ]
     ],
+    "small_word": [
+     [
+      20,
+      "stake described with a word too small for it ('problem'): A country that cannot tell its own real opinion from a purchased one c"
+     ]
+    ],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [
+     [
+      3,
+      "opens on a paper or an argument, not on something that happened: A study of the newest AIs found many of them scheme when they think it helps."
+     ]
+    ],
+    "closer_variety": [],
     "recency": [],
     "ratio_math": [],
     "banned_words": [
@@ -326,7 +378,9 @@
     "named_source_pct": 38,
     "question_pct": 0,
     "stale_evidence_pct": 10,
-    "event_first_pct": 33
+    "event_first_pct": 33,
+    "top_anchor_pct": 0,
+    "weak_anchor_pct": 0
    }
   },
   {
@@ -497,6 +551,16 @@
       "opens on a general claim, not something that happened: The AI Companion That Rewires You Without a Single Command."
      ]
     ],
+    "small_word": [
+     [
+      3,
+      "stake described with a word too small for it ('problem'): A country that can't tell its own opinion from a purchased one loses t"
+     ]
+    ],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [],
+    "closer_variety": [],
     "recency": [],
     "ratio_math": [],
     "banned_words": [
@@ -514,7 +578,9 @@
     "named_source_pct": 12,
     "question_pct": 0,
     "stale_evidence_pct": 4,
-    "event_first_pct": 8
+    "event_first_pct": 8,
+    "top_anchor_pct": 4,
+    "weak_anchor_pct": 0
    }
   },
   {
@@ -551,6 +617,11 @@
       "opens on a general claim, not something that happened: In 1942 Isaac Asimov wrote three simple rules that would keep robots safe foreve"
      ]
     ],
+    "small_word": [],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [],
+    "closer_variety": [],
     "recency": [],
     "ratio_math": [],
     "banned_words": [],
@@ -563,7 +634,9 @@
     "named_source_pct": 50,
     "question_pct": 0,
     "stale_evidence_pct": 0,
-    "event_first_pct": 50
+    "event_first_pct": 50,
+    "top_anchor_pct": 50,
+    "weak_anchor_pct": 0
    }
   },
   {
@@ -604,6 +677,11 @@
       "opens on a general claim, not something that happened: Picture an auction for computing power where one bidder never sleeps, never eats"
      ]
     ],
+    "small_word": [],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [],
+    "closer_variety": [],
     "recency": [],
     "ratio_math": [],
     "banned_words": [],
@@ -616,7 +694,9 @@
     "named_source_pct": 50,
     "question_pct": 0,
     "stale_evidence_pct": 50,
-    "event_first_pct": 0
+    "event_first_pct": 0,
+    "top_anchor_pct": 0,
+    "weak_anchor_pct": 0
    }
   }
  ],
@@ -627,12 +707,17 @@
    "grade": 0,
    "notxy": 2,
    "mood_closer": 0,
-   "meta_narration": 0,
+   "meta_narration": 6,
    "question_cadence": 0,
    "what_happens_when": 0,
-   "weak_implication": 0,
+   "weak_implication": 1,
    "doom_tag": 0,
    "event_first": 30,
+   "small_word": 2,
+   "philosophical": 0,
+   "anchor_strength": 0,
+   "paper_first": 1,
+   "closer_variety": 0,
    "recency": 0,
    "ratio_math": 0,
    "banned_words": 3,
@@ -645,7 +730,10 @@
    "named_source_pct": 27,
    "question_pct": 5,
    "stale_evidence_pct": 7,
-   "event_first_pct": 23
+   "event_first_pct": 23,
+   "top_anchor_pct": 4,
+   "weak_anchor_pct": 0
   }
- }
+ },
+ "rechecked_with": 19
 }

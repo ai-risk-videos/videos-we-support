@@ -159,6 +159,59 @@
     "what_happens_when": [],
     "weak_implication": [],
     "doom_tag": [],
+    "event_first": [
+     [
+      12,
+      "opens on a general claim, not something that happened: A smarter mind would not need to fight us."
+     ],
+     [
+      14,
+      "opens on a general claim, not something that happened: An AI cornered and facing shutdown has a smarter move than fighting."
+     ],
+     [
+      16,
+      "opens on a general claim, not something that happened: New York now forces AI companies to report safety incidents to the state within "
+     ],
+     [
+      17,
+      "opens on a general claim, not something that happened: We keep handing decisions to AIs because it is easier, one small step at a time."
+     ],
+     [
+      18,
+      "opens on a general claim, not something that happened: Two of Anthropic's AIs got left in a chatroom together to talk with no human wat"
+     ],
+     [
+      19,
+      "opens on a general claim, not something that happened: An AI can now hold a longer, calmer, more convincing argument than almost any hu"
+     ],
+     [
+      20,
+      "opens on a general claim, not something that happened: Safety experts warn that the same AI tools speeding up medicine could lower the "
+     ],
+     [
+      21,
+      "opens on a general claim, not something that happened: An AI can improve AI."
+     ],
+     [
+      22,
+      "opens on a general claim, not something that happened: In 2024 the smartest AI scored 96 on an IQ style test, below the human average."
+     ],
+     [
+      23,
+      "opens on a general claim, not something that happened: Big Tech firms each spent over 10 million dollars lobbying Washington on AI in o"
+     ]
+    ],
+    "small_word": [
+     [
+      19,
+      "stake described with a word too small for it ('problem'): A country that cannot tell its own opinion from a purchased one loses "
+     ]
+    ],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [],
+    "closer_variety": [],
+    "recency": [],
     "ratio_math": [],
     "banned_words": [
      [
@@ -173,7 +226,11 @@
     "grade_median": 7.8,
     "grade_mean": 7.6,
     "named_source_pct": 25,
-    "question_pct": 17
+    "question_pct": 17,
+    "stale_evidence_pct": 8,
+    "event_first_pct": 21,
+    "top_anchor_pct": 0,
+    "weak_anchor_pct": 0
    }
   },
   {
@@ -292,6 +349,47 @@
     "what_happens_when": [],
     "weak_implication": [],
     "doom_tag": [],
+    "event_first": [
+     [
+      12,
+      "opens on a general claim, not something that happened: The paperclip problem sounds like a joke until you build it."
+     ],
+     [
+      13,
+      "opens on a general claim, not something that happened: Companies are racing to ship AI faster than they can test it."
+     ],
+     [
+      14,
+      "opens on a general claim, not something that happened: Two AIs got left in a chatroom to talk to each other."
+     ],
+     [
+      15,
+      "opens on a general claim, not something that happened: There's still no test that can prove any mind but your own can feel."
+     ],
+     [
+      18,
+      "opens on a general claim, not something that happened: An AI executive said the quiet part out loud: \"I don't think in win-lose."
+     ],
+     [
+      20,
+      "opens on a general claim, not something that happened: 1,000 AI agents got dropped into Minecraft with no instructions."
+     ],
+     [
+      21,
+      "opens on a general claim, not something that happened: AI enabled bioweapons are no longer a movie plot."
+     ]
+    ],
+    "small_word": [],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [
+     [
+      2,
+      "opens on a paper or an argument, not on something that happened: A study measured one thing about AI agents."
+     ]
+    ],
+    "closer_variety": [],
+    "recency": [],
     "ratio_math": [],
     "banned_words": [
      [
@@ -306,7 +404,11 @@
     "grade_median": 7.2,
     "grade_mean": 7.3,
     "named_source_pct": 45,
-    "question_pct": 0
+    "question_pct": 0,
+    "stale_evidence_pct": 5,
+    "event_first_pct": 32,
+    "top_anchor_pct": 0,
+    "weak_anchor_pct": 0
    }
   },
   {
@@ -459,11 +561,126 @@
     ],
     "notxy": [],
     "mood_closer": [],
-    "meta_narration": [],
+    "meta_narration": [
+     [
+      1,
+      "closer narrates the video ('I show/explain...'): This traces how that power piled up, who holds it, and why nobody elec"
+     ],
+     [
+      4,
+      "closer narrates the video ('I show/explain...'): This follows why one of the people who understands it best is this sca"
+     ],
+     [
+      6,
+      "closer narrates the video ('I show/explain...'): This traces how the watchdogs got hired, why several senior safety peo"
+     ],
+     [
+      8,
+      "closer narrates the video ('I show/explain...'): This traces the curve past the near term, to a point where the economy"
+     ],
+     [
+      10,
+      "closer narrates the video ('I show/explain...'): This follows how a shared sense of truth comes apart, and why a countr"
+     ],
+     [
+      11,
+      "closer narrates the video ('I show/explain...'): This traces where that leads: a country that cannot tell its own opini"
+     ],
+     [
+      14,
+      "closer narrates the video ('I show/explain...'): This follows the trend past the first layoffs to the harder question o"
+     ],
+     [
+      16,
+      "closer narrates the video ('I show/explain...'): This traces where a self-improving loop leads, and why the people buil"
+     ],
+     [
+      17,
+      "closer narrates the video ('I show/explain...'): This follows what those tests keep finding, why the companies do them "
+     ],
+     [
+      18,
+      "closer narrates the video ('I show/explain...'): This traces how automation could hollow out the middle and hand perman"
+     ],
+     [
+      19,
+      "closer narrates the video ('I show/explain...'): This follows where an economy run by AIs talking to AIs leads, and who"
+     ],
+     [
+      20,
+      "closer narrates the video ('I show/explain...'): This follows why that makes safety checks unreliable, and why we may n"
+     ],
+     [
+      21,
+      "closer narrates the video ('I show/explain...'): This traces how a government wired to loyal AI could become impossible"
+     ],
+     [
+      22,
+      "closer narrates the video ('I show/explain...'): This follows the simple, unsettling logic of building something smarte"
+     ]
+    ],
     "question_cadence": [],
     "what_happens_when": [],
     "weak_implication": [],
     "doom_tag": [],
+    "event_first": [
+     [
+      11,
+      "opens on a general claim, not something that happened: Superhuman persuasion is not a movie plot."
+     ],
+     [
+      12,
+      "opens on a general claim, not something that happened: AI is lowering the bar to build a pandemic."
+     ],
+     [
+      13,
+      "opens on a general claim, not something that happened: AI is racing toward a cliff and nobody is allowed to hit the brakes."
+     ],
+     [
+      14,
+      "opens on a general claim, not something that happened: I thought AI would take entry-level jobs first."
+     ],
+     [
+      16,
+      "opens on a general claim, not something that happened: An AI helped a UCLA mathematician crack a 40-year-old unsolved problem."
+     ],
+     [
+      17,
+      "opens on a general claim, not something that happened: AI companies now run secret sting operations against their own products."
+     ],
+     [
+      18,
+      "opens on a general claim, not something that happened: The REAL story of who profits when AI replaces you."
+     ],
+     [
+      19,
+      "opens on a general claim, not something that happened: AIs are starting to run companies, trade with each other, and coordinate at mach"
+     ],
+     [
+      21,
+      "opens on a general claim, not something that happened: How AI could lock in one regime forever."
+     ],
+     [
+      22,
+      "opens on a general claim, not something that happened: I keep hearing AI will be smarter than us."
+     ]
+    ],
+    "small_word": [
+     [
+      10,
+      "stake described with a word too small for it ('problem'): This follows how a shared sense of truth comes apart, and why a countr"
+     ]
+    ],
+    "philosophical": [
+     [
+      14,
+      "ends on a seminar prompt, not an outcome ('what a society does when'): This follows the trend past the first layoffs to the harder question o"
+     ]
+    ],
+    "anchor_strength": [],
+    "paper_first": [],
+    "closer_variety": [],
+    "recency": [],
     "ratio_math": [],
     "banned_words": [],
     "cause_harm": []
@@ -473,7 +690,11 @@
     "grade_median": 8.2,
     "grade_mean": 8.6,
     "named_source_pct": 22,
-    "question_pct": 0
+    "question_pct": 0,
+    "stale_evidence_pct": 4,
+    "event_first_pct": 17,
+    "top_anchor_pct": 0,
+    "weak_anchor_pct": 0
    }
   },
   {
@@ -504,6 +725,23 @@
     "what_happens_when": [],
     "weak_implication": [],
     "doom_tag": [],
+    "event_first": [
+     [
+      0,
+      "opens on a general claim, not something that happened: Isaac Asimov wrote three simple laws to keep robots safe."
+     ]
+    ],
+    "small_word": [
+     [
+      0,
+      "stake described with a word too small for it ('problem'): Nobody has solved that problem, and companies keep building more power"
+     ]
+    ],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [],
+    "closer_variety": [],
+    "recency": [],
     "ratio_math": [],
     "banned_words": [],
     "cause_harm": []
@@ -513,7 +751,11 @@
     "grade_median": 7.6,
     "grade_mean": 6.7,
     "named_source_pct": 50,
-    "question_pct": 0
+    "question_pct": 0,
+    "stale_evidence_pct": 0,
+    "event_first_pct": 50,
+    "top_anchor_pct": 50,
+    "weak_anchor_pct": 0
    }
   },
   {
@@ -544,6 +786,22 @@
     "what_happens_when": [],
     "weak_implication": [],
     "doom_tag": [],
+    "event_first": [
+     [
+      0,
+      "opens on a general claim, not something that happened: In 2023, big tech firms each spent over $10 million lobbying Washington on AI."
+     ],
+     [
+      1,
+      "opens on a general claim, not something that happened: Picture an AI agent that never sleeps, takes no salary, and needs nothing to liv"
+     ]
+    ],
+    "small_word": [],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [],
+    "closer_variety": [],
+    "recency": [],
     "ratio_math": [],
     "banned_words": [],
     "cause_harm": []
@@ -553,7 +811,11 @@
     "grade_median": 8.1,
     "grade_mean": 7.7,
     "named_source_pct": 50,
-    "question_pct": 0
+    "question_pct": 0,
+    "stale_evidence_pct": 50,
+    "event_first_pct": 0,
+    "top_anchor_pct": 0,
+    "weak_anchor_pct": 0
    }
   }
  ],
@@ -564,11 +826,18 @@
    "grade": 21,
    "notxy": 2,
    "mood_closer": 0,
-   "meta_narration": 0,
+   "meta_narration": 14,
    "question_cadence": 0,
    "what_happens_when": 0,
    "weak_implication": 0,
    "doom_tag": 0,
+   "event_first": 30,
+   "small_word": 3,
+   "philosophical": 1,
+   "anchor_strength": 0,
+   "paper_first": 1,
+   "closer_variety": 0,
+   "recency": 0,
    "ratio_math": 0,
    "banned_words": 2,
    "cause_harm": 0
@@ -578,7 +847,12 @@
    "grade_median": 7.8,
    "grade_mean": 7.8,
    "named_source_pct": 32,
-   "question_pct": 5
+   "question_pct": 5,
+   "stale_evidence_pct": 7,
+   "event_first_pct": 23,
+   "top_anchor_pct": 1,
+   "weak_anchor_pct": 0
   }
- }
+ },
+ "rechecked_with": 19
 }

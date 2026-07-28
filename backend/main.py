@@ -708,6 +708,38 @@ _ANCHOR_STOP = set("the a an and or of to in on for with that this it is are was
 def _anchor_toks(t):
     return {w for w in re.findall(r"[a-z0-9]{4,}", (t or "").lower()) if w not in _ANCHOR_STOP}
 
+# The SAME event lives in the bank many times over, told well and told badly. The blackmail study
+# appears 13 times, every copy scored 10, ranging from "Anthropic's new model turns to blackmail when
+# engineers try to take it offline" to "The technical appendix gives per model numbers showing 16
+# leading AI models chose blackmail up to 96 percent of the time". The incident is identical; only the
+# writing differs, and the generator builds from whichever it is handed. Curator's note on the bad
+# ones: "these are bad. they're covering the most interesting things, but they're terribly written."
+# So rank phrasing too, and let the best-told version represent the event.
+_ACADEMIC = (
+    (r"technical appendix|per model numbers|appendix", 3.0),
+    (r"\bstudy (?:found|shows|reports)|researchers? (?:found|report|showed)", 1.2),
+    (r"\bstress tested|placed in simulated|in simulated .{0,20}roles|scripted scenario", 1.2),
+    (r"\d+(?:\.\d+)?\s?percent", 1.0),
+    (r"\bevaluations?\b|\bbenchmark\b|\bsystem card\b|\bsamples\b", 0.8),
+    (r"^\s*(?:the|a|an)\s+\w+\s+(?:paper|report|analysis|study)\b", 2.0),
+)
+
+def _phrasing_score(t):
+    """Higher is punchier. Short, narrative, actor-first sentences beat write-ups about a write-up."""
+    t = (t or "").strip()
+    if not t:
+        return 0.0
+    body = re.sub(r"^\[[^\]]*\]\s*", "", t)          # drop the "[who year]" prefix
+    words = len(body.split())
+    score = 10.0 - 0.09 * words                        # every extra word costs a little
+    for pat, pen in _ACADEMIC:
+        if re.search(pat, body, re.I):
+            score -= pen
+    # a concrete actor doing something early is the shape we want
+    if re.match(r"^(?:When\s+)?[A-Z][\w'.-]*(?:\s+[A-Z][\w'.-]*){0,3}\s+(?:\w+ed|tried|caught|told|began|started|turns?|hacked|copied|killed|threatened)\b", body):
+        score += 1.5
+    return score
+
 def _too_similar(a, b, thresh=0.5):
     A, B = _anchor_toks(a), _anchor_toks(b)
     if not A or not B:
@@ -757,7 +789,11 @@ def anchor_block(k=12):
         return _weighted_sample([r[0] for r in pool], w, min(want, len(pool)))
 
     picks = []
-    for cand in draw(top, n_top * 3) + draw(rest, n_rest * 3):
+    # Sort candidates by phrasing before deduping. The draw-time dedupe keeps whichever version of an
+    # event it meets FIRST, so meeting the well-written one first is the whole fix.
+    cands = draw(top, n_top * 3) + draw(rest, n_rest * 3)
+    cands.sort(key=_phrasing_score, reverse=True)
+    for cand in cands:
         # DRAW-TIME DEDUPE. The bank holds the same Anthropic blackmail study retold by eight
         # different outlets, all scored 10, so a ranked draw without this hands the model the same
         # event over and over and the batch reads like one story. Clustering the bank up front missed
@@ -781,6 +817,13 @@ def anchor_block(k=12):
             "do not name a company, a model, a date, or a mechanism the anchor does not give you. Say what is known, "
             "in the words the anchor supports, and let the missing detail be part of why a viewer wants the video. "
             "A vague true claim beats a specific invented one. "
+            "RETELL, DO NOT TRANSCRIBE. These anchors are written to wildly different standards. Some are crisp "
+            "('Anthropic's new model turns to blackmail when engineers try to take it offline'), some are write-ups "
+            "about a write-up ('the technical appendix gives per model numbers showing 16 leading models chose "
+            "blackmail up to 96 percent of the time'). Never inherit the second kind of phrasing. Say what happened "
+            "as a thing that happened, actor first, in the fewest plain words: who did what, to whom. Do not open on "
+            "a percentage, a study, an appendix, or a rate; if a number is striking it goes after the action, not "
+            "before it. The facts come from the anchor, the sentence is yours. "
             "NEVER MERGE TWO ANCHORS. Each idea's factual claims must come from ONE anchor. Do not use a second "
             "anchor to explain, date, or supply the mechanism for the first, and do not imply they are the same "
             "event. A real failure this caused: the list held a terse post saying an AI company caught its AI "

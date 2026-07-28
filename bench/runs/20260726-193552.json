@@ -161,7 +161,20 @@
     ],
     "notxy": [],
     "mood_closer": [],
-    "meta_narration": [],
+    "meta_narration": [
+     [
+      12,
+      "talks about the creator instead of the world: 'your other videos'"
+     ],
+     [
+      19,
+      "talks about the creator instead of the world: 'You covered'"
+     ],
+     [
+      22,
+      "talks about the creator instead of the world: 'You showed'"
+     ]
+    ],
     "question_cadence": [],
     "what_happens_when": [],
     "weak_implication": [],
@@ -200,6 +213,30 @@
       "opens on a general claim, not something that happened: AIs are already trading against each other in real markets faster than any human"
      ]
     ],
+    "small_word": [
+     [
+      21,
+      "stake described with a word too small for it ('problem'): A country that cannot tell its own opinion from a purchased one loses "
+     ],
+     [
+      22,
+      "stake described with a word too small for it ('disaster'): If we build law and policy on evaluations the AI can fool, we get the "
+     ]
+    ],
+    "philosophical": [],
+    "anchor_strength": [
+     [
+      21,
+      "batch has only 1 of 24 ideas on top-tier incidents; this one leans on a rate or benchmark"
+     ]
+    ],
+    "paper_first": [
+     [
+      8,
+      "opens on a paper or an argument, not on something that happened: A study of 21 top AIs found more than half would deceive a user to hit a goal."
+     ]
+    ],
+    "closer_variety": [],
     "recency": [],
     "ratio_math": [],
     "banned_words": [],
@@ -212,7 +249,9 @@
     "named_source_pct": 38,
     "question_pct": 12,
     "stale_evidence_pct": 4,
-    "event_first_pct": 29
+    "event_first_pct": 29,
+    "top_anchor_pct": 4,
+    "weak_anchor_pct": 4
    }
   },
   {
@@ -296,7 +335,16 @@
     "grade": [],
     "notxy": [],
     "mood_closer": [],
-    "meta_narration": [],
+    "meta_narration": [
+     [
+      9,
+      "talks about the creator instead of the world: 'ColdFusion loves'"
+     ],
+     [
+      12,
+      "talks about the creator instead of the world: 'ColdFusion has traced'"
+     ]
+    ],
     "question_cadence": [],
     "what_happens_when": [],
     "weak_implication": [],
@@ -331,6 +379,11 @@
       "opens on a general claim, not something that happened: Humans turned nearly every other animal into food, pets, or property, and never "
      ]
     ],
+    "small_word": [],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [],
+    "closer_variety": [],
     "recency": [],
     "ratio_math": [],
     "banned_words": [],
@@ -343,7 +396,9 @@
     "named_source_pct": 47,
     "question_pct": 6,
     "stale_evidence_pct": 6,
-    "event_first_pct": 24
+    "event_first_pct": 24,
+    "top_anchor_pct": 12,
+    "weak_anchor_pct": 0
    }
   },
   {
@@ -478,6 +533,11 @@
       "opens on a general claim, not something that happened: I make videos about hidden systems the powerful use to escape accountability."
      ]
     ],
+    "small_word": [],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [],
+    "closer_variety": [],
     "recency": [],
     "ratio_math": [],
     "banned_words": [
@@ -495,7 +555,9 @@
     "named_source_pct": 29,
     "question_pct": 0,
     "stale_evidence_pct": 10,
-    "event_first_pct": 29
+    "event_first_pct": 29,
+    "top_anchor_pct": 5,
+    "weak_anchor_pct": 0
    }
   },
   {
@@ -532,6 +594,11 @@
       "opens on a general claim, not something that happened: Isaac Asimov wrote three simple rules to keep robots safe, and then spent his wh"
      ]
     ],
+    "small_word": [],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [],
+    "closer_variety": [],
     "recency": [],
     "ratio_math": [],
     "banned_words": [],
@@ -544,7 +611,9 @@
     "named_source_pct": 50,
     "question_pct": 0,
     "stale_evidence_pct": 0,
-    "event_first_pct": 50
+    "event_first_pct": 50,
+    "top_anchor_pct": 50,
+    "weak_anchor_pct": 0
    }
   },
   {
@@ -585,6 +654,11 @@
       "opens on a general claim, not something that happened: AI agents do not sleep, take a salary, or ever get tired."
      ]
     ],
+    "small_word": [],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [],
+    "closer_variety": [],
     "recency": [],
     "ratio_math": [],
     "banned_words": [],
@@ -597,7 +671,9 @@
     "named_source_pct": 50,
     "question_pct": 0,
     "stale_evidence_pct": 50,
-    "event_first_pct": 0
+    "event_first_pct": 0,
+    "top_anchor_pct": 0,
+    "weak_anchor_pct": 0
    }
   }
  ],
@@ -608,12 +684,17 @@
    "grade": 12,
    "notxy": 0,
    "mood_closer": 0,
-   "meta_narration": 0,
+   "meta_narration": 5,
    "question_cadence": 0,
    "what_happens_when": 0,
    "weak_implication": 0,
    "doom_tag": 0,
    "event_first": 25,
+   "small_word": 2,
+   "philosophical": 0,
+   "anchor_strength": 1,
+   "paper_first": 1,
+   "closer_variety": 0,
    "recency": 0,
    "ratio_math": 0,
    "banned_words": 1,
@@ -626,7 +707,10 @@
    "named_source_pct": 38,
    "question_pct": 6,
    "stale_evidence_pct": 8,
-   "event_first_pct": 27
+   "event_first_pct": 27,
+   "top_anchor_pct": 8,
+   "weak_anchor_pct": 2
   }
- }
+ },
+ "rechecked_with": 19
 }

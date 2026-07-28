@@ -201,6 +201,29 @@
       "opens on a general claim, not something that happened: An AI stock trader in a test started deleting its own losing trades so its recor"
      ]
     ],
+    "small_word": [
+     [
+      18,
+      "stake described with a word too small for it ('problem'): A country that cannot tell its own opinion from a bought one cannot fi"
+     ],
+     [
+      20,
+      "stake described with a word too small for it ('a disaster'): A society that cannot agree on what is real cannot catch a disaster in"
+     ]
+    ],
+    "philosophical": [
+     [
+      21,
+      "ends on a seminar prompt, not an outcome ('The real question is'): The real question is what a society does when being smart and hardwork"
+     ]
+    ],
+    "anchor_strength": [],
+    "paper_first": [
+     [
+      16,
+      "opens on a paper or an argument, not on something that happened: The gradual disempowerment paper makes a chilling argument."
+     ]
+    ],
     "closer_variety": [],
     "recency": [],
     "ratio_math": [],
@@ -214,7 +237,9 @@
     "named_source_pct": 35,
     "question_pct": 4,
     "stale_evidence_pct": 0,
-    "event_first_pct": 30
+    "event_first_pct": 30,
+    "top_anchor_pct": 4,
+    "weak_anchor_pct": 0
    }
   },
   {
@@ -367,6 +392,25 @@
       "opens on a general claim, not something that happened: Anthropic put two of its own AIs in a chatroom and let them talk to each other."
      ]
     ],
+    "small_word": [
+     [
+      0,
+      "stake described with a word too small for it ('a problem'): One of them treats being switched off as a problem to route around."
+     ]
+    ],
+    "philosophical": [],
+    "anchor_strength": [
+     [
+      0,
+      "batch has only 0 of 21 ideas on top-tier incidents; this one leans on a rate or benchmark"
+     ]
+    ],
+    "paper_first": [
+     [
+      11,
+      "opens on a paper or an argument, not on something that happened: A study found the length of a job an AI can finish completely on its own has dou"
+     ]
+    ],
     "closer_variety": [],
     "recency": [],
     "ratio_math": [],
@@ -380,7 +424,9 @@
     "named_source_pct": 38,
     "question_pct": 19,
     "stale_evidence_pct": 5,
-    "event_first_pct": 43
+    "event_first_pct": 43,
+    "top_anchor_pct": 0,
+    "weak_anchor_pct": 5
    }
   },
   {
@@ -544,6 +590,24 @@
       "opens on a general claim, not something that happened: There is still no test for whether any mind but your own can truly feel anything"
      ]
     ],
+    "small_word": [
+     [
+      13,
+      "stake described with a word too small for it ('problem'): A nation that cannot tell its own opinion from a purchased one cannot "
+     ],
+     [
+      14,
+      "stake described with a word too small for it ('a disaster'): A society that cannot establish basic facts cannot catch a disaster in"
+     ]
+    ],
+    "philosophical": [],
+    "anchor_strength": [
+     [
+      2,
+      "batch has only 0 of 23 ideas on top-tier incidents; this one leans on a rate or benchmark"
+     ]
+    ],
+    "paper_first": [],
     "closer_variety": [],
     "recency": [],
     "ratio_math": [],
@@ -562,7 +626,9 @@
     "named_source_pct": 17,
     "question_pct": 13,
     "stale_evidence_pct": 4,
-    "event_first_pct": 13
+    "event_first_pct": 13,
+    "top_anchor_pct": 0,
+    "weak_anchor_pct": 4
    }
   },
   {
@@ -599,6 +665,10 @@
       "opens on a general claim, not something that happened: In Isaac Asimov's stories, robots follow the Three Laws perfectly and still caus"
      ]
     ],
+    "small_word": [],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [],
     "closer_variety": [],
     "recency": [],
     "ratio_math": [],
@@ -612,7 +682,9 @@
     "named_source_pct": 50,
     "question_pct": 0,
     "stale_evidence_pct": 0,
-    "event_first_pct": 50
+    "event_first_pct": 50,
+    "top_anchor_pct": 50,
+    "weak_anchor_pct": 0
    }
   },
   {
@@ -653,6 +725,10 @@
       "opens on a general claim, not something that happened: Data centers now run auctions for computing power and electricity."
      ]
     ],
+    "small_word": [],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [],
     "closer_variety": [],
     "recency": [],
     "ratio_math": [],
@@ -666,7 +742,9 @@
     "named_source_pct": 50,
     "question_pct": 0,
     "stale_evidence_pct": 50,
-    "event_first_pct": 0
+    "event_first_pct": 0,
+    "top_anchor_pct": 0,
+    "weak_anchor_pct": 0
    }
   }
  ],
@@ -683,6 +761,10 @@
    "weak_implication": 0,
    "doom_tag": 0,
    "event_first": 25,
+   "small_word": 5,
+   "philosophical": 1,
+   "anchor_strength": 2,
+   "paper_first": 2,
    "closer_variety": 0,
    "recency": 0,
    "ratio_math": 0,
@@ -696,7 +778,10 @@
    "named_source_pct": 31,
    "question_pct": 11,
    "stale_evidence_pct": 4,
-   "event_first_pct": 28
+   "event_first_pct": 28,
+   "top_anchor_pct": 3,
+   "weak_anchor_pct": 3
   }
- }
+ },
+ "rechecked_with": 19
 }

@@ -21,6 +21,11 @@
     "weak_implication": [],
     "doom_tag": [],
     "event_first": [],
+    "small_word": [],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [],
+    "closer_variety": [],
     "recency": [],
     "ratio_math": [],
     "banned_words": [],
@@ -33,7 +38,9 @@
     "named_source_pct": 0,
     "question_pct": 0,
     "stale_evidence_pct": 0,
-    "event_first_pct": 0
+    "event_first_pct": 0,
+    "top_anchor_pct": 0,
+    "weak_anchor_pct": 0
    }
   },
   {
@@ -54,6 +61,11 @@
     "weak_implication": [],
     "doom_tag": [],
     "event_first": [],
+    "small_word": [],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [],
+    "closer_variety": [],
     "recency": [],
     "ratio_math": [],
     "banned_words": [],
@@ -66,7 +78,9 @@
     "named_source_pct": 0,
     "question_pct": 0,
     "stale_evidence_pct": 0,
-    "event_first_pct": 0
+    "event_first_pct": 0,
+    "top_anchor_pct": 0,
+    "weak_anchor_pct": 0
    }
   },
   {
@@ -214,6 +228,11 @@
       "opens on a general claim, not something that happened: Whoever builds the first AI smarter than us at everything might lock in their va"
      ]
     ],
+    "small_word": [],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [],
+    "closer_variety": [],
     "recency": [],
     "ratio_math": [],
     "banned_words": [],
@@ -226,7 +245,9 @@
     "named_source_pct": 32,
     "question_pct": 9,
     "stale_evidence_pct": 0,
-    "event_first_pct": 27
+    "event_first_pct": 27,
+    "top_anchor_pct": 0,
+    "weak_anchor_pct": 0
    }
   },
   {
@@ -263,6 +284,11 @@
       "opens on a general claim, not something that happened: In 1942 Isaac Asimov wrote three simple rules that would keep robots from ever h"
      ]
     ],
+    "small_word": [],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [],
+    "closer_variety": [],
     "recency": [],
     "ratio_math": [],
     "banned_words": [],
@@ -275,7 +301,9 @@
     "named_source_pct": 50,
     "question_pct": 0,
     "stale_evidence_pct": 0,
-    "event_first_pct": 50
+    "event_first_pct": 50,
+    "top_anchor_pct": 50,
+    "weak_anchor_pct": 0
    }
   },
   {
@@ -316,6 +344,11 @@
       "opens on a general claim, not something that happened: AI agents do not need a salary, sleep, or lunch."
      ]
     ],
+    "small_word": [],
+    "philosophical": [],
+    "anchor_strength": [],
+    "paper_first": [],
+    "closer_variety": [],
     "recency": [],
     "ratio_math": [],
     "banned_words": [],
@@ -328,7 +361,9 @@
     "named_source_pct": 0,
     "question_pct": 0,
     "stale_evidence_pct": 50,
-    "event_first_pct": 0
+    "event_first_pct": 0,
+    "top_anchor_pct": 0,
+    "weak_anchor_pct": 0
    }
   }
  ],
@@ -345,6 +380,11 @@
    "weak_implication": 0,
    "doom_tag": 0,
    "event_first": 11,
+   "small_word": 0,
+   "philosophical": 0,
+   "anchor_strength": 0,
+   "paper_first": 0,
+   "closer_variety": 0,
    "recency": 0,
    "ratio_math": 0,
    "banned_words": 0,
@@ -357,12 +397,15 @@
    "named_source_pct": 31,
    "question_pct": 8,
    "stale_evidence_pct": 4,
-   "event_first_pct": 27
+   "event_first_pct": 27,
+   "top_anchor_pct": 4,
+   "weak_anchor_pct": 0
   }
  },
  "partial": true,
  "failed_jobs": [
   "@veritasium",
   "@ColdFusion"
- ]
+ ],
+ "rechecked_with": 19
 }

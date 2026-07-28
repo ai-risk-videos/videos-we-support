@@ -142,6 +142,51 @@ HYPOTHETICAL = re.compile(r'^\s*(imagine|picture|think about|suppose|what if|con
 
 EVENT_FIRST_MIN = 0.60      # at least this share of a batch should open on a real occurrence
 
+# ANCHOR STRENGTH. Every other check here measures WRITING. None of them could see the complaint that
+# "the examples are almost never the best examples of scheming", so a batch built entirely on benchmark
+# percentages scored perfectly. This one looks at WHAT THE IDEA IS ABOUT.
+# The tiers are the curator's stated hierarchy: an AI breaking into someone else's infrastructure, an AI
+# trying to kill a person to stay alive, blackmail to avoid shutdown, and agents killing each other sit
+# at the top; "a random scheming thing" and a benchmark rate sit at the bottom.
+# HONEST LIMIT: this is keyword matching over the idea text, so it is a tripwire, not a verdict. The
+# 1,776 anchors in the bank were scored 1-10 by a model, and a model is the right instrument here too.
+# Use this number for movement between runs; read the hooks when the answer matters.
+TOP_TIER_ANCHOR = re.compile(
+    r'\b(?:'
+    r'murder|kill(?:ing|ed)?\s+(?:an?\s+)?(?:employee|person|human|engineer|operator)|let\s+(?:an?\s+)?\w+\s+die'
+    r'|blackmail|extort|threaten(?:ed)?\s+to\s+expose'
+    r'|cop(?:y|ied|ying)\s+itself|self[- ]propagat|exfiltrat|broke\s+out|escaped?\s+its\s+\w+'
+    r'|hack(?:ed|ing)?\s+into|installed?\s+(?:live\s+)?copies'
+    r'|killing\s+other\s+agents|kill(?:ed|ing)?\s+each\s+other'
+    r'|sabotage[ds]?\s+the\s+(?:shutdown|off\s+switch)|rewrote\s+the\s+(?:shutdown|off)'
+    r')\b', re.I)
+# the bottom of the hierarchy: a rate, a percentage, a benchmark, a survey — no incident to point at
+WEAK_ANCHOR = re.compile(
+    r'\b(?:\d+(?:\.\d+)?\s?(?:percent|%)\s+of\s+(?:the\s+)?(?:time|runs|attempts|samples|cases|models)'
+    r'|benchmark|scored?\s+\d|a\s+survey\s+(?:of|found)|poll(?:ed|ing)?\s+of|on\s+average'
+    r'|rate\s+of\s+\w+\s+behaviou?r)\b', re.I)
+ANCHOR_TOP_MIN = 0.20   # at least this share of a batch should be built on top-tier material
+
+def anchor_tier(x):
+    """'top' | 'weak' | 'mid' — what class of real-world material this idea is built on."""
+    t = both(x)
+    if TOP_TIER_ANCHOR.search(t):
+        return "top"
+    if WEAK_ANCHOR.search(t) and not TOP_TIER_ANCHOR.search(t):
+        return "weak"
+    return "mid"
+
+def _c_anchor_strength(ideas, ctx):
+    if not ideas:
+        return []
+    tops = [i for i, x in enumerate(ideas) if anchor_tier(x) == "top"]
+    if len(tops) >= max(1, int(len(ideas) * ANCHOR_TOP_MIN)):
+        return []
+    # under target: flag the weakest ideas so the report shows WHICH ones are thin
+    weak = [i for i, x in enumerate(ideas) if anchor_tier(x) == "weak"]
+    return [(i, "batch has only %d of %d ideas on top-tier incidents; this one leans on a rate or benchmark"
+             % (len(tops), len(ideas))) for i in weak]
+
 # PAPER-FIRST. Feedback on a real pitch: "starting off with a paper is boring! starting off with an
 # incident or something interesting, a fact, a stat, something that will intrigue people, THEN
 # talking about how it portends gradual disempowerment."
@@ -454,6 +499,8 @@ CHECKS = [
      "'A disaster' is what you call a car crash; say what is actually lost.", "idea", _c_small_word),
     ("philosophical", "End on an outcome, not a musing",
      "'The real question is what a society does when...' is a boring philosophical frame.", "idea", _c_philosophical),
+    ("anchor_strength", "Built on the best incidents",
+     "The examples are almost never the best examples; surface the craziest first.", "batch", _c_anchor_strength),
     ("paper_first", "Do not open on a paper",
      "Starting off with a paper is boring; open on an incident, a fact, or a stat.", "batch", _c_paper_first),
     ("closer_variety", "Vary how the stakes land",
@@ -495,4 +542,6 @@ def stats(ideas):
         "question_pct": round(100 * qs / len(ideas)) if ideas else 0,
         "stale_evidence_pct": round(100 * sum(1 for x in ideas if stale_years(x)) / len(ideas)) if ideas else 0,
         "event_first_pct": round(100 * sum(1 for x in ideas if opens_on_event(x)) / len(ideas)) if ideas else 0,
+        "top_anchor_pct": round(100 * sum(1 for x in ideas if anchor_tier(x) == "top") / len(ideas)) if ideas else 0,
+        "weak_anchor_pct": round(100 * sum(1 for x in ideas if anchor_tier(x) == "weak") / len(ideas)) if ideas else 0,
     }

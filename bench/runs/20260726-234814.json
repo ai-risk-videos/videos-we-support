@@ -155,6 +155,12 @@
      ]
     ],
     "philosophical": [],
+    "anchor_strength": [
+     [
+      12,
+      "batch has only 2 of 24 ideas on top-tier incidents; this one leans on a rate or benchmark"
+     ]
+    ],
     "paper_first": [],
     "closer_variety": [],
     "recency": [],
@@ -169,7 +175,9 @@
     "named_source_pct": 50,
     "question_pct": 0,
     "stale_evidence_pct": 8,
-    "event_first_pct": 38
+    "event_first_pct": 38,
+    "top_anchor_pct": 8,
+    "weak_anchor_pct": 4
    }
   },
   {
@@ -192,6 +200,7 @@
     "event_first": [],
     "small_word": [],
     "philosophical": [],
+    "anchor_strength": [],
     "paper_first": [],
     "closer_variety": [],
     "recency": [],
@@ -206,7 +215,9 @@
     "named_source_pct": 0,
     "question_pct": 0,
     "stale_evidence_pct": 0,
-    "event_first_pct": 0
+    "event_first_pct": 0,
+    "top_anchor_pct": 0,
+    "weak_anchor_pct": 0
    }
   },
   {
@@ -347,6 +358,7 @@
     ],
     "small_word": [],
     "philosophical": [],
+    "anchor_strength": [],
     "paper_first": [],
     "closer_variety": [],
     "recency": [],
@@ -366,7 +378,9 @@
     "named_source_pct": 35,
     "question_pct": 0,
     "stale_evidence_pct": 0,
-    "event_first_pct": 35
+    "event_first_pct": 35,
+    "top_anchor_pct": 0,
+    "weak_anchor_pct": 0
    }
   },
   {
@@ -405,6 +419,7 @@
     ],
     "small_word": [],
     "philosophical": [],
+    "anchor_strength": [],
     "paper_first": [],
     "closer_variety": [],
     "recency": [],
@@ -419,7 +434,9 @@
     "named_source_pct": 100,
     "question_pct": 0,
     "stale_evidence_pct": 0,
-    "event_first_pct": 50
+    "event_first_pct": 50,
+    "top_anchor_pct": 50,
+    "weak_anchor_pct": 0
    }
   },
   {
@@ -462,6 +479,7 @@
     ],
     "small_word": [],
     "philosophical": [],
+    "anchor_strength": [],
     "paper_first": [],
     "closer_variety": [],
     "recency": [],
@@ -476,7 +494,9 @@
     "named_source_pct": 50,
     "question_pct": 0,
     "stale_evidence_pct": 50,
-    "event_first_pct": 0
+    "event_first_pct": 0,
+    "top_anchor_pct": 0,
+    "weak_anchor_pct": 0
    }
   }
  ],
@@ -495,6 +515,7 @@
    "event_first": 15,
    "small_word": 1,
    "philosophical": 0,
+   "anchor_strength": 1,
    "paper_first": 0,
    "closer_variety": 0,
    "recency": 0,
@@ -509,11 +530,14 @@
    "named_source_pct": 45,
    "question_pct": 0,
    "stale_evidence_pct": 6,
-   "event_first_pct": 35
+   "event_first_pct": 35,
+   "top_anchor_pct": 6,
+   "weak_anchor_pct": 2
   }
  },
  "partial": true,
  "failed_jobs": [
   "@ColdFusion"
- ]
+ ],
+ "rechecked_with": 19
 }
