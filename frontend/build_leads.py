@@ -861,6 +861,44 @@ async function regenerate(mode){
 // single call for 50 would blow the client timeout, so this runs SEVERAL rounds back to back,
 // appending each batch as it lands. Rounds are sequential on purpose: the backend is one instance
 // and parallel generations make each other time out.
+
+// EVERY generation must go through the job route. Railway's proxy severs any request at ~300s, and a
+// generation now measures 200-340s, so a direct POST /custom fails roughly half the time: the browser
+// gets a 502 with no ideas, the code counts it as an empty batch, and the button quietly resets. That
+// is exactly the "processes, then nothing appears" report, and it hit the two bulk paths because only
+// fetchCustom had been converted. Start, poll, and fall back to the old single request if the job
+// route is unavailable.
+async function customJob(body,onTick){
+ const base=CUSTOM_API.replace(/\/custom$/,"");
+ try{
+  const st=await fetch(base+"/custom_start",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+  if(st.status===429)return {busy:true};
+  if(!st.ok)throw new Error("start "+st.status);
+  const {job}=await st.json();
+  if(!job)throw new Error("no job id");
+  const deadline=Date.now()+700000;
+  while(Date.now()<deadline){
+   await new Promise(res=>setTimeout(res,4000));
+   const pr=await fetch(base+"/custom_result?job="+encodeURIComponent(job));
+   if(pr.status===404)throw new Error("job lost");
+   const pj=await pr.json().catch(()=>null);
+   if(!pj)continue;
+   if(pj.status==="running"){if(onTick)onTick(pj.elapsed||0);continue;}
+   if(pj.status==="error")throw new Error(pj.error||"generation failed");
+   return pj;
+  }
+  throw new Error("timed out waiting for the job");
+ }catch(e){
+  // fallback: still works whenever a generation happens to finish under the proxy ceiling
+  const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),290000);
+  const r=await fetch(CUSTOM_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body),signal:ctrl.signal});
+  clearTimeout(to);
+  if(r.status===429)return {busy:true};
+  if(!r.ok)throw new Error("server "+r.status);
+  return await r.json();
+ }
+}
+
 const MORE_TARGET = 50;      // how many NEW ideas one click tries to add
 const MORE_MAX_ROUNDS = 4;   // hard stop, so a dry channel cannot loop forever
 let moreCancel = false;
@@ -884,20 +922,17 @@ async function addMoreIdeas(){
    setLabel("Finding ideas… "+added+" of "+MORE_TARGET+", batch "+round+"  (click to stop)");
    let j=null;
    try{
-    const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),400000);
     const body={channelUrl:url,
                 exclude:curateIdeas.map(ideaTitle).filter(Boolean).slice(0,120),
                 rejected:curateRejected.map(ideaTitle).filter(Boolean).slice(0,40),
                 channel:curateChannel};
     const prof=(curateProfile&&curateProfile.length>80)?curateProfile:((channelProfile&&channelProfile.length>80)?channelProfile:"");
     if(prof)body.profile=prof; // cached profile -> the fast "more" path, no re-research
-    const r=await fetch(CUSTOM_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body),signal:ctrl.signal});
-    clearTimeout(to);
-    if(r.status===429){toast("Busy right now. Keeping the "+added+" found so far.");break;}
-    j=await r.json();
+    j=await customJob(body,secs=>setLabel("Finding ideas… "+added+" of "+MORE_TARGET+", batch "+round+" ("+secs+"s)  (click to stop)"));
+    if(j&&j.busy){toast("Busy right now. Keeping the "+added+" found so far.");break;}
    }catch(e){
-    // one slow batch should not throw away the batches that already worked
-    toast("A batch timed out. Keeping the "+added+" ideas found so far.");
+    // one slow batch should not throw away the batches that already worked, but SAY what happened
+    toast("A batch failed ("+String(e&&e.message||e).slice(0,60)+"). Keeping the "+added+" found so far.");
     break;
    }
    if(!(j&&Array.isArray(j.ideas)&&j.ideas.length)){dry++;if(dry>=2)break;continue;}
@@ -1099,10 +1134,9 @@ async function generateMore(btn,shown,style){
   const opt={method:"POST",headers:{"Content-Type":"application/json"},signal:ctrl.signal};
   let r;
   if(style==="ideas"){
-   r=await fetch(CUSTOM_API,{...opt,body:JSON.stringify({channelUrl:cleanChanUrl(channelHandle),exclude:shown.map(ideaTitle).slice(0,60),profile:channelProfile,channel:channelName})});
-   if(r.status===429){btn.textContent="Busy — try again in a minute";return;}
-   if(!r.ok)throw new Error("server");
-   const j=await r.json();if(j&&j.profile)channelProfile=j.profile;
+   const j=await customJob({channelUrl:cleanChanUrl(channelHandle),exclude:shown.map(ideaTitle).slice(0,60),profile:channelProfile,channel:channelName});
+   if(j&&j.busy){btn.textContent="Busy — try again in a minute";return;}
+   if(j&&j.profile)channelProfile=j.profile;
    fresh=((j&&j.ideas)||[]).filter(x=>ideaTitle(x)&&!seen.has(key(ideaTitle(x)))).slice(0,12);
   }else{
    r=await fetch(TAILOR_API,{...opt,body:JSON.stringify({channelUrl:cleanChanUrl(channelHandle),leads:topLeadsForTailor()})});
@@ -1128,39 +1162,9 @@ async function fetchCustom(rawurl,rejectedTitles){
  let _stopC=function(){};
  if(msg){msg.className="cmsg";msg.innerHTML='<div class="ptwrap"></div>';_stopC=progressTicker(msg.querySelector(".ptwrap"),300,"Writing fresh ideas");}
  try{
-  // measured 281s for a cold generation, then 278s again after a fidelity pass was added to the
-  // polish chain. A 240s abort was killing calls the server went on to complete, and 330s left only
-  // ~50s of headroom over the worst measurement. 420s with a live progress bar beats a false failure:
-  // the cost of waiting is a progress bar, the cost of aborting is throwing away a finished batch.
   const _cbody={channelUrl:url};if(Array.isArray(rejectedTitles)&&rejectedTitles.length)_cbody.rejected=rejectedTitles.slice(0,40); // feed the reject pile so a regenerate steers away from disliked ideas
-  // JOB + POLL, not one long request. Railway's proxy closes any connection at ~300s: a 300.1s call
-  // came back 502 while the server went on to finish the batch, and a 285.0s call on the same instance
-  // was fine. Generation measures 202-300+s, so a slice of calls was dying after the user had waited
-  // five minutes. Raising the client abort did nothing, because the hangup is upstream of the client.
-  let r=null;
-  try{
-   const st=await fetch(CUSTOM_API.replace(/\/custom$/,"/custom_start"),{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(_cbody)});
-   if(!st.ok)throw new Error("start "+st.status);
-   const {job}=await st.json();
-   if(!job)throw new Error("no job id");
-   const deadline=Date.now()+600000;
-   while(Date.now()<deadline){
-    await new Promise(res=>setTimeout(res,4000));
-    const pr=await fetch(CUSTOM_API.replace(/\/custom$/,"/custom_result")+"?job="+encodeURIComponent(job));
-    if(pr.status===404)throw new Error("job lost");           // server restarted mid-run
-    const pj=await pr.json().catch(()=>null);
-    if(!pj)continue;
-    if(pj.status==="running")continue;
-    if(pj.status==="error")throw new Error(pj.error||"generation failed");
-    r={ok:true,json:async()=>pj};break;                        // shape it like a fetch Response
-   }
-   if(!r)throw new Error("timed out waiting for the job");
-  }catch(e){
-   // fall back to the old single long request; it still works whenever generation finishes under ~300s
-   const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),290000);
-   r=await fetch(CUSTOM_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(_cbody),signal:ctrl.signal});
-   clearTimeout(to);
-  }
+  const _pj=await customJob(_cbody);   // job route: see customJob for why a direct POST cannot work
+  const r={ok:true,status:200,json:async()=>_pj};
   if(r.status===429){if(msg){msg.className="cmsg err";msg.textContent="Busy right now — wait a minute and try again.";}return false;}
   const j=await r.json();
   if(j&&Array.isArray(j.ideas)&&j.ideas.length){
