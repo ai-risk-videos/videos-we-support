@@ -884,7 +884,7 @@ async function addMoreIdeas(){
    setLabel("Finding ideas… "+added+" of "+MORE_TARGET+", batch "+round+"  (click to stop)");
    let j=null;
    try{
-    const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),285000);
+    const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),400000);
     const body={channelUrl:url,
                 exclude:curateIdeas.map(ideaTitle).filter(Boolean).slice(0,120),
                 rejected:curateRejected.map(ideaTitle).filter(Boolean).slice(0,40),
@@ -1126,11 +1126,13 @@ async function fetchCustom(rawurl,rejectedTitles){
  const btn=$("#cgen"),msg=$("#cmsg"),orig=btn?btn.textContent:"";
  if(btn){btn.disabled=true;btn.textContent="Generating…";}
  let _stopC=function(){};
- if(msg){msg.className="cmsg";msg.innerHTML='<div class="ptwrap"></div>';_stopC=progressTicker(msg.querySelector(".ptwrap"),260,"Writing fresh ideas");}
+ if(msg){msg.className="cmsg";msg.innerHTML='<div class="ptwrap"></div>';_stopC=progressTicker(msg.querySelector(".ptwrap"),300,"Writing fresh ideas");}
  try{
-  // measured 281s for a cold generation once the polish chain grew; a 240s abort was killing calls
-  // that the server went on to complete. 330s with a live progress bar beats a false failure.
-  const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),330000);
+  // measured 281s for a cold generation, then 278s again after a fidelity pass was added to the
+  // polish chain. A 240s abort was killing calls the server went on to complete, and 330s left only
+  // ~50s of headroom over the worst measurement. 420s with a live progress bar beats a false failure:
+  // the cost of waiting is a progress bar, the cost of aborting is throwing away a finished batch.
+  const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),420000);
   const _cbody={channelUrl:url};if(Array.isArray(rejectedTitles)&&rejectedTitles.length)_cbody.rejected=rejectedTitles.slice(0,40); // feed the reject pile so a regenerate steers away from disliked ideas
   const r=await fetch(CUSTOM_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(_cbody),signal:ctrl.signal});
   clearTimeout(to);
