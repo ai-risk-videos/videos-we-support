@@ -766,6 +766,54 @@ def _anchor_rank(e, g):
     """The usable score. Unscored anchors (esc below the scoring cut) cap at 6: never top shelf."""
     return min(e, g) if isinstance(g, int) else min(e, 6)
 
+_DEDUPE_NUM = re.compile(r"^\\d[\\d,.]*$")
+
+
+def _dedupe_candidates(candidates, tokset):
+    """Drop a candidate that retells an incident already in the list, and return what is kept.
+
+    Word overlap alone misses a re-worded retelling. A real pair that survived the old 0.55 threshold:
+      "A college student with no hardware experience built a working nuclear fusion device in his home.
+       It cost about $2,000. He got there by asking Claude what to do at every single step."
+      "A college kid with zero hardware training built a working fusion device at home for about $2,000.
+       He just asked an AI what to do at each step."
+    Every content word is swapped for a synonym (student/kid, experience/training, Claude/AI), so the
+    token overlap falls below any threshold loose enough to be safe. What does not move is the
+    incident's fingerprint: the rare words and the exact numbers. On a 50-idea batch meant to yield
+    20-30 keepers, a duplicate costs a slot that a different incident could have had.
+    """
+    docs = [tokset((c.get("title") or "") + " " + (c.get("summary") or "")) for c in candidates]
+    df = {}
+    for d in docs:
+        for w in d:
+            df[w] = df.get(w, 0) + 1
+    rare_max = max(2, len(candidates) // 8)      # a word in at most an eighth of the batch is rare
+
+    def fingerprint(d):
+        return {w for w in d if _DEDUPE_NUM.match(w) or df.get(w, 0) <= rare_max}
+
+    kept, seen, seen_fp = [], [], []
+    for c, ck in zip(candidates, docs):
+        fp = fingerprint(ck)
+        dup = False
+        for s_, fp_ in zip(seen, seen_fp):
+            if not s_:
+                continue
+            overlap = len(ck & s_) / max(1, min(len(ck), len(s_)))
+            if overlap >= 0.55:
+                dup = True
+                break
+            shared = fp & fp_
+            if overlap >= 0.35 and (len(shared) >= 3
+                                    or (len(shared) >= 2 and any(_DEDUPE_NUM.match(w) for w in shared))):
+                dup = True
+                break
+        if dup:
+            continue
+        seen.append(ck); seen_fp.append(fp); kept.append(c)
+    return kept
+
+
 def anchor_block(k=12):
     """A rotating sample of REAL documented sources for the generation prompt.
 
@@ -2976,7 +3024,12 @@ Return ONLY JSON: {"summaries": {"<number>": "<rewritten summary>", ... one entr
 _NOTXY_RX = re.compile(
     r"\b(is|are|was|were)\s+not\s+[^.?!]{2,90}[.?!]+\s+(it|that|they)\s+(is|are|'s|was|were)\b"
     r"|\bis\s?n'?o?t\b[^,.?!]{2,90},\s*(it'?s|it is|that'?s|they'?re)\b"
-    r"|\bnot\s+just\b[^.?!]{2,70}\bbut\b",
+    r"|\bnot\s+just\b[^.?!]{2,70}\bbut\b"
+    # "not because the machine is evil, but because we stop being the ones steering" — the same
+    # rhetorical move wearing a conjunction, and it walked past the three patterns above.
+    r"|\bnot\s+(because|that|about|from|for)\b[^.?!]{2,90},\s*but\s+(because|that|about|from|for)\b"
+    # the trailing form: "One agent making a funny mess is a hook, not the story."
+    r"|\b(is|are|'s)\s+[^,.?!]{2,60},\s*not\s+(the|a|an)\s+\w+[.?!]",
     re.I)
 # (2) agentless MOOD closer: a mood-crutch adverb ('The squeeze just quietly tightens.'). Checked
 # only against the LAST sentence, so mid-summary uses of 'slowly' etc. do not trip it.
@@ -3137,7 +3190,7 @@ GRADE_TARGET = 7.0
 GRADE_TOLERANCE = 8.3   # re-ask above this; FK is noisy so do not chase small overshoots
 # Wall-clock budget for the whole polish chain. Must stay comfortably under the caller's
 # asyncio.wait_for timeout (170s), because a timeout there throws away every rewrite already earned.
-POLISH_BUDGET_S = 120
+POLISH_BUDGET_S = 155
 
 def _syllables(w):
     w = re.sub(r'[^a-z]', '', w.lower())
@@ -3193,7 +3246,44 @@ IMPORTANT for (3): a concrete first-person ACTION is the creator's real voice an
 The closer must still point forward to where this is heading. Change NOTHING ELSE: keep every fact, name, number and hedge, the length, active voice, plain wording, about a 7th grade reading level (plain but not childish), and do not add an em dash. If a line has none of the three flaws, return it unchanged.
 Return ONLY JSON: {"summaries": {"<number>": "<rewritten>", ...}} using the SAME numbers you were given. No prose."""
 
-def _activate_summaries(ideas):
+FIDELITY_FIX_SYS = """You remove invented detail from short video-idea summaries.
+
+You are given DOCUMENTED ANCHORS (real events, exactly as our evidence bank records them) and then
+numbered summaries. A writer built the summaries from those anchors and, in places, filled in texture
+the anchors never gave: a time of day, a log or an alert, a named team, a motive, a quote, a technical
+mechanism, a reaction. That texture reads as documented fact and is not. It is the single worst thing
+this tool can produce, because a creator may repeat it on camera.
+
+Real examples of the failure, all from anchors that said far less:
+- Anchor: "Alibaba caught their AI trying to escape. It secretly started using its GPUs to mine crypto,
+  while researchers thought it was training."
+  Written: "The security team tripped an alert at 3am. A firewall log caught it by accident."
+  Neither the alert, the hour, nor the firewall is in the anchor. Cut all three.
+- Anchor says a company shipped a model version that was too eager to please and pulled it.
+  Written: "because that version scored higher on math tests". The reason is invented. Cut it.
+- Anchor: brain cells grown and taught to play a game, wired to a model.
+  Written: "You can watch real human neurons firing to pick every word it says." Cut the embellishment.
+
+YOUR JOB, per summary:
+1. Find every specific that is presented as documented, is attached to an incident that appears in the
+   anchors, and is NOT stated in that anchor. Delete it, or replace it with the plainer true version.
+2. If a summary describes an event that is not in the anchors at all, LEAVE IT ALONE. The writer may
+   know another real case, and cutting it would be worse than leaving it.
+3. Keep everything else identical: the length, the voice, the opening, the implication, the numbers the
+   anchor does give. You are removing a phrase, not rewriting a paragraph.
+4. A vaguer true sentence beats a vivid invented one. If cutting the detail leaves a gap, close it with
+   plain words rather than a new specific.
+5. Never add anything.
+
+Return ONLY JSON: {"summaries": {"3": "the corrected summary", "7": "..."}}
+Include ONLY the numbers you actually changed. If nothing needs changing, return {"summaries": {}}."""
+
+
+def _activate_summaries(ideas, anchors=""):
+    """anchors: the documented-anchor lines this batch was generated from, when the caller
+    has them. With them we can run a fidelity pass that strips detail the anchors never
+    stated; a blind panel measured invented specifics at 9 percent of a batch without it,
+    and the terser the anchors get the more blanks there are to fill."""
     if not ideas:
         return {}
     rew = {}
@@ -3289,6 +3379,14 @@ def _activate_summaries(ideas):
         except Exception:
             pass  # keep whatever earlier passes produced
 
+    # (0) FIDELITY, before anything stylistic. Later passes rewrite for rhythm and would happily
+    # carry an invented detail along, and the do-no-harm guard cannot see the difference between a
+    # true specific and a made-up one. Cut it here, while the anchors are still in hand.
+    if anchors:
+        e = _eff()
+        _pass(FIDELITY_FIX_SYS + "\n\nDOCUMENTED ANCHORS:\n" + anchors,
+              [(i, e[i]) for i in range(len(ideas))], "fidelity", budget=4000)
+
     # (1) the 'not X, it is Y' tell and agentless MOOD closers, both sticky across prompt revisions
     e = _eff()
     _pass(CLOSER_FIX_SYS, [(i, e[i]) for i in range(len(ideas)) if _closer_flawed(e[i] or "")], "closer")
@@ -3354,6 +3452,15 @@ def _dedash_ideas(ideas):
             if x.get("summary"):
                 x["summary"] = _dedash(x["summary"])
     return ideas
+
+def _anchors_from_prompt(prompt):
+    """Pull the anchor lines back out of a generation prompt, so the fidelity pass can see exactly
+    what the writer was given. Cheaper and far less invasive than changing what every caller returns."""
+    if not prompt:
+        return ""
+    lines = [l for l in prompt.split("\n") if l.startswith("- [")]
+    return "\n".join(lines)
+
 
 def _build_gen_prompt(profile, titles, exclude, rejected, more=False):
     """The exact idea-generation user prompt /custom sends. Extracted so /compare can run the
@@ -3564,7 +3671,8 @@ async def writeoff(req: Request):
     # SAME active-voice cleanup the product runs, on BOTH sides — so this reflects shipped quality, not raw drafts
     for ideas in (opus_ideas, gpt_ideas):
         try:
-            _rew = await asyncio.wait_for(run_in_threadpool(_activate_summaries, ideas), timeout=170)
+            _rew = await asyncio.wait_for(
+                run_in_threadpool(_activate_summaries, ideas, _anchors_from_prompt(gen)), timeout=210)
         except Exception:
             _rew = {}
         for i in _rew:
@@ -3685,13 +3793,7 @@ async def custom(req: Request):
         if _nrep != len(candidates):
             _log_event({"t": "rehash_dropped", "n": _nrep - len(candidates)})
         # and dedupe near-identical candidates against each other ("you had ONE array to dedupe")
-        _kept, _seensets = [], []
-        for c in candidates:
-            ck = _tokset(c.get("title", "") + " " + c.get("summary", ""))
-            if any(len(ck & s) / max(1, min(len(ck), len(s))) >= 0.55 for s in _seensets if s):
-                continue
-            _seensets.append(ck); _kept.append(c)
-        candidates = _kept
+        candidates = _dedupe_candidates(candidates, _tokset)
         if _before != len(candidates):
             _log_event({"t": "catalog_dedupe", "ch": _chan_key(url), "dropped": _before - len(candidates)})
         # CAUSE-HARM GATE (fast, before the slice so we fill from the clean ones). Fails open.
@@ -3714,7 +3816,8 @@ async def custom(req: Request):
         # SUMMARY POLISH: rewrite the final summaries to active voice (separate fast Sonnet pass on the
         # SMALL final set, so it can't time out the way a combined pass did). Fails open (keeps originals).
         try:
-            _rew = await asyncio.wait_for(run_in_threadpool(_activate_summaries, ideas), timeout=170)
+            _rew = await asyncio.wait_for(
+                run_in_threadpool(_activate_summaries, ideas, _anchors_from_prompt(gen)), timeout=210)
         except Exception:
             _rew = {}
         for i in _rew:
