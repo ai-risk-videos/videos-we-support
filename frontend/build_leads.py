@@ -1132,10 +1132,35 @@ async function fetchCustom(rawurl,rejectedTitles){
   // polish chain. A 240s abort was killing calls the server went on to complete, and 330s left only
   // ~50s of headroom over the worst measurement. 420s with a live progress bar beats a false failure:
   // the cost of waiting is a progress bar, the cost of aborting is throwing away a finished batch.
-  const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),420000);
   const _cbody={channelUrl:url};if(Array.isArray(rejectedTitles)&&rejectedTitles.length)_cbody.rejected=rejectedTitles.slice(0,40); // feed the reject pile so a regenerate steers away from disliked ideas
-  const r=await fetch(CUSTOM_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(_cbody),signal:ctrl.signal});
-  clearTimeout(to);
+  // JOB + POLL, not one long request. Railway's proxy closes any connection at ~300s: a 300.1s call
+  // came back 502 while the server went on to finish the batch, and a 285.0s call on the same instance
+  // was fine. Generation measures 202-300+s, so a slice of calls was dying after the user had waited
+  // five minutes. Raising the client abort did nothing, because the hangup is upstream of the client.
+  let r=null;
+  try{
+   const st=await fetch(CUSTOM_API.replace(/\/custom$/,"/custom_start"),{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(_cbody)});
+   if(!st.ok)throw new Error("start "+st.status);
+   const {job}=await st.json();
+   if(!job)throw new Error("no job id");
+   const deadline=Date.now()+600000;
+   while(Date.now()<deadline){
+    await new Promise(res=>setTimeout(res,4000));
+    const pr=await fetch(CUSTOM_API.replace(/\/custom$/,"/custom_result")+"?job="+encodeURIComponent(job));
+    if(pr.status===404)throw new Error("job lost");           // server restarted mid-run
+    const pj=await pr.json().catch(()=>null);
+    if(!pj)continue;
+    if(pj.status==="running")continue;
+    if(pj.status==="error")throw new Error(pj.error||"generation failed");
+    r={ok:true,json:async()=>pj};break;                        // shape it like a fetch Response
+   }
+   if(!r)throw new Error("timed out waiting for the job");
+  }catch(e){
+   // fall back to the old single long request; it still works whenever generation finishes under ~300s
+   const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),290000);
+   r=await fetch(CUSTOM_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(_cbody),signal:ctrl.signal});
+   clearTimeout(to);
+  }
   if(r.status===429){if(msg){msg.className="cmsg err";msg.textContent="Busy right now — wait a minute and try again.";}return false;}
   const j=await r.json();
   if(j&&Array.isArray(j.ideas)&&j.ideas.length){

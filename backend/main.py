@@ -3737,12 +3737,81 @@ async def writeoff(req: Request):
             "opus_model": MODEL, "gpt_model": gpt_model,
             "opus": opus_ideas, "gpt": gpt_ideas, "opus_err": opus_err, "gpt_err": gpt_err}
 
-@app.post("/custom")
-async def custom(req: Request):
+# ---------------------------------------------------------------------------------------------
+# ASYNC JOBS FOR GENERATION.
+# Railway's edge proxy closes a request at almost exactly 300 seconds. Measured directly: a call that
+# ran 300.1s came back 502 "upstream error" while telemetry showed the backend finishing the batch and
+# logging generate n=20 afterwards; a 285.0s call on the same instance returned 24 ideas fine. A full
+# generation measures anywhere from 202s to over 300s, so a real slice of calls was dying at the proxy
+# after the user had already waited five minutes, and the client-side abort timers cannot help because
+# something upstream of the client hangs up first. Raising them, which is what I did first, was useless.
+# The fix has to make each HTTP request short. Start the work, return an id, poll for the result.
+# Single instance, so an in-memory store is fine; a restart loses in-flight jobs and the client falls
+# back to a normal /custom call.
+_JOBS = {}
+_JOB_TTL_S = 1800
+
+
+def _job_gc():
+    dead = [k for k, v in _JOBS.items() if _time.time() - v.get("started", 0) > _JOB_TTL_S]
+    for k in dead:
+        _JOBS.pop(k, None)
+
+
+@app.post("/custom_start")
+async def custom_start(req: Request):
+    """Kick off a generation and return immediately with a job id."""
     try:
         body = await req.json()
     except Exception:
         return JSONResponse({"error": "bad json"}, status_code=400)
+    _job_gc()
+    job = _secrets.token_hex(8)
+    _JOBS[job] = {"status": "running", "started": _time.time()}
+
+    async def _run():
+        try:
+            out = await _custom_generate(body)
+            _JOBS[job] = {"status": "done", "result": out, "started": _JOBS[job]["started"]}
+        except Exception as e:
+            _JOBS[job] = {"status": "error", "error": str(e)[:300],
+                          "started": _JOBS.get(job, {}).get("started", _time.time())}
+
+    asyncio.create_task(_run())
+    return {"job": job}
+
+
+@app.get("/custom_result")
+async def custom_result(req: Request):
+    job = (req.query_params.get("job") or "").strip()
+    j = _JOBS.get(job)
+    if not j:
+        return JSONResponse({"status": "unknown"}, status_code=404)
+    if j["status"] == "running":
+        return {"status": "running", "elapsed": round(_time.time() - j["started"])}
+    if j["status"] == "error":
+        return JSONResponse({"status": "error", "error": j.get("error", "")}, status_code=502)
+    out = j.get("result")
+    # a JSONResponse from the generator carries its own status code; hand back its body
+    if isinstance(out, JSONResponse):
+        return out
+    return {"status": "done", **(out if isinstance(out, dict) else {"ideas": out})}
+
+
+@app.post("/custom")
+async def custom(req: Request):
+    """Kept for compatibility and as the fallback when the job route is unavailable. Subject to the
+    300s proxy ceiling described above, which is exactly why /custom_start exists."""
+    try:
+        body = await req.json()
+    except Exception:
+        return JSONResponse({"error": "bad json"}, status_code=400)
+    return await _custom_generate(body)
+
+
+async def _custom_generate(body):
+    """The whole generation, lifted out of the endpoint so it can be driven either by a plain POST or
+    by the job runner. Returns a dict, or a JSONResponse when it needs a non-200 status."""
     url = (body.get("channelUrl") or body.get("url") or "").strip()
     url = re.sub(r"[?#].*$", "", url)  # YouTube-app share links append ?si=<token>
     if not url:
