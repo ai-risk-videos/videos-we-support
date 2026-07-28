@@ -3329,6 +3329,38 @@ Return ONLY JSON: {"summaries": {"3": "the corrected summary", "7": "..."}}
 Include ONLY the numbers you actually changed. If nothing needs changing, return {"summaries": {}}."""
 
 
+def _fid_titles(ideas, anchors):
+    """Run the fidelity rule over the bold lines and write accepted rewrites back onto `ideas`."""
+    items = [(i, (x.get("title") or "").strip()) for i, x in enumerate(ideas) if (x.get("title") or "").strip()]
+    if not items:
+        return
+    try:
+        body = "\n".join("%d. %s" % (i + 1, t) for i, t in items)
+        m = get_client().messages.create(
+            model=FAST_MODEL, max_tokens=3000,
+            system=(FIDELITY_FIX_SYS + "\n\nDOCUMENTED ANCHORS:\n" + anchors +
+                    "\n\nNOTE: these are TITLES, one or two sentences each. Keep them the same length and "
+                    "the same shape. Cut only the unknowable detail. Return {\"summaries\": {\"1\": \"...\"}} "
+                    "keyed the same way, containing only the ones you changed."),
+            messages=[{"role": "user", "content": "Rewrite these:\n" + body}])
+        t = "".join(b.text for b in m.content if getattr(b, "type", "") == "text")
+        mm = re.search(r"\{.*\}", t, re.S)
+        obj = json.loads(mm.group(0)) if mm else {}
+        n = 0
+        for k, v in (obj.get("summaries") or {}).items():
+            try:
+                idx = int(k) - 1
+                if 0 <= idx < len(ideas) and isinstance(v, str) and 15 < len(v.strip()) <= 400:
+                    ideas[idx]["title"] = _dedash(v.strip()) if "_dedash" in globals() else v.strip()
+                    n += 1
+            except Exception:
+                pass
+        if n:
+            _log_event({"t": "polish_pass", "which": "fidelity_titles", "n": n})
+    except Exception:
+        pass  # fail open: a missing title fix is far better than a lost batch
+
+
 def _activate_summaries(ideas, anchors=""):
     """anchors: the documented-anchor lines this batch was generated from, when the caller
     has them. With them we can run a fidelity pass that strips detail the anchors never
@@ -3436,6 +3468,12 @@ def _activate_summaries(ideas, anchors=""):
         e = _eff()
         _pass(FIDELITY_FIX_SYS + "\n\nDOCUMENTED ANCHORS:\n" + anchors,
               [(i, e[i]) for i in range(len(ideas))], "fidelity", budget=4000)
+        # TITLES TOO. The pass above only ever touched summaries, so an invented detail sitting in the
+        # bold line went out untouched, and the bold line is the part a creator reads first. Measured:
+        # a batch came back with the summary softened to "a night-shift security alert" while the title
+        # still read "A security alarm tripped at 3am, and firewall logs gave it away", none of which
+        # is in the anchor. Same prompt, applied to titles, written straight back onto the ideas.
+        _fid_titles(ideas, anchors)
 
     # (1) the 'not X, it is Y' tell and agentless MOOD closers, both sticky across prompt revisions
     e = _eff()
