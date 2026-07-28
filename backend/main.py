@@ -3355,10 +3355,12 @@ def _fid_titles(ideas, anchors):
                     n += 1
             except Exception:
                 pass
-        if n:
-            _log_event({"t": "polish_pass", "which": "fidelity_titles", "n": n})
-    except Exception:
-        pass  # fail open: a missing title fix is far better than a lost batch
+        _log_event({"t": "polish_pass", "which": "fidelity_titles", "n": n, "of": len(items)})
+    except Exception as _e:
+        # fail open, a missing title fix beats a lost batch, but SAY SO. A bare `pass` here is what
+        # let me conclude the pass had not run when it had; silent success and silent failure looked
+        # the same from outside.
+        _log_event({"t": "polish_pass", "which": "fidelity_titles", "n": 0, "err": str(_e)[:120]})
 
 
 def _activate_summaries(ideas, anchors=""):
@@ -3456,8 +3458,10 @@ def _activate_summaries(ideas, anchors=""):
                     rew[idx] = new; n += 1
                 except Exception:
                     pass
-            if n or rej:
-                _log_event({"t": "polish_pass", "which": tag, "n": n, "rejected": rej})
+            # log unconditionally: a pass that ran and changed nothing must not look like a pass
+            # that never ran, which is exactly the confusion that cost an hour of misdiagnosis.
+            _log_event({"t": "polish_pass", "which": tag, "n": n, "rejected": rej,
+                        "of": len(items)})
         except Exception:
             pass  # keep whatever earlier passes produced
 
