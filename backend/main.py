@@ -991,6 +991,11 @@ __IMPORTANCE_BAR__
 
 What makes an idea interesting:
 - A specific, concrete hook: a real event, a named place, company, person, or number; a counterintuitive mechanism; an untold story; a surprising consequence.
+- OPEN ON THE THING THAT HAPPENED. The first clause names an actor and a verb: who did what. Do not open
+  on a study, a paper, a survey, a percentage, or a count of models ("Sixteen leading models...",
+  "A new study found..."). Those are how the finding was written up, not the thing itself, and a reader
+  decides whether to keep reading before the interesting part arrives. If a number is striking it goes
+  after the action, never in front of it.
 - It promises something the viewer does not already know and cannot guess from the title alone.
 - It uses this creator's signature way of revealing the hidden, surprising machinery behind things.
 
