@@ -21,7 +21,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-MODEL = "claude-opus-4-8"
+MODEL = "claude-opus-5"
+
+# Claude Opus 5 turns thinking ON by default (Opus 4.8 did not), and max_tokens caps thinking PLUS
+# response text together. Eighteen call sites here run on max_tokens between 350 and 15000, tuned for
+# a model that never spent any of that budget on thinking; several would now come back as thinking and
+# a truncated answer, or nothing at all. So thinking is explicitly OFF everywhere by default, which
+# preserves the exact behaviour we measured on 4.8, and switched ON deliberately where it earns its
+# cost. Disabling is only legal at effort `high` or below, which is the default and what we use.
+NO_THINK = {"type": "disabled"}
+THINK = {"type": "adaptive"}
 # The channel profile is a summarization task; Sonnet is markedly faster than Opus and
 # near-Opus quality, which cuts time-to-first-idea. Idea generation stays on Opus (MODEL).
 FAST_MODEL = "claude-sonnet-5"
@@ -1018,7 +1027,7 @@ async def similar(req: Request):
     )
     try:
         msg = await run_in_threadpool(lambda: get_client().messages.create(
-            model=MODEL,
+            model=MODEL, thinking=NO_THINK,
             max_tokens=1100,
             system=SYSTEM,
             messages=[{"role": "user", "content": user}],
@@ -1282,7 +1291,7 @@ async def _build_profile(prof):
     for _ in range(3):
         try:
             msg = await run_in_threadpool(lambda: get_client().messages.create(
-                model=MODEL, max_tokens=2200, system=SYSTEM_ANALYST,  # transcript profiles run long (quoted cold-opens, structure beats)
+                model=MODEL, thinking=NO_THINK, max_tokens=2200, system=SYSTEM_ANALYST,  # transcript profiles run long (quoted cold-opens, structure beats)
                 messages=[{"role": "user", "content": blob}],
             ))
         except Exception:
@@ -1766,7 +1775,7 @@ async def brief(req: Request):
             + "\n\nWrite the research pack.")
     try:
         msg = await run_in_threadpool(lambda: get_client().messages.create(
-            model=MODEL, max_tokens=9000, system=SYSTEM_BRIEF + ANTI_SLOP,
+            model=MODEL, thinking=NO_THINK, max_tokens=9000, system=SYSTEM_BRIEF + ANTI_SLOP,
             messages=[{"role": "user", "content": user}],
         ))
         text = _plain_company("".join(b.text for b in msg.content if getattr(b, "type", "") == "text").strip())
@@ -1940,7 +1949,7 @@ async def _deslop(text):
                      + "\n".join("- " + h.strip()[:160] for h in hits[:12]))
         try:
             m = await run_in_threadpool(lambda: get_client().messages.create(
-                model=MODEL, max_tokens=3000, system=SYSTEM_DESLOP,
+                model=MODEL, thinking=NO_THINK, max_tokens=3000, system=SYSTEM_DESLOP,
                 messages=[{"role": "user", "content": user}],
             ))
             cleaned = _parse_script("".join(b.text for b in m.content if getattr(b, "type", "") == "text").strip())
@@ -2025,7 +2034,7 @@ async def script(req: Request):
     try:
         # pass 1: draft in their voice
         d = await run_in_threadpool(lambda: get_client().messages.create(
-            model=MODEL, max_tokens=3000, system=SYSTEM_SCRIPT + ANTI_SLOP,
+            model=MODEL, thinking=NO_THINK, max_tokens=3000, system=SYSTEM_SCRIPT + ANTI_SLOP,
             messages=[{"role": "user", "content": _mk_user()}],
         ))
         draft = _parse_script("".join(b.text for b in d.content if getattr(b, "type", "") == "text").strip())
@@ -2040,7 +2049,7 @@ async def script(req: Request):
                        + "\n\nRewrite it and return the JSON object.")
             try:
                 r = await run_in_threadpool(lambda: get_client().messages.create(
-                    model=MODEL, max_tokens=3000, system=SYSTEM_VOICEMATCH + ANTI_SLOP,
+                    model=MODEL, thinking=NO_THINK, max_tokens=3000, system=SYSTEM_VOICEMATCH + ANTI_SLOP,
                     messages=[{"role": "user", "content": vm_user}],
                 ))
                 rewritten = _parse_script("".join(b.text for b in r.content if getattr(b, "type", "") == "text").strip())
@@ -2142,7 +2151,7 @@ async def tailor(req: Request):
     for attempt in range(3):
         try:
             rmsg = await run_in_threadpool(lambda: get_client().messages.create(
-                model=MODEL, max_tokens=2000, system=SYSTEM_TAILOR,
+                model=MODEL, thinking=NO_THINK, max_tokens=2000, system=SYSTEM_TAILOR,
                 messages=[{"role": "user", "content": user}],
             ))
         except Exception as e:
@@ -2230,7 +2239,7 @@ async def review(req: Request):
             + "Write the review.")
     try:
         msg = await run_in_threadpool(lambda: get_client().messages.create(
-            model=MODEL, max_tokens=4000, system=SYSTEM_REVIEW,
+            model=MODEL, thinking=NO_THINK, max_tokens=4000, system=SYSTEM_REVIEW,
             messages=[{"role": "user", "content": user}],
         ))
         text = _plain_company("".join(b.text for b in msg.content if getattr(b, "type", "") == "text").strip())
@@ -2925,7 +2934,7 @@ async def _build_voice(videos):
     for _ in range(3):
         try:
             msg = await run_in_threadpool(lambda: get_client().messages.create(
-                model=MODEL, max_tokens=2400, system=SYSTEM_VOICE,
+                model=MODEL, thinking=NO_THINK, max_tokens=2400, system=SYSTEM_VOICE,
                 messages=[{"role": "user", "content": blob}],
             ))
         except Exception:
@@ -3030,7 +3039,7 @@ def _cause_harm_cuts(cands):
     try:
         lines = "\n".join("%d. %s :: %s" % (i + 1, (c.get("title") or ""), (c.get("summary") or "")) for i, c in enumerate(cands))
         msg = get_client().messages.create(
-            model=MODEL, max_tokens=600, system=CAUSE_FILTER_SYS,
+            model=MODEL, thinking=NO_THINK, max_tokens=600, system=CAUSE_FILTER_SYS,
             messages=[{"role": "user", "content": "Candidate ideas:\n" + lines}])
         txt = "".join(b.text for b in msg.content if getattr(b, "type", "") == "text")
         m = re.search(r"\{.*\}", txt, re.S)
@@ -3241,6 +3250,51 @@ def _syllables(w):
         n -= 1
     return max(1, n)
 
+# READABILITY THAT FLESCH-KINCAID CANNOT SEE.
+# The curator, on a summary that scored FK 5.7 and sailed past the grade gate: "the last sentence is
+# too complex sentence structure / high reading level / hard to understand. any sentence i have to
+# reread (i'm 99th percentile) is poorly written."
+# The sentence: "Then the servers and services humans rely on start losing the fights for what keeps
+# them online." Seventeen short words, FK grade 7.7, and genuinely hard, because FK counts syllables
+# and sentence length and is blind to structure. Three things are wrong with it and FK sees none:
+#   1. A dropped relative pronoun makes a noun pile: "the servers and services humans rely on" reads
+#      as three nouns in a row until "rely" forces you to reparse.
+#   2. A nominal clause is used as an object: "the fights FOR WHAT keeps them online".
+#   3. The subject ("servers and services") is four words from its verb ("start").
+# No single signal is worth much on its own, so this scores them and fires only on a STACK. Measured
+# on 186 real sentences: at 2.5 it flags 3 (1.6%), his among them; at 2.0 it flags 5 and starts
+# catching sentences that read fine.
+_PREP_RX = r"\b(?:of|to|in|for|on|with|at|by|from|about|over|into|through|against|between|under|within|across)\b"
+_NOMINAL_RX = re.compile(r"\b(?:for|of|to|about|over|with|from|on|in)\s+(?:what|how|whether|which)\b", re.I)
+_DROPPED_REL_RX = re.compile(r"\b(?:the|these|those|their|its|our)\s+[\w\s,]{2,40}?\b"
+                             r"(?:humans?|people|companies|users|workers|everyone|researchers|we|they|you)\s+"
+                             r"\w+(?:s|ed)?\s+(?:on|in|for|to|with|from|about)\b", re.I)
+_CLAUSE_RX = re.compile(r"\b(?:that|which|who|what|where|when|whose|whether)\b", re.I)
+PARSE_LIMIT = 2.5
+
+
+def _parse_load(sentence):
+    """How much work the reader has to do. Higher is harder. See the comment above for the weights."""
+    load = 0.0
+    if _DROPPED_REL_RX.search(sentence):
+        load += 2.0                                        # the garden path, the worst of them
+    if _NOMINAL_RX.search(sentence):
+        load += 1.0
+    if len(re.findall(_PREP_RX, sentence, re.I)) >= 4:
+        load += 1.0
+    if len(_CLAUSE_RX.findall(sentence)) >= 2:
+        load += 0.5
+    if len(sentence.split()) >= 16 and "," not in sentence:
+        load += 0.5
+    return load
+
+
+def _hard_sentences(text):
+    """The sentences a reader would have to go back over."""
+    return [x for x in re.split(r"(?<=[.?!])\s+", (text or "").strip())
+            if x.strip() and _parse_load(x) >= PARSE_LIMIT]
+
+
 def _fk_grade(text):
     """Flesch-Kincaid grade level. 0 when there is nothing measurable."""
     sents = [s for s in re.split(r'[.?!]+', text or "") if s.strip()]
@@ -3269,6 +3323,21 @@ HOW to bring the grade down, in order of effect:
 1. SPLIT long sentences. Aim for 12 to 18 words each, one idea per sentence. Most of the grade comes from sentence length.
 2. Replace long abstract words with short everyday ones: proprietary -> a trade secret they will not show; concentrates -> ends up; consequential -> important; capability -> what it can do; specializing -> picking jobs; transacting -> buying and selling; commodity -> something you buy; immunity from oversight -> nobody can regulate them; uplift -> real help.
 3. Break up abstract noun stacks into people or things doing something.
+4. THE REREAD TEST, and it matters as much as the grade number. Any sentence a reader has to go back
+   over is badly written, however short its words are. When a line is marked REREAD TEST FAILED, fix
+   THAT sentence and leave the rest of the summary alone. Three structures cause it:
+   a. A dropped "that" or "which" turns a phrase into a pile of nouns. "The servers and services
+      humans rely on" reads as three nouns until the verb forces you back to the start. Put the word
+      back, or better, make it two sentences with a plain subject.
+   b. A question-word phrase used as a thing: "losing the fights FOR WHAT keeps them online", "the
+      horizon OF WHAT an AI can do". Name the thing instead.
+   c. The subject and its verb separated by more than about three words.
+   The worked example, which the curator flagged after rereading it:
+      BEFORE: "Then the servers and services humans rely on start losing the fights for what keeps
+               them online."   (17 words, measured grade 7.7, and still hard)
+      AFTER:  "Hospitals and banks depend on those same computers. They start losing that fight."
+   Notice the fix was not shorter words. It was one clear subject per sentence, the verb next to it,
+   and the vague "what keeps them online" replaced by naming who loses.
 WHAT YOU MUST NOT DO, this is the hard part: keep EVERY number, date, percentage, dollar figure, company name, product name, researcher name and organisation name EXACTLY as written (OpenAI, Anthropic, Palisade Research, METR, o3, 2025). Never swap a named source for "researchers" or "a company". Never drop a hedge (almost, nearly, about, may, could). Never weaken or overstate a claim, and never invent a fact to make a sentence flow. Some words cannot be simplified because they ARE the subject (pension funds, index funds, bioweapon, neurons); keep those and shorten the sentences around them instead.
 Keep the same number of sentences or add one, keep active voice, no em dashes, and do not end on a rhetorical question if the original did not.
 Return ONLY JSON: {"summaries": {"<number>": "<rewritten>", ...}} using the SAME numbers you were given. No prose."""
@@ -3668,15 +3737,33 @@ def _activate_summaries(ideas, anchors=""):
     # when it genuinely got easier AND still carries every number and named source, so this pass can
     # simplify but can never quietly cost us a fact (the failure the earlier review found).
     def _grade_ok(old, new):
-        return _fk_grade(new) < _fk_grade(old) - 0.3 and _keeps_substance(old, new)
+        # A rewrite is accepted when it is easier on EITHER measure and harder on neither. Grading
+        # only on FK let a rewrite trade a long word for a tangled clause and still "improve".
+        if not _keeps_substance(old, new):
+            return False
+        if _hard_sentences(new) and not _hard_sentences(old):
+            return False                                    # introduced a knot: reject
+        if _hard_sentences(old) and not _hard_sentences(new):
+            return _fk_grade(new) <= _fk_grade(old) + 0.5    # untangled it: allow a small grade cost
+        return _fk_grade(new) < _fk_grade(old) - 0.3
     # 3 rounds, not 2: the endgame-escalation pass above deliberately makes closers bigger, which
     # costs reading grade, so the level pass needs another bite. Budget-guarded, and the accept
     # check still refuses any rewrite that loses a fact or fails to get easier.
     for _round in range(3):
         e = _eff()
-        hard = [(i, "%s\n   [this reads at grade %s; bring it to about %s]"
-                 % (e[i], _fk_grade(e[i] or ""), int(GRADE_TARGET)))
-                for i in range(len(ideas)) if _fk_grade(e[i] or "") > GRADE_TOLERANCE]
+        hard = []
+        for i in range(len(ideas)):
+            t = e[i] or ""
+            over = _fk_grade(t) > GRADE_TOLERANCE
+            knots = _hard_sentences(t)
+            if not (over or knots):
+                continue
+            note = "[this reads at grade %s; bring it to about %s]" % (_fk_grade(t), int(GRADE_TARGET))
+            if knots:
+                # name the offending sentence; a general "simplify" instruction rewrites the wrong part
+                note += ("\n   [REREAD TEST FAILED on this sentence, untangle it and leave the rest "
+                         "alone: %r]" % knots[0][:200])
+            hard.append((i, "%s\n   %s" % (t, note)))
         if not hard:
             break
         _pass(GRADE_FIX_SYS, hard, "grade_fix_r%d" % (_round + 1), budget=3000, accept=_grade_ok)
@@ -3835,7 +3922,7 @@ async def compare(req: Request):
     async def _run_opus():
         try:
             om = await asyncio.wait_for(run_in_threadpool(lambda: get_client().messages.create(
-                model=MODEL, max_tokens=12000, system=sysp, messages=[{"role": "user", "content": gen}])), timeout=190)
+                model=MODEL, thinking=NO_THINK, max_tokens=12000, system=sysp, messages=[{"role": "user", "content": gen}])), timeout=190)
             return parse_custom("".join(b.text for b in om.content if getattr(b, "type", "") == "text")), None
         except asyncio.TimeoutError:
             return [], MODEL + " timed out (>190s)"
@@ -3905,7 +3992,7 @@ async def writeoff(req: Request):
     async def _run_opus():
         try:
             om = await asyncio.wait_for(run_in_threadpool(lambda: get_client().messages.create(
-                model=MODEL, max_tokens=8000, system=SYSTEM_WRITEOFF,
+                model=MODEL, thinking=NO_THINK, max_tokens=8000, system=SYSTEM_WRITEOFF,
                 messages=[{"role": "user", "content": userp}])), timeout=190)
             return parse_custom("".join(b.text for b in om.content if getattr(b, "type", "") == "text")), None
         except asyncio.TimeoutError:
@@ -4079,7 +4166,7 @@ async def _custom_generate(body, req=None):
     gen = _build_gen_prompt(profile, titles, exclude, rejected, more=is_more)
     try:
         gmsg = await run_in_threadpool(lambda: get_client().messages.create(
-            model=MODEL, max_tokens=(15000 if is_more else 12000), system=SYSTEM_CUSTOM + ANTI_SLOP,  # raised: summaries are now 2-3 sentences, 32 candidates overflowed 7000 and truncated the JSON
+            model=MODEL, thinking=THINK, max_tokens=(32000 if is_more else 26000), system=SYSTEM_CUSTOM + ANTI_SLOP,  # raised: summaries are now 2-3 sentences, 32 candidates overflowed 7000 and truncated the JSON
             messages=[{"role": "user", "content": gen}],
         ))
         candidates = parse_custom("".join(b.text for b in gmsg.content if getattr(b, "type", "") == "text"))
@@ -4263,7 +4350,7 @@ async def category(req: Request):
     user += seed_block(8) + anchor_block(10)
     try:
         msg = await run_in_threadpool(lambda: get_client().messages.create(
-            model=MODEL, max_tokens=1300, system=SYSTEM_CATEGORY,
+            model=MODEL, thinking=NO_THINK, max_tokens=1300, system=SYSTEM_CATEGORY,
             messages=[{"role": "user", "content": user}],
         ))
         text = "".join(b.text for b in msg.content if getattr(b, "type", "") == "text")
@@ -4299,7 +4386,7 @@ async def retitle(req: Request):
              + "\n\nWrite 5 fresh alternative titles for this exact premise.")
     try:
         msg = await run_in_threadpool(lambda: get_client().messages.create(
-            model=MODEL, max_tokens=700, system=SYSTEM_RETITLE,
+            model=MODEL, thinking=NO_THINK, max_tokens=700, system=SYSTEM_RETITLE,
             messages=[{"role": "user", "content": user}],
         ))
         titles = parse_titles("".join(b.text for b in msg.content if getattr(b, "type", "") == "text"))
@@ -4455,7 +4542,7 @@ async def directions(req: Request):
         return JSONResponse({"error": "missing lead"}, status_code=400)
     try:
         msg = await run_in_threadpool(lambda: get_client().messages.create(
-            model=MODEL, max_tokens=1400, system=SYSTEM_DIRECTIONS + ANTI_SLOP,
+            model=MODEL, thinking=NO_THINK, max_tokens=1400, system=SYSTEM_DIRECTIONS + ANTI_SLOP,
             messages=[{"role": "user", "content": "LEAD: " + lead + "\n\nSuggest the video directions and return the JSON object."}],
         ))
         raw = "".join(b.text for b in msg.content if getattr(b, "type", "") == "text").strip()
@@ -4512,7 +4599,7 @@ async def pitch(req: Request):
         user += "\n\nWrite the pitch and return the JSON object (source_ids may be an empty list)."
     try:
         msg = await run_in_threadpool(lambda: get_client().messages.create(
-            model=MODEL, max_tokens=1300, system=SYSTEM_PITCH + ANTI_SLOP,
+            model=MODEL, thinking=NO_THINK, max_tokens=1300, system=SYSTEM_PITCH + ANTI_SLOP,
             messages=[{"role": "user", "content": user}],
         ))
         raw = "".join(b.text for b in msg.content if getattr(b, "type", "") == "text").strip()
@@ -4731,7 +4818,7 @@ async def verdict(req: Request):
     content = images + [{"type": "text", "text": user}] if images else user
     try:
         msg = await run_in_threadpool(lambda: get_client().messages.create(
-            model=MODEL, max_tokens=350, system=SYSTEM_VERDICT,
+            model=MODEL, thinking=NO_THINK, max_tokens=350, system=SYSTEM_VERDICT,
             messages=[{"role": "user", "content": content}],
         ))
         raw = "".join(b.text for b in msg.content if getattr(b, "type", "") == "text").strip()
