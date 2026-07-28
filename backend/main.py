@@ -3363,6 +3363,153 @@ def _fid_titles(ideas, anchors):
         _log_event({"t": "polish_pass", "which": "fidelity_titles", "n": 0, "err": str(_e)[:120]})
 
 
+# LEAD-WORTHY EVENTS, ranked on GRAB ALONE.
+# The main anchor draw ranks on min(escalation, grab), which is right for "how far did an AI go" but
+# wrong for "what should this video open on". The events that make the best openers for institutional
+# and economic themes score LOW on escalation and were therefore almost never offered: the head of
+# safeguards research at Anthropic quitting with a public letter saying the world is in peril is
+# escalation 5, Amazon cutting 14,000 jobs is 6, the Arup finance worker wiring $25 million after a
+# video call where every colleague was a deepfake is 7. None of those is an AI misbehaving, and all
+# three are exactly the kind of thing a video should start on. So this draw ignores escalation.
+def lead_anchor_block(k=14):
+    rows = []
+    for x in list(get_sources().values()):
+        t = x.get("shows") or ""
+        g = x.get("grab")
+        if t and isinstance(g, int):
+            rows.append((f"[{x.get('who','')} {x.get('year','')}] {t}", g))
+    for cases in _evidence().values():
+        for c in cases:
+            t = c.get("what") or ""
+            g = c.get("grab")
+            if t and isinstance(g, int):
+                rows.append((f"[{c.get('who','')} {c.get('year','')}] {t}", g))
+    if not rows:
+        return ""
+    rows = [r for r in rows if r[1] >= 6]
+    w = [max(0.05, (r[1] ** 2)) for r in rows]
+    picks = []
+    for cand in _weighted_sample([r[0] for r in rows], w, min(k * 3, len(rows))):
+        if any(_too_similar(cand, p) for p in picks):
+            continue
+        picks.append(cand)
+        if len(picks) >= k:
+            break
+    return "\n".join("- " + p for p in picks)
+
+
+# Does the bold line START on something that happened? The curator, on three ideas he called
+# reasonable but not interesting enough: "they should probably always lead with some headline-like
+# event that happened, and then these are what the video goes into from there... they're just not
+# interesting enough unless we put some very interesting incident or something that happened first."
+# A concrete lead names somebody or counts something. "Soon nobody will be able to prove what is
+# real", "There is still no test to prove any mind but your own can feel anything" and "AI safety is
+# worse than you think" name nobody and count nothing.
+# Words capitalised only because a sentence starts with them, or that name nobody in particular.
+# Anything NOT on this list counts as a real name. That is what lets "Stanford scientists used AI to
+# design brand new viruses" through while still catching "Researchers took a normal AI and trained it
+# only on buggy code", which genuinely names nobody.
+_GENERIC_CAPS = {
+    "AI", "AIs", "A.I.", "It", "Its", "They", "Their", "We", "Our", "You", "Your", "I", "My", "He",
+    "She", "His", "Her", "The", "A", "An", "This", "That", "These", "Those", "Soon", "Now", "Then",
+    "Here", "Most", "Many", "Some", "Every", "Everyone", "Nobody", "There", "If", "When", "What",
+    "Why", "How", "And", "But", "Once", "In", "On", "At", "For", "With", "After", "Before", "During",
+    "Because", "While", "Researchers", "Scientists", "People", "Companies", "Groups", "Engineers",
+    "Workers", "Experts", "Governments", "Truth", "Inside", "Imagine", "Meet", "Two", "One", "Three",
+    "Living", "Modern", "Human", "Humans", "Machines", "Models", "Agents", "Big", "Tech", "New"}
+
+
+def _lacks_event_lead(title, summary=""):
+    """True when the opening does not start on a specific occurrence.
+
+    The test is deliberately narrow: does the first sentence NAME somebody or COUNT something. A verb
+    whitelist was tried first and was hopeless, missing "used", "locked" and "took" on the first batch
+    it saw, which is the same paraphrase-hopping that has beaten every keyword check in this file. A
+    named party or a figure is what makes a lead headline-shaped, and it does not paraphrase away.
+    """
+    first = re.split(r"(?<=[.?!])\s+", (title or "").strip())[0]
+    if not first:
+        return True
+    if re.search(r"\d", first):                      # a figure counts as concrete
+        return False
+    return not [w for w in re.findall(r"\b[A-Z][A-Za-z'.\-]{1,}\b", first)
+                if w not in _GENERIC_CAPS]
+
+
+EVENT_LEAD_SYS = """You fix video ideas that start on a theme instead of on something that happened.
+
+Each idea below is a GOOD subject. The problem is only the opening: it leads with the idea rather than
+with an event, so a viewer meets an argument before they meet a reason to care. The curator's note:
+"they should probably always lead with some headline-like event that happened, and then these are what
+the video goes into from there... they're just not interesting enough unless we put some very
+interesting incident or something that happened first."
+
+WHAT TO DO. Put a real, specific, headline-shaped occurrence at the FRONT, then let the existing point
+follow from it. Keep the subject exactly as it is. You are adding a door, not a new house.
+
+Worked examples of the fix he asked for:
+- "AI safety is worse than you think. The people paid to make these machines safe keep quitting."
+  -> open on ONE named departure, the most recent or the most alarming, quoting what they actually
+  said on the way out, THEN show the pattern of others leaving.
+- "Soon nobody will be able to prove what is real. AI can fake video, voices and documents."
+  -> open on one concrete fake that already worked, a specific fraud or a specific election, THEN
+  widen to courts and newsrooms losing their only tool.
+- A gradual-disempowerment idea -> open on a shocking, specific number about jobs already gone at a
+  named company, THEN point at where that trend ends.
+
+HARD RULES:
+1. The event must be REAL. Take it from the LEAD-WORTHY EVENTS list below whenever one fits, and
+   describe it only as that list describes it. If you use an event from your own knowledge it must be
+   one you are certain happened, stated plainly, with nothing added.
+2. NEVER INVENT. No made-up company, person, date, quote, figure, motive, or mechanism. A vaguer true
+   opening beats a vivid invented one. If you cannot find a real event that fits, return the summary
+   unchanged rather than making one up. Returning it unchanged is a perfectly good answer.
+3. Actor first, past tense, in the first few words: who did what.
+4. Keep the closing implication. It should still reach where the whole thing is heading.
+5. Keep the length within about a sentence of what you were given. No em dashes.
+
+Return ONLY JSON, with both parts for each idea you changed:
+{"ideas": {"2": {"title": "the new bold line, opening on the event", "summary": "the summary, adjusted so it follows from that opening"}}}
+Include ONLY the numbers you actually changed. The title is the part that must now open on the event."""
+
+
+def _event_lead_fix(ideas, idxs, lead, rew):
+    """Give a thematic idea a real event to open on, moving title and summary as a pair."""
+    if not idxs:
+        return
+    try:
+        body = "\n\n".join(
+            "%d.\nTITLE: %s\nSUMMARY: %s"
+            % (i + 1, (ideas[i].get("title") or ""),
+               rew.get(i, ideas[i].get("summary") or ""))
+            for i in idxs)
+        m = get_client().messages.create(
+            model=FAST_MODEL, max_tokens=6000,
+            system=EVENT_LEAD_SYS + "\n\nLEAD-WORTHY EVENTS (real, open on one of these):\n" + lead,
+            messages=[{"role": "user", "content": "Fix the opening of each of these:\n\n" + body}])
+        t = "".join(b.text for b in m.content if getattr(b, "type", "") == "text")
+        mm = re.search(r"\{.*\}", t, re.S)
+        obj = json.loads(mm.group(0)) if mm else {}
+        n = 0
+        for k, v in (obj.get("ideas") or obj.get("summaries") or {}).items():
+            try:
+                idx = int(k) - 1
+                if not (0 <= idx < len(ideas)) or not isinstance(v, dict):
+                    continue
+                ti, su = (v.get("title") or "").strip(), (v.get("summary") or "").strip()
+                # only accept a rewrite that actually fixed the lead, never one that made it worse
+                if ti and len(ti) > 25 and not _lacks_event_lead(ti):
+                    ideas[idx]["title"] = ti
+                    if su and len(su) > 40:
+                        rew[idx] = su
+                    n += 1
+            except Exception:
+                pass
+        _log_event({"t": "polish_pass", "which": "event_lead", "n": n, "of": len(idxs)})
+    except Exception as _e:
+        _log_event({"t": "polish_pass", "which": "event_lead", "n": 0, "err": str(_e)[:120]})
+
+
 def _activate_summaries(ideas, anchors=""):
     """anchors: the documented-anchor lines this batch was generated from, when the caller
     has them. With them we can run a fidelity pass that strips detail the anchors never
@@ -3478,6 +3625,18 @@ def _activate_summaries(ideas, anchors=""):
         # still read "A security alarm tripped at 3am, and firewall logs gave it away", none of which
         # is in the anchor. Same prompt, applied to titles, written straight back onto the ideas.
         _fid_titles(ideas, anchors)
+
+    # (0b) EVENT LEAD. Thematic ideas are good subjects that open on the argument, and the curator
+    # rejects them for exactly that: "not interesting enough unless we put some very interesting
+    # incident or something that happened first." Only the ideas whose bold line names nobody and
+    # counts nothing get sent, and they are handed a grab-ranked list of real events to open on.
+    lead = lead_anchor_block(14)
+    thematic = [i for i, x in enumerate(ideas) if _lacks_event_lead(x.get("title") or "")]
+    if lead and thematic:
+        # The lead lives in the BOLD LINE, so this pass has to move the title, not just the summary,
+        # and the two have to move together or the summary ends up answering a question the title no
+        # longer asks. Hence its own round trip rather than the summary-only _pass helper.
+        _event_lead_fix(ideas, thematic, lead, rew)
 
     # (1) the 'not X, it is Y' tell and agentless MOOD closers, both sticky across prompt revisions
     e = _eff()
