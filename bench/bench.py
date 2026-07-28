@@ -17,11 +17,33 @@ API = os.environ.get("BENCH_API", "https://videos-similar-api-production.up.rail
 RUNS = os.path.join(HERE, "runs")
 
 
-def post(path, body, timeout=280):
+# A cold /custom has measured 281s (7 sequential polish passes on top of generation). The old 280s
+# ceiling sat right on top of that, so the slowest channel timed out roughly every other run and the
+# snapshot came back partial. A partial snapshot cannot be a baseline, so a too-tight timeout does not
+# just lose one channel, it costs the whole 12-minute run. 480s leaves real headroom.
+POST_TIMEOUT = 480
+POST_RETRIES = 1        # one retry, because a single flaky job poisons the entire comparison
+
+
+def post(path, body, timeout=POST_TIMEOUT):
     req = urllib.request.Request(API + path, data=json.dumps(body).encode(),
                                  headers={"Content-Type": "application/json"}, method="POST")
     with urllib.request.urlopen(req, timeout=timeout) as r:
         return json.loads(r.read().decode())
+
+
+def post_retry(path, body, label=""):
+    """Retry once on a timeout or a 5xx. Railway cold starts and 502s are the common failure."""
+    last = None
+    for attempt in range(POST_RETRIES + 1):
+        try:
+            return post(path, body)
+        except Exception as e:
+            last = e
+            if attempt < POST_RETRIES:
+                print("    %s failed (%s), retrying once" % (label, str(e)[:70]), flush=True)
+                time.sleep(15)
+    raise last
 
 
 def get_key():
@@ -45,7 +67,7 @@ def run_channel(ch):
     url = "https://www.youtube.com/" + ch["handle"].lstrip("/")
     t0 = time.time()
     try:
-        d = post("/custom", {"channelUrl": url, "fresh": True})
+        d = post_retry("/custom", {"channelUrl": url, "fresh": True}, ch["handle"])
         ideas = d.get("ideas") or []
         return {"kind": "channel", "id": ch["handle"], "why": ch.get("why", ""),
                 "ideas": [{"title": x.get("title", ""), "summary": x.get("summary", "")} for x in ideas],
@@ -60,8 +82,8 @@ def run_concepts(handle, items, key):
     url = "https://www.youtube.com/" + handle.lstrip("/")
     t0 = time.time()
     try:
-        d = post("/writeoff", {"key": key, "channelUrl": url,
-                               "concepts": [c["text"] for c in items]})
+        d = post_retry("/writeoff", {"key": key, "channelUrl": url,
+                                     "concepts": [c["text"] for c in items]}, handle)
         ideas = d.get("opus") or []
         out = []
         for i, x in enumerate(ideas):
@@ -100,7 +122,7 @@ def main():
             print("  (no EVENTS_KEY found, skipping the fixed-concept half)", flush=True)
 
     print("running %d jobs against %s (sequential, expect roughly %d minutes) ..."
-          % (len(jobs), API, max(1, round(len(jobs) * 3.2))))
+          % (len(jobs), API, max(1, round(len(jobs) * 4.0))))
     groups = []
     # SEQUENTIAL on purpose. One /custom takes ~220s alone; the backend is a single Railway
     # instance, so running several at once makes each one slower until some blow past the
