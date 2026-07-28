@@ -2260,6 +2260,43 @@ def _claims():
 def claims_list():
     return {"claimed": sorted(_claims().keys())}
 
+@app.post("/polish_probe")
+async def polish_probe(req: Request):
+    """Run the polish chain over SUPPLIED summaries and return before and after, side by side.
+
+    This exists because the polish chain had no way to be tested. Every measurement of it was a fresh
+    generation compared against a different fresh generation, so batch-to-batch variation swamped the
+    effect: a check of the new fidelity pass came back 9 percent invented before and 8.3 percent after,
+    which at n=24 is the same number twice. A paired test needs the SAME ideas through the pipeline with
+    and without a pass, and that needs an endpoint that accepts ideas instead of writing them.
+
+    Body: {key, ideas:[{title,summary}], anchors:"- [who year] text\n...", skip_fidelity:bool}
+    """
+    try:
+        body = await req.json()
+    except Exception:
+        return JSONResponse({"error": "bad json"}, status_code=400)
+    if body.get("key") != EVENTS_KEY:
+        return JSONResponse({"error": "bad key"}, status_code=403)
+    ideas = body.get("ideas") or []
+    if not isinstance(ideas, list) or not ideas:
+        return JSONResponse({"error": "no ideas"}, status_code=400)
+    ideas = [{"title": (x.get("title") or "")[:400], "summary": (x.get("summary") or "")[:2000]}
+             for x in ideas[:30] if isinstance(x, dict)]
+    anchors = "" if body.get("skip_fidelity") else (body.get("anchors") or "")
+    before = [x["summary"] for x in ideas]
+    try:
+        rew = await asyncio.wait_for(
+            run_in_threadpool(_activate_summaries, ideas, anchors), timeout=300)
+    except Exception as e:
+        return JSONResponse({"error": "polish failed: " + str(e)[:200]}, status_code=502)
+    after = [rew.get(i, before[i]) for i in range(len(ideas))]
+    return {"n": len(ideas), "changed": sum(1 for i in range(len(ideas)) if after[i] != before[i]),
+            "fidelity_ran": bool(anchors),
+            "pairs": [{"title": ideas[i]["title"], "before": before[i], "after": after[i]}
+                      for i in range(len(ideas))]}
+
+
 @app.post("/claim")
 async def claim(req: Request):
     try:
