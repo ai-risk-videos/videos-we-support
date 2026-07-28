@@ -169,6 +169,23 @@ h1{font-size:26px;margin:0 0 4px;font-weight:800}.dot{color:var(--red)}
 .rejrestore{font:inherit;font-size:12px;background:none;border:1px solid var(--line);color:var(--mut);border-radius:7px;padding:3px 9px;cursor:pointer;white-space:nowrap}
 .rejrestore:hover{border-color:#9ac47f;color:#9ac47f}
 .ccard{position:relative;padding:13px 15px;border:1px solid var(--line);border-radius:10px;margin:0 0 11px;background:var(--surf)}
+/* IDEA STATUS. Four states, so we can see ready-vs-generated at a glance, stop re-reviewing settled
+   ideas, and send creators a link with only approved ideas on it. Rejection stays the existing
+   reject pile; these three live on the card. */
+.ccard.st-pre{border-color:#c08a2e;box-shadow:inset 3px 0 0 #c08a2e}
+.ccard.st-ok{border-color:#3f9e63;box-shadow:inset 3px 0 0 #3f9e63}
+.stbar{display:flex;gap:4px;align-items:center;margin-left:auto}
+.stbtn{font:inherit;font-size:11.5px;line-height:1;padding:5px 9px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--mut);cursor:pointer;white-space:nowrap}
+.stbtn:hover{border-color:#7b8794;color:var(--ink)}
+.stbtn.on{font-weight:650}
+.stbtn.on[data-st="new"]{background:#2a2f36;color:#dbe3ea;border-color:#39424c}
+.stbtn.on[data-st="pre"]{background:#3a2c12;color:#e8bd6a;border-color:#6b5220}
+.stbtn.on[data-st="ok"]{background:#16301f;color:#78d79b;border-color:#2c6741}
+.stcount{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin:0 0 11px}
+.stchip{font-size:12px;padding:5px 10px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--mut);cursor:pointer}
+.stchip b{color:var(--ink);margin-right:4px}
+.stchip.sel{border-color:#6fb3ff;color:var(--ink)}
+.stchip.ok b{color:#78d79b}.stchip.pre b{color:#e8bd6a}
 .ccard .ctxt{font-size:16px;line-height:1.5;outline:none}
 .ccard .ctxt[contenteditable]:focus,.ccard .cturn[contenteditable]:focus{background:#161320;border-radius:4px;box-shadow:0 0 0 2px #33303a}
 .ccard .cturn{color:#9a93a2;font-size:14px;line-height:1.5;padding-left:11px;border-left:2px solid #33303a;margin:5px 0;outline:none}
@@ -233,7 +250,7 @@ h1{font-size:26px;margin:0 0 4px;font-weight:800}.dot{color:var(--red)}
  <button id="import">Import</button>
  <input id="importfile" type="file" accept="application/json,.json" hidden>
  <button id="reset">Reset</button>
- <span class="filters"><span class="pagev">v 0728.1754</span></span>
+ <span class="filters"><span class="pagev">v 0728.1758</span></span>
 </div>
 <div id="list"></div>
 </div>
@@ -247,7 +264,7 @@ const PAGES_COL="creator_pages";
 // ---- channel tailoring (/tailor): re-rank the pool for one creator; profile also shapes packs ----
 const TAILOR_API="https://videos-similar-api-production.up.railway.app/tailor";
 const CUSTOM_API="https://videos-similar-api-production.up.railway.app/custom"; // old "Videos We Support" idea generation
-const BUILD_V="0728.1754"; // tailor-cache is keyed to this: LEADS indices shift when the page is rebuilt
+const BUILD_V="0728.1758"; // tailor-cache is keyed to this: LEADS indices shift when the page is rebuilt
 let channelProfile="", channelName="", channelHandle="", tailored=false, fullView=false, tailorOrder=null;
 let currentPageId=""; // set on a saved ?p= creator page; lets packs/scripts save ONTO that page so the creator sees them instantly
 let researchNote=""; // one-shot line shown in the editor after a fresh generation: how many transcripts were read (so it is VISIBLE the tool used them)
@@ -766,7 +783,7 @@ function startCurate(ideas,handle,channel,note,profile,style,rejected){
  const _newHandle=handle||channelHandle;
  if(_newHandle!==curateHandle)curateRejected=[]; // switched to a different page → start a fresh reject pile
  if(rejected!==undefined)curateRejected=(rejected||[]).filter(Boolean); // opening a saved page → load its reject pile; regenerate passes undefined so the pile is preserved
- curateIdeas=(ideas||[]).map(x=>(x.title!=null)?{title:x.title||"",summary:x.summary||"",url:x.url||"",who:x.who||"",y:x.y||""}:{l:x.l||"",dirs:(x.dirs||[]).slice(0,2),url:x.url||"",who:x.who||"",y:x.y||""});
+ curateIdeas=(ideas||[]).map(x=>(x.title!=null)?{title:x.title||"",summary:x.summary||"",url:x.url||"",who:x.who||"",y:x.y||"",st:x.st||""}:{l:x.l||"",dirs:(x.dirs||[]).slice(0,2),url:x.url||"",who:x.who||"",y:x.y||""});
  curateHandle=handle||channelHandle; curateChannel=channel||channelName||curateHandle; curateProfile=(profile!==undefined&&profile!==null)?profile:channelProfile;
  inCurate=true; curateDirty=false;
  const b=$("#tbanner");if(b)b.style.display="none";
@@ -786,6 +803,7 @@ function startCurate(ideas,handle,channel,note,profile,style,rejected){
    '<button class="regenbtn" id="restorever" style="margin-left:auto">↩ Restore a previous version</button></div>'+
   '<textarea id="curnote" placeholder="Optional note to the creator (shown at the top of their page)">'+esc(note||"")+'</textarea>'+
   '<div class="addrow"><textarea id="addidea" rows="2" placeholder="Add your own idea, or paste a news story or a line from their longlist. It becomes an idea here, and gets a research pack + sample script like the rest."></textarea><button class="addbtn" id="addbtn">＋ Add idea</button></div>'+
+  '<div class="stcount" id="stcount"></div>'+
   '<div id="ccards"></div>'+
   '<button class="morebtn" id="moreideas">＋ Get 50 more ideas (keeps the ones you have)</button>'+
   '<div id="rejwrap"></div>';
@@ -931,21 +949,59 @@ async function addMoreIdeas(){
   toast("No genuinely new ideas came back. Try once more, or reject a few to steer it.");
  }
 }
+
+// ---- IDEA STATUS ------------------------------------------------------------------------------
+// "" / "new"  Not reviewed   (fresh generation nobody has looked at)
+// "pre"       Needs Drew's approval  (pre-approved by the first reviewer)
+// "ok"        Approved  (ready to show creators)
+// Rejection is NOT a status: rejected ideas move to the existing reject pile, which already works
+// and keeps them as signal for the next generation.
+const ST_LABEL={"new":"Not reviewed","pre":"Needs Drew","ok":"Approved"};
+function ideaSt(x){return (x&&x.st==="pre")?"pre":((x&&x.st==="ok")?"ok":"new");}
+// Has anyone actually used the workflow on this page? If not, every idea is publishable, exactly as
+// before. Without this, every page created before today would publish as empty.
+function pageUsesStatus(ideas){return (ideas||[]).some(x=>x&&(x.st==="ok"||x.st==="pre"));}
+function publishableIdeas(ideas){
+ return pageUsesStatus(ideas)?(ideas||[]).filter(x=>ideaSt(x)==="ok"):(ideas||[]);
+}
+let stFilter="all";
+function renderStatusBar(){
+ const el=$("#stcount");if(!el)return;
+ const c={"new":0,"pre":0,"ok":0};curateIdeas.forEach(x=>{c[ideaSt(x)]++;});
+ const chip=(k,lbl,extra)=>'<button class="stchip '+(extra||"")+(stFilter===k?" sel":"")+'" data-f="'+k+'"><b>'+
+   (k==="all"?curateIdeas.length:c[k])+'</b>'+lbl+'</button>';
+ el.innerHTML=chip("all","total")+chip("new","not reviewed")+chip("pre","need Drew","pre")+chip("ok","approved","ok")+
+  '<span class="chansub" style="margin-left:auto">'+(c.ok?("Publishing sends the "+c.ok+" approved"):"No approved ideas yet, publishing sends everything")+'</span>';
+ el.querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>{stFilter=b.getAttribute("data-f");renderCards();});
+}
 function renderCards(){
  const w=$("#ccards");if(!w)return;
  const ct=$(".curtitle");if(ct)ct.textContent=curTitle();
+ renderStatusBar();
  w.innerHTML=curateIdeas.map((x,i)=>{
+  if(stFilter!=="all"&&ideaSt(x)!==stFilter)return "";
   const isIdea=x.title!=null;
   const head='<div><span class="cnum2">'+(i+1)+'</span><span class="ctxt" contenteditable="true">'+esc(isIdea?x.title:x.l)+'</span></div>';
   const body=isIdea?('<div class="cturn" contenteditable="true" data-sum="1">'+esc(x.summary||"")+'</div>'):((x.dirs||[]).map((d,j)=>'<div class="cturn" contenteditable="true" data-j="'+j+'">'+esc(d)+'</div>').join(""));
-  return '<div class="ccard" data-i="'+i+'">'+head+body+'<div class="cctl"><button data-act="up">▲</button><button data-act="down">▼</button><button data-act="rm">✕ remove</button>'+
-   (x.who?'<span class="dmeta" style="margin-left:auto">'+esc(x.who)+(x.y?" · "+esc(x.y):"")+'</span>':'')+'</div></div>';
+  const st=ideaSt(x);
+  const stbar='<span class="stbar">'+["new","pre","ok"].map(k=>'<button class="stbtn'+(st===k?" on":"")+'" data-st="'+k+'" title="'+ST_LABEL[k]+'">'+ST_LABEL[k]+'</button>').join("")+'</span>';
+  return '<div class="ccard st-'+st+'" data-i="'+i+'">'+head+body+'<div class="cctl"><button data-act="up">▲</button><button data-act="down">▼</button><button data-act="rm">✕ remove</button>'+
+   (x.who?'<span class="dmeta">'+esc(x.who)+(x.y?" · "+esc(x.y):"")+'</span>':'')+stbar+'</div></div>';
  }).join("");
  w.querySelectorAll(".ccard").forEach(card=>{
   const i=+card.getAttribute("data-i");
+  if(!curateIdeas[i])return;
   const tx=card.querySelector(".ctxt");tx.oninput=()=>{curateDirty=true;if(curateIdeas[i].title!=null)curateIdeas[i].title=tx.textContent.trim();else curateIdeas[i].l=tx.textContent.trim();scheduleSave();};
   card.querySelectorAll(".cturn").forEach(t=>{if(t.hasAttribute("data-sum")){t.oninput=()=>{curateDirty=true;curateIdeas[i].summary=t.textContent.trim();scheduleSave();};}else{const j=+t.getAttribute("data-j");t.oninput=()=>{curateDirty=true;curateIdeas[i].dirs[j]=t.textContent.trim();scheduleSave();};}});
-  card.querySelector('[data-act="rm"]').onclick=()=>{curateDirty=true;const rm=curateIdeas.splice(i,1)[0];if(rm&&(ideaTitle(rm).trim()||ideaSummary(rm).trim()))curateRejected.unshift(rm);renderCards();renderRejected();scheduleSave();}; // removed ideas go to the reject pile (kept as signal), not discarded
+  card.querySelectorAll(".stbtn").forEach(b=>b.onclick=()=>{
+   const k=b.getAttribute("data-st");
+   curateIdeas[i].st=(k==="new")?"":k;   // store "" for not-reviewed so old pages stay byte-identical
+   curateDirty=true;renderCards();scheduleSave();
+  });
+  // an approved idea is settled; make destroying it deliberate rather than one stray click
+  card.querySelector('[data-act="rm"]').onclick=()=>{
+   if(ideaSt(curateIdeas[i])==="ok"&&!confirm("This idea is approved. Reject it anyway?"))return;
+   curateDirty=true;const rm=curateIdeas.splice(i,1)[0];if(rm&&(ideaTitle(rm).trim()||ideaSummary(rm).trim()))curateRejected.unshift(rm);renderCards();renderRejected();scheduleSave();}; // removed ideas go to the reject pile (kept as signal), not discarded
   card.querySelector('[data-act="up"]').onclick=()=>{if(i>0){curateDirty=true;const a=curateIdeas;const tmp=a[i-1];a[i-1]=a[i];a[i]=tmp;renderCards();scheduleSave();}};
   card.querySelector('[data-act="down"]').onclick=()=>{if(i<curateIdeas.length-1){curateDirty=true;const a=curateIdeas;const tmp=a[i+1];a[i+1]=a[i];a[i]=tmp;renderCards();scheduleSave();}};
  });
@@ -992,13 +1048,19 @@ async function publishCurrent(){
  const note=(($("#curnote")&&$("#curnote").value)||"").trim();
  const ideas=curateIdeas.filter(x=>ideaTitle(x).trim().length>0||ideaSummary(x).trim().length>0); // keep anything with a title OR body; never drop a short title or a mid-edit blank-title card
  if(!ideas.length){toast("Nothing to publish");return;}
+ // The doc keeps every idea; the creator link shows only the approved ones. Say which is which, and
+ // refuse to publish a page whose creator view would be a surprise.
+ const _vis=publishableIdeas(ideas);
+ if(pageUsesStatus(ideas)&&!_vis.length){toast("Nothing is approved yet, so the creator would see nothing. Approve at least one idea first.");return;}
+ if(pageUsesStatus(ideas)&&_vis.length<ideas.length&&
+    !confirm("The creator will see the "+_vis.length+" approved idea"+(_vis.length===1?"":"s")+", not all "+ideas.length+". Publish?"))return;
  const btn=$("#dopublish"),orig=btn?btn.textContent:"";if(btn){btn.disabled=true;btn.textContent="Publishing…";}
  try{
   // Firestore write promises stay PENDING while offline; bound it so the button can never
   // stick on "Publishing…". If it times out the write may still land, so say "couldn't confirm".
   const id=await withTimeout(savePage(curateHandle,curateChannel,note,ideas,curateProfile,curateStyle,curateRejected),15000);
   inCurate=false; // published — draft is safely saved, no more unsaved-work guard
-  showPublished(location.origin+location.pathname+"?p="+encodeURIComponent(id),curateChannel,ideas.length);
+  showPublished(location.origin+location.pathname+"?p="+encodeURIComponent(id),curateChannel,_vis.length);
  }catch(e){toast(String(e&&e.message)==="timeout"?"Couldn't confirm the save — check your connection and try again":"Publish failed — check connection");console.error(e);if(btn){btn.disabled=false;btn.textContent=orig;}}
 }
 function showPublished(link,channel,n){
@@ -1032,7 +1094,9 @@ async function showDashboard(){
   $("#dashbody").outerHTML=rows.map(r=>{
    const link=location.origin+location.pathname+"?p="+encodeURIComponent(r.id);
    const when=r.updated?new Date(r.updated).toISOString().slice(0,10):"";
-   return '<div class="dashrow"><span class="dchan">'+esc(r.channel||r.handle||r.id)+'</span><span class="dmeta">'+((r.ideas&&r.ideas.length)||0)+' videos · '+when+'</span>'+
+   const _n=(r.ideas&&r.ideas.length)||0, _ok=publishableIdeas(r.ideas||[]).length, _st=pageUsesStatus(r.ideas||[]);
+   return '<div class="dashrow"><span class="dchan">'+esc(r.channel||r.handle||r.id)+'</span><span class="dmeta">'+
+    (_st?(_ok+' approved of '+_n):(_n+' videos'))+' · '+when+'</span>'+
     '<a href="'+esc(link)+'" target="_blank" rel="noopener">Open ↗</a><button data-edit="'+esc(r.id)+'">Edit</button><button data-copy="'+esc(link)+'">⧉ Copy</button></div>';
   }).join("");
   list.querySelectorAll("[data-copy]").forEach(bn=>bn.onclick=()=>{navigator.clipboard.writeText(bn.getAttribute("data-copy")).then(()=>toast("Link copied")).catch(()=>toast("Copy failed"));});
@@ -1067,6 +1131,13 @@ async function renderCreatorPage(id){
  if(failed){$("#list").innerHTML=cloudErr("Couldn't load this page right now. Check your connection and reload.");return;}
  if(!doc||!Array.isArray(doc.ideas)||!doc.ideas.filter(Boolean).length){$("#list").innerHTML='<div class="simmsg simerr" style="padding:26px 0">This page is not available. Ask for a fresh link.</div>';return;}
  doc.ideas=doc.ideas.filter(Boolean); // drop any null entries from older/externally-edited docs
+ // A creator link shows APPROVED ideas only, so a fresh generation sitting on the page waiting for
+ // review never appears to them. The full set stays in the doc, which is what "Edit this page" and
+ // the version history need. Pages made before statuses existed have none set, so they show
+ // everything exactly as before; that fallback is the whole reason this is safe to ship.
+ const _allIdeas=doc.ideas.slice();
+ doc.ideas=publishableIdeas(doc.ideas);
+ if(!doc.ideas.length)doc.ideas=_allIdeas; // never show a creator an empty page
  currentPageId=pageId(id); // packs/scripts opened here save ONTO this page so the creator sees them instantly
  channelName=doc.channel||doc.handle||id;channelHandle=doc.handle||("@"+pageId(id));channelProfile=doc.profile||"";creatorNote=doc.note||"";
  setCreatorHeader(channelName);
@@ -1081,12 +1152,12 @@ async function renderCreatorPage(id){
   const old=document.querySelector(".editpagebtn");if(old)old.remove();
   const ed=document.createElement("button");ed.className="editpagebtn";ed.textContent="✏️ Edit this page";
   ed.title="Only you see this. Edit, reorder, or remove ideas, then re-publish to the same link.";
-  ed.onclick=()=>{ed.remove();document.body.classList.remove("creator");creatorView=false;const pm2=document.querySelector(".premakebtn");if(pm2)pm2.remove();startCurate(doc.ideas,doc.handle||pageId(id),doc.channel||doc.handle||id,doc.note||"",doc.profile||"",doc.style||"leads",doc.rejected||[]);};
+  ed.onclick=()=>{ed.remove();document.body.classList.remove("creator");creatorView=false;const pm2=document.querySelector(".premakebtn");if(pm2)pm2.remove();startCurate(_allIdeas,doc.handle||pageId(id),doc.channel||doc.handle||id,doc.note||"",doc.profile||"",doc.style||"leads",doc.rejected||[]);};
   document.body.appendChild(ed); // fixed top-right, always visible (admin only) — not buried at page bottom
   const oldpm=document.querySelector(".premakebtn");if(oldpm)oldpm.remove();
   const pm=document.createElement("button");pm.className="premakebtn";pm.textContent="⚡ Pre-make packs + scripts";
   pm.title="Only you see this. Generates the research pack + sample script for every idea and saves them onto this page, so the creator opens the link and sees them instantly. Takes a while — keep this tab open.";
-  pm.onclick=()=>premakeAll(pm,doc.ideas);
+  pm.onclick=()=>premakeAll(pm,doc.ideas);  // packs only for what the creator can actually see
   document.body.appendChild(pm);
  }
 }
