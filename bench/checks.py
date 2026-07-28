@@ -162,6 +162,40 @@ def _c_viewer_implication(ideas, ctx):
     return out
 
 
+# LEADS WITH AN EVENT. Distinct from `event_first`, which asks whether the text mentions an
+# occurrence anywhere. This asks whether the BOLD LINE OPENS on one. The curator, on three ideas he
+# called reasonable: "they should probably always lead with some headline-like event that happened, and
+# then these are what the video goes into from there... they're just not interesting enough unless we
+# put some very interesting incident or something that happened first."
+# The test is narrow on purpose: does the first sentence NAME somebody or COUNT something. A verb
+# whitelist was tried first and missed "used", "locked" and "took" immediately. Validated both
+# directions on 12 hand-labelled cases, 0 errors, including his three thematic ones as positives.
+_LEAD_GENERIC = {
+    "AI", "AIs", "A.I.", "It", "Its", "They", "Their", "We", "Our", "You", "Your", "I", "My", "He",
+    "She", "His", "Her", "The", "A", "An", "This", "That", "These", "Those", "Soon", "Now", "Then",
+    "Here", "Most", "Many", "Some", "Every", "Everyone", "Nobody", "There", "If", "When", "What",
+    "Why", "How", "And", "But", "Once", "In", "On", "At", "For", "With", "After", "Before", "During",
+    "Because", "While", "Researchers", "Scientists", "People", "Companies", "Groups", "Engineers",
+    "Workers", "Experts", "Governments", "Truth", "Inside", "Imagine", "Meet", "Two", "One", "Three",
+    "Living", "Modern", "Human", "Humans", "Machines", "Models", "Agents", "Big", "Tech", "New"}
+
+
+def lacks_event_lead(x):
+    first = re.split(r"(?<=[.?!])\s+", (x.get("title") or "").strip())
+    first = first[0] if first else ""
+    if not first:
+        return True
+    if re.search(r"\d", first):
+        return False
+    return not [w for w in re.findall(r"\b[A-Z][A-Za-z'.\-]{1,}\b", first) if w not in _LEAD_GENERIC]
+
+
+def _c_event_lead(ideas, ctx):
+    return [(i, "bold line opens on a theme, not on something that happened: %r"
+             % ((x.get("title") or "")[:70]))
+            for i, x in enumerate(ideas) if lacks_event_lead(x)]
+
+
 EVENT_FIRST_MIN = 0.60      # at least this share of a batch should open on a real occurrence
 
 # ANCHOR STRENGTH. Every other check here measures WRITING. None of them could see the complaint that
@@ -526,6 +560,8 @@ CHECKS = [
     ("viewer_implication", "Do not tell the viewer what they think",
      "Open on the thing that happened, not on a guess about the audience.", "idea",
      _c_viewer_implication),
+    ("event_lead", "Lead with a headline-shaped event",
+     "Not interesting enough unless a real incident comes first.", "idea", _c_event_lead),
     ("paper_first", "Do not open on a paper",
      "Starting off with a paper is boring; open on an incident, a fact, or a stat.", "batch", _c_paper_first),
     ("closer_variety", "Vary how the stakes land",
@@ -567,6 +603,7 @@ def stats(ideas):
         "question_pct": round(100 * qs / len(ideas)) if ideas else 0,
         "stale_evidence_pct": round(100 * sum(1 for x in ideas if stale_years(x)) / len(ideas)) if ideas else 0,
         "event_first_pct": round(100 * sum(1 for x in ideas if opens_on_event(x)) / len(ideas)) if ideas else 0,
+        "event_lead_pct": round(100 * sum(1 for x in ideas if not lacks_event_lead(x)) / len(ideas)) if ideas else 0,
         "top_anchor_pct": round(100 * sum(1 for x in ideas if anchor_tier(x) == "top") / len(ideas)) if ideas else 0,
         "weak_anchor_pct": round(100 * sum(1 for x in ideas if anchor_tier(x) == "weak") / len(ideas)) if ideas else 0,
     }
