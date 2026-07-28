@@ -140,6 +140,28 @@ WHEN = re.compile(r'\b(20\d\d|last (?:year|month|week|spring|summer|fall|winter)
                   r'in (?:January|February|March|April|May|June|July|August|September|October|November|December))\b', re.I)
 HYPOTHETICAL = re.compile(r'^\s*(imagine|picture|think about|suppose|what if|consider)\b', re.I)
 
+# TELLING THE VIEWER WHAT THEY THINK. "You think AI risk means killer robots", "You feel like you
+# can't do anything about it". A blind panel found 2 of 24 ideas opening this way. It spends the first
+# clause on a guess about the audience, and any viewer who does not hold that belief is now arguing
+# instead of watching. Anchored to the opening because the construction is only fatal at the front.
+VIEWER_IMPL = re.compile(
+    r"^\s*(?:You\s+(?:think|feel|believe|assume|probably|might\s+think|were\s+told|have\s+heard)"
+    r"|Most\s+people\s+(?:think|believe|assume)"
+    r"|We\s+all\s+(?:think|believe|assume)"
+    r"|Everyone\s+(?:thinks|believes|assumes))\b", re.I)
+
+
+def _c_viewer_implication(ideas, ctx):
+    out = []
+    for i, x in enumerate(ideas):
+        for field in ("title", "summary"):
+            t = (x.get(field) or "").strip()
+            if VIEWER_IMPL.match(t):
+                out.append((i, "opens by telling the viewer what they think: %r" % t[:60]))
+                break
+    return out
+
+
 EVENT_FIRST_MIN = 0.60      # at least this share of a batch should open on a real occurrence
 
 # ANCHOR STRENGTH. Every other check here measures WRITING. None of them could see the complaint that
@@ -501,6 +523,9 @@ CHECKS = [
      "'The real question is what a society does when...' is a boring philosophical frame.", "idea", _c_philosophical),
     ("anchor_strength", "Built on the best incidents",
      "The examples are almost never the best examples; surface the craziest first.", "batch", _c_anchor_strength),
+    ("viewer_implication", "Do not tell the viewer what they think",
+     "Open on the thing that happened, not on a guess about the audience.", "idea",
+     _c_viewer_implication),
     ("paper_first", "Do not open on a paper",
      "Starting off with a paper is boring; open on an incident, a fact, or a stat.", "batch", _c_paper_first),
     ("closer_variety", "Vary how the stakes land",
