@@ -4169,13 +4169,21 @@ async def _custom_generate(body, req=None):
     try:
         # OWN TIMEOUT, AND NO RETRY. The shared client is timeout=150s, max_retries=1 — a bound sized
         # for the slowest call under a model that never spent budget on thinking. Turning adaptive
-        # thinking on here and doubling max_tokens pushed this one call past 150s, so it timed out,
-        # retried, timed out again, and returned nothing at ~300s. Zero ideas, not truncated ideas.
-        # A retry is actively harmful on a call this long: it doubles the wall clock to buy a second
-        # attempt at something that failed on duration, not on a blip.
+        # thinking on here pushed this one call past 150s, so it timed out, retried, timed out again,
+        # and returned NOTHING at ~300s: zero ideas, not truncated ideas. A retry is actively harmful
+        # on a call this long, doubling the wall clock to re-attempt something that failed on duration
+        # rather than on a blip. The bound stays even with thinking off, because this call was always
+        # the closest to 150s and the shared default was never sized for it.
+        #
+        # THINKING IS OFF HERE ON PURPOSE. Opus 5 defaults it on and it is this model's headline
+        # strength, but switching it on is a change whose BENEFIT is unmeasured and whose COST is
+        # ~100s on a pipeline already at ~330s. Shipping it on the strength of the release notes broke
+        # generation outright. Opus 5 with thinking off is a like-for-like swap of a configuration we
+        # have actually measured. Turning it on is a separate experiment: raise max_tokens to
+        # 26000/32000 alongside it (thinking and output share the budget), and compare batches.
         gmsg = await run_in_threadpool(lambda: get_client().with_options(
             timeout=GEN_TIMEOUT_S, max_retries=0).messages.create(
-            model=MODEL, thinking=THINK, max_tokens=(32000 if is_more else 26000), system=SYSTEM_CUSTOM + ANTI_SLOP,  # raised: summaries are now 2-3 sentences, 32 candidates overflowed 7000 and truncated the JSON
+            model=MODEL, thinking=NO_THINK, max_tokens=(15000 if is_more else 12000), system=SYSTEM_CUSTOM + ANTI_SLOP,  # raised: summaries are now 2-3 sentences, 32 candidates overflowed 7000 and truncated the JSON
             messages=[{"role": "user", "content": gen}],
         ))
         candidates = parse_custom("".join(b.text for b in gmsg.content if getattr(b, "type", "") == "text"))
