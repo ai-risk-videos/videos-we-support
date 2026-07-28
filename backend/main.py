@@ -29,6 +29,8 @@ MODEL = "claude-opus-5"
 # a truncated answer, or nothing at all. So thinking is explicitly OFF everywhere by default, which
 # preserves the exact behaviour we measured on 4.8, and switched ON deliberately where it earns its
 # cost. Disabling is only legal at effort `high` or below, which is the default and what we use.
+# Generation is the one long call, and it needs a bound of its own rather than the shared client's.
+GEN_TIMEOUT_S = 420.0
 NO_THINK = {"type": "disabled"}
 THINK = {"type": "adaptive"}
 # The channel profile is a summarization task; Sonnet is markedly faster than Opus and
@@ -4165,7 +4167,14 @@ async def _custom_generate(body, req=None):
     is_more = isinstance(cached, str) and len(cached) > 80
     gen = _build_gen_prompt(profile, titles, exclude, rejected, more=is_more)
     try:
-        gmsg = await run_in_threadpool(lambda: get_client().messages.create(
+        # OWN TIMEOUT, AND NO RETRY. The shared client is timeout=150s, max_retries=1 — a bound sized
+        # for the slowest call under a model that never spent budget on thinking. Turning adaptive
+        # thinking on here and doubling max_tokens pushed this one call past 150s, so it timed out,
+        # retried, timed out again, and returned nothing at ~300s. Zero ideas, not truncated ideas.
+        # A retry is actively harmful on a call this long: it doubles the wall clock to buy a second
+        # attempt at something that failed on duration, not on a blip.
+        gmsg = await run_in_threadpool(lambda: get_client().with_options(
+            timeout=GEN_TIMEOUT_S, max_retries=0).messages.create(
             model=MODEL, thinking=THINK, max_tokens=(32000 if is_more else 26000), system=SYSTEM_CUSTOM + ANTI_SLOP,  # raised: summaries are now 2-3 sentences, 32 candidates overflowed 7000 and truncated the JSON
             messages=[{"role": "user", "content": gen}],
         ))
