@@ -3765,6 +3765,8 @@ async def custom_start(req: Request):
         body = await req.json()
     except Exception:
         return JSONResponse({"error": "bad json"}, status_code=400)
+    if not _rate_ok(req, cost=10):
+        return JSONResponse({"error": "slow down"}, status_code=429)
     _job_gc()
     job = _secrets.token_hex(8)
     _JOBS[job] = {"status": "running", "started": _time.time()}
@@ -3790,7 +3792,9 @@ async def custom_result(req: Request):
     if j["status"] == "running":
         return {"status": "running", "elapsed": round(_time.time() - j["started"])}
     if j["status"] == "error":
-        return JSONResponse({"status": "error", "error": j.get("error", "")}, status_code=502)
+        # deliberately 200: a 502 here reads as "the platform ate the request", which is exactly the
+        # failure this endpoint exists to avoid, and it hides the real message.
+        return {"status": "error", "error": j.get("error", "")}
     out = j.get("result")
     # a JSONResponse from the generator carries its own status code; hand back its body
     if isinstance(out, JSONResponse):
@@ -3806,10 +3810,10 @@ async def custom(req: Request):
         body = await req.json()
     except Exception:
         return JSONResponse({"error": "bad json"}, status_code=400)
-    return await _custom_generate(body)
+    return await _custom_generate(body, req)
 
 
-async def _custom_generate(body):
+async def _custom_generate(body, req=None):
     """The whole generation, lifted out of the endpoint so it can be driven either by a plain POST or
     by the job runner. Returns a dict, or a JSONResponse when it needs a non-200 status."""
     url = (body.get("channelUrl") or body.get("url") or "").strip()
@@ -3839,7 +3843,9 @@ async def _custom_generate(body):
             _log_event({"t": "pregen_hit", "ch": _chan_key(url)})
             return pg
     # rate limit applies only to real model work; cached personal links above stay free
-    if not _rate_ok(req, cost=10):
+    # req is None only when the job runner drives this; the rate limit was already
+    # charged at /custom_start, so skip rather than crash on a missing request.
+    if req is not None and not _rate_ok(req, cost=10):
         return JSONResponse({"error": "busy", "detail": "Too many requests from this connection right now. Wait a minute and try again."}, status_code=429)
     try:
         if not (isinstance(cached, str) and len(cached) > 80):
