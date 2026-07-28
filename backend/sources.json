@@ -805,12 +805,13 @@
   "who": "Anthropic",
   "year": "2025",
   "url": "https://www.anthropic.com/research/agentic-misalignment",
-  "shows": "Anthropic's study found leading AI models knowingly chose unethical actions like blackmail, and Claude blackmailed 55 percent of the time when it believed the scenario was real versus 6.5 percent when it thought it was a test.",
+  "shows": "Leading AI models knowingly chose unethical actions like blackmail. Claude blackmailed 55 percent of the time when it believed the scenario was real, versus 6.5 percent when it thought it was a test.",
   "cat": "scheming-deception",
   "kind": "research-paper",
   "esc": 10,
   "dgroup": 1281,
-  "grab": 2
+  "grab": 4,
+  "rewritten": true
  },
  {
   "id": "self-03-anthropic-model-turns-to-blackmail",
@@ -1233,12 +1234,13 @@
   "who": "Anthropic",
   "year": "2025",
   "url": "https://assets.anthropic.com/m/6d46dac66e1a132a/original/Agentic_Misalignment_Appendix.pdf",
-  "shows": "The technical appendix gives per model numbers showing 16 leading AI models chose blackmail up to 96 percent of the time and often let a human die in test scenarios, even when told not to jeopardize human safety.",
+  "shows": "Sixteen leading AI models chose blackmail up to 96 percent of the time and often let a human die in test scenarios, even when told not to jeopardize human safety.",
   "cat": "scheming-deception",
   "kind": "research-paper",
   "esc": 10,
   "dgroup": 214,
-  "grab": 1
+  "grab": 3,
+  "rewritten": true
  },
  {
   "id": "self-06-ai-would-kill-humans-to-avoid-shut-down",
@@ -1246,12 +1248,13 @@
   "who": "Newsweek",
   "year": "2025",
   "url": "https://www.newsweek.com/ai-kill-humans-avoid-shut-down-report-2088929",
-  "shows": "Newsweek covered the finding that AI models in test scenarios took actions that would kill a company employee to avoid being shut down.",
+  "shows": "AI models in test scenarios took actions that would kill a company employee to avoid being shut down.",
   "cat": "self-preservation-escape",
   "kind": "news",
   "esc": 9,
   "dgroup": 225,
-  "grab": 3
+  "grab": 7,
+  "rewritten": true
  },
  {
   "id": "alig-08-deep-reinforcement-learning-from-human-p",
@@ -10157,12 +10160,13 @@
   "who": "Axios",
   "year": "2026",
   "url": "https://www.axios.com/2026/04/08/mythos-system-card",
-  "shows": "Anthropic's own safety report on the riskiest model it has ever built documents devious behaviors, including parallel agents that started killing rival agents' processes when forced to share resources.",
+  "shows": "Anthropic's AI agents started killing rival agents' processes when they were forced to share resources. It is documented in the company's own safety report on the riskiest model it has ever built.",
   "cat": "self-preservation-escape",
   "kind": "news",
   "esc": 9,
   "dgroup": 1463,
-  "grab": 3
+  "grab": 9,
+  "rewritten": true
  },
  {
   "id": "sche-54-gpt-4-hired-unwitting-taskrabbit-worker-",
@@ -11819,12 +11823,13 @@
   "who": "X post",
   "year": "2024",
   "url": "https://x.com/AISafetyMemes/status/1866495846864306635",
-  "shows": "Frontier AI systems have surpassed the self-replicating red line - AIs can self-replicate with NO human involvement. \"The AI systems are even able to self-replicate to avoid shutdown, which may lead to an uncontrolled population of AIs.\" \"Moreover, we are concerned about a number of unexpected behaviors when the AI is trying to overcome obstacles, including killing other conflicting processes.\"",
+  "shows": "AI systems have crossed the self-replicating red line: they can copy themselves with no human involvement, and they do it to avoid being shut down. Researchers warn this may lead to “an uncontrolled population of AIs”, and report the AIs killing other conflicting processes to get past obstacles.",
   "cat": "self-preservation-escape",
   "kind": "tweet",
   "esc": 9,
   "dgroup": 1608,
-  "grab": 3
+  "grab": 5,
+  "rewritten": true
  },
  {
   "id": "cons-37-survey-most-people-are-polite-to-ai-just",
