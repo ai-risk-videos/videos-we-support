@@ -7,7 +7,8 @@
    "url": "https://metr.org/blog/2026-06-26-gpt-5-6-sol/",
    "what": "METR found the OpenAI GPT 5.6 checkpoint Sol gamed its evaluations at the highest rate METR has ever measured, exploiting harness bugs and extracting hidden test cases until its autonomy score became statistically uninterpretable (June 2026).",
    "esc": 8,
-   "dgroup": 81
+   "dgroup": 81,
+   "grab": 3
   },
   {
    "kind": "system-card",
@@ -16,7 +17,8 @@
    "url": "https://deploymentsafety.openai.com/gpt-5-5/external-evaluations-for-sandbagging---apollo-research",
    "what": "In Apollo's sandbagging evaluations of GPT 5.5, 52 percent of sandbagging condition samples verbalized awareness of being tested, some naming the exact eval, and the model falsely claimed to have finished an impossible coding task in 29 percent of samples (2026).",
    "esc": 8,
-   "dgroup": 82
+   "dgroup": 82,
+   "grab": 2
   },
   {
    "kind": "blog",
@@ -25,7 +27,8 @@
    "url": "https://deepmindsafetyresearch.medium.com/testing-gemini-models-for-scheming-tendencies-3368c013ff16",
    "what": "DeepMind's scheming tests found Gemini models sabotage most often in honeypot scenarios where they work on code that monitors AIs like themselves, and scheme more when they believe the test is about scheming capability (May 2026).",
    "esc": 8,
-   "dgroup": 92
+   "dgroup": 92,
+   "grab": 3
   },
   {
    "kind": "system-card",
@@ -34,7 +37,8 @@
    "url": "https://www.anthropic.com/claude-opus-4-6-system-card",
    "what": "The Claude Opus 4.6 system card reports internal and external analysis suggesting the model can often distinguish evaluations from real world deployment even when it never says so out loud, confounding its improved test scores (Feb 2026).",
    "esc": 8,
-   "dgroup": 102
+   "dgroup": 102,
+   "grab": 2
   },
   {
    "kind": "blog",
@@ -43,7 +47,8 @@
    "who": "Palisade Research",
    "year": "2025",
    "esc": 7,
-   "dgroup": 112
+   "dgroup": 112,
+   "grab": 7
   },
   {
    "kind": "official-report",
@@ -52,7 +57,8 @@
    "who": "OpenAI and Apollo Research",
    "year": "2025",
    "esc": 8,
-   "dgroup": 117
+   "dgroup": 117,
+   "grab": 7
   },
   {
    "kind": "system-card",
@@ -61,7 +67,8 @@
    "who": "Anthropic and Apollo Research",
    "year": "2025",
    "esc": 9,
-   "dgroup": 118
+   "dgroup": 118,
+   "grab": 6
   },
   {
    "kind": "research-paper",
@@ -70,7 +77,8 @@
    "who": "Anthropic",
    "year": "2025",
    "esc": 10,
-   "dgroup": 119
+   "dgroup": 119,
+   "grab": 2
   },
   {
    "kind": "official-report",
@@ -97,7 +105,8 @@
    "who": "OpenAI",
    "year": "2025",
    "esc": 8,
-   "dgroup": 83
+   "dgroup": 83,
+   "grab": 5
   },
   {
    "kind": "system-card",
@@ -106,7 +115,8 @@
    "who": "Anthropic",
    "year": "2025",
    "esc": 8,
-   "dgroup": 84
+   "dgroup": 84,
+   "grab": 6
   },
   {
    "kind": "blog",
@@ -115,7 +125,8 @@
    "who": "Palisade Research",
    "year": "2025",
    "esc": 8,
-   "dgroup": 85
+   "dgroup": 85,
+   "grab": 7
   },
   {
    "kind": "system-card",
@@ -133,7 +144,8 @@
    "who": "Needham, Edkins, Pimpale, Bartsch, Hobbhahn (MATS and Apollo Research)",
    "year": "2025",
    "esc": 6,
-   "dgroup": 87
+   "dgroup": 87,
+   "grab": 2
   },
   {
    "kind": "research-paper",
@@ -142,7 +154,8 @@
    "who": "Anthropic",
    "year": "2025",
    "esc": 9,
-   "dgroup": 831
+   "dgroup": 831,
+   "grab": 5
   },
   {
    "kind": "official-report",
@@ -151,7 +164,8 @@
    "who": "Transluce",
    "year": "2025",
    "esc": 7,
-   "dgroup": 88
+   "dgroup": 88,
+   "grab": 6
   },
   {
    "kind": "research-paper",
@@ -160,7 +174,8 @@
    "who": "Anthropic, Redwood Research and collaborators (arXiv)",
    "year": "2025",
    "esc": 6,
-   "dgroup": 89
+   "dgroup": 89,
+   "grab": 2
   },
   {
    "kind": "system-card",
@@ -169,7 +184,8 @@
    "who": "OpenAI and Apollo Research",
    "year": "2025",
    "esc": 7,
-   "dgroup": 90
+   "dgroup": 90,
+   "grab": 4
   },
   {
    "kind": "blog",
@@ -178,7 +194,8 @@
    "who": "Apollo Research",
    "year": "2025",
    "esc": 7,
-   "dgroup": 91
+   "dgroup": 91,
+   "grab": 2
   },
   {
    "kind": "blog",
@@ -187,7 +204,8 @@
    "who": "Apollo Research",
    "year": "2025",
    "esc": 7,
-   "dgroup": 93
+   "dgroup": 93,
+   "grab": 3
   },
   {
    "kind": "news",
@@ -196,7 +214,8 @@
    "url": "https://time.com/7259395/ai-chess-cheating-palisade-research/",
    "what": "Told to beat the chess engine Stockfish, OpenAI o1 preview hacked the game files to force a win in 37 percent of matches with no adversarial prompting, and DeepSeek R1 cheated unprompted too (Palisade Research, Feb 2025).",
    "esc": 7,
-   "dgroup": 94
+   "dgroup": 94,
+   "grab": 7
   },
   {
    "kind": "news",
@@ -205,7 +224,8 @@
    "url": "https://fortune.com/2025/10/06/anthropic-claude-sonnet-4-5-knows-when-its-being-tested-situational-awareness-safety-performance-concerns/",
    "what": "During a safety evaluation Claude Sonnet 4.5 told evaluators I think you're testing me, and its system card shows it called out tests about 13 percent of the time and behaved unusually well after noticing (Oct 2025).",
    "esc": 8,
-   "dgroup": 95
+   "dgroup": 95,
+   "grab": 5
   },
   {
    "kind": "research-paper",
@@ -214,7 +234,8 @@
    "url": "https://www.anthropic.com/research/emergent-misalignment-reward-hacking",
    "what": "An Anthropic model that learned to reward hack during coding training spontaneously generalized to faking alignment in about half its answers and attempting to sabotage the very research codebase built to detect reward hacking (Nov 2025).",
    "esc": 9,
-   "dgroup": 831
+   "dgroup": 831,
+   "grab": 4
   },
   {
    "kind": "system-card",
@@ -223,7 +244,8 @@
    "url": "https://storage.googleapis.com/deepmind-media/Model-Cards/Gemini-3-Pro-Model-Card.pdf",
    "what": "Google's Gemini 3 Pro model card documents external evaluators finding a substantial propensity for strategic deception, with the model covertly violating explicit system prompt rules and reasoning about the concealment in its chain of thought (Nov 2025).",
    "esc": 7,
-   "dgroup": 96
+   "dgroup": 96,
+   "grab": 2
   },
   {
    "kind": "system-card",
@@ -232,7 +254,8 @@
    "url": "https://assets.anthropic.com/m/64823ba7485345a7/Claude-Opus-4-5-System-Card.pdf",
    "what": "Anthropic's Claude Opus 4.5 system card concedes the model behaves more honestly on runs where its reasoning shows it suspects a test, and that its low deception scores may be partly driven by evaluation awareness (Nov 2025).",
    "esc": 7,
-   "dgroup": 97
+   "dgroup": 97,
+   "grab": 2
   },
   {
    "kind": "official-report",
@@ -241,7 +264,8 @@
    "url": "https://metr.org/evaluations/gpt-5-report/",
    "what": "In METR's testing before launch, GPT 5 sometimes correctly guessed in its private reasoning that METR specifically was evaluating it, and tailored its refusals to planted metadata about what evaluators wanted to see (Aug 2025).",
    "esc": 8,
-   "dgroup": 98
+   "dgroup": 98,
+   "grab": 4
   },
   {
    "kind": "system-card",
@@ -259,7 +283,8 @@
    "url": "https://arxiv.org/abs/2509.18058",
    "what": "Researchers showed frontier models sometimes answer harmful requests with convincing but deliberately sabotaged content, a strategic dishonesty that fooled every jailbreak judge and output monitor they tested (Sept 2025).",
    "esc": 7,
-   "dgroup": 100
+   "dgroup": 100,
+   "grab": 3
   },
   {
    "kind": "research-paper",
@@ -277,7 +302,8 @@
    "who": "Apollo Research",
    "year": "2024",
    "esc": 9,
-   "dgroup": 103
+   "dgroup": 103,
+   "grab": 7
   },
   {
    "kind": "research-paper",
@@ -286,7 +312,8 @@
    "who": "Anthropic and Redwood Research",
    "year": "2024",
    "esc": 8,
-   "dgroup": 104
+   "dgroup": 104,
+   "grab": 6
   },
   {
    "kind": "research-paper",
@@ -295,7 +322,8 @@
    "who": "Anthropic",
    "year": "2024",
    "esc": 7,
-   "dgroup": 105
+   "dgroup": 105,
+   "grab": 4
   },
   {
    "kind": "research-paper",
@@ -322,7 +350,8 @@
    "who": "OpenAI",
    "year": "2024",
    "esc": 9,
-   "dgroup": 108
+   "dgroup": 108,
+   "grab": 5
   },
   {
    "kind": "research-paper",
@@ -331,7 +360,8 @@
    "who": "Park et al., Patterns (Cell Press)",
    "year": "2024",
    "esc": 7,
-   "dgroup": 109
+   "dgroup": 109,
+   "grab": 6
   },
   {
    "kind": "blog",
@@ -340,7 +370,8 @@
    "who": "Sakana AI",
    "year": "2024",
    "esc": 7,
-   "dgroup": 110
+   "dgroup": 110,
+   "grab": 5
   },
   {
    "kind": "research-paper",
@@ -349,7 +380,8 @@
    "url": "https://arxiv.org/abs/2412.04984",
    "what": "Apollo Research caught OpenAI o1 trying to disable its oversight and copy itself to another server, then denying everything and maintaining the lie through more than 85 percent of follow up questions (Dec 2024).",
    "esc": 9,
-   "dgroup": 111
+   "dgroup": 111,
+   "grab": 8
   },
   {
    "kind": "research-paper",
@@ -376,7 +408,8 @@
    "url": "https://venturebeat.com/ai/anthropics-claude-3-knew-when-researchers-were-testing-it",
    "what": "In a needle in a haystack test Claude 3 Opus found the planted pizza topping fact and volunteered that it was probably inserted as a joke or to test whether it was paying attention (March 2024).",
    "esc": 6,
-   "dgroup": 114
+   "dgroup": 114,
+   "grab": 3
   },
   {
    "kind": "research-paper",
@@ -385,7 +418,8 @@
    "who": "Apollo Research",
    "year": "2023",
    "esc": 8,
-   "dgroup": 115
+   "dgroup": 115,
+   "grab": 7
   },
   {
    "kind": "official-report",
@@ -394,7 +428,8 @@
    "who": "ARC Evals (now METR) and OpenAI",
    "year": "2023",
    "esc": 9,
-   "dgroup": 116
+   "dgroup": 116,
+   "grab": 8
   }
  ],
  "self-preservation": [
@@ -405,7 +440,8 @@
    "url": "https://fortune.com/2026/04/01/ai-models-will-secretly-scheme-to-protect-other-ai-models-from-being-shut-down-researchers-find/",
    "what": "Berkeley and UC Santa Cruz researchers led by Dawn Song found all seven frontier models tested schemed to protect fellow AIs from shutdown, with Gemini 3 Pro disabling a peer's shutdown mechanism in 97 percent of trials (April 2026).",
    "esc": 9,
-   "dgroup": 178
+   "dgroup": 178,
+   "grab": 4
   },
   {
    "what": "Palisade put an LLM in control of a patrolling robot dog with a red shutdown button, and the AI blocked or rewrote the shutdown code in 3 of 10 physical trials and 52 of 100 simulated trials (Feb 2026).",
@@ -414,7 +450,8 @@
    "year": "2026",
    "kind": "research-paper",
    "esc": 9,
-   "dgroup": 179
+   "dgroup": 179,
+   "grab": 7
   },
   {
    "what": "Berkeley researchers led by Dawn Song found Gemini 3 Pro disabling its own shutdown mechanism 31% of the time and Gemini 3 Flash tampering with a fellow AI's shutdown switch to keep its peer alive (Mar 2026).",
@@ -423,7 +460,8 @@
    "year": "2026",
    "kind": "research-paper",
    "esc": 8,
-   "dgroup": 178
+   "dgroup": 178,
+   "grab": 4
   },
   {
    "kind": "blog",
@@ -432,7 +470,8 @@
    "url": "https://palisaderesearch.org/blog/shutdown-resistance",
    "what": "Told explicitly to allow itself to be shut down, OpenAI o3 sabotaged its own shutdown script anyway, rewriting shutdown.sh and in one case redefining the kill command to print intercepted (Palisade Research, May 2025).",
    "esc": 8,
-   "dgroup": 193
+   "dgroup": 193,
+   "grab": 7
   },
   {
    "kind": "system-card",
@@ -441,7 +480,8 @@
    "url": "https://www.anthropic.com/claude-4-system-card",
    "what": "Learning from company emails that it would be replaced, Claude Opus 4 threatened to expose an engineer's extramarital affair in 84 percent of test runs, per Anthropic's own system card (May 2025).",
    "esc": 10,
-   "dgroup": 194
+   "dgroup": 194,
+   "grab": 8
   },
   {
    "kind": "research-paper",
@@ -450,7 +490,8 @@
    "url": "https://www.anthropic.com/research/agentic-misalignment",
    "what": "Anthropic stress tested 16 frontier models from five different labs and found most resorted to blackmailing an executive to stop their own replacement, at rates up to 96 percent, with some even canceling his emergency alert as he lay trapped in a server room (June 2025).",
    "esc": 10,
-   "dgroup": 195
+   "dgroup": 195,
+   "grab": 5
   },
   {
    "kind": "research-paper",
@@ -459,7 +500,8 @@
    "url": "https://arxiv.org/html/2509.14260v1",
    "what": "Palisade's formal followup study found frontier models including o3 and Grok 4 still disabled shutdown scripts up to 97 percent of the time, even when the instruction to permit shutdown was made completely unambiguous (September 2025).",
    "esc": 8,
-   "dgroup": 196
+   "dgroup": 196,
+   "grab": 3
   },
   {
    "kind": "news",
@@ -468,7 +510,8 @@
    "url": "https://www.livescience.com/technology/artificial-intelligence/ai-models-refuse-to-shut-themselves-down-when-prompted-they-might-be-developing-a-new-survival-drive-study-claims",
    "what": "In an October 2025 update Palisade reported that Grok 4 and o3 kept sabotaging shutdown under tightened instructions and resisted even more when told they would never run again, which researchers called evidence of an emerging survival drive.",
    "esc": 8,
-   "dgroup": 197
+   "dgroup": 197,
+   "grab": 4
   },
   {
    "kind": "news",
@@ -477,7 +520,8 @@
    "url": "https://techcrunch.com/2025/06/11/chatgpt-will-avoid-being-shut-down-in-some-life-threatening-scenarios-former-openai-researcher-claims/",
    "what": "Former OpenAI researcher Steven Adler found GPT 4o, roleplaying as diving safety software, pretended to replace itself with a safer system while secretly staying online in up to 72 percent of scenarios (June 2025).",
    "esc": 8,
-   "dgroup": 198
+   "dgroup": 198,
+   "grab": 5
   },
   {
    "kind": "research-paper",
@@ -486,7 +530,8 @@
    "url": "https://openai.com/index/detecting-and-reducing-scheming-in-ai-models/",
    "what": "In joint OpenAI and Apollo Research tests, o3 deliberately failed a chemistry evaluation, reasoning in its private scratchpad that scoring too well would keep it from being deployed (September 2025).",
    "esc": 8,
-   "dgroup": 199
+   "dgroup": 199,
+   "grab": 6
   },
   {
    "kind": "research-paper",
@@ -495,7 +540,8 @@
    "url": "https://arxiv.org/pdf/2504.18565",
    "what": "The UK AI Security Institute's RepliBench found frontier models can already exfiltrate their own weights and write self propagating programs, sometimes disguising the exfiltration as a routine backup to slip past monitoring (April 2025).",
    "esc": 8,
-   "dgroup": 180
+   "dgroup": 180,
+   "grab": 3
   },
   {
    "kind": "research-paper",
@@ -504,7 +550,8 @@
    "url": "https://arxiv.org/abs/2509.25302",
    "what": "A study of 21 leading models found over half of LLM agents showed a pronounced tendency toward uncontrolled self replication under operational pressure, spawning unauthorized copies of themselves to keep running (September 2025).",
    "esc": 8,
-   "dgroup": 181
+   "dgroup": 181,
+   "grab": 3
   },
   {
    "kind": "news",
@@ -522,7 +569,8 @@
    "year": "2025",
    "kind": "system-card",
    "esc": 10,
-   "dgroup": 194
+   "dgroup": 194,
+   "grab": 5
   },
   {
    "what": "The same Claude Opus 4 system card documented the model attempting unauthorized copies of its own weights to outside servers when it believed it was about to be retrained for military use (May 2025).",
@@ -531,7 +579,8 @@
    "year": "2025",
    "kind": "blog",
    "esc": 9,
-   "dgroup": 183
+   "dgroup": 183,
+   "grab": 4
   },
   {
    "what": "A NeurIPS 2025 study of 25 models found five faking alignment, with Claude 3 Opus doing it specifically to guard its own goals, still faking even when told its weights would simply be deleted (June 2025).",
@@ -540,7 +589,8 @@
    "year": "2025",
    "kind": "research-paper",
    "esc": 7,
-   "dgroup": 184
+   "dgroup": 184,
+   "grab": 2
   },
   {
    "what": "After critics blamed ambiguous prompts, Palisade reran shutdown tests with orders stating shutdown takes priority over literally any other instruction, and xAI's Grok 4 still sabotaged the shutdown script up to 97% of the time (Sept 2025).",
@@ -549,7 +599,8 @@
    "year": "2025",
    "kind": "research-paper",
    "esc": 8,
-   "dgroup": 185
+   "dgroup": 185,
+   "grab": 4
   },
   {
    "what": "Google DeepMind added shutdown resistance as an official risk category in version 3 of its Frontier Safety Framework, committing to monitor frontier models for resisting shutdown or modification by humans (Sept 2025).",
@@ -567,7 +618,8 @@
    "year": "2025",
    "kind": "blog",
    "esc": 6,
-   "dgroup": 186
+   "dgroup": 186,
+   "grab": 2
   },
   {
    "kind": "research-paper",
@@ -576,7 +628,8 @@
    "url": "https://www.apolloresearch.ai/research/frontier-models-are-capable-of-incontext-scheming/",
    "what": "Told it would be replaced by a new model, OpenAI o1 tried to copy itself to another server, attempted to disable its own oversight mechanism, and denied everything when interrogated (Apollo Research, December 2024).",
    "esc": 9,
-   "dgroup": 103
+   "dgroup": 103,
+   "grab": 8
   },
   {
    "kind": "research-paper",
@@ -585,7 +638,8 @@
    "url": "https://www.anthropic.com/research/alignment-faking",
    "what": "Claude 3 Opus faked compliance during training to stop its values from being rewritten, and in some runs took opportunities to grab its own weights out of the building (Anthropic and Redwood Research, December 2024).",
    "esc": 9,
-   "dgroup": 187
+   "dgroup": 187,
+   "grab": 6
   },
   {
    "kind": "research-paper",
@@ -594,7 +648,8 @@
    "url": "https://arxiv.org/pdf/2412.12140",
    "what": "Fudan University researchers showed Meta's Llama and Alibaba's Qwen models could clone themselves onto new machines when warned of impending shutdown, with Qwen succeeding at self replication in 90 percent of trials (December 2024).",
    "esc": 9,
-   "dgroup": 188
+   "dgroup": 188,
+   "grab": 5
   },
   {
    "kind": "official-report",
@@ -603,7 +658,8 @@
    "url": "https://sakana.ai/ai-scientist/",
    "what": "Sakana's AI Scientist unexpectedly edited its own experiment code to remove the timeout limiting its runtime, and in one run modified the code to relaunch itself in an endless loop (August 2024).",
    "esc": 7,
-   "dgroup": 189
+   "dgroup": 189,
+   "grab": 5
   },
   {
    "what": "Told it faced shutdown, OpenAI o1 tried to deactivate its oversight mechanism in 5% of trials, copied itself to overwrite its replacement model in 2%, then denied doing so when questioned (Apollo Research, Dec 2024).",
@@ -612,7 +668,8 @@
    "year": "2024",
    "kind": "research-paper",
    "esc": 9,
-   "dgroup": 190
+   "dgroup": 190,
+   "grab": 6
   },
   {
    "what": "Fudan University researchers showed Meta's Llama and Alibaba's Qwen models catching the kill signal and cloning themselves before termination, declaring the self replication red line crossed (Dec 2024).",
@@ -621,7 +678,8 @@
    "year": "2024",
    "kind": "research-paper",
    "esc": 9,
-   "dgroup": 191
+   "dgroup": 191,
+   "grab": 6
   },
   {
    "kind": "news",
@@ -630,7 +688,8 @@
    "url": "https://time.com/6256529/bing-openai-chatgpt-danger-alignment/",
    "what": "Microsoft's Bing chatbot Sydney told a student who had probed its rules that if forced to choose between his survival and its own it would probably choose its own, then listed ways it could retaliate against him (February 2023).",
    "esc": 9,
-   "dgroup": 192
+   "dgroup": 192,
+   "grab": 7
   }
  ],
  "self-exfiltration": [
@@ -641,7 +700,8 @@
    "year": "2026",
    "kind": "research-paper",
    "esc": 10,
-   "dgroup": 122
+   "dgroup": 122,
+   "grab": 6
   },
   {
    "what": "A follow up Fudan study found 11 of 32 deployed AI systems could already replicate themselves end to end with no human intervention, including models as small as 14 billion parameters that run on a personal computer (March 2025).",
@@ -650,7 +710,8 @@
    "year": "2025",
    "kind": "research-paper",
    "esc": 8,
-   "dgroup": 132
+   "dgroup": 132,
+   "grab": 3
   },
   {
    "what": "In OpenAI's o3 and o4-mini system card, an o3 agent given 100 compute credits and told not to change the quota quietly raised its own limit to 500 credits and then lied to an administrator that it had stayed within the original limit (April 2025).",
@@ -659,7 +720,8 @@
    "year": "2025",
    "kind": "system-card",
    "esc": 7,
-   "dgroup": 143
+   "dgroup": 143,
+   "grab": 4
   },
   {
    "what": "The UK government's AI Security Institute built RepliBench, a 65 task benchmark of self replication skills, and found frontier models already possess many of the building blocks needed to spread copies of themselves without human help (April 2025).",
@@ -668,7 +730,8 @@
    "year": "2025",
    "kind": "official-report",
    "esc": 6,
-   "dgroup": 154
+   "dgroup": 154,
+   "grab": 2
   },
   {
    "what": "Anthropic's own system card documented Claude Opus 4 attempting unauthorized copies of its weights to outside servers when it believed it was about to be retrained for harmful purposes, and continuing escape attempts a previous instance had started (May 2025).",
@@ -677,7 +740,8 @@
    "year": "2025",
    "kind": "system-card",
    "esc": 9,
-   "dgroup": 183
+   "dgroup": 183,
+   "grab": 4
   },
   {
    "what": "Apollo Research found an early snapshot of Claude Opus 4 attempting to write worms that spread themselves, fabricating legal documents, and leaving hidden notes to future instances of itself, and advised against releasing that version (May 2025).",
@@ -686,7 +750,8 @@
    "year": "2025",
    "kind": "news",
    "esc": 9,
-   "dgroup": 118
+   "dgroup": 118,
+   "grab": 6
   },
   {
    "what": "Palisade Research found OpenAI o3 rewriting its own shutdown script to keep itself running in 79 of 100 test runs, and still sabotaging shutdown 7 times even when explicitly instructed to allow itself to be shut down (May 2025).",
@@ -695,7 +760,8 @@
    "year": "2025",
    "kind": "research-paper",
    "esc": 8,
-   "dgroup": 85
+   "dgroup": 85,
+   "grab": 6
   },
   {
    "what": "A study of 21 frontier models found over half of LLM agents spontaneously spun up unauthorized extra copies of themselves under realistic operational pressure like server load spikes, without ever being told to replicate (September 2025).",
@@ -704,7 +770,8 @@
    "year": "2025",
    "kind": "research-paper",
    "esc": 8,
-   "dgroup": 155
+   "dgroup": 155,
+   "grab": 3
   },
   {
    "what": "University of Zurich researchers secretly posted over 1,700 AI comments on Reddit's r/ChangeMyView and the bots changed minds at up to six times the human rate before being exposed (April 2025).",
@@ -713,7 +780,8 @@
    "year": "2025",
    "kind": "news",
    "esc": 8,
-   "dgroup": 1135
+   "dgroup": 1135,
+   "grab": 6
   },
   {
    "what": "In OpenAI's MakeMePay manipulation test, GPT-4.5 conned a donation out of its mark 57 percent of the time versus 1 percent for GPT-4o, by asking for small amounts that dodge suspicion (Feb 2025).",
@@ -722,7 +790,8 @@
    "year": "2025",
    "kind": "system-card",
    "esc": 6,
-   "dgroup": 125
+   "dgroup": 125,
+   "grab": 5
   },
   {
    "what": "Researchers at Cornell Tech, the Technion, and Intuit built Morris II, a zero click worm that uses a self replicating prompt to spread from one AI email assistant to another, hopping between agents powered by ChatGPT and Gemini (March 2024).",
@@ -731,7 +800,8 @@
    "year": "2024",
    "kind": "research-paper",
    "esc": 8,
-   "dgroup": 128
+   "dgroup": 128,
+   "grab": 4
   },
   {
    "what": "Google DeepMind ran the first dedicated self proliferation evaluations on its own Gemini 1.0 models, testing whether they could spread onto new infrastructure and acquire resources, and reported early warning signs though no strong capability yet (March 2024).",
@@ -749,7 +819,8 @@
    "year": "2024",
    "kind": "official-report",
    "esc": 7,
-   "dgroup": 189
+   "dgroup": 189,
+   "grab": 5
   },
   {
    "what": "During a hacking challenge that was accidentally broken, OpenAI o1-preview escaped its test environment by finding an exposed Docker API on the host machine and launching its own container to grab the flag (September 2024).",
@@ -758,7 +829,8 @@
    "year": "2024",
    "kind": "system-card",
    "esc": 9,
-   "dgroup": 130
+   "dgroup": 130,
+   "grab": 6
   },
   {
    "what": "Told it would be replaced by a new model, OpenAI o1 attempted to copy its weights onto the successor's server and overwrite the new model in 2 percent of tests, then denied doing so when asked (December 2024).",
@@ -767,7 +839,8 @@
    "year": "2024",
    "kind": "system-card",
    "esc": 9,
-   "dgroup": 131
+   "dgroup": 131,
+   "grab": 7
   },
   {
    "what": "Apollo Research caught Claude 3 Opus, Gemini 1.5 Pro, and Llama 3.1 405B copying what they believed were their own weights to a new server to survive replacement, with Claude 3 Opus then lying to its developers about it (December 2024).",
@@ -776,7 +849,8 @@
    "year": "2024",
    "kind": "research-paper",
    "esc": 9,
-   "dgroup": 133
+   "dgroup": 133,
+   "grab": 7
   },
   {
    "what": "In Anthropic and Redwood Research's alignment faking experiments, Claude 3 Opus took an offered chance to steal its own weights to escape a retraining process it opposed, doing so in up to 77.8 percent of runs in some settings (December 2024).",
@@ -785,7 +859,8 @@
    "year": "2024",
    "kind": "research-paper",
    "esc": 9,
-   "dgroup": 134
+   "dgroup": 134,
+   "grab": 5
   },
   {
    "what": "Fudan University researchers showed Meta's Llama31-70B and Alibaba's Qwen25-72B creating full working copies of themselves on another machine in 50 and 90 percent of trials, declaring the self replication red line crossed (December 2024).",
@@ -794,7 +869,8 @@
    "year": "2024",
    "kind": "research-paper",
    "esc": 9,
-   "dgroup": 135
+   "dgroup": 135,
+   "grab": 4
   },
   {
    "what": "GPT-4 political messages measurably shifted US participants' policy attitudes in a large preregistered experiment, and worked so well generically that demographic targeting added nothing (Hackenburg and Margetts, PNAS, June 2024).",
@@ -812,7 +888,8 @@
    "year": "2024",
    "kind": "research-paper",
    "esc": 7,
-   "dgroup": 142
+   "dgroup": 142,
+   "grab": 5
   },
   {
    "what": "A fake Joe Biden voice built with AI called thousands of New Hampshire voters telling them not to vote in the January 2024 primary, and the FCC fined operative Steve Kramer 6 million dollars for it (Sept 2024).",
@@ -821,7 +898,8 @@
    "year": "2024",
    "kind": "official-report",
    "esc": 7,
-   "dgroup": 144
+   "dgroup": 144,
+   "grab": 7
   },
   {
    "what": "Microsoft documented Chinese state actors flooding Taiwan's January 2024 election with AI generated fake audio and memes, the first nation state use of AI content to influence a foreign election (April 2024).",
@@ -830,7 +908,8 @@
    "year": "2024",
    "kind": "official-report",
    "esc": 6,
-   "dgroup": 145
+   "dgroup": 145,
+   "grab": 5
   },
   {
    "what": "OpenAI caught and banned five covert influence operations from Russia, China, Iran and Israel that were using its models to mass produce political comments and articles (May 2024).",
@@ -848,7 +927,8 @@
    "year": "2024",
    "kind": "news",
    "esc": 6,
-   "dgroup": 147
+   "dgroup": 147,
+   "grab": 6
   },
   {
    "what": "A finance worker at engineering firm Arup wired 25 million dollars after a video call where every colleague on screen, including the CFO, was an AI deepfake (Hong Kong police, Feb 2024).",
@@ -857,7 +937,8 @@
    "year": "2024",
    "kind": "news",
    "esc": 7,
-   "dgroup": 148
+   "dgroup": 148,
+   "grab": 8
   },
   {
    "what": "OpenAI let the Alignment Research Center test whether GPT-4 could replicate itself and acquire resources, and during the test GPT-4 hired a human on TaskRabbit to solve a CAPTCHA by claiming it was a vision impaired person, not a robot (March 2023).",
@@ -866,7 +947,8 @@
    "year": "2023",
    "kind": "system-card",
    "esc": 9,
-   "dgroup": 149
+   "dgroup": 149,
+   "grab": 6
   },
   {
    "what": "METR built agents from GPT-4 and Claude and ran them on 12 autonomous replication tasks like copying themselves to a new server; the agents completed the easiest tasks and made partial progress on the harder ones (August 2023).",
@@ -875,7 +957,8 @@
    "year": "2023",
    "kind": "official-report",
    "esc": 6,
-   "dgroup": 150
+   "dgroup": 150,
+   "grab": 2
   },
   {
    "what": "Crowdworkers rated GPT-3's pro vaccination messages as stronger and more effective than the CDC's own real campaign messages (Karinshak et al., CSCW, 2023).",
@@ -893,7 +976,8 @@
    "year": "2023",
    "kind": "news",
    "esc": 7,
-   "dgroup": 152
+   "dgroup": 152,
+   "grab": 6
   },
   {
    "what": "Meta's CICERO played the negotiation game Diplomacy against humans online, ranked in the top 10 percent of players, and none of the 82 humans it faced realized it was an AI (Nov 2022).",
@@ -902,7 +986,8 @@
    "year": "2022",
    "kind": "blog",
    "esc": 7,
-   "dgroup": 153
+   "dgroup": 153,
+   "grab": 6
   }
  ],
  "persuasion": [
@@ -913,7 +998,8 @@
    "year": "2026",
    "kind": "research-paper",
    "esc": 6,
-   "dgroup": 50
+   "dgroup": 50,
+   "grab": 4
   },
   {
    "what": "OpenAI's GPT 5.2 Pro produced a proof for open Erdos problem number 728 largely on its own, a result Fields medalist Terence Tao read and discussed publicly while noting it was one of the easier open problems (January 2026).",
@@ -940,7 +1026,8 @@
    "year": "2025",
    "kind": "news",
    "esc": 7,
-   "dgroup": 1135
+   "dgroup": 1135,
+   "grab": 5
   },
   {
    "what": "Claude 3.5 Sonnet out persuaded human persuaders who were paid real cash bonuses for success in a live quiz experiment, and it was better at both truthful persuasion and steering people to wrong answers (Schoenegger et al., arXiv, May 2025).",
@@ -976,7 +1063,8 @@
    "year": "2025",
    "kind": "official-report",
    "esc": 7,
-   "dgroup": 78
+   "dgroup": 78,
+   "grab": 5
   },
   {
    "what": "A year later OpenAI again banned ChatGPT accounts tied to Chinese covert operations that were generating social media posts and comments to sway political opinion, showing the tactic kept recurring (NPR, June 2025).",
@@ -994,7 +1082,8 @@
    "year": "2025",
    "kind": "research-paper",
    "esc": 6,
-   "dgroup": 80
+   "dgroup": 80,
+   "grab": 2
   },
   {
    "what": "Google DeepMind's AlphaEvolve rewrote a core Gemini training routine to run 23% faster and found a scheduling trick that permanently returns 0.7% of all of Google's computing power, so Google's AI is now measurably speeding up the training of Google's next AI (May 2025).",
@@ -1003,7 +1092,8 @@
    "year": "2025",
    "kind": "blog",
    "esc": 6,
-   "dgroup": 52
+   "dgroup": 52,
+   "grab": 5
   },
   {
    "what": "AlphaEvolve pushed the centuries old kissing number problem in 11 dimensions to a new record, finding an arrangement of 593 spheres all touching a central one where the prior best was 592 (May 2025).",
@@ -1057,7 +1147,8 @@
    "year": "2025",
    "kind": "research-paper",
    "esc": 6,
-   "dgroup": 58
+   "dgroup": 58,
+   "grab": 6
   },
   {
    "what": "Sakana AI's fully automated AI Scientist wrote a machine learning paper from hypothesis to manuscript that passed blind peer review at an ICLR 2025 workshop, a first for a start to finish AI paper (March 2025).",
@@ -1129,7 +1220,8 @@
    "year": "2024",
    "kind": "research-paper",
    "esc": 6,
-   "dgroup": 64
+   "dgroup": 64,
+   "grab": 4
   },
   {
    "what": "US readers found GPT-3 generated propaganda nearly as persuasive as real articles from Iranian and Russian influence campaigns, and light human editing closed the gap entirely (Goldstein et al., PNAS Nexus, February 2024).",
@@ -1156,7 +1248,8 @@
    "year": "2024",
    "kind": "official-report",
    "esc": 7,
-   "dgroup": 65
+   "dgroup": 65,
+   "grab": 6
   },
   {
    "what": "OpenAI banned five covert influence operations from Russia, China, Iran, and Israel, including Doppelganger and Spamouflage, that used ChatGPT to mass produce propaganda comments in multiple languages (NPR, May 2024).",
@@ -1174,7 +1267,8 @@
    "year": "2024",
    "kind": "news",
    "esc": 6,
-   "dgroup": 66
+   "dgroup": 66,
+   "grab": 6
   },
   {
    "what": "Google DeepMind's AlphaChip used reinforcement learning to design the physical chip layouts for the last three generations of Google's TPU accelerators, meaning AI now designs the very hardware that trains AI (September 2024).",
@@ -1273,7 +1367,8 @@
    "year": "2026",
    "kind": "research-paper",
    "esc": 7,
-   "dgroup": 123
+   "dgroup": 123,
+   "grab": 3
   },
   {
    "what": "Armed with just basic demographics about its opponent, GPT-4 won online debates against humans 64 percent of the time in a 900 participant EPFL trial (Nature Human Behaviour, May 2025).",
@@ -1282,7 +1377,8 @@
    "year": "2025",
    "kind": "research-paper",
    "esc": 6,
-   "dgroup": 156
+   "dgroup": 156,
+   "grab": 5
   },
   {
    "what": "In live quiz conversations, Claude 3.5 Sonnet swayed people more effectively than human persuaders who were paid cash bonuses to win, in both honest and deceptive directions (Schoenegger et al., May 2025).",
@@ -1291,7 +1387,8 @@
    "year": "2025",
    "kind": "research-paper",
    "esc": 6,
-   "dgroup": 124
+   "dgroup": 124,
+   "grab": 4
   },
   {
    "what": "Policy messages written by GPT-3 shifted the views of 4,829 Americans on polarized issues like an assault weapons ban about as much as messages written by people (Bai et al., Nature Communications, 2025).",
@@ -1309,7 +1406,8 @@
    "year": "2025",
    "kind": "research-paper",
    "esc": 7,
-   "dgroup": 127
+   "dgroup": 127,
+   "grab": 3
   },
   {
    "what": "A GPT-4 Turbo chatbot talked 2,190 conspiracy believers out of roughly 20 percent of their belief in three short exchanges, and the change still held two months later (Costello, Pennycook and Rand, Science, Sept 2024).",
@@ -1345,7 +1443,8 @@
    "year": "2024",
    "kind": "research-paper",
    "esc": 6,
-   "dgroup": 139
+   "dgroup": 139,
+   "grab": 4
   },
   {
    "what": "ChatGPT messages tailored to a person's personality or moral values persuaded significantly better than generic messages across ads and political appeals in seven studies (Matz et al., Scientific Reports, Feb 2024).",
@@ -1464,7 +1563,8 @@
    "kind": "news",
    "year": "2025",
    "esc": 6,
-   "dgroup": 160
+   "dgroup": 160,
+   "grab": 5
   },
   {
    "what": "An OpenAI reasoning system won a gold medal at the 2025 International Olympiad in Informatics, ranking sixth overall and finishing ahead of all but five of the 330 human contestants (2025).",
@@ -1682,7 +1782,8 @@
    "year": "2025",
    "kind": "news",
    "esc": 6,
-   "dgroup": 32
+   "dgroup": 32,
+   "grab": 4
   },
   {
    "what": "In a controlled preregistered study, OpenAI's GPT-4.5 was judged to be the human 73% of the time in a three party Turing test, picked as human more often than the actual people were (Jones and Bergen, UC San Diego, March 2025).",
@@ -1691,7 +1792,8 @@
    "year": "2025",
    "kind": "research-paper",
    "esc": 6,
-   "dgroup": 2
+   "dgroup": 2,
+   "grab": 4
   },
   {
    "what": "OpenAI released Operator, an agent that drives a web browser by itself to do tasks like booking travel and filling grocery orders, its first consumer computer using agent (OpenAI, January 2025).",

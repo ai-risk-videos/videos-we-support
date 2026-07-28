@@ -751,8 +751,20 @@ def _too_similar(a, b, thresh=0.5):
 # person to stay alive, blackmail to avoid shutdown, agents killing each other, all far above "a random
 # scheming thing" or a benchmark rate. Crucially the score ignores whether researchers called it a test,
 # because "the model didn't know it was in a test, so it doesn't really matter that it was in a test."
-ANCHOR_TOP_TIER = 8          # esc >= this is the top shelf
+# TWO SCORES, AND WE TAKE THE LOWER. `esc` scores the EVENT (how far the AI went). `grab` scores the
+# TELLING (would a normal person stop scrolling at this exact sentence). They are close to independent,
+# measured r=0.23 over 515 anchors, and an anchor is only useful when BOTH are high. The bank holds the
+# same event told well and told badly: the Anthropic blackmail study appears 13 times, every copy at
+# esc 10, with grab ranging from 10 ("When Claude 4 Opus was told it would be replaced, it tried to
+# blackmail Anthropic employees") down to 1 ("The technical appendix gives per model numbers showing 16
+# leading AI models chose blackmail up to 96 percent of the time"). Ranking on esc alone put that
+# appendix line on the top shelf. min() drops it to 1 and it can never be drawn from the top again.
+ANCHOR_TOP_TIER = 7          # min(esc, grab) >= this is the top shelf: 109 anchors, enough for variety
 ANCHOR_TOP_SHARE = 0.7       # most of every draw comes from the top shelf
+
+def _anchor_rank(e, g):
+    """The usable score. Unscored anchors (esc below the scoring cut) cap at 6: never top shelf."""
+    return min(e, g) if isinstance(g, int) else min(e, 6)
 
 def anchor_block(k=12):
     """A rotating sample of REAL documented sources for the generation prompt.
@@ -766,15 +778,21 @@ def anchor_block(k=12):
     year correlate at about -0.08: the year of an incident says almost nothing about how good it is,
     and sorting by recency was burying the best material (GPT-4 hiring a TaskRabbit worker in 2023,
     o1-preview escaping its sandbox in 2024) while promoting system-card statistics from 2026."""
-    rows = []  # (text, year, esc)
+    rows = []   # (text, year, rank)
+    told = {}   # text -> grab, so the dedupe can keep the best-TOLD version of a repeated event
     for s in get_sources().values():
         if s.get("kind") in ("research-paper", "news", "incident", "official-report", "data",
                              "primary-doc", "tweet", "blog", "expert-quote", "video", "scenario"):
-            rows.append((f"[{s.get('who','')} {s.get('year','')}] {s.get('shows','')}",
-                         s.get("year"), int(s.get("esc") or 5)))
-    rows += [(f"[{c.get('who','')} {c.get('year','')}] {c.get('what','')}", c.get("year"),
-              int(c.get("esc") or 5))
-             for cases in _evidence().values() for c in cases]
+            t = f"[{s.get('who','')} {s.get('year','')}] {s.get('shows','')}"
+            rows.append((t, s.get("year"), _anchor_rank(int(s.get("esc") or 5), s.get("grab"))))
+            if isinstance(s.get("grab"), int):
+                told[t] = s["grab"]
+    for cases in _evidence().values():
+        for c in cases:
+            t = f"[{c.get('who','')} {c.get('year','')}] {c.get('what','')}"
+            rows.append((t, c.get("year"), _anchor_rank(int(c.get("esc") or 5), c.get("grab"))))
+            if isinstance(c.get("grab"), int):
+                told[t] = c["grab"]
     if not rows:
         return ""
 
@@ -792,7 +810,14 @@ def anchor_block(k=12):
     # Sort candidates by phrasing before deduping. The draw-time dedupe keeps whichever version of an
     # event it meets FIRST, so meeting the well-written one first is the whole fix.
     cands = draw(top, n_top * 3) + draw(rest, n_rest * 3)
-    cands.sort(key=_phrasing_score, reverse=True)
+    # Order by how well each is told before deduping, because the dedupe keeps whichever version of an
+    # event it meets FIRST. A model's read (`grab`) is the measure of record; _phrasing_score is the
+    # keyword fallback for anchors that were never scored, and only catches the cases it knows about.
+    # The fallback is CAPPED below the scored range. _phrasing_score hands a short, clean, but dull
+    # sentence a 9 ("Congressional testimony citing expectations that advanced AI could arrive within
+    # two to five years"), which would let an unscored anchor outrank a model-scored 8 and open the
+    # list. An unscored anchor is by definition off the top shelf, so it sorts below every scored one.
+    cands.sort(key=lambda t: told[t] if t in told else min(_phrasing_score(t), 6.0), reverse=True)
     for cand in cands:
         # DRAW-TIME DEDUPE. The bank holds the same Anthropic blackmail study retold by eight
         # different outlets, all scored 10, so a ranked draw without this hands the model the same
