@@ -701,29 +701,77 @@ def _weighted_sample(items, weights, k):
             out.append(pool.pop()[0])
     return out
 
+_ANCHOR_STOP = set("the a an and or of to in on for with that this it is are was were be as at by from its "
+                   "their our we you they has have had not but than then when what which who whom into over "
+                   "after before more most some such can could would will may might about across per said".split())
+
+def _anchor_toks(t):
+    return {w for w in re.findall(r"[a-z0-9]{4,}", (t or "").lower()) if w not in _ANCHOR_STOP}
+
+def _too_similar(a, b, thresh=0.5):
+    A, B = _anchor_toks(a), _anchor_toks(b)
+    if not A or not B:
+        return False
+    return len(A & B) / min(len(A), len(B)) >= thresh
+
+# Every anchor now carries `esc`, 1-10, scored on how arresting it is as the thing a video opens on.
+# The curator's hierarchy: an AI breaking into someone else's infrastructure, an AI trying to kill a
+# person to stay alive, blackmail to avoid shutdown, agents killing each other, all far above "a random
+# scheming thing" or a benchmark rate. Crucially the score ignores whether researchers called it a test,
+# because "the model didn't know it was in a test, so it doesn't really matter that it was in a test."
+ANCHOR_TOP_TIER = 8          # esc >= this is the top shelf
+ANCHOR_TOP_SHARE = 0.7       # most of every draw comes from the top shelf
+
 def anchor_block(k=12):
-    """A rotating sample of REAL documented sources injected into generation prompts, so ideas can
-    anchor on true recent events instead of the model's stale memory. RECENCY WEIGHTED: the bank
-    spans several years, and an even sample made half the anchors two-plus years old."""
-    rows = []  # (text, year)
+    """A rotating sample of REAL documented sources for the generation prompt.
+
+    RANKED, not uniform. Before this, anchors were drawn at random (later, recency-weighted) from
+    ~1,500 sources, so any single great incident had roughly a 1% chance of being offered and the
+    generator kept reaching for benchmark rates. Now most of each draw comes from the highest-scoring
+    shelf, with a minority sampled wider so batches do not become monotonous.
+
+    Recency is only a mild tiebreak INSIDE a tier. Measured on the scheming set, escalation score and
+    year correlate at about -0.08: the year of an incident says almost nothing about how good it is,
+    and sorting by recency was burying the best material (GPT-4 hiring a TaskRabbit worker in 2023,
+    o1-preview escaping its sandbox in 2024) while promoting system-card statistics from 2026."""
+    rows = []  # (text, year, esc)
     for s in get_sources().values():
-        # WHY THIS LIST IS WIDE: it used to allow only papers, news and official reports, which made
-        # 685 of 1,524 curated sources (45%) invisible to the generator, including every tweet. That is
-        # exactly where the wild, viral, recent material lives. Two examples the curator named as the
-        # most interesting incidents in the whole bank, an AI trying to kill an employee to avoid
-        # shutdown and Mythos agents killing each other over resources, are both kind="tweet" and could
-        # never be offered as anchors. The generator was left reaching for benchmark rates and system
-        # card statistics because those were the only things it could see.
         if s.get("kind") in ("research-paper", "news", "incident", "official-report", "data",
                              "primary-doc", "tweet", "blog", "expert-quote", "video", "scenario"):
-            rows.append((f"[{s.get('who','')} {s.get('year','')}] {s.get('shows','')}", s.get("year")))
-    # the evidence piles are 250+ verified one-sentence incidents, the punchiest anchors we have
-    rows += [(f"[{c.get('who','')} {c.get('year','')}] {c.get('what','')}", c.get("year"))
+            rows.append((f"[{s.get('who','')} {s.get('year','')}] {s.get('shows','')}",
+                         s.get("year"), int(s.get("esc") or 5)))
+    rows += [(f"[{c.get('who','')} {c.get('year','')}] {c.get('what','')}", c.get("year"),
+              int(c.get("esc") or 5))
              for cases in _evidence().values() for c in cases]
     if not rows:
         return ""
-    picks = _weighted_sample([t for t, _ in rows], [_recency_weight(y) for _, y in rows], k)
+
+    top = [r for r in rows if r[2] >= ANCHOR_TOP_TIER]
+    rest = [r for r in rows if r[2] < ANCHOR_TOP_TIER]
+    n_top = min(len(top), max(1, int(round(k * ANCHOR_TOP_SHARE))))
+    n_rest = max(0, k - n_top)
+
+    def draw(pool, want):
+        # weight by escalation, with recency as a gentle nudge only
+        w = [max(0.05, (r[2] ** 2) * _recency_weight(r[1]) + 0.35) for r in pool]
+        return _weighted_sample([r[0] for r in pool], w, min(want, len(pool)))
+
+    picks = []
+    for cand in draw(top, n_top * 3) + draw(rest, n_rest * 3):
+        # DRAW-TIME DEDUPE. The bank holds the same Anthropic blackmail study retold by eight
+        # different outlets, all scored 10, so a ranked draw without this hands the model the same
+        # event over and over and the batch reads like one story. Clustering the bank up front missed
+        # these because each retelling uses different rare words; comparing what we are about to show
+        # does not.
+        if any(_too_similar(cand, p) for p in picks):
+            continue
+        picks.append(cand)
+        if len(picks) >= k:
+            break
+
     return ("\n\nREAL DOCUMENTED ANCHORS (internal, a rotating sample of verified real events and findings; never mention this list). "
+            "These are ORDERED BEST FIRST: the earlier ones are the most arresting things in our whole evidence bank, and an idea built "
+            "on one of them starts far ahead of an idea built on a benchmark statistic. Reach for the top of this list before the bottom. "
             "LEAD each idea's bold line with one of these named real events (or another you are certain happened), THEN widen to "
             "the implication; people do not believe this stuff happens, so the specific documented thing goes first and sells the "
             "pattern. Describe anchors accurately and never invent specifics beyond what is stated. "
@@ -733,34 +781,9 @@ def anchor_block(k=12):
             "do not name a company, a model, a date, or a mechanism the anchor does not give you. Say what is known, "
             "in the words the anchor supports, and let the missing detail be part of why a viewer wants the video. "
             "A vague true claim beats a specific invented one. "
-                        "NEVER OPEN ON A PAPER OR AN ARGUMENT. A document existing is not interesting; what it FOUND is. BAD: "
-            "'The gradual disempowerment paper makes a chilling argument.' BAD: 'Six researchers laid out how humans "
-            "could lose control.' Both open on people talking, and a viewer shrugs. GOOD: lead with the incident, the "
-            "number, or the behaviour, and bring the paper in afterwards as the receipt, e.g. 'AI already writes a third "
-            "of the new code at Anthropic. Six researchers mapped where that ends.' Rule of thumb: something HAPPENED "
-            "beats someone SAID. A concrete experiment still counts as happening, so 'Researchers dropped 1,000 AI agents "
-            "into Minecraft with no instructions' is fine, because that is a thing that occurred. What is banned is "
-            "opening on a paper, a report, a framework, or a researcher arguing a position. "
-            "OPEN ON THE REAL THING. Only about half the ideas currently start with something that actually happened; "
-            "the rest open on a general claim ('We cannot see inside the AIs we build', 'Companies are shipping AI faster "
-            "than they can test it'), which reads like an essay topic instead of a video. AIM FOR AT LEAST THREE IN FOUR "
-            "ideas to open on a specific documented thing: a named company, lab, researcher or court doing a specific "
-            "thing, a named study and what it found, a documented incident, a lawsuit, a launch, a leak. THE EASIEST FIX "
-            "IS REORDERING, NOT NEW RESEARCH: when a claim already rests on a real study or a real company, LEAD WITH WHO "
-            "instead of the abstraction. BAD 'The length of a task an AI can finish alone has doubled every 7 months for "
-            "six years.' GOOD 'METR measured how long a job an AI can finish alone, and the number has doubled every 7 "
-            "months for six years.' BAD 'We still cannot see inside the AIs we are building.' GOOD 'Google spent years "
-            "trying to read the thoughts inside its own AI, then gave up in 2025.' WHEN NO SINGLE INCIDENT EXISTS, and "
-            "for some subjects it genuinely does not (there is no one interpretability event, and bio-risk is kept "
-            "non-specific on purpose), do NOT invent one: a made up event is far worse than opening on a concept. Lead "
-            "instead with the nearest real thing, a company's own published admission, a named researcher's stated "
-            "position, a named benchmark, or a dated decision. Only when none of that exists may an idea open on the "
-            "concept. "
-            "PREFER THE NEWEST: this list is deliberately weighted toward the last year or so, because the field moves fast and a "
-            "viewer who follows AI has already heard the famous stories from two or three years ago. When two anchors would make a "
-            "similar point, always take the more recent one, and say WHEN it happened so the recency lands. An older event still "
-            "earns its place when it is genuinely the best or the origin of the story, and a historical parallel from decades ago "
-            "(a book, a disaster, a scientist) is welcome as the FRAME, but the AI evidence you cite should be current:\n"
+            "An older event still earns its place when it is genuinely the best or the origin of the story, and a "
+            "historical parallel from decades ago (a book, a disaster, a scientist) is welcome as the FRAME, but the "
+            "AI evidence you cite should be real and described exactly as given:\n"
             + "\n".join("- " + p for p in picks))
 
 SYSTEM = """You generate YouTube video ideas for a project that funds creators to make videos about AI risk (the dangers of advanced AI: superintelligence, loss of control, job loss, surveillance, AI pandemics, AI warfare, and similar).
