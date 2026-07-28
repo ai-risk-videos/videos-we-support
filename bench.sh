@@ -9,6 +9,8 @@ set -euo pipefail
 cd "$(dirname "$0")"
 
 if [[ "${1:-}" != "--report-only" ]]; then
+python3 "$(dirname "$0")/backend/test_anchors.py" || { echo "evidence-bank invariants FAILED, not running the bench"; exit 1; }
+
   python3 bench/bench.py "$@"
 fi
 python3 bench/report.py
