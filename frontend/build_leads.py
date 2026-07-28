@@ -243,7 +243,7 @@ h1{font-size:26px;margin:0 0 4px;font-weight:800}.dot{color:var(--red)}
   <input id="curl" type="text" placeholder="Paste a YouTube channel, e.g. youtube.com/@kurzgesagt" autocomplete="off" spellcheck="false">
  </div>
  <div class="genrow">
-  <button id="cgen" class="genbtn primary">✍️ Write fresh ideas for them<span class="gensub">brand-new, bespoke to their channel · about 40s · recommended</span></button>
+  <button id="cgen" class="genbtn primary">✍️ Write fresh ideas for them<span class="gensub">brand-new, bespoke to their channel · takes 3-5 minutes · recommended</span></button>
   <button id="cgo" class="genbtn">📚 Pull from our idea library<span class="gensub">faster · ranks our vetted pool for them</span></button>
  </div>
  <div class="cmsg" id="cmsg"></div>
@@ -1092,7 +1092,7 @@ async function generateMore(btn,shown,style){
  btn.disabled=true;btn.textContent="Finding more…";
  const statusEl=document.createElement("div");statusEl.className="ptwrap";statusEl.style.cssText="margin:6px auto 14px;max-width:440px";btn.parentNode.insertBefore(statusEl,btn.nextSibling);
  const _stopMore=progressTicker(statusEl, style==="ideas"?70:35, "Finding more for "+channelName);
- const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),220000);// gen + gate/polish pass legitimately runs long; keep under fetchCustom's 240s
+ const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),380000);// gen + gate/polish legitimately runs 200-280s; keep under fetchCustom's 420s
  try{
   const seen=new Set(shown.map(x=>key(ideaTitle(x))));
   let fresh=[];
