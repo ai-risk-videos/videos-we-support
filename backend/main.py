@@ -3828,9 +3828,34 @@ _UNNAMED_SOURCE_RX = re.compile(
     r"|\breportedly\s+(?:said|told|admitted)\b", re.I)
 
 
+# The bank is the ground truth for what legitimate attribution looks like, and it is full of
+# "An NVIDIA researcher reports...", "An OpenAI employee says he was fired...". Those name the
+# ORGANISATION even when the person stays anonymous, which is ordinary sourced journalism. The
+# fabricated one named nothing: "An AI company insider says...". So the test is not the role word, it
+# is whether a real organisation is attached to it. Tuned against all 1527 bank entries.
+_GENERIC_ORG_RX = re.compile(r"\b(?:AI|tech|the|a|an|one|some|major|big|leading|top)\s+compan(?:y|ies)\b|"
+                             r"\bthe industry\b|\bthe field\b|\bthe labs?\b", re.I)
+_ORG_NEAR_RX = re.compile(r"\b[A-Z][A-Za-z]{2,}\b")
+
+
 def _invents_source(text):
-    """True when the text cites a human source it cannot name. Always a fabrication here."""
-    return bool(_UNNAMED_SOURCE_RX.search(text or ""))
+    """True when the text cites a human source with no organisation attached to it.
+
+    An anonymous person at a NAMED organisation is normal sourcing and appears throughout the bank. An
+    anonymous person at an unnamed organisation is something the bank never contains, so it is always
+    the writer's invention.
+    """
+    t = text or ""
+    for m in _UNNAMED_SOURCE_RX.finditer(t):
+        lead = t[max(0, m.start() - 46):m.start() + 24]
+        if _GENERIC_ORG_RX.search(lead):
+            return True                                   # "an AI company insider": named nothing
+        # a proper noun beside the role means a real organisation is attached; skip the first word of
+        # the sentence, which is capitalised by position rather than because it is a name
+        cand = _ORG_NEAR_RX.findall(lead[1:] if m.start() == 0 else lead)
+        if not [w for w in cand if w not in ("An", "A", "One", "Some", "The", "Sources", "People")]:
+            return True
+    return False
 
 
 def _sentence_cost(sentence):
