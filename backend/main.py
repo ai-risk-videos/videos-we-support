@@ -3718,6 +3718,31 @@ HARD RULES:
 Return ONLY JSON: {"ideas": {"2": "<just the new final sentence or two>", ...}} using the numbers given."""
 
 
+_FMT_START = "FORMAT — every idea has TWO layers"
+_FMT_END = "Brainstorm widely, then return ONLY a JSON object"
+
+
+def _swap_format(prompt, replacement):
+    """Swap the two-layer format spec out of a built prompt for a different one.
+
+    Anchored on literal text rather than on the FORMAT_RULE constant, because the marker pass expands
+    nested markers inside FORMAT_RULE and the constant is no longer present verbatim. Returns the
+    prompt with the swap applied, or, if the anchors are not found, the prompt with the replacement
+    appended and a telemetry line so a silent no-op is visible instead of being mistaken for a result.
+    """
+    a = prompt.find(_FMT_START)
+    b = prompt.find(_FMT_END, a + 1) if a >= 0 else -1
+    if a < 0 or b < 0:
+        _log_event({"t": "format_swap", "ok": False, "why": "anchors not found"})
+        return prompt + "\n\n" + replacement
+    out = prompt[:a] + replacement + "\n" + prompt[b:]
+    # the JSON example still shows a filled summary; make it match the one-block contract
+    out = out.replace('{"title":"...","summary":"...","priority":true|false}',
+                      '{"title":"<the whole 100-130 word block>","summary":"","priority":true|false}')
+    _log_event({"t": "format_swap", "ok": True, "removed_chars": b - a})
+    return out
+
+
 ONEBLOCK_FORMAT = (
     "FORMAT — every idea is ONE BLOCK. Put the entire pitch in the \"title\" field and set \"summary\" to "
     "the empty string \"\". There is no second layer, no paragraph underneath, nothing held back for a "
@@ -4228,9 +4253,11 @@ async def compare(req: Request):
         # SUBSTITUTE the format spec, do not append an override. Appending failed: FORMAT_RULE carries
         # worked BAD/GOOD examples of the two-layer shape, and the model followed the concrete examples
         # over the abstract instruction, returning the normal white-53 / grey-67 split every time.
-        sysp = (SYSTEM_CUSTOM.replace(FORMAT_RULE, ONEBLOCK_FORMAT) + ANTI_SLOP
-                if FORMAT_RULE and FORMAT_RULE in SYSTEM_CUSTOM
-                else SYSTEM_CUSTOM + ANTI_SLOP + "\n\n" + ONEBLOCK_FORMAT)
+        # Splice on literal anchors. Replacing FORMAT_RULE itself silently does nothing: nested markers
+        # (__READING_LEVEL__ and friends) are expanded inside it during the marker pass, so the raw
+        # constant no longer appears in SYSTEM_CUSTOM verbatim. `_swap_format` verifies it changed and
+        # falls back to appending rather than pretending it worked.
+        sysp = _swap_format(SYSTEM_CUSTOM, ONEBLOCK_FORMAT) + ANTI_SLOP
     # run BOTH models concurrently (sequential summed past the request timeout) and bound each side
     async def _run_opus():
         try:
