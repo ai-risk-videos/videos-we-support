@@ -3130,6 +3130,47 @@ def _closer_flawed(summary):
 # ---- WEAK IMPLICATION. The closer keeps landing on a first-order inconvenience ("that makes an
 # honest public debate very hard to hold") when the real stake is that a society loses the ability
 # to correct itself at all. Detect the shrug words, then re-ask for the endgame.
+# WHERE THE CLOSER LANDS, not what words it uses.
+# The curator, for at least the fourth time: "the implications sentence just does not go far enough,
+# it usually stops at something like 'it could be hard to verify that something is true' like no shit!
+# everyone knows that!" and the bar, in his words: "THIS COULD LEAD TO LITERALLY EVERYONE FUCKING
+# DYING OR CIVILIZATION COLLAPSING".
+# Measured on a full batch of 24: **0 reached a terminal outcome, and 11 (46%) ended on an oversight
+# or verification failure.** The old selector below (_WEAK_STAKE_RX) fires on weak VOCABULARY —
+# "harder to", "complicates", "erodes trust", "raises questions" — and not one of those 24 closers
+# used any of it. They were confident, specific sentences about a destination three rungs too low, so
+# the selector returned an empty list and the escalation pass NEVER RAN. A vocabulary test cannot see
+# a short journey.
+# The ladder the closer has to climb:
+#   1. the thing that happened          2. it generalises past one company
+#   3. nobody can check or regulate it  <-- WHERE IT KEEPS STOPPING. Not an ending.
+#   4. humans permanently lose the ability to steer or reverse it
+#   5. people die at scale, or the society cannot recover
+# Rungs 4 and 5 pass. Rung 3 and below do not. Rung 4 is a legitimate ceiling: some mechanisms top
+# out at irreversible loss of control and forcing a body count onto those would be the doom-sticker
+# failure that _DOOM_TAG_RX exists to catch.
+_TERMINAL_RX = re.compile(
+    r'\b(?:'
+    r'die|dies|died|dying|deaths?|kill(?:s|ed|ing)?|starv\w+|'
+    r'extinct\w*|wiped out|civili[sz]ation|collapse[sd]?|collapsing|'
+    r'never (?:get|got|come|comes|coming)\s+(?:it\s+)?back|no way back|cannot come back|'
+    r'irreversib\w+|permanent\w*|for good|undo it|unwind it|'
+    r'los(?:e|es|ing|t)\s+(?:control|the ability to steer)|out of (?:our|human|anyone.s)\s+control|'
+    r'no(?:body| one| human)\s+(?:is\s+)?(?:still\s+)?(?:in charge|steering|at the wheel)|'
+    r'humans?\s+(?:no longer|stop)\s+\w+|nobody left'
+    r')\b', re.I)
+
+
+def _reaches_terminal(summary):
+    """True when the closing sentences actually land on rung 4 or 5.
+
+    Checked over the last TWO sentences, because the escalation pass is allowed to split the closer
+    in two and the payload often lands in the second half.
+    """
+    parts = [p for p in re.split(r"(?<=[.?!])\s+", (summary or "").strip()) if p.strip()]
+    return bool(_TERMINAL_RX.search(" ".join(parts[-2:])))
+
+
 _WEAK_STAKE_RX = re.compile(
     r'\b(?:'
     r'(?:much |very |a lot |even |far )?(?:harder|tougher|more difficult|difficult|hard)\s+to\b'
@@ -3160,12 +3201,61 @@ def _closer_doomtag(summary):
     """True when a closer reaches for generic doom instead of the mechanism's own consequence."""
     return bool(_DOOM_TAG_RX.search(_last_sentence(summary)))
 
-ESCALATE_FIX_SYS = """You are a script editor. Each numbered line is a video-idea summary whose LAST sentence stops at a first-order inconvenience when the real stake is much bigger. Rewrite ONLY the last sentence (you may split it into two short sentences) so it lands the ENDGAME, and change nothing else.
-HOW: take the mechanism described in that summary and ask "and then what?" two or three more times, until you reach what it costs a whole society if this keeps going. Name who loses what, and show why nobody can undo it. Permanence is what makes a stake serious: no one can check it, no one can switch it off, no one can take it back, no one can vote it away.
-WORKED EXAMPLE. Summary about AI out-persuading humans. BAD ending: "That makes a shared, honest public debate very hard to hold." GOOD ending: "Whoever pays for the most persuasive AI gets to pick what millions of people believe. A country that cannot tell its own opinion from a purchased one cannot fix any problem, including this one."
-More: BAD "It gets harder to know what is real." GOOD "No court, no election, and no newsroom can prove what actually happened, so whoever owns the best fakes writes the record."
-TWO HARD RULES. (1) The ending must FOLLOW from the specific mechanism in that summary. NEVER bolt on a generic tag like "and this could end humanity", "that is an extinction risk", or "the stakes could not be higher" — that is worse than the shrug you are replacing. (2) Keep every fact, name, number and hedge already in the summary, keep active voice, keep it easy to read at about a 7th grade level, no em dashes, and do not end on a rhetorical question unless the original did.
-Return ONLY JSON: {"summaries": {"<number>": "<rewritten summary>", ...}} using the SAME numbers you were given. No prose."""
+ESCALATE_FIX_SYS = """You are a script editor. Each numbered line is a video-idea summary whose LAST sentence stops too early. Rewrite ONLY the closing sentence (you may make it two short sentences) so it lands the real endgame. Change nothing else.
+
+THE LADDER. Every one of these ideas can be walked up five rungs. Ask "and then what?" until you run out of rungs:
+  1. The thing that actually happened.
+  2. It is not one company or one incident, it generalises.
+  3. Nobody can check it, regulate it, verify it, inspect it, trace it, or prove what happened.
+  4. Humans permanently lose the ability to steer it or take it back.
+  5. People die at scale, or the society cannot recover.
+
+RUNG 3 IS NOT AN ENDING. This is the single most common failure and the reason you are being asked.
+The curator on it: "the implications sentence just does not go far enough, it usually stops at
+something like 'it could be hard to verify that something is true' like no shit! everyone knows
+that!" On a measured batch, 46 percent of closers ended on rung 3 and NONE reached rung 4 or 5.
+So: "no regulator can follow it", "nobody outside the company can verify it", "no engineer can
+diagnose it", "no voter ever saw a ballot", "nobody can prove what happened" are WAYPOINTS. Keep
+walking. The bar you are aiming at, in the curator's words: "THIS COULD LEAD TO LITERALLY EVERYONE
+FUCKING DYING OR CIVILIZATION COLLAPSING."
+
+LAND ON ONE OF THESE TWO, and be concrete about it:
+  - Rung 5, harm: name who dies, or what stops working that people need to stay alive. Food, power,
+    water, hospitals, medicine, a war starting.
+  - Rung 4, permanence: name the thing humans can no longer steer or take back, and why there is no
+    route back. "Nobody is at the wheel any more and there is no way to get back on" is rung 4 and is
+    a legitimate ending when the mechanism genuinely tops out there.
+Rung 4 is a real ceiling for some ideas. Do not bolt a body count onto a mechanism that cannot cause
+one. Reaching honestly for rung 4 beats faking rung 5.
+
+WORKED EXAMPLES. Note that in every one, the BAD version is a rung-3 ending that reads confident and
+specific. Sounding certain is not the same as going far enough.
+  BAD:  "No court, no election, and no newsroom can prove what actually happened."
+  GOOD: "A country that cannot agree on what happened cannot respond to anything real, a pandemic or
+         an attack included, and the people who die are the ones waiting on a decision that never
+         comes."
+  BAD:  "The decisions get made agent to agent, at a speed no regulator can follow."
+  GOOD: "By the time a person notices, the systems moving food, power and medicine are taking orders
+         from something no one can call off, and people start dying in the gaps."
+  BAD:  "Nobody can unwind it afterwards, because there is no single ledger a human can read."
+  GOOD: "There is no version of this we can undo. Whatever it decides to do next, we find out by
+         living through it."
+  BAD:  "It gets harder to know what is real."
+  GOOD: "Whoever owns the best fakes decides what a billion people believe, and a society that cannot
+         establish a basic fact cannot stop anything, including whatever the AIs do next."
+
+HARD RULES.
+1. The ending must FOLLOW from the specific mechanism in that summary. Never bolt on a generic tag
+   like "and this could end humanity", "that is an extinction risk", or "the stakes could not be
+   higher". A doom sticker with no mechanism is WORSE than the rung-3 ending you are replacing.
+2. Keep every fact, name, number and hedge already in the summary. Keep active voice.
+3. Plain words, about a 7th grade reading level, sentences of 12 to 20 words. No em dashes.
+4. A reader must never have to reread it. One clear subject per sentence with its verb right next to
+   it. Do not stack clauses to fit more in; use another short sentence instead.
+5. Do not end on a rhetorical question unless the original did.
+
+Return ONLY JSON: {"summaries": {"<number>": "<rewritten summary>", ...}} using the SAME numbers you
+were given. No prose."""
 
 # ---- BATCH-LEVEL cadence enforcement. The prompt keeps drifting back to "end every idea on a rhetorical
 # question" (a review measured 19 of 19 in one batch, 'What happens when' 13 times in another), which reads
@@ -3732,9 +3822,14 @@ def _activate_summaries(ideas, anchors=""):
     # naming the endgame. Runs BEFORE the grade pass so any escalation still gets read-levelled.
     # Accept only if the shrug is gone and the rewrite did not reach for a generic doom tag.
     e = _eff()
-    weak = [(i, e[i]) for i in range(len(ideas)) if _closer_weak(e[i] or "")]
+    # Escalate anything that has not reached rung 4, which on a measured batch was all 24 of 24.
+    # The old vocabulary test selected none of them. Keep _closer_weak as an OR: a closer can be both
+    # short-of-terminal and mealy-mouthed, and the shrug words are still worth catching on their own.
+    weak = [(i, e[i]) for i in range(len(ideas))
+            if not _reaches_terminal(e[i] or "") or _closer_weak(e[i] or "")]
     _pass(ESCALATE_FIX_SYS, weak, "weak_implication", budget=3000,
-          accept=lambda old, new: not _closer_weak(new) and not _closer_doomtag(new))
+          accept=lambda old, new: (not _closer_doomtag(new) and not _closer_weak(new)
+                                   and (_reaches_terminal(new) or not _reaches_terminal(old))))
     # (4) MEASURED READING GRADE. Everything above only *asks* for plain writing; this checks it.
     # Two bounded rounds, because one round leaves the stubborn ones behind. A rewrite is kept only
     # when it genuinely got easier AND still carries every number and named source, so this pass can
@@ -3743,6 +3838,12 @@ def _activate_summaries(ideas, anchors=""):
         # A rewrite is accepted when it is easier on EITHER measure and harder on neither. Grading
         # only on FK let a rewrite trade a long word for a tangled clause and still "improve".
         if not _keeps_substance(old, new):
+            return False
+        # THE GRADE PASS MUST NOT UNDO THE ESCALATION PASS. It runs after it, gets three rounds, and
+        # optimises for simplicity, and the endgame closer is the longest, heaviest sentence in the
+        # summary — exactly what a simplifier trims first. Three rounds of that against one round of
+        # escalation is a fight escalation loses. A rewrite that drops off rung 4 is rejected.
+        if _reaches_terminal(old) and not _reaches_terminal(new):
             return False
         if _hard_sentences(new) and not _hard_sentences(old):
             return False                                    # introduced a knot: reject
