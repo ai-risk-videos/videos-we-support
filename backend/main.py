@@ -3468,6 +3468,12 @@ Real examples of the failure, all from anchors that said far less:
   though the underlying story is not in the anchor list.
 - Anchor: brain cells grown and taught to play a game, wired to a model.
   Written: "You can watch real human neurons firing to pick every word it says." Cut the embellishment.
+- WORST CASE, an invented human source. Written: "An AI company insider says people will end up as meat
+  robots. Earpieces in, glasses on, an AI watches through your camera and tells you what to do next."
+  There is no such insider and no such quote. NEVER attribute anything to an unnamed person: no "an
+  insider says", no "sources say", no "an employee told", no "people familiar with". Our records contain
+  no unnamed human sources at all, so any such phrase in your draft was invented by the writer. Either
+  name the real source the record gives you, or state the thing without attributing it to anybody.
 
 YOUR JOB, per summary:
 1. Find every specific that is presented as documented, is attached to an incident that appears in the
@@ -3806,6 +3812,27 @@ Never a sentence a reader would go back over. No em dashes. Invent nothing.
 _PASSIVE_RX = re.compile(r"\b(?:is|are|was|were|been|being|be|gets?|got)\s+(?:\w+ly\s+)?\w+(?:ed|en)\b", re.I)
 
 
+# INVENTED HUMAN SOURCES. The one fabrication QA found in a clean batch was not a stray detail, it was
+# a whole attributed claim: "An AI company insider says people will end up as meat robots. Earpieces in,
+# glasses on, an AI watches through your camera and tells you what to do next." Nothing like it is in
+# any source file. Checked the other direction too: the bank contains **zero** entries that cite an
+# unnamed human source, so an unnamed source in the output is never inherited and always invented.
+# That makes this the cleanest fabrication signal in the whole pipeline: the bank has no examples, so
+# any match is a defect, not a judgement call.
+_UNNAMED_SOURCE_RX = re.compile(
+    r"\b(?:an?|one|some)\s+(?:\w+\s+){0,2}"
+    r"(?:insider|source|employee|engineer|researcher|executive|official|whistleblower|staffer)s?\s+"
+    r"(?:says?|said|tells?|told|claims?|reports?|reveal(?:s|ed)?|admits?|warns?)\b"
+    r"|\bsources?\s+(?:say|said|tell|told|close to|familiar with)\b"
+    r"|\bpeople familiar with\b"
+    r"|\breportedly\s+(?:said|told|admitted)\b", re.I)
+
+
+def _invents_source(text):
+    """True when the text cites a human source it cannot name. Always a fabrication here."""
+    return bool(_UNNAMED_SOURCE_RX.search(text or ""))
+
+
 def _sentence_cost(sentence):
     """How much work one sentence costs a reader. Higher is worse. Roughly: 0 is clean, 1.5+ is a reread."""
     sentence = (sentence or "").strip()
@@ -3897,7 +3924,8 @@ def _sentence_polish(ideas, field="title"):
                 worst_new = max([c for _, _, c in _costly_sentences(new)] or [0])
                 # must actually get easier, must not lose the event opening, must not lose a fact
                 if (worst_new >= worst_old or not _keeps_substance(old, new)
-                        or (_lacks_event_lead(new) and not _lacks_event_lead(old))):
+                        or (_lacks_event_lead(new) and not _lacks_event_lead(old))
+                        or (_invents_source(new) and not _invents_source(old))):
                     rej += 1
                     continue
                 ideas[idx][field] = _dedash(new)
@@ -3957,7 +3985,7 @@ def _bold_endgame_fix(ideas, anchors=""):
                 # every rewrite; asking "did it stop on a waypoint again" catches the real defect and
                 # lets an ending my keyword list has never seen through.
                 if (_ends_on_waypoint(new) or _closer_doomtag(new) or _hard_sentences(new)
-                        or new.strip() == old_line.strip()
+                        or new.strip() == old_line.strip() or _invents_source(new)
                         or (_lacks_event_lead(new) and not _lacks_event_lead(old_line))):
                     rej += 1
                     continue
