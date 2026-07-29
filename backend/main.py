@@ -4246,18 +4246,6 @@ async def compare(req: Request):
     titles = prof.get("recent") or []
     gen = _build_gen_prompt(profile, titles, [], [])
     sysp = SYSTEM_CUSTOM + ANTI_SLOP
-    # A/B HOOK: the curator noticed the bold line is consistently better written than the paragraph
-    # under it, and asked what happens if we drop the paragraph and let the bold line run long. Opt-in
-    # per request so the default product is untouched while the two formats are compared.
-    if body.get("oneblock"):
-        # SUBSTITUTE the format spec, do not append an override. Appending failed: FORMAT_RULE carries
-        # worked BAD/GOOD examples of the two-layer shape, and the model followed the concrete examples
-        # over the abstract instruction, returning the normal white-53 / grey-67 split every time.
-        # Splice on literal anchors. Replacing FORMAT_RULE itself silently does nothing: nested markers
-        # (__READING_LEVEL__ and friends) are expanded inside it during the marker pass, so the raw
-        # constant no longer appears in SYSTEM_CUSTOM verbatim. `_swap_format` verifies it changed and
-        # falls back to appending rather than pretending it worked.
-        sysp = _swap_format(SYSTEM_CUSTOM, ONEBLOCK_FORMAT) + ANTI_SLOP
     # run BOTH models concurrently (sequential summed past the request timeout) and bound each side
     async def _run_opus():
         try:
@@ -4441,6 +4429,22 @@ async def custom(req: Request):
     return await _custom_generate(body, req)
 
 
+def _gen_system(body):
+    """The system prompt for the /custom idea-generation call.
+
+    This function exists because the one-block A/B silently did nothing three times running. The flag
+    was setting a `sysp` local inside the /writeoff path, while THIS call hardcoded
+    `SYSTEM_CUSTOM + ANTI_SLOP`. Three generations, three prompt rewrites, none of them ever sent.
+    Any future per-request prompt variation belongs here, where the call actually reads it.
+    """
+    if (body or {}).get("oneblock"):
+        # ONE BLOCK, no paragraph. The curator noticed the bold line is consistently better written
+        # than the summary beneath it, and asked what happens if the summary goes away and the bold
+        # line runs long. Opt-in per request, so the shipped product is untouched.
+        return _swap_format(SYSTEM_CUSTOM, ONEBLOCK_FORMAT) + ANTI_SLOP
+    return SYSTEM_CUSTOM + ANTI_SLOP
+
+
 async def _custom_generate(body, req=None):
     """The whole generation, lifted out of the endpoint so it can be driven either by a plain POST or
     by the job runner. Returns a dict, or a JSONResponse when it needs a non-200 status."""
@@ -4521,7 +4525,7 @@ async def _custom_generate(body, req=None):
         # 26000/32000 alongside it (thinking and output share the budget), and compare batches.
         gmsg = await run_in_threadpool(lambda: get_client().with_options(
             timeout=GEN_TIMEOUT_S, max_retries=0).messages.create(
-            model=MODEL, thinking=NO_THINK, max_tokens=(15000 if is_more else 12000), system=SYSTEM_CUSTOM + ANTI_SLOP,  # raised: summaries are now 2-3 sentences, 32 candidates overflowed 7000 and truncated the JSON
+            model=MODEL, thinking=NO_THINK, max_tokens=(15000 if is_more else 12000), system=_gen_system(body),  # raised: summaries are now 2-3 sentences, 32 candidates overflowed 7000 and truncated the JSON
             messages=[{"role": "user", "content": gen}],
         ))
         candidates = parse_custom("".join(b.text for b in gmsg.content if getattr(b, "type", "") == "text"))
