@@ -894,7 +894,12 @@ async function customJob(body,onTick){
   if(!st.ok)throw new Error("start "+st.status);
   const {job}=await st.json();
   if(!job)throw new Error("no job id");
-  const deadline=Date.now()+700000;
+  // A measured generation just took 1138s: longer bold lines (45-70 words now, up from ~32) mean more
+  // output tokens per idea, and the escalation pass selects nearly every idea instead of none. At the
+  // old 700s the client gave up on work the server went on to finish, which is the same class of bug
+  // as the Railway proxy ceiling: throwing away a completed batch. 1800s, and the progress ticker
+  // keeps counting so a long wait reads as progress rather than a hang.
+  const deadline=Date.now()+1800000;
   while(Date.now()<deadline){
    await new Promise(res=>setTimeout(res,4000));
    const pr=await fetch(base+"/custom_result?job="+encodeURIComponent(job));
