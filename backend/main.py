@@ -3714,6 +3714,29 @@ HARD RULES:
 Return ONLY JSON: {"ideas": {"2": "<the full rewritten bold line>", ...}} using the numbers given."""
 
 
+ONEBLOCK_SYS = """
+OVERRIDE, THIS BATCH ONLY: WRITE ONE BLOCK, NOT TWO.
+Ignore every instruction above about a bold line plus a paragraph underneath. There is no paragraph.
+Put the ENTIRE pitch in the `title` field and leave `summary` as an empty string.
+
+The single block runs 100 to 130 words, six to nine short sentences, and does all of these in order:
+  1. The real thing that happened. Actor first, named, past tense. No preamble.
+  2. The one or two details that make it land. Only details you were given.
+  3. Why it is not a one-off: the same pressure or capability is in other systems.
+  4. Where it ends up if it keeps going, run forward to the point it cannot be undone.
+  5. The far side of that point: who is still in a position to decide anything, and what everyone
+     else is left holding.
+Do NOT end on scale ("companies are handing agents this access right now"), on oversight ("nobody can
+verify it", "no regulator can follow it"), on a legal gap ("there is no law"), or on a narrative beat
+("the team never noticed"). Those are waypoints and the reader already assumes them.
+
+Every sentence carries new information. This is the only thing the reader will see, so nothing may be
+spent restating what a previous sentence said in different words.
+Short plain sentences, about a 7th grade reading level, one clear subject with its verb beside it.
+Never a sentence a reader would go back over. No em dashes. Invent nothing.
+"""
+
+
 def _bold_endgame_fix(ideas, anchors=""):
     """Rewrite bold lines whose last sentence stops short of the endgame.
 
@@ -4157,6 +4180,11 @@ async def compare(req: Request):
     titles = prof.get("recent") or []
     gen = _build_gen_prompt(profile, titles, [], [])
     sysp = SYSTEM_CUSTOM + ANTI_SLOP
+    # A/B HOOK: the curator noticed the bold line is consistently better written than the paragraph
+    # under it, and asked what happens if we drop the paragraph and let the bold line run long. Opt-in
+    # per request so the default product is untouched while the two formats are compared.
+    if body.get("oneblock"):
+        sysp += "\n\n" + ONEBLOCK_SYS
     # run BOTH models concurrently (sequential summed past the request timeout) and bound each side
     async def _run_opus():
         try:
