@@ -3633,6 +3633,36 @@ Return ONLY JSON, with both parts for each idea you changed:
 Include ONLY the numbers you actually changed. The title is the part that must now open on the event."""
 
 
+# DETECT THE FAILURE, NOT THE SUCCESS.
+# `_reaches_terminal` is a positive test — does the ending contain death/control language — and it is
+# unreliable: it reported 0 where a model panel found 5, and it missed "there is no version of that
+# where humans get the steering wheel back". Used as an accept guard it rejected 23 of 23 rewrites,
+# telemetry `{"which":"bold_endgame","n":0,"rejected":23,"of":23}`, so a working pass shipped nothing.
+# The negative test is far more dependable, because the failure modes are few, repetitive, and I have
+# dozens of real examples of them. These are the endings the pitch keeps stopping on:
+_WAYPOINT_RX = re.compile(
+    r'\b(?:'
+    # scale / trend
+    r'(?:companies|firms|businesses) are (?:now )?(?:handing|wiring|shipping|giving|planning)'
+    r'|(?:millions|thousands|billions) (?:of|already)'
+    r'|right now\s*\.?\s*$|anyway\s*\.?\s*$'
+    # oversight / detection
+    r'|no(?:body| one)?\s+(?:can|could)\s+(?:verify|check|audit|inspect|trace|diagnose|prove|tell|see|follow|read)'
+    r'|no (?:regulator|auditor|engineer|voter|outside\w*|law|treaty|rule|agency)'
+    r'|(?:had|have|has) no idea|never noticed|did not notice|could not tell'
+    r'|only (?:found|noticed|caught) (?:this |it )?because'
+    r'|happened to be auditing'
+    # legal gap
+    r'|there is no law|nothing binding|no consequences'
+    r')\b', re.I)
+
+
+def _ends_on_waypoint(text):
+    """True when the FINAL sentence stops on scale, oversight, a legal gap, or a narrative beat."""
+    parts = [p for p in re.split(r"(?<=[.?!])\s+", (text or "").strip()) if p.strip()]
+    return bool(parts) and bool(_WAYPOINT_RX.search(parts[-1]))
+
+
 BOLD_ENDGAME_SYS = """You rewrite the LAST SENTENCE of a video pitch so it lands where the pitch is going.
 
 Each numbered item is the bold line of an AI-risk video idea. It is the whole pitch: most readers never
@@ -3694,7 +3724,8 @@ def _bold_endgame_fix(ideas, anchors=""):
     is a dedicated call with its own accept guard, so this is one too.
     """
     idxs = [i for i, x in enumerate(ideas)
-            if (x.get("title") or "").strip() and not _reaches_terminal(x.get("title") or "")]
+            if (x.get("title") or "").strip()
+            and (_ends_on_waypoint(x.get("title") or "") or not _reaches_terminal(x.get("title") or ""))]
     if not idxs:
         return
     try:
@@ -3717,7 +3748,12 @@ def _bold_endgame_fix(ideas, anchors=""):
                 # ACCEPT ONLY A REWRITE THAT ACTUALLY CLIMBED, and never one that bolts on doom or
                 # leaves a sentence the reader has to untangle. Without this guard the pass reports
                 # success while changing nothing that matters.
-                if not _reaches_terminal(new) or _closer_doomtag(new) or _hard_sentences(new):
+                # Accept unless it demonstrably failed. Requiring a positive keyword match rejected
+                # every rewrite; asking "did it stop on a waypoint again" catches the real defect and
+                # lets an ending my keyword list has never seen through.
+                old_line = ideas[idx].get("title") or ""
+                if (_ends_on_waypoint(new) or _closer_doomtag(new) or _hard_sentences(new)
+                        or new.strip() == old_line.strip()):
                     rej += 1
                     continue
                 ideas[idx]["title"] = _dedash(new)
