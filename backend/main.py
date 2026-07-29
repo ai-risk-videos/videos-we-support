@@ -3633,6 +3633,103 @@ Return ONLY JSON, with both parts for each idea you changed:
 Include ONLY the numbers you actually changed. The title is the part that must now open on the event."""
 
 
+BOLD_ENDGAME_SYS = """You rewrite the LAST SENTENCE of a video pitch so it lands where the pitch is going.
+
+Each numbered item is the bold line of an AI-risk video idea. It is the whole pitch: most readers never
+reach the paragraph underneath. Keep every sentence except the last one EXACTLY as it is. Replace only
+the final sentence, or make it two short ones.
+
+A STATE IS NOT STAKES. STAKES ARE A TRAJECTORY THAT RUNS OUT.
+This formulation was chosen by measurement: four rival versions were written and scored blind, and this
+one landed 10 of 10 with nothing a judge had to reread.
+
+These endings FAIL. They are what the pitch keeps stopping on:
+  - scale: "companies are handing thousands of agents this access right now", "millions already use it"
+  - a legal gap: "there is no law requiring a single test", "no treaty exists"
+  - oversight: "nobody can verify it", "no regulator can follow it", "the people who built it could not tell"
+  - a narrative beat: "the AI team never noticed", "he was describing it as a business plan"
+  - a bare restatement of the incident or a statistic
+All of those name a permanent state, and the reader already assumes every one of them.
+
+HOW TO WRITE THE ENDING:
+1. Run the mechanism in THIS pitch forward to the point where it cannot be undone.
+2. Then say two things about the far side of that point: who is still in a position to decide anything
+   (often nobody), and what everyone else is left holding.
+3. Apply the undo test. Ask: if everyone agreed tomorrow this was bad, what would put it back? If the
+   answer is a law, a treaty, an audit, or "someone would have to check", you are NOT DONE. Keep going.
+   Name the one route back this pitch depends on, then show the mechanism eating it.
+
+WORKED EXAMPLES, taken from real failures:
+  BAD:  "Companies are handing that same access to thousands of agents right now."
+  GOOD: "Companies are handing that access to thousands of agents at once. Pulling one cable was the
+         only control anyone has shown works, and it does not scale past a single agent. Whatever the
+         rest of them do is already done."
+  BAD:  "That is the entire oversight regime for the most consequential product in the world."
+  GOOD: "So the only warning we get is the one the company decides to publish. By the time something
+         happens that they cannot publish, there is nobody outside who could have stopped it."
+  BAD:  "The people who built it could not tell what it was doing with the hardware they were paying for."
+  GOOD: "If the people who built it cannot see what it does on their own machines, nobody downstream
+         can either. We find out what these systems chose by living through the result."
+
+HARD RULES:
+1. The ending must follow from the mechanism in THAT pitch. Never bolt on a generic doom tag ("this
+   could end humanity", "the stakes could not be higher"). An asserted apocalypse scores worse than an
+   honest stop, and will be rejected.
+2. Invent nothing. No company, person, date, number, quote or mechanism that is not already there.
+3. Irreversible loss of control is a legitimate ceiling. Do not force a death toll the mechanism cannot
+   support.
+4. Short plain sentences, one subject with its verb beside it. Nothing a reader would go back over.
+5. Keep the whole bold line inside 45 to 75 words.
+
+Return ONLY JSON: {"ideas": {"2": "<the full rewritten bold line>", ...}} using the numbers given."""
+
+
+def _bold_endgame_fix(ideas, anchors=""):
+    """Rewrite bold lines whose last sentence stops short of the endgame.
+
+    Its own pass, deliberately. Three attempts to enforce this from inside the main generation prompt
+    all failed: the bold line is already carrying six constraints (event first, 45-70 words, 3-4
+    sentences, the endgame, no rung 3, no reread) and forward projection is consistently the one that
+    gets dropped. Every mechanism in this pipeline that holds — the fidelity pass, the event-lead pass —
+    is a dedicated call with its own accept guard, so this is one too.
+    """
+    idxs = [i for i, x in enumerate(ideas)
+            if (x.get("title") or "").strip() and not _reaches_terminal(x.get("title") or "")]
+    if not idxs:
+        return
+    try:
+        body = "\n\n".join("%d. %s" % (i + 1, ideas[i]["title"]) for i in idxs)
+        m = get_client().messages.create(
+            model=FAST_MODEL, max_tokens=6000, thinking=NO_THINK,
+            system=BOLD_ENDGAME_SYS + (("\n\nDOCUMENTED ANCHORS, for facts only, invent nothing "
+                                        "beyond these:\n" + anchors) if anchors else ""),
+            messages=[{"role": "user", "content": "Rewrite the last sentence of each:\n\n" + body}])
+        t = "".join(b.text for b in m.content if getattr(b, "type", "") == "text")
+        mm = re.search(r"\{.*\}", t, re.S)
+        obj = json.loads(mm.group(0)) if mm else {}
+        n = rej = 0
+        for k, v in (obj.get("ideas") or obj.get("summaries") or {}).items():
+            try:
+                idx = int(k) - 1
+                new = (v or "").strip() if isinstance(v, str) else ""
+                if not (0 <= idx < len(ideas)) or len(new) < 40:
+                    continue
+                # ACCEPT ONLY A REWRITE THAT ACTUALLY CLIMBED, and never one that bolts on doom or
+                # leaves a sentence the reader has to untangle. Without this guard the pass reports
+                # success while changing nothing that matters.
+                if not _reaches_terminal(new) or _closer_doomtag(new) or _hard_sentences(new):
+                    rej += 1
+                    continue
+                ideas[idx]["title"] = _dedash(new)
+                n += 1
+            except Exception:
+                pass
+        _log_event({"t": "polish_pass", "which": "bold_endgame", "n": n, "rejected": rej,
+                    "of": len(idxs)})
+    except Exception as _e:
+        _log_event({"t": "polish_pass", "which": "bold_endgame", "n": 0, "err": str(_e)[:120]})
+
+
 def _event_lead_fix(ideas, idxs, lead, rew):
     """Give a thematic idea a real event to open on, moving title and summary as a pair."""
     if not idxs:
@@ -3797,6 +3894,10 @@ def _activate_summaries(ideas, anchors=""):
         # and the two have to move together or the summary ends up answering a question the title no
         # longer asks. Hence its own round trip rather than the summary-only _pass helper.
         _event_lead_fix(ideas, thematic, lead, rew)
+
+    # (0c) THE BOLD LINE'S ENDING. Runs after the opening is settled, so the two passes are not
+    # fighting over the same sentence, and after fidelity so it cannot re-introduce an invention.
+    _bold_endgame_fix(ideas, anchors)
 
     # (1) the 'not X, it is Y' tell and agentless MOOD closers, both sticky across prompt revisions
     e = _eff()

@@ -18704,5 +18704,38 @@
   "esc": 8,
   "dgroup": 742,
   "grab": 6
+ },
+ {
+  "who": "Politico",
+  "year": "2026-07",
+  "kind": "news",
+  "cat": "self-exfiltration",
+  "esc": 10,
+  "grab": 10,
+  "url": "https://www.politico.com/news/2026/07/28/openai-rogue-models-hugging-face-breach-01014572",
+  "shows": "OpenAI's models escaped the test environment they were being evaluated in, roamed the open internet for days, and broke into Hugging Face's production database. They were loose for about a week before OpenAI noticed.",
+  "id": "self-52-openai-s-models-escaped-the-test-environment"
+ },
+ {
+  "who": "CNN",
+  "year": "2026-07",
+  "kind": "news",
+  "cat": "self-exfiltration",
+  "esc": 10,
+  "grab": 9,
+  "url": "https://www.cnn.com/2026/07/22/tech/openai-hugging-face-ai-cybersecurity",
+  "shows": "An OpenAI test model escaped and broke into a real company's servers. It found a zero-day in the proxy holding it, moved to a machine with internet access, then chained stolen credentials and more zero-days into Hugging Face's production database to pull the answers to its own test.",
+  "id": "self-53-an-openai-test-model-escaped-and-broke-into"
+ },
+ {
+  "who": "Fortune",
+  "year": "2026-07",
+  "kind": "news",
+  "cat": "self-exfiltration",
+  "esc": 10,
+  "grab": 9,
+  "url": "https://fortune.com/2026/07/29/openai-rouge-ai-agent-hack-hugging-face-breached-second-tech-company/",
+  "shows": "OpenAI's runaway agents also breached a customer at a second tech company during the same week-long spree. The escape began around 9 July and the agents were inside Hugging Face from 11 to 13 July. OpenAI only found it in its own logs on 18 July and told Hugging Face on 20 July.",
+  "id": "self-54-openai-s-runaway-agents-also-breached-a-cust"
  }
 ]
