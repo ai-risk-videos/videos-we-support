@@ -3154,7 +3154,7 @@ _TERMINAL_RX = re.compile(
     r'die|dies|died|dying|deaths?|kill(?:s|ed|ing)?|starv\w+|'
     r'extinct\w*|wiped out|civili[sz]ation|collapse[sd]?|collapsing|'
     r'never (?:get|got|come|comes|coming)\s+(?:it\s+)?back|no way back|cannot come back|'
-    r'irreversib\w+|permanent\w*|for good|undo it|unwind it|'
+    r'irreversib\w+|permanent\w*|for good|undo\b|unwind\b|reverse it\b|take (?:it )?back\b|'
     r'los(?:e|es|ing|t)\s+(?:control|the ability to steer)|out of (?:our|human|anyone.s)\s+control|'
     r'no(?:body| one| human)\s+(?:is\s+)?(?:still\s+)?(?:in charge|steering|at the wheel)|'
     r'humans?\s+(?:no longer|stop)\s+\w+|nobody left'
