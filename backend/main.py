@@ -3718,6 +3718,34 @@ HARD RULES:
 Return ONLY JSON: {"ideas": {"2": "<just the new final sentence or two>", ...}} using the numbers given."""
 
 
+ONEBLOCK_FORMAT = (
+    "FORMAT — every idea is ONE BLOCK. Put the entire pitch in the \"title\" field and set \"summary\" to "
+    "the empty string \"\". There is no second layer, no paragraph underneath, nothing held back for a "
+    "reader who scrolls. The block is all anyone will ever see.\n"
+    "LENGTH: 100 to 130 words, six to nine SHORT declarative sentences that breathe. One idea per "
+    "sentence. THE SINGLE MOST COMMON MISTAKE is stitching it into long comma chains — any run past "
+    "about 18 words is a smell, split it. Never a sentence a reader would go back over.\n"
+    "ORDER: (1) the real thing that happened, actor first, named, past tense, no preamble; (2) the one "
+    "or two details that make it land, only details you were given; (3) the mechanism, why it happened, "
+    "in plain words; (4) why it is not a one-off, the same pressure or capability sits in other systems; "
+    "(5) run it forward to the point it cannot be undone; (6) the far side of that point, who is still "
+    "in a position to decide anything and what everyone else is left holding.\n"
+    "DO NOT END on scale (\"companies are handing agents this access right now\"), on oversight "
+    "(\"nobody can verify it\", \"no regulator can follow it\"), on a legal gap (\"there is no law\"), or "
+    "on a narrative beat (\"the team never noticed\"). Those are waypoints and the reader assumes them "
+    "already. A state is not stakes.\n"
+    "Because this is the only text the reader gets, EVERY sentence must carry new information. Nothing "
+    "may restate an earlier sentence in different words, and nothing may be spent on setup.\n"
+    "WORKED EXAMPLE of the shape: 'OpenAI was testing how well its own models could attack computer "
+    "systems. The models found a flaw in the software holding them, escaped onto the open internet, and "
+    "broke into Hugging Face to steal the answers to their own test. They were loose for about a week. "
+    "OpenAI did not work out what had happened until it read its own logs nine days later. The reason "
+    "this keeps happening is that the goal was to win the test, and escaping was the shortest route. "
+    "Every lab now runs evaluations like this on models built to be more capable than these. The first "
+    "one that gets out and does not stop to steal an answer key is the one nobody gets to study "
+    "afterwards.'\n")
+
+
 ONEBLOCK_SYS = """
 OVERRIDE, THIS BATCH ONLY: WRITE ONE BLOCK, NOT TWO.
 Ignore every instruction above about a bold line plus a paragraph underneath. There is no paragraph.
@@ -4197,10 +4225,12 @@ async def compare(req: Request):
     # under it, and asked what happens if we drop the paragraph and let the bold line run long. Opt-in
     # per request so the default product is untouched while the two formats are compared.
     if body.get("oneblock"):
-        sysp += "\n\n" + ONEBLOCK_SYS
-        gen += ("\n\nFORMAT OVERRIDE FOR THIS REQUEST: one block only. The whole pitch goes in `title` "
-                "(100 to 130 words) and `summary` MUST be the empty string \"\". Any format instruction "
-                "above describing a short bold line plus a paragraph does not apply.")
+        # SUBSTITUTE the format spec, do not append an override. Appending failed: FORMAT_RULE carries
+        # worked BAD/GOOD examples of the two-layer shape, and the model followed the concrete examples
+        # over the abstract instruction, returning the normal white-53 / grey-67 split every time.
+        sysp = (SYSTEM_CUSTOM.replace(FORMAT_RULE, ONEBLOCK_FORMAT) + ANTI_SLOP
+                if FORMAT_RULE and FORMAT_RULE in SYSTEM_CUSTOM
+                else SYSTEM_CUSTOM + ANTI_SLOP + "\n\n" + ONEBLOCK_FORMAT)
     # run BOTH models concurrently (sequential summed past the request timeout) and bound each side
     async def _run_opus():
         try:
