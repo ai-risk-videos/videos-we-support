@@ -3666,8 +3666,12 @@ def _ends_on_waypoint(text):
 BOLD_ENDGAME_SYS = """You rewrite the LAST SENTENCE of a video pitch so it lands where the pitch is going.
 
 Each numbered item is the bold line of an AI-risk video idea. It is the whole pitch: most readers never
-reach the paragraph underneath. Keep every sentence except the last one EXACTLY as it is. Replace only
-the final sentence, or make it two short ones.
+reach the paragraph underneath.
+
+RETURN ONLY THE NEW FINAL SENTENCE, or two short ones. Nothing else. Do not repeat the rest of the
+pitch back to me and do not rewrite its opening. The opening names the real event this idea is built
+on and it is the most valuable part; the code splices your ending onto it mechanically, so anything you
+write about the earlier sentences is discarded. Read them for context, then write only the ending.
 
 A STATE IS NOT STAKES. STAKES ARE A TRAJECTORY THAT RUNS OUT.
 This formulation was chosen by measurement: four rival versions were written and scored blind, and this
@@ -3709,9 +3713,9 @@ HARD RULES:
 3. Irreversible loss of control is a legitimate ceiling. Do not force a death toll the mechanism cannot
    support.
 4. Short plain sentences, one subject with its verb beside it. Nothing a reader would go back over.
-5. Keep the whole bold line inside 45 to 75 words.
+5. Your ending is 12 to 35 words. The spliced line must stay readable at about 45 to 80 words total.
 
-Return ONLY JSON: {"ideas": {"2": "<the full rewritten bold line>", ...}} using the numbers given."""
+Return ONLY JSON: {"ideas": {"2": "<just the new final sentence or two>", ...}} using the numbers given."""
 
 
 ONEBLOCK_SYS = """
@@ -3765,18 +3769,27 @@ def _bold_endgame_fix(ideas, anchors=""):
         for k, v in (obj.get("ideas") or obj.get("summaries") or {}).items():
             try:
                 idx = int(k) - 1
-                new = (v or "").strip() if isinstance(v, str) else ""
-                if not (0 <= idx < len(ideas)) or len(new) < 40:
+                ending = (v or "").strip() if isinstance(v, str) else ""
+                if not (0 <= idx < len(ideas)) or len(ending) < 20:
                     continue
+                old_line = ideas[idx].get("title") or ""
+                parts = [p for p in re.split(r"(?<=[.?!])\s+", old_line.strip()) if p.strip()]
+                if len(parts) < 2:
+                    continue                      # nothing to splice onto; leave it alone
+                # SPLICE, never replace. Letting the model hand back a whole rewritten bold line cost
+                # the opening event on 20 of 24 titles in one batch: it returned a shorter line that
+                # started mid-thought and ended well. The event-first opening is the most valuable part
+                # of the pitch and a later pass must not be able to spend it.
+                new = " ".join(parts[:-1]) + " " + ending
                 # ACCEPT ONLY A REWRITE THAT ACTUALLY CLIMBED, and never one that bolts on doom or
                 # leaves a sentence the reader has to untangle. Without this guard the pass reports
                 # success while changing nothing that matters.
                 # Accept unless it demonstrably failed. Requiring a positive keyword match rejected
                 # every rewrite; asking "did it stop on a waypoint again" catches the real defect and
                 # lets an ending my keyword list has never seen through.
-                old_line = ideas[idx].get("title") or ""
                 if (_ends_on_waypoint(new) or _closer_doomtag(new) or _hard_sentences(new)
-                        or new.strip() == old_line.strip()):
+                        or new.strip() == old_line.strip()
+                        or (_lacks_event_lead(new) and not _lacks_event_lead(old_line))):
                     rej += 1
                     continue
                 ideas[idx]["title"] = _dedash(new)
@@ -4185,6 +4198,9 @@ async def compare(req: Request):
     # per request so the default product is untouched while the two formats are compared.
     if body.get("oneblock"):
         sysp += "\n\n" + ONEBLOCK_SYS
+        gen += ("\n\nFORMAT OVERRIDE FOR THIS REQUEST: one block only. The whole pitch goes in `title` "
+                "(100 to 130 words) and `summary` MUST be the empty string \"\". Any format instruction "
+                "above describing a short bold line plus a paragraph does not apply.")
     # run BOTH models concurrently (sequential summed past the request timeout) and bound each side
     async def _run_opus():
         try:
