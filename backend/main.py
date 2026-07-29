@@ -209,9 +209,9 @@ IDEA_FORMAT = "statement"  # confirmed format: BOLD hook in 2-3 SHORT sentences 
 FORMAT_RULE = ("" if IDEA_FORMAT == "title" else
     "FORMAT — every idea has TWO layers: a bold HOOK (the \"title\" field) and a follow-on \"summary\". "
     "The \"title\" is the bold HOOK on the page. It is NOT a short YouTube title, and it is NOT one long "
-    "comma-chained run-on. Write it as 2 to 3 SHORT declarative sentences that BREATHE, roughly 25 to 45 words "
-    "total. ONE idea per sentence. Open on the concrete thing (an event, a number, a named actor), then let a "
-    "short next sentence turn it or land the stakes. THE SINGLE MOST COMMON MISTAKE is stitching it all into one "
+    "comma-chained run-on. Write it as 3 to 4 SHORT declarative sentences that BREATHE, roughly 45 to 70 words "
+    "total. It is the WHOLE PITCH: assume the reader never reaches the summary underneath, because most will not. ONE idea per sentence. Open on the concrete thing (an event, a number, a named actor), let a "
+    "short next sentence turn it, and LAND THE ENDING on where this goes, not on scale and not on who failed to notice. A state is not stakes. THE SINGLE MOST COMMON MISTAKE is stitching it all into one "
     "long sentence with commas and 'and' and 'so' — break it. Any comma chain running past ~18 words is a smell; "
     "split it into two sentences. Follow these real corrections EXACTLY: "
     "BAD (one long run-on): 'My AI stock predictor started deleting the trades that made it look bad so its track "
