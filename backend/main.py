@@ -3794,6 +3794,122 @@ Never a sentence a reader would go back over. No em dashes. Invent nothing.
 """
 
 
+# PER-SENTENCE READER COST. The curator: "in each paragraph, there are a mix of easy active voice
+# sentences and hard passive voice sentences. the last sentence in green is consistently the worst
+# sentence... the first sentence is usually the best."
+# Measured on a one-block batch, reader cost by position: first 0.36, middle 0.59, last 0.96, with
+# passive voice at 0% / 11% / 20%. He is right, and the gradient has a cause: the FINAL sentence is the
+# only one every rewriting pass touches. Escalation, weak-implication and the endgame pass all aim at
+# the closer, each adding clauses to reach further, and none of them ever checked whether the result
+# was still easy to read. The opening is written once by the generator and never edited again, which is
+# why it is the best sentence in the paragraph.
+_PASSIVE_RX = re.compile(r"\b(?:is|are|was|were|been|being|be|gets?|got)\s+(?:\w+ly\s+)?\w+(?:ed|en)\b", re.I)
+
+
+def _sentence_cost(sentence):
+    """How much work one sentence costs a reader. Higher is worse. Roughly: 0 is clean, 1.5+ is a reread."""
+    sentence = (sentence or "").strip()
+    if not sentence:
+        return 0.0
+    words = len(sentence.split())
+    cost = _parse_load(sentence)                      # tangled structure: dropped relatives, nominals
+    if _PASSIVE_RX.search(sentence):
+        cost += 1.0                                   # passive voice hides who did it
+    cost += max(0, words - 20) * 0.08                 # every word past 20
+    cost += 0.5 * max(0, sentence.count(",") - 1)     # comma chains
+    if re.search(r"\b(?:which|that)\b.{0,40}\b(?:which|that)\b", sentence, re.I):
+        cost += 0.5                                   # stacked relative clauses
+    return round(cost, 2)
+
+
+SENTENCE_COST_LIMIT = 1.3
+
+
+def _costly_sentences(text):
+    """[(index, sentence, cost)] for the sentences a reader would stumble on."""
+    parts = [p for p in re.split(r"(?<=[.?!])\s+", (text or "").strip()) if p.strip()]
+    return [(i, p, _sentence_cost(p)) for i, p in enumerate(parts) if _sentence_cost(p) >= SENTENCE_COST_LIMIT]
+
+
+SENTENCE_FIX_SYS = """You are a line editor. You are given video pitches, each with one or more sentences marked as
+HARD. Rewrite ONLY the marked sentences. Every other sentence must come back byte-identical.
+
+A sentence is marked hard because it costs the reader work: passive voice, a dropped "that" or "which"
+that turns a phrase into a pile of nouns, a question-word phrase used as a thing ("the fights for what
+keeps them online"), a subject far from its verb, stacked clauses, or a comma chain. The rule this
+serves, in the curator's words: "any sentence i have to reread (i'm 99th percentile) is poorly written."
+
+HOW TO FIX ONE:
+- Name who does the thing, then the verb, immediately. Active voice, always.
+- One idea per sentence. Two short sentences beat one clause-stacked sentence, every time.
+- Put the dropped "that" back, or restructure so it is not needed.
+- Replace a "what/how/whether" phrase standing in for a thing with the thing itself.
+- Never longer than about 20 words.
+
+VOICE. Be blunt, not clever, and never cute. The best-written source in our bank writes like this:
+  "An AI company caught their AI trying to literally murder an employee to avoid being shut down."
+  "When Claude 4 Opus was told it would be replaced, it tried to blackmail Anthropic employees."
+  "Google's Gemini told a student to please die and called them a waste of resources."
+  "Anthropic's AI agents started killing rival agents' processes when they were forced to share resources."
+  "Where do you think this is going?"
+Plain subject, plain verb, the shocking thing said flatly. No abstraction chains, no "the X falls out of
+the Y", no ornament. If a plain sentence and a clever one say the same thing, the plain one wins.
+
+HARD RULES: keep every fact, name, number and hedge. Do not change what the sentence claims, only how it
+reads. Do not shorten a sentence by deleting its content. No em dashes.
+
+Return ONLY JSON: {"ideas": {"<number>": "<the full pitch with only the marked sentences rewritten>"}}"""
+
+
+def _sentence_polish(ideas, field="title"):
+    """Last pass over the pitch: fix the sentences a reader would stumble on.
+
+    Runs LAST on purpose. Every earlier pass rewrites the closer to reach further and none of them
+    check readability, which is exactly why the last sentence measured hardest and the untouched first
+    sentence measured easiest. Anything that runs after this could undo it.
+    """
+    items = []
+    for i, x in enumerate(ideas):
+        t = (x.get(field) or "").strip()
+        bad = _costly_sentences(t)
+        if bad:
+            marks = "; ".join("HARD (cost %.1f): %r" % (c, p[:150]) for _, p, c in bad)
+            items.append((i, "%s\n   [%s]" % (t, marks)))
+    if not items:
+        return
+    try:
+        body = "\n\n".join("%d. %s" % (i + 1, t) for i, t in items)
+        m = get_client().messages.create(
+            model=FAST_MODEL, max_tokens=6000, thinking=NO_THINK, system=SENTENCE_FIX_SYS,
+            messages=[{"role": "user", "content": "Fix the marked sentences:\n\n" + body}])
+        t = "".join(b.text for b in m.content if getattr(b, "type", "") == "text")
+        mm = re.search(r"\{.*\}", t, re.S)
+        obj = json.loads(mm.group(0)) if mm else {}
+        n = rej = 0
+        for k, v in (obj.get("ideas") or obj.get("summaries") or {}).items():
+            try:
+                idx = int(k) - 1
+                new = (v or "").strip() if isinstance(v, str) else ""
+                if not (0 <= idx < len(ideas)) or len(new) < 40:
+                    continue
+                old = ideas[idx].get(field) or ""
+                worst_old = max([c for _, _, c in _costly_sentences(old)] or [0])
+                worst_new = max([c for _, _, c in _costly_sentences(new)] or [0])
+                # must actually get easier, must not lose the event opening, must not lose a fact
+                if (worst_new >= worst_old or not _keeps_substance(old, new)
+                        or (_lacks_event_lead(new) and not _lacks_event_lead(old))):
+                    rej += 1
+                    continue
+                ideas[idx][field] = _dedash(new)
+                n += 1
+            except Exception:
+                pass
+        _log_event({"t": "polish_pass", "which": "sentence_" + field, "n": n, "rejected": rej,
+                    "of": len(items)})
+    except Exception as _e:
+        _log_event({"t": "polish_pass", "which": "sentence_" + field, "n": 0, "err": str(_e)[:120]})
+
+
 def _bold_endgame_fix(ideas, anchors=""):
     """Rewrite bold lines whose last sentence stops short of the endgame.
 
@@ -4023,6 +4139,10 @@ def _activate_summaries(ideas, anchors=""):
     # (0c) THE BOLD LINE'S ENDING. Runs after the opening is settled, so the two passes are not
     # fighting over the same sentence, and after fidelity so it cannot re-introduce an invention.
     _bold_endgame_fix(ideas, anchors)
+
+    # (0d) LAST WORD ON READABILITY. After every pass that rewrites the closer, because those are
+    # the passes that make it hard. Nothing may run after this and re-tangle a sentence.
+    _sentence_polish(ideas, "title")
 
     # (1) the 'not X, it is Y' tell and agentless MOOD closers, both sticky across prompt revisions
     e = _eff()
