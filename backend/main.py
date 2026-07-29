@@ -3645,7 +3645,7 @@ _WAYPOINT_RX = re.compile(
     # scale / trend
     r'(?:companies|firms|businesses) are (?:now )?(?:handing|wiring|shipping|giving|planning)'
     r'|(?:millions|thousands|billions) (?:of|already)'
-    r'|right now\s*\.?\s*$|anyway\s*\.?\s*$'
+    r'|right now\s*\.?\s*$|\banyway\b|\boversight\b|the alternative was'
     # oversight / detection
     r'|no(?:body| one)?\s+(?:can|could)\s+(?:verify|check|audit|inspect|trace|diagnose|prove|tell|see|follow|read)'
     r'|no (?:regulator|auditor|engineer|voter|outside\w*|law|treaty|rule|agency)'

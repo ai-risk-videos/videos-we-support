@@ -169,6 +169,14 @@ h1{font-size:26px;margin:0 0 4px;font-weight:800}.dot{color:var(--red)}
 .rejrestore{font:inherit;font-size:12px;background:none;border:1px solid var(--line);color:var(--mut);border-radius:7px;padding:3px 9px;cursor:pointer;white-space:nowrap}
 .rejrestore:hover{border-color:#9ac47f;color:#9ac47f}
 .ccard{position:relative;padding:13px 15px;border:1px solid var(--line);border-radius:10px;margin:0 0 11px;background:var(--surf)}
+/* DRAG TO REORDER. The arrows move one slot at a time; the curator often needs to move an idea 5 to 15
+   places, which is 15 clicks and a re-render each. Native HTML5 drag and drop, no library. */
+.ccard[draggable="true"]{cursor:grab}
+.ccard.dragging{opacity:.4;cursor:grabbing}
+.ccard.dropafter{box-shadow:0 3px 0 0 #6fb3ff}
+.ccard.dropbefore{box-shadow:0 -3px 0 0 #6fb3ff}
+.cgrip{position:absolute;top:9px;right:11px;color:#5a6673;font-size:14px;letter-spacing:1px;cursor:grab;user-select:none}
+.cgrip:hover{color:var(--ink)}
 /* IDEA STATUS. Four states, so we can see ready-vs-generated at a glance, stop re-reviewing settled
    ideas, and send creators a link with only approved ideas on it. Rejection stays the existing
    reject pile; these three live on the card. */
@@ -804,6 +812,7 @@ function startCurate(ideas,handle,channel,note,profile,style,rejected){
   '<textarea id="curnote" placeholder="Optional note to the creator (shown at the top of their page)">'+esc(note||"")+'</textarea>'+
   '<div class="addrow"><textarea id="addidea" rows="2" placeholder="Add your own idea, or paste a news story or a line from their longlist. It becomes an idea here, and gets a research pack + sample script like the rest."></textarea><button class="addbtn" id="addbtn">＋ Add idea</button></div>'+
   '<div class="stcount" id="stcount"></div>'+
+  '<div class="chansub" style="margin:-4px 0 10px">Drag a card by the ⠿ handle to move it any distance. The ▲▼ buttons still nudge one slot.</div>'+
   '<div id="ccards"></div>'+
   '<button class="morebtn" id="moreideas">＋ Get 50 more ideas (keeps the ones you have)</button>'+
   '<div id="rejwrap"></div>';
@@ -979,6 +988,8 @@ function renderStatusBar(){
   '<span class="chansub" style="margin-left:auto">'+(c.ok?("Publishing sends the "+c.ok+" approved"):"No approved ideas yet, publishing sends everything")+'</span>';
  el.querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>{stFilter=b.getAttribute("data-f");renderCards();});
 }
+let _dragFrom=null;
+function _clearDropHints(){document.querySelectorAll("#ccards .ccard").forEach(c=>c.classList.remove("dropafter","dropbefore"));}
 function renderCards(){
  const w=$("#ccards");if(!w)return;
  const ct=$(".curtitle");if(ct)ct.textContent=curTitle();
@@ -990,7 +1001,7 @@ function renderCards(){
   const body=isIdea?('<div class="cturn" contenteditable="true" data-sum="1">'+esc(x.summary||"")+'</div>'):((x.dirs||[]).map((d,j)=>'<div class="cturn" contenteditable="true" data-j="'+j+'">'+esc(d)+'</div>').join(""));
   const st=ideaSt(x);
   const stbar='<span class="stbar">'+["new","pre","ok"].map(k=>'<button class="stbtn'+(st===k?" on":"")+'" data-st="'+k+'" title="'+ST_LABEL[k]+'">'+ST_LABEL[k]+'</button>').join("")+'</span>';
-  return '<div class="ccard st-'+st+'" data-i="'+i+'">'+head+body+'<div class="cctl"><button data-act="up">▲</button><button data-act="down">▼</button><button data-act="rm">✕ remove</button>'+
+  return '<div class="ccard st-'+st+'" data-i="'+i+'" draggable="true"><span class="cgrip" title="Drag to move this idea">⠿</span>'+head+body+'<div class="cctl"><button data-act="up">▲</button><button data-act="down">▼</button><button data-act="rm">✕ remove</button>'+
    (x.who?'<span class="dmeta">'+esc(x.who)+(x.y?" · "+esc(x.y):"")+'</span>':'')+stbar+'</div></div>';
  }).join("");
  w.querySelectorAll(".ccard").forEach(card=>{
@@ -998,6 +1009,31 @@ function renderCards(){
   if(!curateIdeas[i])return;
   const tx=card.querySelector(".ctxt");tx.oninput=()=>{curateDirty=true;if(curateIdeas[i].title!=null)curateIdeas[i].title=tx.textContent.trim();else curateIdeas[i].l=tx.textContent.trim();scheduleSave();};
   card.querySelectorAll(".cturn").forEach(t=>{if(t.hasAttribute("data-sum")){t.oninput=()=>{curateDirty=true;curateIdeas[i].summary=t.textContent.trim();scheduleSave();};}else{const j=+t.getAttribute("data-j");t.oninput=()=>{curateDirty=true;curateIdeas[i].dirs[j]=t.textContent.trim();scheduleSave();};}});
+  // ---- drag to reorder ----
+  card.addEventListener("dragstart",ev=>{
+   _dragFrom=i;card.classList.add("dragging");
+   try{ev.dataTransfer.setData("text/plain",String(i));ev.dataTransfer.effectAllowed="move";}catch(e){}
+  });
+  card.addEventListener("dragend",()=>{card.classList.remove("dragging");_clearDropHints();_dragFrom=null;});
+  card.addEventListener("dragover",ev=>{
+   if(_dragFrom===null||_dragFrom===i)return;
+   ev.preventDefault();ev.dataTransfer.dropEffect="move";
+   const r=card.getBoundingClientRect();const after=(ev.clientY-r.top)>r.height/2;
+   _clearDropHints();card.classList.add(after?"dropafter":"dropbefore");
+  });
+  card.addEventListener("dragleave",()=>card.classList.remove("dropafter","dropbefore"));
+  card.addEventListener("drop",ev=>{
+   ev.preventDefault();
+   const from=_dragFrom;_clearDropHints();
+   if(from===null||from===i)return;
+   const r=card.getBoundingClientRect();const after=(ev.clientY-r.top)>r.height/2;
+   let to=after?i+1:i;
+   const a=curateIdeas;const moved=a.splice(from,1)[0];
+   if(from<to)to--;                       // the splice above shifted everything after `from` down one
+   a.splice(to,0,moved);
+   _dragFrom=null;curateDirty=true;renderCards();scheduleSave();
+   toast("Moved to position "+(to+1));
+  });
   card.querySelectorAll(".stbtn").forEach(b=>b.onclick=()=>{
    const k=b.getAttribute("data-st");
    curateIdeas[i].st=(k==="new")?"":k;   // store "" for not-reviewed so old pages stay byte-identical
