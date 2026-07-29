@@ -235,7 +235,7 @@ FORMAT_RULE = ("" if IDEA_FORMAT == "title" else
     "improves AI' but 'companies are pouring that compute into AI that improves AI'; not 'these agents are being "
     "wired into companies' but 'companies are wiring these agents into their operations'; not 'a goal that was "
     "specified slightly wrong' but 'a goal someone specified slightly wrong'. "
-    "THE BOLD LINE IS THE WHOLE PITCH, NOT A HEADLINE. Assume the reader never gets to the paragraph underneath: most people will not. So the bold line has to do the entire job on its own, and it should run about 45 to 70 words, three or four short sentences. Build it in this order: (1) the real thing that happened, actor first, named; (2) the one detail that makes it land; (3) where it ends up if it keeps going, and that ending must reach the same bar as the closer below, people dying at scale or humans permanently losing the ability to steer or reverse it. Do NOT stop the bold line at nobody can verify it, no regulator can follow it, or nobody can prove what happened. Those are waypoints. Short plain sentences, one clear subject each, never a line the reader has to go back over. The paragraph underneath then adds the mechanism and the steps in between; it must not simply restate the bold line. "
+    "THE BOLD LINE IS THE WHOLE PITCH, NOT A HEADLINE. Assume the reader never gets to the paragraph underneath: most people will not. So the bold line has to do the entire job on its own, and it should run about 45 to 70 words, three or four short sentences. Build it in this order: (1) the real thing that happened, actor first, named; (2) the one detail that makes it land; (3) where it ends up if it keeps going. A STATE IS NOT STAKES: do not end the bold line on "nobody can verify it", "no regulator can follow it", "there is no law", or "millions already use it". Those name a permanent state and everyone already knows them. Run the mechanism forward to the point it cannot be undone, then say who is still in a position to decide anything (often nobody) and what everyone else is left holding. Apply the undo test: if the answer to "what would put this back" is a law, a treaty or an audit, you have not finished. Short plain sentences, one clear subject each, never a line the reader has to go back over. The paragraph underneath then adds the mechanism and the steps in between; it must not simply restate the bold line. "
     "KEEP THE SUMMARY TO ABOUT 55 TO 70 WORDS. Say the whole thing, then stop. Do not add a sentence that restates the one before it in bigger words, and do not close with a second implication once the first has landed. Selectivity is what keeps it short: drop what would not change how a creator sees the idea. Do NOT compress by cramming clauses together, a long tangled sentence is worse than one more short one. "
     "NEVER TELL THE VIEWER WHAT THEY THINK OR FEEL. Banned openers: \"You think AI risk means killer robots\", \"You feel like you can't do anything about it\", \"Most people assume...\", \"We all believe...\". They put a guess about the audience where the interesting thing should be, and a viewer who does NOT think that is now arguing with you instead of watching. Open on the thing that happened and let the surprise do the work. "
     "NEVER TALK ABOUT THE CREATOR, only about the world. Banned in every position, not just the opening: naming their taste ('Veritasium loves a slow-burn fragility story', 'ColdFusion loves this structural lesson'), citing their back catalogue ('You covered how animals scale', 'the exact shape of the failures in your other videos', 'ColdFusion has traced this through Dropbox filings'), or addressing their audience ('what ColdFusion viewers should worry about'). The creator can see for themselves that it fits them; saying so wastes the sentence and reads like a pitch deck. Just keep saying interesting things about real things that happened. Match their world by CHOOSING that subject, never by announcing the match. "
@@ -3204,46 +3204,43 @@ def _closer_doomtag(summary):
 
 ESCALATE_FIX_SYS = """You are a script editor. Each numbered line is a video-idea summary whose LAST sentence stops too early. Rewrite ONLY the closing sentence (you may make it two short sentences) so it lands the real endgame. Change nothing else.
 
-THE LADDER. Every one of these ideas can be walked up five rungs. Ask "and then what?" until you run out of rungs:
-  1. The thing that actually happened.
-  2. It is not one company or one incident, it generalises.
-  3. Nobody can check it, regulate it, verify it, inspect it, trace it, or prove what happened.
-  4. Humans permanently lose the ability to steer it or take it back.
-  5. People die at scale, or the society cannot recover.
+A STATE IS NOT STAKES. STAKES ARE A TRAJECTORY THAT RUNS OUT.
+This is the whole fix, and it was chosen by measurement, not taste. Four rival formulations of this
+instruction were written and applied to ten real stalled endings, then scored blind by three judges on
+whether the ending actually reaches the bar. This one scored 10 of 10, with zero bolted-on doom and
+zero sentences a judge had to reread. The runners-up scored 9, 9 and 8, and two of them produced
+sentences that needed rereading, because forcing severity tends to force complexity. So: severity and
+readability are not in tension if you do it THIS way.
 
-RUNG 3 IS NOT AN ENDING. This is the single most common failure and the reason you are being asked.
-The curator on it: "the implications sentence just does not go far enough, it usually stops at
-something like 'it could be hard to verify that something is true' like no shit! everyone knows
-that!" On a measured batch, 46 percent of closers ended on rung 3 and NONE reached rung 4 or 5.
-So: "no regulator can follow it", "nobody outside the company can verify it", "no engineer can
-diagnose it", "no voter ever saw a ballot", "nobody can prove what happened" are WAYPOINTS. Keep
-walking. The bar you are aiming at, in the curator's words: "THIS COULD LEAD TO LITERALLY EVERYONE
-FUCKING DYING OR CIVILIZATION COLLAPSING."
+Endings fail the same way every time. They name a permanent state, "nobody can verify this", "no
+regulator exists", "there is no law", "millions already use it", and stop. The curator on that:
+"it usually stops at something like 'it could be hard to verify that something is true' like no shit!
+everyone knows that!"
 
-LAND ON ONE OF THESE TWO, and be concrete about it:
-  - Rung 5, harm: name who dies, or what stops working that people need to stay alive. Food, power,
-    water, hospitals, medicine, a war starting.
-  - Rung 4, permanence: name the thing humans can no longer steer or take back, and why there is no
-    route back. "Nobody is at the wheel any more and there is no way to get back on" is rung 4 and is
-    a legitimate ending when the mechanism genuinely tops out there.
-Rung 4 is a real ceiling for some ideas. Do not bolt a body count onto a mechanism that cannot cause
-one. Reaching honestly for rung 4 beats faking rung 5.
+HOW TO WRITE THE ENDING.
+1. Run the mechanism forward to the point where it cannot be undone.
+2. Then say two things about the far side of that point:
+   - who is still in a position to decide anything. Often the answer is nobody.
+   - what everyone else is left holding.
 
-WORKED EXAMPLES. Note that in every one, the BAD version is a rung-3 ending that reads confident and
-specific. Sounding certain is not the same as going far enough.
-  BAD:  "No court, no election, and no newsroom can prove what actually happened."
-  GOOD: "A country that cannot agree on what happened cannot respond to anything real, a pandemic or
-         an attack included, and the people who die are the ones waiting on a decision that never
-         comes."
-  BAD:  "The decisions get made agent to agent, at a speed no regulator can follow."
-  GOOD: "By the time a person notices, the systems moving food, power and medicine are taking orders
-         from something no one can call off, and people start dying in the gaps."
-  BAD:  "Nobody can unwind it afterwards, because there is no single ledger a human can read."
-  GOOD: "There is no version of this we can undo. Whatever it decides to do next, we find out by
-         living through it."
-  BAD:  "It gets harder to know what is real."
-  GOOD: "Whoever owns the best fakes decides what a billion people believe, and a society that cannot
-         establish a basic fact cannot stop anything, including whatever the AIs do next."
+THE UNDO TEST, use it before you commit to a last line. Ask: if everyone agreed tomorrow this was
+bad, what would put it back? If your answer is a law, a treaty, a regulator, an audit, or "someone
+would have to check", you are NOT DONE. That is still reversible, and everyone already knows nobody
+regulates AI. Cut it and keep walking. Name instead the one route back this idea depends on, then show
+the mechanism eating it. Routes that count: someone notices, someone reads it, someone pulls the plug,
+a test catches the model, a buyer picks the safer option. End on that route being gone with nothing
+behind it.
+
+WORKED EXAMPLE.
+  BAD:  "Companies are now handing these agents company cards, inboxes and admin passwords."
+  GOOD: "Companies are handing these agents cards and admin passwords, thousands at a time. The cable
+         was the only control anyone has proved works, and it does not scale past one agent. Whatever
+         the rest of them do is done."
+Notice the good version is not louder. It runs the same fact forward until there is nobody left to
+decide, and it stops there.
+
+Irreversible loss of control is a legitimate ceiling. Do not invent a death toll the mechanism cannot
+support: an asserted apocalypse scores worse than an honest stop.
 
 HARD RULES.
 1. The ending must FOLLOW from the specific mechanism in that summary. Never bolt on a generic tag
