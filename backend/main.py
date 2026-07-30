@@ -3942,6 +3942,10 @@ _PASSIVE_EXEMPT_RX = re.compile(
     r"\b(?:avoid|avoiding|risk|risking|resist|resisting|prevent|preventing|escape|escaping|fear|"
     r"without|of|from|after|before|than|instead of|rather than|about|toward|towards)\s+being\b"
     r"|\bto\s+be\b|\bto\s+being\b|\bfrom\s+being\b", re.I)
+# Reported speech: "Anthropic TOLD Claude Opus 4 it WAS BEING REPLACED" is a sentence about Anthropic
+# doing something, and he labelled it GOOD twice. The passive lives in the reported clause.
+_REPORTED_RX = re.compile(r"\b(?:told|said|announced|warned|informed|admitted|confirmed|"
+                          r"reported|learned|found|knew|discovered)\b[^.]{0,40}$", re.I)
 
 
 _SUBORD_RX = re.compile(r"^\s*(?:When|After|Once|If|Because|While|Although|Though|As|Before|Since|"
@@ -3967,6 +3971,12 @@ def _is_passive(sentence):
             continue
         if subord and m.start() < comma:
             continue                          # leading setup clause, not the main one
+        if _REPORTED_RX.search(t[:m.start()]):
+            continue                          # inside reported speech, not the main clause
+        # "Every model it ships gets built TO BE loved the same way" — he labelled this GOOD. A
+        # participle followed by an infinitive is describing purpose, not hiding an actor.
+        if re.match(r"\s*\w+\s+to\s+\w+", t[m.end():]):
+            continue
         # a TRAILING subordinate or relative clause is also not the sentence's main verb:
         # "...started killing processes WHEN THEY WERE FORCED to share", "...the environment they
         # WERE BEING EVALUATED in". Both of those sentences are active where it counts.
