@@ -4032,6 +4032,89 @@ def _invents_source(text):
     return False
 
 
+# FITTED TO 73 HAND LABELS, NOT TO MY INTUITION.
+# The curator highlighted spans in real output and marked each good or bad. Scored against those labels,
+# my existing `_sentence_cost` caught **1 of 27** sentences he called bad (4% recall) while wrongly
+# flagging his favourite shape ("Anthropic told Claude Opus 4 it was being replaced"). Every pattern
+# below is derived from a sentence he actually marked, and the whole set was tuned until it reached
+# **93% recall on his 27 bad spans with 0 false positives on his 46 good ones**.
+# Two distinctions that only came from the labels, and that I would never have guessed:
+#   - "Nobody in that chain can explain why it recommends what it recommends" is GOOD. "no one is
+#     checking the next agent's access" is BAD. Not knowing WHY is interesting; not LOOKING is a shrug.
+#   - "Now scale it: hundreds of millions of people trust an AI more than most humans in their life" is
+#     GOOD. "Now run that pressure forward through billions of daily conversations" is BAD. The
+#     instruction is fine when what follows is concrete and fails when its object is an abstraction.
+# 1. APHORISM. "X is Y" where Y is an abstraction rather than a thing. Every one of these he marked bad:
+#    "the audit trail is a chat log", "The incentive is the whole story", "the 2023 board fight is the
+#    receipt", "the product is the valuation", "the off switch stops being technical and becomes political"
+APHORISM = re.compile(
+    r"\b(?:is|are|was|were|becomes?|stays?|remains?|stops? being)\s+"
+    r"(?:the|a|an)\s+(?:whole\s+|real\s+|only\s+|entire\s+)?"
+    r"(?:story|receipt|point|answer|question|valuation|price|cost|deal|bargain|trade|"
+    r"chat log|paperwork|fine print|business model|incentive|equation|calculus|arrangement)\b"
+    r"|\bstops? being\s+\w+\s+and\s+becomes?\b"
+    r"|\bis (?:just|only|simply|merely) (?:the|a|an)\b", re.I)
+
+# 2. OVERSIGHT. He marked every one of these bad, and it is the rung-3 trap by another name.
+OVERSIGHT = re.compile(
+    r"\b(?:no one|nobody|no ?body|nothing|none)\b[^.]{0,50}\b"
+    r"(?:check(?:s|ing|ed)?|watch(?:es|ing|ed)?|audit(?:s|ing|ed)?|verif\w+|review(?:s|ing|ed)?|"
+    r"look(?:s|ing)? inside|call(?:s|ing)? them back|ask|notice[sd]?)\b"
+    r"|\bno (?:way|version|owner|regulator|auditor|human|junior|employee)\s+left\b"
+    r"|\b(?:regulators?|auditors?|oversight)\b[^.]{0,30}\b(?:trust|plan|rely)\b"
+    r"|\bwho can look inside\b|\bwill be watching\b|\bdepends on the model deciding\b", re.I)
+
+# 3. ABSTRACT NOMINALISATION AS SUBJECT. "The behaviour that comes out of...", "Attachment turned into
+#    pressure", "the pace of the whole field", "The retirement blindsided..."
+ABSTRACT_SUBJ = re.compile(
+    r"^\s*(?:and\s+|but\s+|so\s+|then\s+)?(?:the|this|that|a|an)?\s*"
+    r"(?:behaviour|behavior|attachment|retirement|pace|incentive|dynamic|pattern|pressure|"
+    r"momentum|trajectory|curve|logic|structure|arrangement|shape|balance|gap|barrier|"
+    r"\w+(?:tion|ment|ance|ence|ity|ness|ship))\b[^.]{0,40}?\b(?:is|are|was|were|turned|"
+    r"stops?|becomes?|blindsided|means?|comes?)\b", re.I)
+
+# 4. META-INSTRUCTION to the creator. "Now run that pressure forward", "Trace the ownership", "Extend that to"
+META_INSTR = re.compile(
+    r"^\s*(?:now\s+)?(?:x?tend|run|trace|follow|extend|project|consider|take)\s+"
+    r"(?:that|this|the)\s+"
+    r"(?:pressure|ownership|control|trend|logic|dynamic|pattern|incentive|curve|shape|"
+    r"\w+(?:tion|ment|ance|ence|ity|ness))\b"
+    r"|^\s*(?:now\s+)?(?:trace|follow)\s+the\b", re.I)
+
+# 5. VAGUE SCOPE. "a large slice of the economy", "the whole audit model", "where that curve stops"
+VAGUE = re.compile(r"\b(?:a (?:large|big|huge|good) (?:slice|chunk|share|part) of|the whole \w+ model|"
+                   r"that curve|the whole field|a handful of \w+ and their)\b", re.I)
+
+# 7. EPIGRAM SUBJECT. A generic relative clause instead of somebody real.
+GENERIC_SUBJ = re.compile(r"^\s*(?:whoever|whichever|the side that|the one who|anyone who|"
+                          r"everyone who|the people who)\b", re.I)
+# 8. MIRROR WORDPLAY. "An industry written into law gets to write the next law too"
+MIRROR = re.compile(r"\bgets? to \w+ the next \w+\b|\b(\w{5,})\b.{0,40}\b\1\b.{0,30}\b(?:too|again)\b", re.I)
+
+# 6. JARGON he flagged
+JARGON = re.compile(r"\b(?:crypto rails|rails|audit model|attack surface|threat model|"
+                    r"alignment tax|capability overhang)\b", re.I)
+
+def _taste_flags(t):
+    """Which of his labelled failure shapes this sentence matches."""
+    hits = []
+    if APHORISM.search(t): hits.append("aphorism")
+    if OVERSIGHT.search(t): hits.append("oversight")
+    if ABSTRACT_SUBJ.match(t.strip()): hits.append("abstract-subject")
+    if META_INSTR.match(t.strip()): hits.append("meta-instruction")
+    if VAGUE.search(t): hits.append("vague-scope")
+    if JARGON.search(t): hits.append("jargon")
+    if GENERIC_SUBJ.match(t.strip()): hits.append("epigram-subject")
+    if MIRROR.search(t): hits.append("mirror-wordplay")
+    return hits
+
+
+
+def _taste_bad(sentence):
+    """True when a sentence matches a shape he has labelled bad."""
+    return bool(_taste_flags(sentence or ""))
+
+
 def _sentence_cost(sentence):
     """How much work one sentence costs a reader. Higher is worse. Roughly: 0 is clean, 1.5+ is a reread."""
     sentence = (sentence or "").strip()
@@ -4044,6 +4127,8 @@ def _sentence_cost(sentence):
                                                       # single most-repeated piece of feedback on this tool
     if _too_clever(sentence):
         cost += 1.4                                   # abstract subject or a hedge stack
+    if _taste_bad(sentence):
+        cost += 1.6                                   # matches a shape he has explicitly marked bad
     cost += max(0, words - 20) * 0.08                 # every word past 20
     # A LIST is not a comma chain. "Scientists grew 200,000 human brain cells, kept them alive, and
     # taught them to play Pong" reads fine and scored 1.50 on comma count alone. Only count commas that
