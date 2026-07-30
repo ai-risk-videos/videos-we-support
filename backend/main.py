@@ -3740,7 +3740,10 @@ def _grade_endings(lines):
     if not lines:
         return {}
     try:
-        body = "\n\n".join("%d. %s" % (n + 1, t) for n, (_, t) in enumerate(lines))
+        def _tail(t):
+            parts = [p for p in re.split(r"(?<=[.?!])\s+", (t or "").strip()) if p.strip()]
+            return " ".join(parts[-2:])          # the ending is all it judges; the block was ~150 words
+        body = "\n\n".join("%d. %s" % (n + 1, _tail(t)) for n, (_, t) in enumerate(lines))
         m = get_client().messages.create(
             model=FAST_MODEL, max_tokens=3000, thinking=NO_THINK, system=ENDGAME_GRADE_SYS,
             messages=[{"role": "user", "content": "Grade these endings:\n\n" + body}])
@@ -4253,14 +4256,19 @@ def _sentence_polish(ideas, field="title"):
         return
     # CHUNKED. One request per 6 items, so a malformed reply costs one chunk instead of the batch.
     n = rej = 0
-    for _c in range(0, len(items), 6):
-        chunk = items[_c:_c + 6]
-        try:
-            n2, rej2 = _sentence_polish_chunk(ideas, field, chunk)
-            n += n2; rej += rej2
-        except Exception as _e:
-            _log_event({"t": "polish_pass", "which": "sentence_" + field, "n": 0,
-                        "err": str(_e)[:120], "chunk": _c})
+    chunks = [items[c:c + 6] for c in range(0, len(items), 6)]
+    # CONCURRENT. The chunks touch disjoint ideas, so there is no reason to pay for them one after
+    # another: sequential chunking is what took a generation from ~390s to 1460s, past the client
+    # deadline, so a real user saw nothing at all.
+    with _cf.ThreadPoolExecutor(max_workers=min(4, len(chunks) or 1)) as ex:
+        futs = {ex.submit(_sentence_polish_chunk, ideas, field, ch): i for i, ch in enumerate(chunks)}
+        for f in _cf.as_completed(futs):
+            try:
+                n2, rej2 = f.result()
+                n += n2; rej += rej2
+            except Exception as _e:
+                _log_event({"t": "polish_pass", "which": "sentence_" + field, "n": 0,
+                            "err": str(_e)[:120], "chunk": futs[f]})
     _log_event({"t": "polish_pass", "which": "sentence_" + field, "n": n, "rejected": rej,
                 "of": len(items)})
 
