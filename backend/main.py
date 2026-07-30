@@ -886,6 +886,16 @@ def anchor_block(k=12):
     _named_rx = re.compile(r"\b(?:OpenAI|Anthropic|Google|DeepMind|Meta|Microsoft|xAI|Alibaba|"
                            r"Palisade|Apollo|METR|Replit|Hugging Face|Salesforce|Amazon|Claude|GPT|"
                            r"Gemini|Grok|Llama)\b")
+    # EXPLICIT LINKS beat similarity here. A bank entry may carry `same_as: <id>` naming the sourced
+    # record for the same event; that record is always offered alongside it, however differently it is
+    # worded. Set by hand for now, one link per terse-but-anonymous entry that has a sourced twin.
+    _by_id = {v.get("id"): v for v in get_sources().values()}
+    _linked = {}
+    for _v in get_sources().values():
+        _tgt = _by_id.get(_v.get("same_as"))
+        if _tgt and (_v.get("shows") or "") and (_tgt.get("shows") or ""):
+            _linked[f"[{_v.get('who','')} {_v.get('year','')}] {_v.get('shows','')}"] = \
+                f"[{_tgt.get('who','')} {_tgt.get('year','')}] {_tgt.get('shows','')}"
     cands = draw(top, n_top * 3) + draw(rest, n_rest * 3)
     # Order by how well each is told before deduping, because the dedupe keeps whichever version of an
     # event it meets FIRST. A model's read (`grab`) is the measure of record; _phrasing_score is the
@@ -912,6 +922,10 @@ def anchor_block(k=12):
                     _siblings[dup_of].append(cand)
             continue
         picks.append(cand)
+        if cand in _linked:
+            _siblings.setdefault(cand, [])
+            if _linked[cand] not in _siblings[cand]:
+                _siblings[cand].append(_linked[cand])
         if len(picks) >= k:
             break
 
