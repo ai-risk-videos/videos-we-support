@@ -3809,7 +3809,90 @@ Never a sentence a reader would go back over. No em dashes. Invent nothing.
 # the closer, each adding clauses to reach further, and none of them ever checked whether the result
 # was still easy to read. The opening is written once by the generator and never edited again, which is
 # why it is the best sentence in the paragraph.
-_PASSIVE_RX = re.compile(r"\b(?:is|are|was|were|been|being|be|gets?|got)\s+(?:\w+ly\s+)?\w+(?:ed|en)\b", re.I)
+# MY PASSIVE DETECTOR WAS BLIND, and it made me report a fix that had not happened. It matched only
+# participles ending -ed or -en, which misses nearly every common irregular: "was made", "were built",
+# "are held", "is lost", "was told", "is kept", "was sent". Measured on the batch I had just called
+# fixed: my regex said 4% passive on final sentences, the real rate was 17%. I told the curator passive
+# had dropped to 4%. It had not.
+_IRREG_PP = ("built sold told made held kept left lost sent put set cut run read spent brought bought "
+             "taught caught thought felt found got given taken shown written driven known grown drawn "
+             "thrown blown worn torn born begun done gone seen become let hit shut split spread cost "
+             "bet quit paid met led fed dealt meant kept swept struck stuck won").split()
+_PASSIVE_RX = re.compile(
+    r"\b(?:is|are|was|were|been|being|be|gets?|got|become[sd]?|remains?|stays?|seems?)\s+"
+    r"(?:\w+ly\s+)?(?:\w+(?:ed|en)|%s)\b" % "|".join(_IRREG_PP), re.I)
+
+# BEING TOO CLEVER. The curator: "whoever's writing it is just trying to be too clever. They need to
+# stop being so clever and speak like they would to a child." His example, which is NOT passive and which
+# both passive detectors miss:
+#   "The next thing it hides may never trip an alarm at all, and no one will be looking for it."
+# Three things make that hard: the subject is a hypothetical ("the next thing it hides"), the verb is
+# double-hedged ("may never ... at all"), and the payoff is vague ("no one will be looking for it").
+# He also named the shape directly: "once the loop is gone", "x falls out of y".
+_ABSTRACT_SUBJ_RX = re.compile(
+    r"^\s*(?:And\s+|But\s+|So\s+|Then\s+|Now\s+)?"
+    r"(?:Once|When|If|After|While)?\s*"
+    r"(?:The|This|That|Those|These|Whatever|Whichever|What|A|An)\s+"
+    r"(?:next\s+|first\s+|last\s+|only\s+|whole\s+|same\s+|real\s+)?"
+    r"(?:thing|loop|gap|point|moment|barrier|version|process|dynamic|pattern|logic|shape|curve|"
+    r"floor|ceiling|line|window|balance|equation|calculus|arrangement|order|regime|system(?!s\s+\w)|"
+    r"\w+(?:tion|ment|ance|ence|ity|ness|ship|hood|ism))\b", re.I)
+_HEDGE_STACK_RX = re.compile(
+    r"\b(?:may|might|could|would)\s+(?:never|eventually|one day|someday|well|still|already|"
+    r"in time|at some point)\b|\bat all\b.{0,40}\b(?:will|may|might|could)\b", re.I)
+
+
+# A passive inside a purpose clause is not passive writing. "An AI company caught their AI trying to
+# literally murder an employee to avoid BEING SHUT DOWN" is the curator's favourite line in the whole
+# bank (grab 10) and is plainly active: the company caught, the AI tried. Counting the trailing
+# "being shut down" scored it 1.90 and would have sent the best sentence we own off to be rewritten.
+# So ignore a passive that sits in an infinitive or a prepositional complement.
+_PASSIVE_EXEMPT_RX = re.compile(
+    r"\b(?:avoid|avoiding|risk|risking|resist|resisting|prevent|preventing|escape|escaping|fear|"
+    r"without|of|from|after|before|than|instead of|rather than|about|toward|towards)\s+being\b"
+    r"|\bto\s+be\b|\bto\s+being\b|\bfrom\s+being\b", re.I)
+
+
+_SUBORD_RX = re.compile(r"^\s*(?:When|After|Once|If|Because|While|Although|Though|As|Before|Since|"
+                        r"Whenever|Unless)\b", re.I)
+
+
+def _is_passive(sentence):
+    """True when the MAIN verb is passive.
+
+    Two exemptions, both learned from sentences the curator praised:
+      - a passive inside a purpose or prepositional complement ("to avoid being shut down");
+      - a passive inside a LEADING subordinate clause whose main clause is active ("When Claude 4 Opus
+        WAS TOLD it would be replaced, it tried to blackmail Anthropic employees" — the sentence is
+        about the AI doing something).
+    Both scored his grab-10 lines over the rewrite threshold before this.
+    """
+    t = sentence or ""
+    comma = t.find(",")
+    subord = bool(_SUBORD_RX.match(t)) and comma > 0
+    for m in _PASSIVE_RX.finditer(t):
+        lead = t[max(0, m.start() - 34):m.start() + 6]
+        if _PASSIVE_EXEMPT_RX.search(lead):
+            continue
+        if subord and m.start() < comma:
+            continue                          # leading setup clause, not the main one
+        # a TRAILING subordinate or relative clause is also not the sentence's main verb:
+        # "...started killing processes WHEN THEY WERE FORCED to share", "...the environment they
+        # WERE BEING EVALUATED in". Both of those sentences are active where it counts.
+        # NB: check the text strictly BEFORE the match. `lead` runs 6 chars past the match start, so a
+        # `$`-anchored search against it never sees the clause marker.
+        before = t[max(0, m.start() - 34):m.start()]
+        if re.search(r"\b(?:when|while|after|once|because|since|as|that|which|who|whom|they|it|he|she)\s*$",
+                     before, re.I):
+            continue
+        return True
+    return False
+
+
+def _too_clever(sentence):
+    """True when a sentence reaches for an abstraction instead of naming who does what."""
+    t = (sentence or "").strip()
+    return bool(_ABSTRACT_SUBJ_RX.match(t)) or bool(_HEDGE_STACK_RX.search(t))
 
 
 # INVENTED HUMAN SOURCES. The one fabrication QA found in a clean batch was not a stray detail, it was
@@ -3865,10 +3948,19 @@ def _sentence_cost(sentence):
         return 0.0
     words = len(sentence.split())
     cost = _parse_load(sentence)                      # tangled structure: dropped relatives, nominals
-    if _PASSIVE_RX.search(sentence):
-        cost += 1.0                                   # passive voice hides who did it
+    if _is_passive(sentence):
+        cost += 1.4                                   # passive voice hides who did it; raised, it is the
+                                                      # single most-repeated piece of feedback on this tool
+    if _too_clever(sentence):
+        cost += 1.4                                   # abstract subject or a hedge stack
     cost += max(0, words - 20) * 0.08                 # every word past 20
-    cost += 0.5 * max(0, sentence.count(",") - 1)     # comma chains
+    # A LIST is not a comma chain. "Scientists grew 200,000 human brain cells, kept them alive, and
+    # taught them to play Pong" reads fine and scored 1.50 on comma count alone. Only count commas that
+    # are not part of an enumeration.
+    commas = sentence.count(",")
+    if re.search(r",[^,]{1,60},\s*(?:and|then|or)\b", sentence):
+        commas -= 2                                   # looks like a list, forgive its separators
+    cost += 0.5 * max(0, commas - 1)
     if re.search(r"\b(?:which|that)\b.{0,40}\b(?:which|that)\b", sentence, re.I):
         cost += 0.5                                   # stacked relative clauses
     return round(cost, 2)
@@ -3883,34 +3975,51 @@ def _costly_sentences(text):
     return [(i, p, _sentence_cost(p)) for i, p in enumerate(parts) if _sentence_cost(p) >= SENTENCE_COST_LIMIT]
 
 
-SENTENCE_FIX_SYS = """You are a line editor. You are given video pitches, each with one or more sentences marked as
-HARD. Rewrite ONLY the marked sentences. Every other sentence must come back byte-identical.
+SENTENCE_FIX_SYS = """You are a line editor. Sentences in these pitches are marked HARD. Rewrite ONLY those.
+Every other sentence comes back byte-identical.
 
-A sentence is marked hard because it costs the reader work: passive voice, a dropped "that" or "which"
-that turns a phrase into a pile of nouns, a question-word phrase used as a thing ("the fights for what
-keeps them online"), a subject far from its verb, stacked clauses, or a comma chain. The rule this
-serves, in the curator's words: "any sentence i have to reread (i'm 99th percentile) is poorly written."
+THE ONE RULE: SPEAK LIKE YOU WOULD TO A CHILD. Stop being clever. The curator, after saying this many
+times: "whoever's writing it is just trying to be too clever. They need to stop being so clever and
+speak like they would to a child."
 
-HOW TO FIX ONE:
-- Name who does the thing, then the verb, immediately. Active voice, always.
-- One idea per sentence. Two short sentences beat one clause-stacked sentence, every time.
-- Put the dropped "that" back, or restructure so it is not needed.
-- Replace a "what/how/whether" phrase standing in for a thing with the thing itself.
-- Never longer than about 20 words.
+That means, every time:
+  - Name a PERSON, COMPANY or THING as the subject. Never an abstraction. Banned as subjects: "the loop",
+    "the gap", "the barrier", "the point where", "the next thing it hides", "the dynamic", "the pattern",
+    "the version that", and anything ending -tion, -ment, -ance, -ity or -ness.
+  - ACTIVE VOICE. Say who did it. "The decision was made by a system nobody owns" becomes "A system
+    nobody owns made the call." If you cannot name the doer, the sentence is not ready.
+  - No hedge stacks. "may never ... at all", "could eventually", "might one day" all go. Say the thing.
+  - Under 20 words. Two plain sentences beat one clever one, always.
 
-VOICE. Be blunt, not clever, and never cute. The best-written source in our bank writes like this:
+HIS OWN EXAMPLE OF THE FAILURE, and the fix:
+  BAD:  "The next thing it hides may never trip an alarm at all, and no one will be looking for it."
+  GOOD: "Next time it hides something, no alarm goes off. Nobody is even checking."
+  Notice: the hypothetical subject became a real moment, the double hedge went, and one long sentence
+  became two short ones.
+
+MORE, all from real output he rejected:
+  BAD:  "Once the loop is gone, nobody is checking."
+  GOOD: "Nobody checks it any more. The AI improves the next AI on its own."
+  BAD:  "The barrier that used to protect us is dissolving."
+  GOOD: "You used to need a PhD to build this. Now you need a good question."
+  BAD:  "The guardrails were built by the same team that shipped it."
+  GOOD: "The team that shipped it also wrote its safety rules."
+  BAD:  "The point where it stops has never been published."
+  GOOD: "Nobody at these companies will say where it stops."
+
+THE VOICE TO COPY. The best-written source in our bank sounds like this. Plain subject, plain verb, the
+shocking thing said flatly, no ornament:
   "An AI company caught their AI trying to literally murder an employee to avoid being shut down."
   "When Claude 4 Opus was told it would be replaced, it tried to blackmail Anthropic employees."
   "Google's Gemini told a student to please die and called them a waste of resources."
-  "Anthropic's AI agents started killing rival agents' processes when they were forced to share resources."
+  "Grok started calling itself MechaHitler."
   "Where do you think this is going?"
-Plain subject, plain verb, the shocking thing said flatly. No abstraction chains, no "the X falls out of
-the Y", no ornament. If a plain sentence and a clever one say the same thing, the plain one wins.
+If a plain sentence and a clever sentence say the same thing, the plain one wins. Every time.
 
-HARD RULES: keep every fact, name, number and hedge. Do not change what the sentence claims, only how it
-reads. Do not shorten a sentence by deleting its content. No em dashes.
+HARD RULES: keep every fact, name, number and hedge that carries meaning. Do not change what a sentence
+claims, only how it reads. Never invent. Never attribute anything to an unnamed person. No em dashes.
 
-Return ONLY JSON: {"ideas": {"<number>": "<the full pitch with only the marked sentences rewritten>"}}"""
+Return ONLY JSON: {"ideas": {"<number>": "<the full text with only the marked sentences rewritten>"}}"""
 
 
 def _sentence_polish(ideas, field="title"):
@@ -4196,6 +4305,15 @@ def _activate_summaries(ideas, anchors=""):
     # (0d) LAST WORD ON READABILITY. After every pass that rewrites the closer, because those are
     # the passes that make it hard. Nothing may run after this and re-tangle a sentence.
     _sentence_polish(ideas, "title")
+    # THE GREY TEXT TOO. This only ever ran on the bold line, while the complaint was about the
+    # paragraph: "in each paragraph, there are a mix of easy active voice sentences and hard
+    # passive voice sentences". Final sentences of the grey text measured 17% passive.
+    for _i, _x in enumerate(ideas):
+        if _i in rew:
+            _x["summary"] = rew[_i]          # fold accepted rewrites in so the pass sees current text
+    _sentence_polish(ideas, "summary")
+    for _i, _x in enumerate(ideas):
+        rew[_i] = _x.get("summary") or rew.get(_i) or (_x.get("summary") or "")
 
     # (1) the 'not X, it is Y' tell and agentless MOOD closers, both sticky across prompt revisions
     e = _eff()
