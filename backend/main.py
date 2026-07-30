@@ -3844,7 +3844,7 @@ ONEBLOCK_FORMAT = (
     "FORMAT — every idea is ONE BLOCK. Put the entire pitch in the \"title\" field and set \"summary\" to "
     "the empty string \"\". There is no second layer, no paragraph underneath, nothing held back for a "
     "reader who scrolls. The block is all anyone will ever see.\n"
-    "LENGTH: 100 to 130 words, six to nine SHORT declarative sentences that breathe. One idea per "
+    "LENGTH: 110 to 140 words, seven to ten SHORT declarative sentences that breathe. One idea per "
     "sentence. THE SINGLE MOST COMMON MISTAKE is stitching it into long comma chains — any run past "
     "about 18 words is a smell, split it. Never a sentence a reader would go back over.\n"
     "ORDER: (1) the real thing that happened, actor first, named, past tense, no preamble; (2) the one "
@@ -3856,6 +3856,13 @@ ONEBLOCK_FORMAT = (
     "(\"nobody can verify it\", \"no regulator can follow it\"), on a legal gap (\"there is no law\"), or "
     "on a narrative beat (\"the team never noticed\"). Those are waypoints and the reader assumes them "
     "already. A state is not stakes.\n"
+    "NEVER TALK ABOUT THE VIDEO OR THE CREATOR. Banned outright: \"In this episode we look at...\", "
+    "\"we trace how...\", \"this piece follows...\", \"the way you would look at a bank's internal "
+    "controls\", and any framing of what the video will do. Say the interesting thing about the real "
+    "world; the creator can see for themselves that it fits them. A sentence describing the video is a "
+    "sentence not spent on the story. "
+    "NO HEADLINE. Do not put a title, a headline, or a line in Title Case at the top of the block. It "
+    "opens on the first sentence of the story and nothing else. "
     "Because this is the only text the reader gets, EVERY sentence must carry new information. Nothing "
     "may restate an earlier sentence in different words, and nothing may be spent on setup.\n"
     "WORKED EXAMPLE of the shape: 'OpenAI was testing how well its own models could attack computer "
@@ -4208,6 +4215,22 @@ claims, only how it reads. Never invent. Never attribute anything to an unnamed 
 Return ONLY JSON: {"ideas": {"<number>": "<the full text with only the marked sentences rewritten>"}}"""
 
 
+def _loose_json_map(text):
+    """Pull {"<number>": "<string>"} pairs out of a model reply that is not valid JSON.
+
+    A strict json.loads over one big object is all-or-nothing: on a 20-item request carrying ~150-word
+    blocks, a single unescaped quote threw away every rewrite and the pass logged
+    `err: Expecting ',' delimiter` while reporting n=0. This recovers the entries that are intact.
+    """
+    out = {}
+    for m in re.finditer(r'"(\d{1,3})"\s*:\s*"((?:[^"\\]|\\.)*)"', text or "", re.S):
+        try:
+            out[m.group(1)] = json.loads('"' + m.group(2) + '"')
+        except Exception:
+            out[m.group(1)] = m.group(2).replace('\\"', '"').replace("\\n", " ")
+    return out
+
+
 def _sentence_polish(ideas, field="title"):
     """Last pass over the pitch: fix the sentences a reader would stumble on.
 
@@ -4228,16 +4251,39 @@ def _sentence_polish(ideas, field="title"):
             items.append((i, "%s\n   [%s]" % (t, "; ".join(marks))))
     if not items:
         return
-    try:
+    # CHUNKED. One request per 6 items, so a malformed reply costs one chunk instead of the batch.
+    n = rej = 0
+    for _c in range(0, len(items), 6):
+        chunk = items[_c:_c + 6]
+        try:
+            n2, rej2 = _sentence_polish_chunk(ideas, field, chunk)
+            n += n2; rej += rej2
+        except Exception as _e:
+            _log_event({"t": "polish_pass", "which": "sentence_" + field, "n": 0,
+                        "err": str(_e)[:120], "chunk": _c})
+    _log_event({"t": "polish_pass", "which": "sentence_" + field, "n": n, "rejected": rej,
+                "of": len(items)})
+
+
+def _sentence_polish_chunk(ideas, field, items):
+    n = rej = 0
+    if True:
         body = "\n\n".join("%d. %s" % (i + 1, t) for i, t in items)
         m = get_client().messages.create(
             model=FAST_MODEL, max_tokens=6000, thinking=NO_THINK, system=SENTENCE_FIX_SYS,
             messages=[{"role": "user", "content": "Fix the marked sentences:\n\n" + body}])
         t = "".join(b.text for b in m.content if getattr(b, "type", "") == "text")
+        obj = {}
         mm = re.search(r"\{.*\}", t, re.S)
-        obj = json.loads(mm.group(0)) if mm else {}
-        n = rej = 0
-        for k, v in (obj.get("ideas") or obj.get("summaries") or {}).items():
+        if mm:
+            try:
+                parsed = json.loads(mm.group(0))
+                obj = parsed.get("ideas") or parsed.get("summaries") or {}
+            except Exception:
+                obj = {}
+        if not obj:
+            obj = _loose_json_map(t)          # salvage whatever entries are intact
+        for k, v in obj.items():
             try:
                 idx = int(k) - 1
                 new = (v or "").strip() if isinstance(v, str) else ""
@@ -4258,10 +4304,7 @@ def _sentence_polish(ideas, field="title"):
                 n += 1
             except Exception:
                 pass
-        _log_event({"t": "polish_pass", "which": "sentence_" + field, "n": n, "rejected": rej,
-                    "of": len(items)})
-    except Exception as _e:
-        _log_event({"t": "polish_pass", "which": "sentence_" + field, "n": 0, "err": str(_e)[:120]})
+    return n, rej
 
 
 def _bold_endgame_fix(ideas, anchors=""):
