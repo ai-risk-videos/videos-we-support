@@ -22,6 +22,7 @@ for s in src:
     g = s["grab"] if isinstance(s.get("grab"), int) else None
     rank = min(e, g if g is not None else min(e, 6)) + (s.get("bump") or 0)
     rows.append({"id": s["id"], "who": str(s.get("who") or ""), "year": str(s.get("year") or ""),
+                 "url": str(s.get("url") or ""),
                  "text": t, "esc": e, "grab": g, "rank": rank,
                  "cat": str(s.get("cat") or "other"), "cut": bool(s.get("cut")),
                  "aism": bool(re.search(r"aisafetymemes|ai safety memes",
@@ -50,7 +51,9 @@ def row_html(r):
             "<button class='x' title='never use this one'>✕</button></span></li>"
             % (" cut" if r["cut"] else "", E(r["id"]), band, r["rank"], r["esc"],
                r["grab"] if r["grab"] is not None else "&ndash;",
-               E(r["year"]), " &middot; " if r["who"] else "", E(r["who"][:26]),
+               E(r["year"]), " &middot; " if r["who"] else "",
+               ("<a class='src' href='%s' target='_blank' rel='noopener' title='open the source'>%s ↗</a>"
+                % (E(r["url"]), E(r["who"][:26]))) if r["url"] else E(r["who"][:26]),
                E(r["text"][:300])))
 
 
@@ -86,7 +89,8 @@ li.row.dragging{opacity:.4}
 .t10{background:#3a1f1c;color:#ff9d92}.t8{background:#3a2f18;color:var(--amb)}.t6{background:#1c2b22;color:var(--grn)}.t1{background:#1b2027;color:var(--mut)}
 .sc{flex:0 0 104px;font-size:10px;color:#6b7885;padding-top:5px}
 .sc i{font-style:normal;margin-right:3px}
-.meta{flex:0 0 150px;color:var(--mut);font-size:11.5px;padding-top:4px}
+.meta{flex:0 0 172px;color:var(--mut);font-size:11.5px;padding-top:4px}
+a.src{color:#7fb2e5;text-decoration:none}a.src:hover{color:#a9cdf3;text-decoration:underline}
 .tx{flex:1;font-size:13.4px;color:#cdd6df}
 .act{flex:0 0 auto;display:flex;gap:3px}
 .act button{font:inherit;font-size:11px;border:1px solid #2c3540;background:#1a212a;color:#b9c4cf;border-radius:5px;padding:3px 7px;cursor:pointer}
@@ -128,6 +132,7 @@ function apply(){
   save();
 }
 document.addEventListener("click",e=>{
+  if(e.target.closest&&e.target.closest("a.src"))return;   // opening the source is not a vote
   const b=e.target.closest&&e.target.closest("button"); if(!b)return;
   const li=b.closest("li.row"); if(!li)return;
   const id=li.dataset.id; dec[id]=dec[id]||{cut:false,bump:0};
@@ -137,7 +142,9 @@ document.addEventListener("click",e=>{
   save(); send(id,dec[id]);
 });
 let dragging=null;
-document.addEventListener("dragstart",e=>{const li=e.target.closest&&e.target.closest("li.row");
+document.addEventListener("dragstart",e=>{
+  if(e.target.closest&&e.target.closest("a.src")){e.preventDefault();return;}
+  const li=e.target.closest&&e.target.closest("li.row");
   if(!li)return;dragging=li;li.classList.add("dragging");});
 document.addEventListener("dragend",()=>{if(dragging)dragging.classList.remove("dragging");dragging=null;});
 document.addEventListener("dragover",e=>{
