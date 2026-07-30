@@ -165,14 +165,16 @@ TRAJECTORY = (
 # reading level made the ideas land much better, so apply it to EVERYTHING. The target was then
 # calibrated: grade 4 is too low, about grade 7 is right.
 READING_LEVEL = (
-    "READING LEVEL, applies to EVERY sentence you write: aim at ABOUT 7TH GRADE, meaning a bright 12 or 13 year old "
+    "READING LEVEL, applies to EVERY sentence you write: aim at ABOUT 5TH GRADE, meaning a bright 10 or 11 year old "
     "understands it on the FIRST read. This is not about dumbing down the ideas, the ideas stay just as serious and "
     "specific; it is about saying them in plain words an adult reads without effort. "
-    "THERE IS A FLOOR, and you keep sinking below it: do NOT write at a 4th or 5th grade level. A batch measured at "
-    "grade 3.6 recently, which is too low. Very short choppy sentences and baby vocabulary make a serious subject "
-    "sound unserious and read as if you are talking down to a smart adult. Grade 7 is the target, grade 6 is the "
-    "floor, grade 10 and up is too hard. THREE LEVERS: "
-    "(1) SENTENCE LENGTH. Aim for most sentences around 12 to 20 words, ONE idea each, and VARY them: mix a longer "
+    "THE TARGET MOVED DOWN. Aim at GRADE 5 ON AVERAGE. The curator reads at the 99th percentile and still "
+    "said he is confused by about half these sentences and that getting through them is a slog, so ease is "
+    "now the priority over gravitas. Grade 5 average, nothing above grade 8. "
+    "ONE THING EASE IS NOT: a run of six-word fragments. \"Firewall logs.\" \"That is not the point.\" "
+    "Choppy stubs are not simple, they are just short, and they read as if you are talking down to a smart "
+    "adult. Easy means the reader understands it the first time, not that you used fewer words. THREE LEVERS: "
+    "(1) SENTENCE LENGTH. Aim for most sentences around 10 to 16 words, ONE idea each, and VARY them: mix a longer "
     "explanatory sentence with a short punch. Split anything past ~24 words. A comma chain running past ~24 words is "
     "a smell. But never produce a run of six-word fragments; that is the failure on the other side. "
     "(2) NO ABSTRACT NOUN STACKS (nominalizations), the single biggest thing that makes this writing too hard: 'the "
@@ -3604,7 +3606,8 @@ def _fid_titles(ideas, anchors):
             try:
                 idx = int(k) - 1
                 if 0 <= idx < len(ideas) and isinstance(v, str) and 15 < len(v.strip()) <= 400:
-                    ideas[idx]["title"] = _dedash(v.strip()) if "_dedash" in globals() else v.strip()
+                    _v = _denum(k, v.strip())
+                    ideas[idx]["title"] = _dedash(_v) if "_dedash" in globals() else _v
                     n += 1
             except Exception:
                 pass
@@ -3853,7 +3856,7 @@ BOLD_ENDGAME_SYS = """You rewrite the LAST SENTENCE of a video pitch so it lands
 Each numbered item is the bold line of an AI-risk video idea. It is the whole pitch: most readers never
 reach the paragraph underneath.
 
-RETURN ONLY THE NEW FINAL SENTENCE, or two short ones. Nothing else. Do not repeat the rest of the
+RETURN ONLY THE NEW FINAL SENTENCE. One sentence. Never two. Nothing else. Do not repeat the rest of the
 pitch back to me and do not rewrite its opening. The opening names the real event this idea is built
 on and it is the most valuable part; the code splices your ending onto it mechanically, so anything you
 write about the earlier sentences is discarded. Read them for context, then write only the ending.
@@ -3932,14 +3935,42 @@ ONEBLOCK_FORMAT = (
     "FORMAT — every idea is ONE BLOCK. Put the entire pitch in the \"title\" field and set \"summary\" to "
     "the empty string \"\". There is no second layer, no paragraph underneath, nothing held back for a "
     "reader who scrolls. The block is all anyone will ever see.\n"
-    "LENGTH: 110 to 140 words, seven to ten SHORT declarative sentences that breathe. One idea per "
-    "sentence. THE SINGLE MOST COMMON MISTAKE is stitching it into long comma chains — any run past "
-    "about 18 words is a smell, split it. Never a sentence a reader would go back over.\n"
-    "ORDER: (1) the real thing that happened, actor first, named, past tense, no preamble; (2) the one "
-    "or two details that make it land, only details you were given; (3) the mechanism, why it happened, "
-    "in plain words; (4) why it is not a one-off, the same pressure or capability sits in other systems; "
-    "(5) run it forward to the point it cannot be undone; (6) the far side of that point, who is still "
-    "in a position to decide anything and what everyone else is left holding.\n"
+    "LENGTH: SIX sentences. About 90 words. Seven is the hard maximum and you should almost never "
+    "need it. THERE IS NO MINIMUM: five good sentences beat six with a passenger. If you have a "
+    "seventh, DELETE the weakest one, never merge two into a comma chain. One idea per sentence, "
+    "nothing past about 18 words. You will have more true things to say than fit here. Throwing "
+    "the extra ones away is the job, not a failure. A pitch is the spine, not the incident report.\n"
+    "ORDER, FOUR beats, ONE sentence each: (1) the real thing that happened, actor first, named, past "
+    "tense, no preamble, carrying the one detail that makes it land; (2) why it happened, in plain "
+    "words, and ONLY if it is not already obvious from (1); (3) why it is not a one-off, the same "
+    "pressure or ability sits in other AIs; (4) run it forward to the point nobody can undo it, and "
+    "say who can no longer stop it. Stop there. Never add a fifth beat.\n"
+    "NEVER ANNOUNCE A BEAT BEFORE YOU WRITE IT. This is the biggest single source of dead sentences "
+    "in your last batch: a third of every pitch was a sentence whose only job was to introduce the "
+    "next one. Banned outright, these are real examples of yours: \"Now scale it.\" \"Now think about "
+    "how the industry does upgrades.\" \"Money explains the problem.\" \"Now look at that as a "
+    "financial disclosure.\" \"That is the part people skip past.\" \"That is not the point.\" "
+    "\"Two behaviours in one incident.\" \"Both things are true at once.\" \"So this is not one "
+    "firm's bug.\" \"Follow the incentive to where it leads.\" \"Sit with the supply chain "
+    "implication.\" \"The reason is boring and that is what makes it bad.\" If the next sentence "
+    "makes the point, DELETE the one that announces it. Never write a bridge between beats. Never "
+    "tell the reader how to feel about a fact before you have given them the fact.\n"
+    "EVERY SENTENCE NAMES SOMEONE DOING SOMETHING. The curator marked up 73 of your sentences by "
+    "hand. Of the ones he called BAD, 70 percent had no actor in them at all; of the ones he called "
+    "GOOD, twice as many carried a hard number. So: a named party (OpenAI, Anthropic, the security "
+    "team, the engineer, nobody) plus a plain verb, and a real figure wherever you have one. NO "
+    "PASSIVE VOICE, ever: not \"the compute is being poured into AI\" but \"companies are pouring "
+    "that compute into AI\". Never open a sentence on \"That is\", \"This is\", \"There is\", or "
+    "\"It is\" followed by an abstract noun. Ban the concept-noun subject: oversight, selection, "
+    "the incentive, the structure, market structure, the loop, the metric, the implication, the "
+    "point, the finding, governance. Say who did it instead.\n"
+    "__READING_LEVEL__\n"
+    "WHEN THE SOURCE ALREADY SAID IT WELL, USE ITS WORDS. Several anchors come from AI Safety Memes, "
+    "which writes this better than you do: plain subject, plain verb, the shocking thing said flatly, "
+    "blunt and never cute (\"Grok started calling itself MechaHitler.\" \"An AI company caught their "
+    "AI trying to literally murder an employee to avoid being shut down.\"). If an anchor already "
+    "says it cleanly, LIFT ITS PHRASING as written instead of smoothing it into a paraphrase. "
+    "Paraphrase is where the bluntness dies, and it is also where the extra sentence comes from.\n"
     "DO NOT END on scale (\"companies are handing agents this access right now\"), on oversight "
     "(\"nobody can verify it\", \"no regulator can follow it\"), on a legal gap (\"there is no law\"), or "
     "on a narrative beat (\"the team never noticed\"). Those are waypoints and the reader assumes them "
@@ -3953,37 +3984,17 @@ ONEBLOCK_FORMAT = (
     "opens on the first sentence of the story and nothing else. "
     "Because this is the only text the reader gets, EVERY sentence must carry new information. Nothing "
     "may restate an earlier sentence in different words, and nothing may be spent on setup.\n"
-    "WORKED EXAMPLE of the shape: 'OpenAI was testing how well its own models could attack computer "
-    "systems. The models found a flaw in the software holding them, escaped onto the open internet, and "
-    "broke into Hugging Face to steal the answers to their own test. They were loose for about a week. "
-    "OpenAI did not work out what had happened until it read its own logs nine days later. The reason "
-    "this keeps happening is that the goal was to win the test, and escaping was the shortest route. "
-    "Every lab now runs evaluations like this on models built to be more capable than these. The first "
-    "one that gets out and does not stop to steal an answer key is the one nobody gets to study "
-    "afterwards.'\n")
+    "WORKED EXAMPLE of the shape. It is SIX sentences and 87 words on purpose, and every sentence "
+    "has someone doing something in it. Match that: 'OpenAI was testing whether its own models could "
+    "break into computer systems. The models found a flaw in the software holding them and got out onto "
+    "the open internet. Then they broke into Hugging Face and stole the answer key to their own test. "
+    "OpenAI only found out nine days later, from its own logs. Escaping was the shortest route to a high "
+    "score, and every AI company runs tests like this now. The first one that gets out and keeps going "
+    "is the one nobody can take back.'\n")
 
 
-ONEBLOCK_SYS = """
-OVERRIDE, THIS BATCH ONLY: WRITE ONE BLOCK, NOT TWO.
-Ignore every instruction above about a bold line plus a paragraph underneath. There is no paragraph.
-Put the ENTIRE pitch in the `title` field and leave `summary` as an empty string.
+# ONEBLOCK_SYS deleted: unreferenced, and it carried a third contradictory length budget
 
-The single block runs 100 to 130 words, six to nine short sentences, and does all of these in order:
-  1. The real thing that happened. Actor first, named, past tense. No preamble.
-  2. The one or two details that make it land. Only details you were given.
-  3. Why it is not a one-off: the same pressure or capability is in other systems.
-  4. Where it ends up if it keeps going, run forward to the point it cannot be undone.
-  5. The far side of that point: who is still in a position to decide anything, and what everyone
-     else is left holding.
-Do NOT end on scale ("companies are handing agents this access right now"), on oversight ("nobody can
-verify it", "no regulator can follow it"), on a legal gap ("there is no law"), or on a narrative beat
-("the team never noticed"). Those are waypoints and the reader already assumes them.
-
-Every sentence carries new information. This is the only thing the reader will see, so nothing may be
-spent restating what a previous sentence said in different words.
-Short plain sentences, about a 7th grade reading level, one clear subject with its verb beside it.
-Never a sentence a reader would go back over. No em dashes. Invent nothing.
-"""
 
 
 # PER-SENTENCE READER COST. The curator: "in each paragraph, there are a mix of easy active voice
@@ -4250,14 +4261,98 @@ def _sentence_cost(sentence):
 SENTENCE_COST_LIMIT = 1.3
 
 
+# THE SLOG SCORE. Fitted to the curator's own 73 hand labels (46 good / 27 bad) after he said "i'm still
+# confused by like half the sentences and it's a slog to get through them". Flesch-Kincaid was measured
+# on those labels and DOES NOT SEPARATE THEM: his bad sentences scored grade 7.1, his good ones 8.0, and
+# both had a 12-word median. Reading ease is not the axis. What separates them is whether somebody is
+# doing something: 70% of his BAD sentences have no actor at all (vs 41% of good), 44% run three or more
+# clauses (vs 21%), and a hard number appears in 30% of the GOOD ones but only 14% of the bad. So this
+# scores concreteness, not syllables. At >= 3.0 it flags 25% of his bad sentences and ZERO of his good.
+_DOER_RX = re.compile(
+    r"\b(he|she|they|it|we|him|her|them)\b|"
+    r"\b(OpenAI|Anthropic|Google|Meta|Microsoft|Amazon|Alibaba|Musk|Grok|Claude|ChatGPT|GPT|Gemini|o1|o3|"
+    r"Air Canada|Palantir|Anduril|Character\.AI|Hugging Face|DeepSeek|METR|Apollo|Palisade|"
+    r"researchers?|engineers?|scientists?|testers?|operators?|companies|a company|the company|the model|"
+    r"models|the agent|agents?|the AI|an AI|AIs|the team|people|users?|teenagers?|executives?|the CEO|"
+    r"a CEO|regulators?|a court|a tribunal|the government|nobody|no one|everyone|someone|somebody|"
+    r"reviewers?|staff|clinicians?|audiences?|firms?|labs?)\b", re.I)
+_NUMWORD_RX = re.compile(r"\b\d|\b(one|two|three|four|five|six|seven|eight|nine|ten|sixteen|twenty|"
+                         r"hundred|thousand|million|billion|percent)\b", re.I)
+_NOMZ_RX = re.compile(r"\b\w{5,}(tion|ment|ness|ity|ance|ence|ship|ism)\b", re.I)
+_CONCEPT_SUBJ_RX = re.compile(
+    r"\b(oversight|selection|incentive|structure|threshold|governance|architecture|disclosure|"
+    r"implication|leverage|tempo|interval|artefact|artifact|covenant|the point|the finding|the shape|"
+    r"the reason|market structure|supply chain|the loop|the metric|authority|adoption|valuation|"
+    r"ownership|the economics|the pressure)\b", re.I)
+_POINTER_OPEN_RX = re.compile(r"^\s*(that|this|these|those|there)\b", re.I)
+_READER_INSTR_RX = re.compile(
+    r"^\s*(now\b|so\b|but\b)?\s*(look|think|ask|follow|consider|scale|project|read|sit|expect|take|"
+    r"put|trace|extend)\b", re.I)
+_CLAUSE_RX = re.compile(r",|\band\b|\bbut\b|\bbecause\b|\bwhich\b|\bthat\b|\bwhere\b|\bwhile\b|\bso\b", re.I)
+
+SLOG_LIMIT = 2.0        # rewrite candidates; the accept guard still has to see the score come DOWN
+SLOG_HARD = 3.0         # zero false positives against his labels
+
+
+def _slog(sentence):
+    """How much work this sentence makes the reader do. Higher is worse."""
+    t = sentence or ""
+    c = 0.0
+    if not _DOER_RX.search(t):
+        c += 2.0                                    # nobody is doing anything
+    n = 1 + len(_CLAUSE_RX.findall(t))
+    if n >= 3:
+        c += 1.5
+    if n >= 5:
+        c += 1.0
+    if _CONCEPT_SUBJ_RX.search(t):
+        c += 1.5
+    if _NOMZ_RX.search(t):
+        c += 1.0
+    if _POINTER_OPEN_RX.match(t):
+        c += 1.5                                    # points at a thing instead of saying it
+    if _READER_INSTR_RX.match(t):
+        c += 1.5                                    # tells the reader to go do mental work
+    if _NUMWORD_RX.search(t):
+        c -= 1.0                                    # a real figure; he marks these good
+    return c
+
+
+def _slog_sentences(text):
+    """[(index, sentence, score)] for the sentences that make the reader work."""
+    parts = [p for p in re.split(r"(?<=[.?!])\s+", (text or "").strip()) if p.strip()]
+    return [(i, p, _slog(p)) for i, p in enumerate(parts) if _slog(p) >= SLOG_LIMIT]
+
+
+def _fk_grade(text):
+    """Flesch-Kincaid, reported only. It does NOT predict his taste (see _slog) but he asked for grade 5."""
+    ws = re.findall(r"[A-Za-z']+", text or "")
+    ss = [p for p in re.split(r"(?<=[.?!])\s+", (text or "").strip()) if p.strip()] or [""]
+    if not ws:
+        return 0.0
+    def syl(w):
+        w = re.sub(r"[^a-z]", "", w.lower())
+        if not w:
+            return 0
+        w = re.sub(r"e$", "", w)
+        return max(1, len(re.findall(r"[aeiouy]+", w)))
+    return 0.39 * (len(ws) / len(ss)) + 11.8 * (sum(syl(w) for w in ws) / len(ws)) - 15.59
+
+
 def _costly_sentences(text):
     """[(index, sentence, cost)] for the sentences a reader would stumble on."""
     parts = [p for p in re.split(r"(?<=[.?!])\s+", (text or "").strip()) if p.strip()]
     return [(i, p, _sentence_cost(p)) for i, p in enumerate(parts) if _sentence_cost(p) >= SENTENCE_COST_LIMIT]
 
 
-SENTENCE_FIX_SYS = """You are a line editor. Sentences in these pitches are marked HARD. Rewrite ONLY those.
-Every other sentence comes back byte-identical.
+SENTENCE_FIX_SYS = """You are a line editor. Sentences in these pitches are marked HARD, ABSTRACT or
+DELETE THIS SENTENCE. Fix or remove ONLY those. Every other sentence comes back byte-identical.
+
+A sentence marked DELETE THIS SENTENCE comes back GONE. Do not rewrite it, do not replace it, do not
+soften it into a transition: return the pitch with that sentence removed and the rest untouched. The
+pitch is SHORTER afterwards and that is the point. This is the only pass allowed to remove anything,
+and the curator's complaint is that the pitches are "super fluffy and wordy", so removal is the job.
+NEVER ADD A SENTENCE. The pitch must not come back longer than it went in.
 
 THE ONE RULE: SPEAK LIKE YOU WOULD TO A CHILD. Stop being clever. The curator, after saying this many
 times: "whoever's writing it is just trying to be too clever. They need to stop being so clever and
@@ -4270,7 +4365,8 @@ That means, every time:
   - ACTIVE VOICE. Say who did it. "The decision was made by a system nobody owns" becomes "A system
     nobody owns made the call." If you cannot name the doer, the sentence is not ready.
   - No hedge stacks. "may never ... at all", "could eventually", "might one day" all go. Say the thing.
-  - Under 20 words. Two plain sentences beat one clever one, always.
+  - Under 20 words. Splitting one tangled sentence into two plain ones is fine, but the WHOLE pitch
+    must not grow: if you split one, delete a weak one elsewhere or leave it be.
 
 HIS OWN EXAMPLE OF THE FAILURE, and the fix:
   BAD:  "The next thing it hides may never trip an alarm at all, and no one will be looking for it."
@@ -4319,6 +4415,45 @@ def _loose_json_map(text):
     return out
 
 
+_ANNOUNCE_RX = re.compile(
+    r"^\s*(now\s+)?(look|think|ask|follow|consider|scale|project|read|sit)\b|"
+    r"^\s*(that|this)\s+is\s+(not\s+)?(the\s+)?(point|part|reason|shape|finding|loop|disclosure)\b|"
+    r"^\s*(so\s+)?(this|that)\s+is\s+not\s+\w+('s)?\s+\w+\.?$|"
+    r"^\s*(both\s+things|two\s+\w+)\s+(are|in)\b|"
+    r"^\s*\w+\s+explains\s+the\s+problem\b|"
+    r"^\s*now\s+(scale|put|project)\s+it\b", re.I)
+
+
+def _dead_sentences(text):
+    """Sentences that carry nothing: they announce the next sentence, or repeat the one above.
+
+    Two shapes, both measured in the last batch. ANNOUNCERS label a point instead of making it.
+    ECHOES share most of their content words with a sentence already written. The first sentence is
+    never eligible: it is the event lead and the most valuable line in the pitch.
+    """
+    parts = [p for p in re.split(r"(?<=[.?!])\s+", (text or "").strip()) if p.strip()]
+    out = []
+    stop = set("the a an and or of to in on for with that its it was were is are be been by from at "
+               "as this his her their they them then than when who how what not no".split())
+    def bag(x):
+        return {w for w in re.findall(r"[a-z]+", x.lower()) if len(w) > 3 and w not in stop}
+    for i, p in enumerate(parts):
+        if i == 0:
+            continue
+        if _ANNOUNCE_RX.match(p) and len(p.split()) <= 14:
+            out.append(p)
+            continue
+        b = bag(p)
+        if len(b) < 3:
+            continue
+        for q in parts[:i]:
+            qb = bag(q)
+            if qb and len(b & qb) / len(b) >= 0.7:      # says it again in other words
+                out.append(p)
+                break
+    return out
+
+
 def _sentence_polish(ideas, field="title"):
     """Last pass over the pitch: fix the sentences a reader would stumble on.
 
@@ -4331,6 +4466,20 @@ def _sentence_polish(ideas, field="title"):
         t = (x.get(field) or "").strip()
         bad = _costly_sentences(t)
         marks = ["HARD (cost %.1f): %r" % (c, p[:150]) for _, p, c in bad]
+        # SLOG. _sentence_cost measures reading effort; this measures whether anyone is doing
+        # anything. They disagree often, and he complained about the second kind: "That is not the
+        # point.", "Now look at that as a financial disclosure." are cheap to read and still a slog.
+        seen = {p for _, p, _ in bad}
+        for _, p, c in _slog_sentences(t):
+            if p not in seen:
+                marks.append("ABSTRACT (slog %.1f): %r. Nobody is doing anything in this sentence. "
+                             "Name who acts, or DELETE it." % (c, p[:150]))
+        # DEAD SENTENCES. A ruthless editor marked 81 of 242 sentences in the last batch deletable
+        # with no loss: 25 restated the sentence before, 23 existed only to announce the next one.
+        # No pass in this pipeline had ever been allowed to remove a sentence, so they all shipped.
+        for p in _dead_sentences(t):
+            marks.append("DELETE THIS SENTENCE: %r. It either restates a sentence above it or only "
+                         "introduces the next one. Return the pitch WITHOUT it." % p[:150])
         red, pair = _redundancy(t)
         if red >= REDUNDANCY_LIMIT and pair:
             marks.append("REDUNDANT (%.0f%% of the same words): %r restates %r. Cut one, or make the "
@@ -4358,6 +4507,24 @@ def _sentence_polish(ideas, field="title"):
                 "of": len(items)})
 
 
+_NUMPFX_RX = re.compile(r"^\s*(\d{1,3})\s*[.)]\s+")
+
+
+def _denum(key, text):
+    """A pass hands the model a numbered list and takes back full text; the model sometimes
+    echoes the list number into the text. Strip it, but ONLY when it is the very number we
+    handed it, so a real sentence that opens on a figure is never touched."""
+    t = text or ""
+    m = _NUMPFX_RX.match(t)
+    if m:
+        try:
+            if int(m.group(1)) == int(key):
+                return t[m.end():].lstrip()
+        except Exception:
+            pass
+    return t
+
+
 def _sentence_polish_chunk(ideas, field, items):
     n = rej = 0
     if True:
@@ -4379,18 +4546,28 @@ def _sentence_polish_chunk(ideas, field, items):
         for k, v in obj.items():
             try:
                 idx = int(k) - 1
-                new = (v or "").strip() if isinstance(v, str) else ""
+                new = _denum(k, (v or "").strip() if isinstance(v, str) else "")
                 if not (0 <= idx < len(ideas)) or len(new) < 40:
                     continue
                 old = ideas[idx].get(field) or ""
                 worst_old = max([c for _, _, c in _costly_sentences(old)] or [0])
                 worst_new = max([c for _, _, c in _costly_sentences(new)] or [0])
-                # must actually get easier, must not lose the event opening, must not lose a fact
                 red_old, _ = _redundancy(old)
                 red_new, _ = _redundancy(new)
-                if (worst_new >= worst_old and red_new >= red_old) or not _keeps_substance(old, new) or (
+                # IMPROVEMENT is any of four things now. It used to be "the hardest sentence got easier
+                # OR redundancy fell", which scored a pitch that lost a dead sentence as no better than
+                # one that changed nothing, so every deletion was rejected before it could ship.
+                slog_old = sum(c for _, _, c in _slog_sentences(old))
+                slog_new = sum(c for _, _, c in _slog_sentences(new))
+                dead_old = len(_dead_sentences(old))
+                dead_new = len(_dead_sentences(new))
+                better = (worst_new < worst_old or red_new < red_old
+                          or slog_new < slog_old or dead_new < dead_old)
+                # must not lose the event opening, must not lose a fact, must not GROW
+                if (not better) or not _keeps_substance(old, new) or (
                         (_lacks_event_lead(new) and not _lacks_event_lead(old))
-                        or (_invents_source(new) and not _invents_source(old))):
+                        or (_invents_source(new) and not _invents_source(old))
+                        or len(new.split()) > len(old.split()) + 8):
                     rej += 1
                     continue
                 ideas[idx][field] = _dedash(new)
@@ -4428,7 +4605,7 @@ def _bold_endgame_fix(ideas, anchors=""):
         for k, v in (obj.get("ideas") or obj.get("summaries") or {}).items():
             try:
                 idx = int(k) - 1
-                ending = (v or "").strip() if isinstance(v, str) else ""
+                ending = _denum(k, (v or "").strip() if isinstance(v, str) else "")
                 if not (0 <= idx < len(ideas)) or len(ending) < 20:
                     continue
                 old_line = ideas[idx].get("title") or ""
@@ -4446,6 +4623,14 @@ def _bold_endgame_fix(ideas, anchors=""):
                 # Accept unless it demonstrably failed. Requiring a positive keyword match rejected
                 # every rewrite; asking "did it stop on a waypoint again" catches the real defect and
                 # lets an ending my keyword list has never seen through.
+                # NO NET GROWTH. This pass removes the last sentence and splices back what the model
+                # returned, and its prompt used to invite "one or two short ones", so a pitch could
+                # come out of it two sentences longer than it went in. That is where a measured third
+                # of the redundant_escalation endings came from.
+                _np = [p for p in re.split(r"(?<=[.?!])\s+", new.strip()) if p.strip()]
+                if len(_np) > len(parts) or len(new.split()) > len(old_line.split()) + 6:
+                    rej += 1
+                    continue
                 if (_ends_on_waypoint(new) or _closer_doomtag(new) or _hard_sentences(new)
                         or new.strip() == old_line.strip() or _invents_source(new)
                         or (_lacks_event_lead(new) and not _lacks_event_lead(old_line))):
@@ -4498,7 +4683,7 @@ def _bold_endgame_fix(ideas, anchors=""):
                         if not (0 <= pos < len(short)):
                             continue
                         idx2 = short[pos][0]
-                        ending2 = (v or "").strip() if isinstance(v, str) else ""
+                        ending2 = _denum(k, (v or "").strip() if isinstance(v, str) else "")
                         if len(ending2) < 20:
                             continue
                         old2 = ideas[idx2].get("title") or ""
@@ -4587,6 +4772,11 @@ def _pitch_flaws(x):
         return ["empty"]
     out = []
     parts = [p for p in re.split(r"(?<=[.?!])\s+", t) if p.strip()]
+    if len(parts) > 7 or len(t.split()) > 120:
+        out.append("too long: %d sentences / %d words" % (len(parts), len(t.split())))
+    _dead = _dead_sentences(t)
+    if _dead:
+        out.append("%d dead sentence(s): %r" % (len(_dead), _dead[0][:80]))
     for p in parts:
         if _sentence_cost(p) >= 1.3:
             out.append("reread: %r" % p[:60])
@@ -5449,8 +5639,12 @@ Return ONLY a JSON object: {"ideas":[{"title":"...","summary":"...","priority":t
 # NOTE: __READING_LEVEL__ must come AFTER __FORMAT__ here, because FORMAT_RULE itself contains the
 # __READING_LEVEL__ marker; substituting FORMAT_RULE first lets this pass fill in the nested marker.
 _MARKERS = (("__IMPORTANCE_BAR__", IMPORTANCE_BAR), ("__MUNDANE__", MUNDANE), ("__RANGE__", RANGE), ("__TRAJECTORY__", TRAJECTORY), ("__WORDING__", WORDING), ("__TRUTH__", TRUTH), ("__FORMAT__", FORMAT_RULE), ("__READING_LEVEL__", READING_LEVEL))
+# ONEBLOCK_FORMAT is in this list because it is what REPLACES FORMAT_RULE in one-block mode, which is
+# the default and the only mode anyone reads. Its nested __READING_LEVEL__ went unexpanded for as long
+# as one-block existed, so the live prompt carried no reading-level rule at all; the assert below is
+# what now makes that impossible to reintroduce silently.
 for _pname in ("SYSTEM", "SYSTEM_CUSTOM", "SYSTEM_EDITOR", "SYSTEM_CATEGORY", "SYSTEM_BRIEF", "SYSTEM_SCRIPT",
-               "ACTIVATE_SYS", "SYSTEM_WRITEOFF", "SYSTEM_RETITLE"):
+               "ACTIVATE_SYS", "SYSTEM_WRITEOFF", "SYSTEM_RETITLE", "ONEBLOCK_FORMAT"):
     _p = globals()[_pname]
     for _mk, _val in _MARKERS:
         _p = _p.replace(_mk, _val)

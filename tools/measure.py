@@ -95,6 +95,11 @@ def measure(ideas, secs):
         "redundant_paras": sum(1 for v in red if v >= main.REDUNDANCY_LIMIT),
         "meta_narration": sum(1 for x in ideas if META.search(x.get("title") or "")),
         "words_median": int(st.median([len((x.get("title") or "").split()) for x in ideas] or [0])),
+        "sents_median": int(st.median([len([p for p in re.split(r"(?<=[.?!])\s+", (x.get("title") or "").strip())
+                                            if p.strip()]) for x in ideas] or [0])),
+        "fk_grade": round(st.mean([main._fk_grade(s) for s in allsents] or [0]), 1),
+        "slog_pct": round(100 * sum(1 for s in allsents if main._slog(s) >= main.SLOG_LIMIT) / n),
+        "dead_sents": sum(len(main._dead_sentences(x.get("title") or "")) for x in ideas),
         "grey_text": sum(1 for x in ideas if (x.get("summary") or "").strip()),
     }
 
@@ -107,7 +112,11 @@ ROWS = [("rejected_shapes_pct", "sentences matching a shape you marked bad", "%"
         ("redundant_paras", "paragraphs restating themselves", "", True),
         ("meta_narration", "lines about the video itself", "", True),
         ("grey_text", "pitches still carrying grey text", "", True),
-        ("words_median", "words per pitch (median)", "", None),
+        ("words_median", "words per pitch (median)", "", True),
+        ("sents_median", "sentences per pitch (median)", "", True),
+        ("fk_grade", "reading grade (mean, target 5)", "", True),
+        ("slog_pct", "sentences where nobody is doing anything", "%", True),
+        ("dead_sents", "sentences that only announce the next one", "", True),
         ("secs", "seconds to generate", "", True)]
 
 
