@@ -874,6 +874,18 @@ def anchor_block(k=12):
     picks = []
     # Sort candidates by phrasing before deduping. The draw-time dedupe keeps whichever version of an
     # event it meets FIRST, so meeting the well-written one first is the whole fix.
+    #
+    # BUT THE DEDUPE WAS THROWING AWAY THE ATTRIBUTION. The punchiest telling of an event is often an
+    # anonymous tweet: "An AI company caught their AI trying to literally murder an employee to avoid
+    # being shut down" scores grab 10, while the twelve entries that name Anthropic score 3 to 9. So
+    # grab-ranking picked the anonymous one, the dedupe dropped all twelve named siblings, and the
+    # writer, told not to invent a company name, went one worse and asserted that nobody had ever named
+    # one: "The company never named itself, never named the model, and never said how far it got."
+    # Every word of that is false about a study Anthropic published in full. The fix is not another
+    # prohibition, it is giving the writer the sourced version alongside the punchy one.
+    _named_rx = re.compile(r"\b(?:OpenAI|Anthropic|Google|DeepMind|Meta|Microsoft|xAI|Alibaba|"
+                           r"Palisade|Apollo|METR|Replit|Hugging Face|Salesforce|Amazon|Claude|GPT|"
+                           r"Gemini|Grok|Llama)\b")
     cands = draw(top, n_top * 3) + draw(rest, n_rest * 3)
     # Order by how well each is told before deduping, because the dedupe keeps whichever version of an
     # event it meets FIRST. A model's read (`grab`) is the measure of record; _phrasing_score is the
@@ -883,13 +895,21 @@ def anchor_block(k=12):
     # two to five years"), which would let an unscored anchor outrank a model-scored 8 and open the
     # list. An unscored anchor is by definition off the top shelf, so it sorts below every scored one.
     cands.sort(key=lambda t: told[t] if t in told else min(_phrasing_score(t), 6.0), reverse=True)
+    _siblings = {}
     for cand in cands:
         # DRAW-TIME DEDUPE. The bank holds the same Anthropic blackmail study retold by eight
         # different outlets, all scored 10, so a ranked draw without this hands the model the same
         # event over and over and the batch reads like one story. Clustering the bank up front missed
         # these because each retelling uses different rare words; comparing what we are about to show
         # does not.
-        if any(_too_similar(cand, p) for p in picks):
+        dup_of = next((p for p in picks if _too_similar(cand, p)), None)
+        if dup_of is not None:
+            # same event, different telling. If the kept version names nobody and this one names a real
+            # company or model, hold it as corroboration rather than discarding it.
+            if not _named_rx.search(dup_of) and _named_rx.search(cand):
+                _siblings.setdefault(dup_of, [])
+                if len(_siblings[dup_of]) < 2:
+                    _siblings[dup_of].append(cand)
             continue
         picks.append(cand)
         if len(picks) >= k:
@@ -907,6 +927,15 @@ def anchor_block(k=12):
             "do not name a company, a model, a date, or a mechanism the anchor does not give you. Say what is known, "
             "in the words the anchor supports, and let the missing detail be part of why a viewer wants the video. "
             "A vague true claim beats a specific invented one. "
+            "NEVER CLAIM SOMETHING WAS NOT DISCLOSED. A short anchor means our note is short; it says "
+            "NOTHING about what the company published. Banned outright: \"the company never named "
+            "itself\", \"that is the whole public account\", \"nobody has said how far it got\", \"no "
+            "one will say which model\". A real generated line read \"An AI company caught one of its "
+            "own AIs trying to kill an employee... The company never named itself, never named the "
+            "model, and never said how far it got\" about a study Anthropic published in full, with the "
+            "model named. That is a fabrication about the world built out of a gap in our notes. If a "
+            "name is not in front of you, write the sentence without a name and without any claim about "
+            "why the name is missing. "
             "RETELL, DO NOT TRANSCRIBE. These anchors are written to wildly different standards. Some are crisp "
             "('Anthropic's new model turns to blackmail when engineers try to take it offline'), some are write-ups "
             "about a write-up ('the technical appendix gives per model numbers showing 16 leading models chose "
@@ -925,7 +954,12 @@ def anchor_block(k=12):
             "An older event still earns its place when it is genuinely the best or the origin of the story, and a "
             "historical parallel from decades ago (a book, a disaster, a scientist) is welcome as the FRAME, but the "
             "AI evidence you cite should be real and described exactly as given:\n"
-            + "\n".join("- " + p for p in picks))
+            + "\n".join(
+                ("- " + p + "".join(
+                    "\n    SAME EVENT, FULLER RECORD (use these names and figures; the line above is a "
+                    "short retelling, not evidence that the event was anonymous): " + sib
+                    for sib in _siblings.get(p, [])))
+                for p in picks))
 
 SYSTEM = """You generate YouTube video ideas for a project that funds creators to make videos about AI risk (the dangers of advanced AI: superintelligence, loss of control, job loss, surveillance, AI pandemics, AI warfare, and similar).
 
