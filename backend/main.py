@@ -1128,7 +1128,7 @@ __TRUTH__
 __FORMAT__
 
 Brainstorm widely, then return ONLY a JSON object with your 32 strongest candidates:
-{"ideas": [{"title":"...","summary":"...","priority":true|false}, ...32 candidates]}"""
+{"ideas": [{"title":"...","summary":"...","priority":true|false}, ...60 candidates]}"""
 
 
 SYSTEM_EDITOR = """You are the toughest editor and most demanding superfan of ONE specific YouTube creator. You are given their strategist profile and a list of candidate AI risk video ideas. Pick and sharpen the ones their longtime audience would genuinely be excited to watch.
@@ -4525,6 +4525,64 @@ def _event_lead_fix(ideas, idxs, lead, rew):
         _log_event({"t": "polish_pass", "which": "event_lead", "n": 0, "err": str(_e)[:120]})
 
 
+# SELECT, DO NOT REWRITE.
+# After a night of adding rewrite passes, the curator: "we haven't made progress in a long time... so
+# many abstract, hard to understand sentences are slipping through, and the implications sentence still
+# does not seem to have improved even a little bit." He was right, and the reason is architectural.
+# Measured across 776 pitches from 31 batches: **379 (49%) already contain no sentence over the bar,
+# with no rewriting at all.** The generator writes well about half the time. Every rewrite pass exists
+# to repair the other half, and that is where the failures live:
+#   - a rewrite pass can only fix what a detector SEES, and detector after detector turned out blind
+#     (passive missed every irregular participle; the ladder guard passed 20 of 24 rung-3 endings);
+#   - each pass optimises one axis and damages another (the endgame pass made sentences harder to read;
+#     the grade pass flattened endgames; one destroyed the event opening on 20 of 24 titles);
+#   - they fight each other, and each new guard exists to stop an earlier pass undoing a later one.
+# Rejection is a far easier problem than repair. To reject you only need to be right often enough; to
+# repair you have to understand quality well enough to improve it, which is what kept failing. So:
+# generate many, throw away anything with a flaw, and keep what was already good.
+# 60 candidates * 49% clean is about 29 keepers, which is the 20 to 30 he needs on a page.
+SELECT_KEEP_MIN = 14          # if filtering leaves fewer than this, fall back rather than ship a stub
+
+
+def _pitch_flaws(x):
+    """Every reason to throw this pitch away. Style only; truth is the fidelity pass's job."""
+    t = (x.get("title") or "").strip()
+    if not t:
+        return ["empty"]
+    out = []
+    parts = [p for p in re.split(r"(?<=[.?!])\s+", t) if p.strip()]
+    for p in parts:
+        if _sentence_cost(p) >= 1.3:
+            out.append("reread: %r" % p[:60])
+        elif _taste_bad(p):
+            out.append("rejected shape: %r" % p[:60])
+    if parts and _ends_on_waypoint(parts[-1]):
+        out.append("ending stops at oversight")
+    if _lacks_event_lead(t):
+        out.append("does not open on an event")
+    if _invents_source(t):
+        out.append("unnamed source")
+    red, pair = _redundancy(t)
+    if red >= REDUNDANCY_LIMIT:
+        out.append("restates itself")
+    return out
+
+
+def _select_clean(candidates, want):
+    """Keep the pitches that need no repair, in order, and report what was dropped and why."""
+    kept, dropped = [], {}
+    for c in candidates:
+        f = _pitch_flaws(c)
+        if f:
+            dropped[f[0].split(":")[0]] = dropped.get(f[0].split(":")[0], 0) + 1
+            continue
+        kept.append(c)
+        if len(kept) >= want:
+            break
+    _log_event({"t": "select", "kept": len(kept), "of": len(candidates), "dropped": dropped})
+    return kept
+
+
 def _activate_summaries(ideas, anchors=""):
     # In one-block mode every summary is empty, so the six summary-targeted passes below would each
     # make a model call that can only return nothing. Detect it once and skip them; the title passes
@@ -4536,6 +4594,18 @@ def _activate_summaries(ideas, anchors=""):
     if not ideas:
         return {}
     rew = {}
+    # A SELECTED BATCH NEEDS NO STYLE REWRITING. That is the point of selecting: these pitches already
+    # carry no sentence over the bar, no oversight ending and no rejected shape, so every style pass can
+    # only churn them. Fidelity still runs, because invented detail is not a matter of taste.
+    if ideas and all(x.get("_selected") for x in ideas):
+        _log_event({"t": "polish_mode", "selected": True, "n": len(ideas)})
+        if anchors:
+            _fid_titles(ideas, anchors)
+        for x in ideas:
+            x.pop("_selected", None)
+        return rew
+    for x in ideas:
+        x.pop("_selected", None)
     _white_only = not any((x.get("summary") or "").strip() for x in ideas)
     if _white_only:
         _log_event({"t": "polish_mode", "white_only": True, "n": len(ideas)})
@@ -5108,6 +5178,23 @@ def _gen_system(body):
     return _swap_format(SYSTEM_CUSTOM, ONEBLOCK_FORMAT) + ANTI_SLOP
 
 
+def _pick(candidates, want):
+    """Selection first, with a fallback so a strict filter can never ship an empty page.
+
+    If enough candidates are already clean we take those and skip the style rewrites entirely. If the
+    filter leaves too few — a thin batch, or a channel the generator finds hard — we fall back to the
+    old behaviour and let the rewrite passes do what they can. Either way the fidelity pass still runs,
+    because fabrication is a correctness problem and never a matter of taste.
+    """
+    clean = _select_clean(candidates, want)
+    if len(clean) >= SELECT_KEEP_MIN:
+        for c in clean:
+            c["_selected"] = True          # marks the batch as needing no style rewriting
+        return clean
+    _log_event({"t": "select_fallback", "clean": len(clean), "want": want, "of": len(candidates)})
+    return candidates[:want]
+
+
 async def _custom_generate(body, req=None):
     """The whole generation, lifted out of the endpoint so it can be driven either by a plain POST or
     by the job runner. Returns a dict, or a JSONResponse when it needs a non-200 status."""
@@ -5188,7 +5275,7 @@ async def _custom_generate(body, req=None):
         # 26000/32000 alongside it (thinking and output share the budget), and compare batches.
         gmsg = await run_in_threadpool(lambda: get_client().with_options(
             timeout=GEN_TIMEOUT_S, max_retries=0).messages.create(
-            model=MODEL, thinking=NO_THINK, max_tokens=(15000 if is_more else 12000), system=_gen_system(body),  # raised: summaries are now 2-3 sentences, 32 candidates overflowed 7000 and truncated the JSON
+            model=MODEL, thinking=NO_THINK, max_tokens=(30000 if is_more else 26000), system=_gen_system(body),  # raised: summaries are now 2-3 sentences, 32 candidates overflowed 7000 and truncated the JSON
             messages=[{"role": "user", "content": gen}],
         ))
         candidates = parse_custom("".join(b.text for b in gmsg.content if getattr(b, "type", "") == "text"))
@@ -5248,9 +5335,9 @@ async def _custom_generate(body, req=None):
             # Follow-up batches: the generator already produced 32 candidates and we were binning 17
             # of them. The curator needs 20-30 KEEPERS on the page, so raw yield per call matters more
             # than shaving seconds. Return nearly all of them and let the curator cut.
-            ideas = candidates[:28]
+            ideas = _pick(candidates, 28)
         else:
-            ideas = candidates[:25]
+            ideas = _pick(candidates, 25)
         # SUMMARY POLISH: rewrite the final summaries to active voice (separate fast Sonnet pass on the
         # SMALL final set, so it can't time out the way a combined pass did). Fails open (keeps originals).
         try:
