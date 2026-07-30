@@ -4296,7 +4296,9 @@ _READER_INSTR_RX = re.compile(
     r"put|trace|extend)\b", re.I)
 _CLAUSE_RX = re.compile(r",|\band\b|\bbut\b|\bbecause\b|\bwhich\b|\bthat\b|\bwhere\b|\bwhile\b|\bso\b", re.I)
 
-GRADE_LIMIT = 8.0      # measured Flesch-Kincaid; anything above this gets split or simplified
+GRADE_LIMIT = 10.5     # measured Flesch-Kincaid. Deliberately well above the grade-5 target: at
+                       # the target itself this marked half of every pitch and the repair pass
+                       # degraded everything it touched. Catch the outliers, not the average.
 SLOG_LIMIT = 2.0        # rewrite candidates; the accept guard still has to see the score come DOWN
 SLOG_HARD = 3.0         # zero false positives against his labels
 
@@ -4484,12 +4486,15 @@ def _sentence_polish(ideas, field="title"):
         # DEAD SENTENCES. A ruthless editor marked 81 of 242 sentences in the last batch deletable
         # with no loss: 25 restated the sentence before, 23 existed only to announce the next one.
         # No pass in this pipeline had ever been allowed to remove a sentence, so they all shipped.
-        for p in [q for q in re.split(r"(?<=[.?!])\s+", t.strip()) if q.strip()]:
-            g = _fk_grade(p)
-            if g >= GRADE_LIMIT and p not in seen:
-                marks.append("TOO HARD (reads at grade %.0f, target 5): %r. SPLIT it into two plain "
-                             "sentences, or say the same thing in shorter words. Splitting is fine, "
-                             "the pitch just must not get longer overall." % (g, p[:150]))
+        # ONLY THE WORST TWO. Setting this at the batch mean marked half of every pitch, the editor
+        # rewrote nearly everything, and one measured run lost event leads (4% -> 17%), gained passive
+        # voice (5% -> 11%) and doubled the abstract rate. A repair pass has to be given a small job.
+        _hard = sorted([(g, q) for q in re.split(r"(?<=[.?!])\s+", t.strip()) if q.strip()
+                        for g in [_fk_grade(q)] if g >= GRADE_LIMIT and q not in seen], reverse=True)[:2]
+        for g, p in _hard:
+            marks.append("TOO HARD (reads at grade %.0f, target 5): %r. SPLIT it into two plain "
+                         "sentences, or say the same thing in shorter words. Splitting is fine, "
+                         "the pitch just must not get longer overall." % (g, p[:150]))
         for p in _dead_sentences(t):
             marks.append("DELETE THIS SENTENCE: %r. It either restates a sentence above it or only "
                          "introduces the next one. Return the pitch WITHOUT it." % p[:150])
