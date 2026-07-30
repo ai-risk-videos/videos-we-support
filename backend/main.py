@@ -4426,6 +4426,9 @@ def _event_lead_fix(ideas, idxs, lead, rew):
 
 
 def _activate_summaries(ideas, anchors=""):
+    # In one-block mode every summary is empty, so the six summary-targeted passes below would each
+    # make a model call that can only return nothing. Detect it once and skip them; the title passes
+    # still run, and this saves roughly five round trips per generation.
     """anchors: the documented-anchor lines this batch was generated from, when the caller
     has them. With them we can run a fidelity pass that strips detail the anchors never
     stated; a blind panel measured invented specifics at 9 percent of a batch without it,
@@ -4433,6 +4436,18 @@ def _activate_summaries(ideas, anchors=""):
     if not ideas:
         return {}
     rew = {}
+    _white_only = not any((x.get("summary") or "").strip() for x in ideas)
+    if _white_only:
+        _log_event({"t": "polish_mode", "white_only": True, "n": len(ideas)})
+        lead = lead_anchor_block(14)
+        thematic = [i for i, x in enumerate(ideas) if _lacks_event_lead(x.get("title") or "")]
+        if anchors:
+            _fid_titles(ideas, anchors)
+        if lead and thematic:
+            _event_lead_fix(ideas, thematic, lead, rew)
+        _bold_endgame_fix(ideas, anchors)
+        _sentence_polish(ideas, "title")
+        return rew
     try:
         lines = "\n".join("%d. %s" % (i + 1, (x.get("summary") or "")) for i, x in enumerate(ideas))
         msg = get_client().messages.create(
@@ -4983,12 +4998,14 @@ def _gen_system(body):
     `SYSTEM_CUSTOM + ANTI_SLOP`. Three generations, three prompt rewrites, none of them ever sent.
     Any future per-request prompt variation belongs here, where the call actually reads it.
     """
-    if (body or {}).get("oneblock"):
-        # ONE BLOCK, no paragraph. The curator noticed the bold line is consistently better written
-        # than the summary beneath it, and asked what happens if the summary goes away and the bold
-        # line runs long. Opt-in per request, so the shipped product is untouched.
-        return _swap_format(SYSTEM_CUSTOM, ONEBLOCK_FORMAT) + ANTI_SLOP
-    return SYSTEM_CUSTOM + ANTI_SLOP
+    # ONE BLOCK IS THE DEFAULT NOW. The curator: the white text was consistently better written than
+    # the grey paragraph, and he asked for white only. Part of that gap was mechanical rather than
+    # inherent: the bold line had four dedicated passes (event-lead, fidelity, endgame, readability)
+    # and the paragraph had none of them. Folding everything into one block means every sentence gets
+    # the full treatment. `twolayer` reverses it for a side-by-side.
+    if (body or {}).get("twolayer"):
+        return SYSTEM_CUSTOM + ANTI_SLOP
+    return _swap_format(SYSTEM_CUSTOM, ONEBLOCK_FORMAT) + ANTI_SLOP
 
 
 async def _custom_generate(body, req=None):
