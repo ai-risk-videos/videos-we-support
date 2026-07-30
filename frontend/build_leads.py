@@ -1176,6 +1176,10 @@ async function showDashboard(){
   list.querySelectorAll("[data-edit]").forEach(bn=>bn.onclick=async()=>{try{const doc=await loadPageDoc(bn.getAttribute("data-edit"));if(doc)startCurate(doc.ideas||[],doc.handle||bn.getAttribute("data-edit"),doc.channel||doc.handle,doc.note||"",doc.profile||"",doc.style||"leads",doc.rejected||[]);else toast("That page no longer exists — refresh the list.");}catch(e){toast("Could not open page — check your connection.");}});
  }catch(e){const x=$("#dashbody");if(x)x.textContent="Could not load pages ("+((e&&e.message)||e)+").";console.error(e);}
 }
+// *emphasis* -> italics. The curator: "totally fine to use italics to highlight key words/stuff".
+// esc() ALWAYS runs first, so the only markup that survives is the <em> we add ourselves; nothing the
+// model writes can inject HTML.
+function em(t){return esc(t||"").replace(/[*]([^*]{1,60})[*]/g,"<em>$1</em>");}
 function leadCard(x,rank){
  const d=document.createElement("div");d.className="lead";
  const isIdea=x.title!=null; const main=isIdea?x.title:x.l;
@@ -1183,7 +1187,7 @@ function leadCard(x,rank){
  // a legible secondary color, NOT the old dim gray that people skipped. The generator now writes this as a
  // substantive 2-3 sentence description, so it adds real context rather than restating the hook.
  const sub=isIdea?(x.summary||""):((x.dirs||[]).join(" "));
- d.innerHTML='<div class="rank">'+rank+'</div><div class="body"><div class="txt">'+esc(main)+'</div>'+(sub.trim()?'<div class="subtxt">'+esc(sub)+'</div>':'')+
+ d.innerHTML='<div class="rank">'+rank+'</div><div class="body"><div class="txt">'+em(main)+'</div>'+(sub.trim()?'<div class="subtxt">'+em(sub)+'</div>':'')+
   '<div class="meta">'+(x.who?'<span>'+esc(x.who)+(x.y?" · "+esc(x.y):"")+'</span>':'')+(x.url?'<a href="'+esc(x.url)+'" target="_blank" rel="noopener">read more ›</a>':'')+
   '<button class="packbtn">📄 Research pack</button><button class="scriptbtn">🎬 Sample script</button></div><div class="brief"></div><div class="scriptbox"></div></div>';
  d.querySelector(".packbtn").onclick=(e)=>loadBrief(d,x,e.currentTarget);
