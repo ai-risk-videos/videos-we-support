@@ -868,10 +868,12 @@ def anchor_block(k=12):
     aism = set()      # lines to reuse verbatim rather than paraphrase
     priority = []     # always offered, and always first
     for s in get_sources().values():
+        if s.get("cut"):
+            continue          # the curator marked this one never-use in anchors.html
         if s.get("kind") in ("research-paper", "news", "incident", "official-report", "data",
                              "primary-doc", "tweet", "blog", "expert-quote", "video", "scenario"):
             t = f"[{s.get('who','')} {s.get('year','')}] {s.get('shows','')}"
-            rk = _anchor_rank(int(s.get("esc") or 5), s.get("grab"))
+            rk = _anchor_rank(int(s.get("esc") or 5), s.get("grab")) + int(s.get("bump") or 0)
             if _is_aism(s):
                 aism.add(t)
                 rk = max(rk, 7)      # a missing grab score must not keep AISM off the top shelf
