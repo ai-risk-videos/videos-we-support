@@ -3671,6 +3671,84 @@ def _ends_on_waypoint(text):
     return bool(parts) and bool(_WAYPOINT_RX.search(parts[-1]))
 
 
+# REDUNDANCY. The curator: "these white paragraphs are filled with weirdly redundant sentences. like a
+# lazy student just read the first 2 sentences then added fluff and restated it to pad the whole thing."
+# Measured on a batch: worst same-paragraph sentence pairs overlapped 100%, 75% and 50% on content
+# words. "Nobody designed any of that." followed by "Nobody designed the religion or the taxes, and
+# nobody running real operations will be watching closely enough..." is one sentence twice.
+_RED_STOP = set(("the a an and or of to in on for is are was were be been being it its this that these those "
+                 "with as at by from they them their we you our not no but so then than what which who "
+                 "will would can could may might have has had do does did just now also into over").split())
+
+
+def _redundancy(text):
+    """Worst content-word overlap between any two sentences, 0 to 1, plus that pair."""
+    S = [x for x in re.split(r"(?<=[.?!])\s+", (text or "").strip()) if x.strip()]
+    sets = [{w for w in re.findall(r"[a-z]{4,}", x.lower()) if w not in _RED_STOP} for x in S]
+    worst, pair = 0.0, None
+    for i in range(len(sets)):
+        for j in range(i + 1, len(sets)):
+            if not sets[i] or not sets[j]:
+                continue
+            ov = len(sets[i] & sets[j]) / min(len(sets[i]), len(sets[j]))
+            if ov > worst:
+                worst, pair = ov, (S[i], S[j])
+    return worst, pair
+
+
+REDUNDANCY_LIMIT = 0.5
+
+
+ENDGAME_GRADE_SYS = """You grade the ENDING of a video pitch on one ladder, and nothing else.
+
+  1. The thing that happened.
+  2. It generalises past one company.
+  3. Nobody can check, verify, audit, regulate, prove or trace it. Also: who plans to rely on it, who is
+     watching, who never noticed. ALL of rung 3.
+  4. Humans permanently lose the ability to steer it or take it back.
+  5. People die at scale, or the society cannot recover.
+
+Rungs 4 and 5 pass. Rung 3 and below fail. Be strict, and judge the MECHANISM, not the adjectives: an
+ending that merely asserts enormity reaches whatever rung its mechanism supports, not the rung it
+claims. "The grades are what regulators plan to trust" is rung 3 even though it sounds final. "Nobody
+is left who could switch it off" is rung 4.
+
+For each numbered ending return the rung, and when it is under 4, one short clause naming what the next
+rung would have to say for THAT pitch specifically.
+
+Return ONLY JSON: {"grades": {"1": {"rung": 3, "next": "..."}, "2": {"rung": 4, "next": ""}}}"""
+
+
+def _grade_endings(lines):
+    """[(i, bold_line)] -> {i: (rung, hint)}. A model decides, because my keyword guard cannot.
+
+    Six times now a regex has been the arbiter of whether an ending reached the bar, and six times the
+    model wrote a shape the regex did not know. The guard stays for clear failures; the RUNG call is
+    made here.
+    """
+    if not lines:
+        return {}
+    try:
+        body = "\n\n".join("%d. %s" % (n + 1, t) for n, (_, t) in enumerate(lines))
+        m = get_client().messages.create(
+            model=FAST_MODEL, max_tokens=3000, thinking=NO_THINK, system=ENDGAME_GRADE_SYS,
+            messages=[{"role": "user", "content": "Grade these endings:\n\n" + body}])
+        t = "".join(b.text for b in m.content if getattr(b, "type", "") == "text")
+        mm = re.search(r"\{.*\}", t, re.S)
+        obj = (json.loads(mm.group(0)) if mm else {}).get("grades") or {}
+        out = {}
+        for k, v in obj.items():
+            try:
+                pos = int(k) - 1
+                if 0 <= pos < len(lines) and isinstance(v, dict):
+                    out[lines[pos][0]] = (int(v.get("rung") or 0), str(v.get("next") or "")[:220])
+            except Exception:
+                pass
+        return out
+    except Exception:
+        return {}
+
+
 BOLD_ENDGAME_SYS = """You rewrite the LAST SENTENCE of a video pitch so it lands where the pitch is going.
 
 Each numbered item is the bold line of an AI-risk video idea. It is the whole pitch: most readers never
@@ -4035,9 +4113,13 @@ def _sentence_polish(ideas, field="title"):
     for i, x in enumerate(ideas):
         t = (x.get(field) or "").strip()
         bad = _costly_sentences(t)
-        if bad:
-            marks = "; ".join("HARD (cost %.1f): %r" % (c, p[:150]) for _, p, c in bad)
-            items.append((i, "%s\n   [%s]" % (t, marks)))
+        marks = ["HARD (cost %.1f): %r" % (c, p[:150]) for _, p, c in bad]
+        red, pair = _redundancy(t)
+        if red >= REDUNDANCY_LIMIT and pair:
+            marks.append("REDUNDANT (%.0f%% of the same words): %r restates %r. Cut one, or make the "
+                         "second sentence carry something new." % (100 * red, pair[1][:120], pair[0][:120]))
+        if marks:
+            items.append((i, "%s\n   [%s]" % (t, "; ".join(marks))))
     if not items:
         return
     try:
@@ -4059,8 +4141,10 @@ def _sentence_polish(ideas, field="title"):
                 worst_old = max([c for _, _, c in _costly_sentences(old)] or [0])
                 worst_new = max([c for _, _, c in _costly_sentences(new)] or [0])
                 # must actually get easier, must not lose the event opening, must not lose a fact
-                if (worst_new >= worst_old or not _keeps_substance(old, new)
-                        or (_lacks_event_lead(new) and not _lacks_event_lead(old))
+                red_old, _ = _redundancy(old)
+                red_new, _ = _redundancy(new)
+                if (worst_new >= worst_old and red_new >= red_old) or not _keeps_substance(old, new) or (
+                        (_lacks_event_lead(new) and not _lacks_event_lead(old))
                         or (_invents_source(new) and not _invents_source(old))):
                     rej += 1
                     continue
@@ -4131,6 +4215,56 @@ def _bold_endgame_fix(ideas, anchors=""):
                 pass
         _log_event({"t": "polish_pass", "which": "bold_endgame", "n": n, "rejected": rej,
                     "of": len(idxs)})
+
+        # VERIFY, THEN RETRY ONCE. The keyword guard only rejects shapes I have enumerated, and the
+        # model keeps writing new ones ("The grades are what regulators plan to trust" sails through
+        # every pattern I own). So a grader reads the endings and says which are still on rung 3, and
+        # those get one more attempt with the grader's own note about what rung 4 would need to say.
+        graded = _grade_endings([(i, ideas[i].get("title") or "") for i in idxs])
+        short = [(i, r, hint) for i, (r, hint) in graded.items() if r and r < 4]
+        _log_event({"t": "polish_pass", "which": "endgame_graded", "n": len(graded),
+                    "still_rung3": len(short)})
+        if short:
+            try:
+                body2 = "\n\n".join(
+                    "%d. %s\n   [a grader put this ending on rung %d. To reach rung 4 it needs to say: %s]"
+                    % (n2 + 1, ideas[i].get("title") or "", r, hint or "who permanently loses the ability "
+                       "to steer or reverse this, and why there is no way back")
+                    for n2, (i, r, hint) in enumerate(short))
+                m2 = get_client().messages.create(
+                    model=FAST_MODEL, max_tokens=5000, thinking=NO_THINK,
+                    system=BOLD_ENDGAME_SYS + (("\n\nDOCUMENTED ANCHORS, for facts only:\n" + anchors)
+                                               if anchors else ""),
+                    messages=[{"role": "user", "content":
+                               "These endings did not reach the bar. Write the final sentence again, "
+                               "further along:\n\n" + body2}])
+                t2 = "".join(b.text for b in m2.content if getattr(b, "type", "") == "text")
+                mm2 = re.search(r"\{.*\}", t2, re.S)
+                obj2 = (json.loads(mm2.group(0)) if mm2 else {}).get("ideas") or {}
+                n2ok = 0
+                for k, v in obj2.items():
+                    try:
+                        pos = int(k) - 1
+                        if not (0 <= pos < len(short)):
+                            continue
+                        idx2 = short[pos][0]
+                        ending2 = (v or "").strip() if isinstance(v, str) else ""
+                        if len(ending2) < 20:
+                            continue
+                        old2 = ideas[idx2].get("title") or ""
+                        parts2 = [p for p in re.split(r"(?<=[.?!])\s+", old2.strip()) if p.strip()]
+                        if len(parts2) < 2:
+                            continue
+                        cand = " ".join(parts2[:-1]) + " " + ending2
+                        if (_closer_doomtag(cand) or _hard_sentences(cand) or _invents_source(cand)
+                                or (_lacks_event_lead(cand) and not _lacks_event_lead(old2))):
+                            continue
+                        ideas[idx2]["title"] = _dedash(cand); n2ok += 1
+                    except Exception:
+                        pass
+                _log_event({"t": "polish_pass", "which": "endgame_retry", "n": n2ok, "of": len(short)})
+            except Exception as _e2:
+                _log_event({"t": "polish_pass", "which": "endgame_retry", "n": 0, "err": str(_e2)[:120]})
     except Exception as _e:
         _log_event({"t": "polish_pass", "which": "bold_endgame", "n": 0, "err": str(_e)[:120]})
 
