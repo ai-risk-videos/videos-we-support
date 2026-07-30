@@ -1,4 +1,5 @@
 import os, re, json, random, urllib.request, urllib.parse, asyncio
+import concurrent.futures as _cf   # chunked polish passes run in parallel; see _sentence_polish
 from fastapi import FastAPI, Request
 from fastapi.concurrency import run_in_threadpool
 from fastapi.middleware.cors import CORSMiddleware
