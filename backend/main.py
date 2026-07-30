@@ -3940,6 +3940,12 @@ ONEBLOCK_FORMAT = (
     "seventh, DELETE the weakest one, never merge two into a comma chain. One idea per sentence, "
     "nothing past about 18 words. You will have more true things to say than fit here. Throwing "
     "the extra ones away is the job, not a failure. A pitch is the spine, not the incident report.\n"
+    "NEVER HIT THE SIX BY CRAMMING. When the first attempt came in at six sentences it also came in "
+    "a whole reading grade HARDER, because two ideas got compressed into one sentence to make the "
+    "count. That is the wrong trade and it is worse than being long. If it does not fit in six EASY "
+    "sentences, DROP A BEAT: cut the third beat, or cut a detail. Never join two ideas with a comma, "
+    "a semicolon, \"once\", \"while\", or \"which\" to save a sentence. A reader who has to unpick "
+    "one dense sentence has lost more than a reader who got one fact fewer.\n"
     "ORDER, FOUR beats, ONE sentence each: (1) the real thing that happened, actor first, named, past "
     "tense, no preamble, carrying the one detail that makes it land; (2) why it happened, in plain "
     "words, and ONLY if it is not already obvious from (1); (3) why it is not a one-off, the same "
@@ -4290,6 +4296,7 @@ _READER_INSTR_RX = re.compile(
     r"put|trace|extend)\b", re.I)
 _CLAUSE_RX = re.compile(r",|\band\b|\bbut\b|\bbecause\b|\bwhich\b|\bthat\b|\bwhere\b|\bwhile\b|\bso\b", re.I)
 
+GRADE_LIMIT = 8.0      # measured Flesch-Kincaid; anything above this gets split or simplified
 SLOG_LIMIT = 2.0        # rewrite candidates; the accept guard still has to see the score come DOWN
 SLOG_HARD = 3.0         # zero false positives against his labels
 
@@ -4477,6 +4484,12 @@ def _sentence_polish(ideas, field="title"):
         # DEAD SENTENCES. A ruthless editor marked 81 of 242 sentences in the last batch deletable
         # with no loss: 25 restated the sentence before, 23 existed only to announce the next one.
         # No pass in this pipeline had ever been allowed to remove a sentence, so they all shipped.
+        for p in [q for q in re.split(r"(?<=[.?!])\s+", t.strip()) if q.strip()]:
+            g = _fk_grade(p)
+            if g >= GRADE_LIMIT and p not in seen:
+                marks.append("TOO HARD (reads at grade %.0f, target 5): %r. SPLIT it into two plain "
+                             "sentences, or say the same thing in shorter words. Splitting is fine, "
+                             "the pitch just must not get longer overall." % (g, p[:150]))
         for p in _dead_sentences(t):
             marks.append("DELETE THIS SENTENCE: %r. It either restates a sentence above it or only "
                          "introduces the next one. Return the pitch WITHOUT it." % p[:150])
@@ -4561,13 +4574,18 @@ def _sentence_polish_chunk(ideas, field, items):
                 slog_new = sum(c for _, _, c in _slog_sentences(new))
                 dead_old = len(_dead_sentences(old))
                 dead_new = len(_dead_sentences(new))
-                better = (worst_new < worst_old or red_new < red_old
-                          or slog_new < slog_old or dead_new < dead_old)
+                grade_old = max([_fk_grade(p) for p in
+                                 re.split(r"(?<=[.?!])\s+", old.strip()) if p.strip()] or [0])
+                grade_new = max([_fk_grade(p) for p in
+                                 re.split(r"(?<=[.?!])\s+", new.strip()) if p.strip()] or [0])
+                better = (worst_new < worst_old or red_new < red_old or slog_new < slog_old
+                          or dead_new < dead_old or grade_new < grade_old - 0.5)
                 # must not lose the event opening, must not lose a fact, must not GROW
                 if (not better) or not _keeps_substance(old, new) or (
                         (_lacks_event_lead(new) and not _lacks_event_lead(old))
                         or (_invents_source(new) and not _invents_source(old))
-                        or len(new.split()) > len(old.split()) + 8):
+                        or len(new.split()) > len(old.split()) + 8
+                        or grade_new > grade_old + 1.0):
                     rej += 1
                     continue
                 ideas[idx][field] = _dedash(new)
