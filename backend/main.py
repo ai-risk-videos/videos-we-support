@@ -3713,6 +3713,17 @@ ending that merely asserts enormity reaches whatever rung its mechanism supports
 claims. "The grades are what regulators plan to trust" is rung 3 even though it sounds final. "Nobody
 is left who could switch it off" is rung 4.
 
+THE TRAP, and it is the single most common failure: RUNG 3 IN LONGER CLOTHING. An ending grows a
+"nobody is left" or "no way to" clause and still describes only detection, oversight, accountability
+or trust. All of these are rung 3 no matter how final they sound:
+  "no version left to appeal to"        "no junior left who checks the AI"
+  "there is no way left to check"       "nobody signed off and nobody is checking"
+  "every test now depends on the model deciding not to hide"
+Ask one question: after this sentence, is the LOSS about knowing, or about DOING? If humans still could
+act once they knew, it is rung 3. Rung 4 needs the action itself to be gone or lethal:
+  "By the time anyone asks whether to pull it out, pulling it out is the thing that kills people."
+  "Killing it means finding every copy of the sequence, and gene libraries do not do recalls."
+
 For each numbered ending return the rung, and when it is under 4, one short clause naming what the next
 rung would have to say for THAT pitch specifically.
 
@@ -4224,7 +4235,12 @@ def _bold_endgame_fix(ideas, anchors=""):
         short = [(i, r, hint) for i, (r, hint) in graded.items() if r and r < 4]
         _log_event({"t": "polish_pass", "which": "endgame_graded", "n": len(graded),
                     "still_rung3": len(short)})
-        if short:
+        # TWO ROUNDS, not one. A blind grader measured a single retry taking rung-4+ endings from 0 of 24
+        # to 9 of 24: real movement, and two thirds still short. Re-grade after each round and keep only
+        # the ones that are still failing, so the second round is small and targeted.
+        for _round in range(2):
+            if not short or not _budget_left():
+                break
             try:
                 body2 = "\n\n".join(
                     "%d. %s\n   [a grader put this ending on rung %d. To reach rung 4 it needs to say: %s]"
@@ -4265,6 +4281,11 @@ def _bold_endgame_fix(ideas, anchors=""):
                 _log_event({"t": "polish_pass", "which": "endgame_retry", "n": n2ok, "of": len(short)})
             except Exception as _e2:
                 _log_event({"t": "polish_pass", "which": "endgame_retry", "n": 0, "err": str(_e2)[:120]})
+                break
+            regraded = _grade_endings([(i, ideas[i].get("title") or "") for i, _r, _h in short])
+            short = [(i, r, hint) for i, (r, hint) in regraded.items() if r and r < 4]
+            _log_event({"t": "polish_pass", "which": "endgame_round", "round": _round + 1,
+                        "still_rung3": len(short)})
     except Exception as _e:
         _log_event({"t": "polish_pass", "which": "bold_endgame", "n": 0, "err": str(_e)[:120]})
 
