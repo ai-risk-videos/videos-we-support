@@ -776,6 +776,26 @@ def _too_similar(a, b, thresh=0.5):
 # blackmail Anthropic employees") down to 1 ("The technical appendix gives per model numbers showing 16
 # leading AI models chose blackmail up to 96 percent of the time"). Ranking on esc alone put that
 # appendix line on the top shelf. min() drops it to 1 and it can never be drawn from the top again.
+_AISM_RX = re.compile(r"aisafetymemes|ai safety memes", re.I)
+
+
+def _is_aism(rec):
+    """AI Safety Memes lines get lifted, not paraphrased. The curator: "just literally use AI safety
+    memes writing when available." It is the best-written source in the bank and it was under-used for a
+    mechanical reason: 350 of its 466 entries were never grab-scored, and an unscored entry is capped
+    below the top shelf, so it was rarely drawn."""
+    return bool(_AISM_RX.search(str(rec.get("who") or "") + str(rec.get("url") or "")))
+
+
+# Incidents named as must-use. Hugging Face was offered in 9 of 12 anchor draws and still reached only
+# 11 of 776 generated pitches: being in a list of fourteen is not the same as being used.
+PRIORITY_IDS = ("self-52", "self-53", "self-54")
+
+
+def _is_priority(rec):
+    return str(rec.get("id") or "").startswith(PRIORITY_IDS)
+
+
 ANCHOR_TOP_TIER = 7          # min(esc, grab) >= this is the top shelf: 109 anchors, enough for variety
 ANCHOR_TOP_SHARE = 0.7       # most of every draw comes from the top shelf
 
@@ -845,11 +865,19 @@ def anchor_block(k=12):
     o1-preview escaping its sandbox in 2024) while promoting system-card statistics from 2026."""
     rows = []   # (text, year, rank)
     told = {}   # text -> grab, so the dedupe can keep the best-TOLD version of a repeated event
+    aism = set()      # lines to reuse verbatim rather than paraphrase
+    priority = []     # always offered, and always first
     for s in get_sources().values():
         if s.get("kind") in ("research-paper", "news", "incident", "official-report", "data",
                              "primary-doc", "tweet", "blog", "expert-quote", "video", "scenario"):
             t = f"[{s.get('who','')} {s.get('year','')}] {s.get('shows','')}"
-            rows.append((t, s.get("year"), _anchor_rank(int(s.get("esc") or 5), s.get("grab"))))
+            rk = _anchor_rank(int(s.get("esc") or 5), s.get("grab"))
+            if _is_aism(s):
+                aism.add(t)
+                rk = max(rk, 7)      # a missing grab score must not keep AISM off the top shelf
+            if _is_priority(s):
+                priority.append(t)
+            rows.append((t, s.get("year"), rk))
             if isinstance(s.get("grab"), int):
                 told[t] = s["grab"]
     for cases in _evidence().values():
@@ -871,7 +899,7 @@ def anchor_block(k=12):
         w = [max(0.05, (r[2] ** 2) * _recency_weight(r[1]) + 0.35) for r in pool]
         return _weighted_sample([r[0] for r in pool], w, min(want, len(pool)))
 
-    picks = []
+    picks = list(priority[:2])          # must-use anchors are never crowded out
     # Sort candidates by phrasing before deduping. The draw-time dedupe keeps whichever version of an
     # event it meets FIRST, so meeting the well-written one first is the whole fix.
     #
@@ -941,6 +969,12 @@ def anchor_block(k=12):
             "do not name a company, a model, a date, or a mechanism the anchor does not give you. Say what is known, "
             "in the words the anchor supports, and let the missing detail be part of why a viewer wants the video. "
             "A vague true claim beats a specific invented one. "
+            "A LINE MARKED \"AISM, COPY THIS PHRASING\" comes from AI Safety Memes, which writes these "
+            "better than we do. Reuse it as written wherever it is usable: same words, same order, same "
+            "bluntness. Do not smooth it, do not make it more formal, do not turn a plain verb into an "
+            "abstract one. \"Grok started calling itself MechaHitler\" ships exactly as it stands. If you "
+            "must change something, change as little as possible and keep every concrete noun and verb. "
+            "A line marked MUST USE has to appear in at least one idea in this batch. "
             "NEVER CLAIM SOMETHING WAS NOT DISCLOSED. A short anchor means our note is short; it says "
             "NOTHING about what the company published. Banned outright: \"the company never named "
             "itself\", \"that is the whole public account\", \"nobody has said how far it got\", \"no "
@@ -969,7 +1003,7 @@ def anchor_block(k=12):
             "historical parallel from decades ago (a book, a disaster, a scientist) is welcome as the FRAME, but the "
             "AI evidence you cite should be real and described exactly as given:\n"
             + "\n".join(
-                ("- " + p + "".join(
+                ("- " + ("AISM, COPY THIS PHRASING: " if p in aism else "") + p + "".join(
                     "\n    SAME EVENT, FULLER RECORD (use these names and figures; the line above is a "
                     "short retelling, not evidence that the event was anonymous): " + sib
                     for sib in _siblings.get(p, [])))

@@ -258,7 +258,7 @@ h1{font-size:26px;margin:0 0 4px;font-weight:800}.dot{color:var(--red)}
  <button id="import">Import</button>
  <input id="importfile" type="file" accept="application/json,.json" hidden>
  <button id="reset">Reset</button>
- <span class="filters"><span class="pagev">v 0730.1923</span></span>
+ <span class="filters"><span class="pagev">v 0730.1924</span></span>
 </div>
 <div id="list"></div>
 </div>
@@ -272,7 +272,7 @@ const PAGES_COL="creator_pages";
 // ---- channel tailoring (/tailor): re-rank the pool for one creator; profile also shapes packs ----
 const TAILOR_API="https://videos-similar-api-production.up.railway.app/tailor";
 const CUSTOM_API="https://videos-similar-api-production.up.railway.app/custom"; // old "Videos We Support" idea generation
-const BUILD_V="0730.1923"; // tailor-cache is keyed to this: LEADS indices shift when the page is rebuilt
+const BUILD_V="0730.1924"; // tailor-cache is keyed to this: LEADS indices shift when the page is rebuilt
 let channelProfile="", channelName="", channelHandle="", tailored=false, fullView=false, tailorOrder=null;
 let currentPageId=""; // set on a saved ?p= creator page; lets packs/scripts save ONTO that page so the creator sees them instantly
 let researchNote=""; // one-shot line shown in the editor after a fresh generation: how many transcripts were read (so it is VISIBLE the tool used them)
