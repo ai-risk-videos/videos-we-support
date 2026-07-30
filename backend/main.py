@@ -4238,8 +4238,11 @@ def _bold_endgame_fix(ideas, anchors=""):
         # TWO ROUNDS, not one. A blind grader measured a single retry taking rung-4+ endings from 0 of 24
         # to 9 of 24: real movement, and two thirds still short. Re-grade after each round and keep only
         # the ones that are still failing, so the second round is small and targeted.
+        # NB: no budget check here. `_budget_left` is a closure inside _activate_summaries and is not in
+        # scope in this function; calling it raised NameError and the retry silently never ran, leaving
+        # 18 of 24 endings on rung 3 with no second attempt. The loop is already bounded at 2 rounds.
         for _round in range(2):
-            if not short or not _budget_left():
+            if not short:
                 break
             try:
                 body2 = "\n\n".join(
