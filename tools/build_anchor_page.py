@@ -104,7 +104,8 @@ __BODY__
 <div id="bar"><div class="in">
   <span><b id="ncut">0</b> cut</span><span><b id="nmoved">0</b> moved</span>
   <button id="copy">Copy decisions</button><button id="resend">Re-send all</button>
-  <span style="margin-left:auto">changes are saved locally and sent as you make them</span>
+  <span id="whoami"></span>
+  <span style="margin-left:auto">changes save locally and send as you make them</span>
 </div></div>
 <script>
 const API="https://videos-similar-api-production.up.railway.app/event";
@@ -114,8 +115,10 @@ const $=s=>document.querySelector(s);
 function save(){localStorage.setItem(KEY,JSON.stringify(dec));
   $("#ncut").textContent=Object.values(dec).filter(d=>d.cut).length;
   $("#nmoved").textContent=Object.values(dec).filter(d=>d.bump).length;}
+const WHO=(new URLSearchParams(location.search).get("u")||localStorage.getItem("anchoruser")||"").trim();
+if(WHO)localStorage.setItem("anchoruser",WHO);
 function send(id,d){fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},keepalive:true,
-  body:JSON.stringify({t:"anchorvote",id:id,cut:!!d.cut,bump:d.bump||0,ts:new Date().toISOString()})}).catch(()=>{});}
+  body:JSON.stringify({t:"anchorvote",id:id,cut:!!d.cut,bump:d.bump||0,who:WHO||"unknown",ts:new Date().toISOString()})}).catch(()=>{});}
 function apply(){
   for(const [id,d] of Object.entries(dec)){
     const li=document.querySelector('[data-id="'+CSS.escape(id)+'"]'); if(!li)continue;
@@ -160,8 +163,9 @@ document.addEventListener("drop",e=>{
 $("#copy").onclick=()=>navigator.clipboard.writeText(JSON.stringify(dec,null,1))
   .then(()=>alert("Copied decisions for "+Object.keys(dec).length+" anchors."));
 $("#resend").onclick=async()=>{let ok=0;for(const [id,d] of Object.entries(dec)){try{await fetch(API,{method:"POST",
-  headers:{"Content-Type":"application/json"},body:JSON.stringify({t:"anchorvote",id:id,cut:!!d.cut,bump:d.bump||0})});ok++;}catch(e){}}
+  headers:{"Content-Type":"application/json"},body:JSON.stringify({t:"anchorvote",id:id,cut:!!d.cut,bump:d.bump||0,who:WHO||"unknown"})});ok++;}catch(e){}}
   alert("Re-sent "+ok+" of "+Object.keys(dec).length);};
+$("#whoami").textContent = WHO ? ("curating as " + WHO) : "add ?u=yourname to the URL so your picks are attributed";
 apply();
 </script></body></html>"""
 

@@ -17,7 +17,8 @@ def votes_from_events():
     out = {}
     for e in (ev.get("events") or []):
         if e.get("t") == "anchorvote" and e.get("id"):
-            out[e["id"]] = {"cut": bool(e.get("cut")), "bump": int(e.get("bump") or 0)}
+            out[e["id"]] = {"cut": bool(e.get("cut")), "bump": int(e.get("bump") or 0),
+                            "who": str(e.get("who") or "unknown")}
     return out
 
 
@@ -40,7 +41,9 @@ def main():
         if not v:
             continue
         if v["cut"] and not s.get("cut"):
-            s["cut"] = True; cut += 1
+            s["cut"] = True
+            s["cut_by"] = v.get("who", "unknown")     # who cut it, so a disagreement is visible
+            cut += 1
         elif not v["cut"] and s.get("cut"):
             s.pop("cut", None)
         if v["bump"]:
