@@ -19,7 +19,9 @@ this file). ~20s per channel.
 import json, os, re, sys, time, urllib.request
 
 BASE = "https://videos-similar-api-production.up.railway.app"
-KEY = os.environ.get("SPECIES_OPS_KEY", "sk-17623772cdc7e1aa2f255a1ff57b7aa0e55dfca0")  # rotated 2026-07-14; this file lives only on this Mac
+KEY = os.environ.get("SPECIES_OPS_KEY") or os.environ.get("EVENTS_KEY") or ""
+if not KEY:
+    raise SystemExit("set SPECIES_OPS_KEY (or EVENTS_KEY) before running; there is no baked-in key.\nA rotated one used to be hard-coded here under a comment claiming this file was local only. It was\ncommitted to a PUBLIC repo instead, and because it was stale every upload silently 403d.")
 HERE = os.path.dirname(os.path.abspath(__file__))
 LOCAL = os.path.join(HERE, "transcripts.json")
 N_VIDEOS = 12          # transcripts per channel (matches the server's _TR_MAX_VIDEOS)
