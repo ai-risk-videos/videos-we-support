@@ -163,7 +163,26 @@ document.addEventListener("dragstart",e=>{
   if(e.target.closest&&e.target.closest("a.src")){e.preventDefault();return;}
   const li=e.target.closest&&e.target.closest("li.row");
   if(!li)return;dragging=li;li.classList.add("dragging");});
-document.addEventListener("dragend",()=>{if(dragging)dragging.classList.remove("dragging");dragging=null;});
+function record(li){
+  // RECORD ON dragend, NOT ONLY ON drop. dragover already moved the row on screen, but the vote
+  // was saved in the drop handler, and drop never fires when you release over a heading or the
+  // gap between two lists. The row slid into place and nothing was ever sent: the move looked
+  // saved and vanished on refresh. dragend always fires, so the recording lives here now.
+  const prev=li.previousElementSibling, next=li.nextElementSibling;
+  const nrank=(el)=>el&&el.classList.contains("row")?parseInt(el.querySelector(".rk").textContent,10):null;
+  const a=nrank(prev), b=nrank(next);
+  const target = a!==null&&b!==null ? Math.round((a+b)/2) : (a!==null?a:(b!==null?b:null));
+  if(target===null)return;
+  const rk=li.querySelector(".rk"); const was=parseInt(rk.textContent,10);
+  if(target===was)return;                       // dropped back where it started
+  const id=li.dataset.id; dec[id]=dec[id]||{cut:false,bump:0};
+  dec[id].bump=(dec[id].bump||0)+(target-was); rk.textContent=target;
+  li.classList.add("saved"); setTimeout(()=>li.classList.remove("saved"),900);
+  save(); send(id,dec[id]);
+}
+document.addEventListener("dragend",()=>{
+  if(dragging){dragging.classList.remove("dragging"); record(dragging);}
+  dragging=null;});
 document.addEventListener("dragover",e=>{
   const li=e.target.closest&&e.target.closest("li.row");
   if(!li||!dragging||li===dragging)return; e.preventDefault();
@@ -172,18 +191,7 @@ document.addEventListener("dragover",e=>{
 });
 document.addEventListener("drop",e=>{
   if(!dragging)return; e.preventDefault();
-  // a drag is recorded as the rank change it implies, using the neighbours it landed between
-  const li=dragging, prev=li.previousElementSibling, next=li.nextElementSibling;
-  const nrank=(el)=>el?parseInt(el.querySelector(".rk").textContent,10):null;
-  const a=nrank(prev), b=nrank(next);
-  const target = a!==null&&b!==null ? Math.round((a+b)/2) : (a!==null?a:(b!==null?b:null));
-  if(target!==null){
-    const rk=li.querySelector(".rk"); const was=parseInt(rk.textContent,10);
-    const id=li.dataset.id; dec[id]=dec[id]||{cut:false,bump:0};
-    dec[id].bump=(dec[id].bump||0)+(target-was); rk.textContent=target;
-    li.classList.add("saved"); setTimeout(()=>li.classList.remove("saved"),900);
-    save(); send(id,dec[id]);
-  }
+  const li=dragging; dragging=null; li.classList.remove("dragging"); record(li);
 });
 $("#copy").onclick=()=>navigator.clipboard.writeText(JSON.stringify(dec,null,1))
   .then(()=>alert("Copied decisions for "+Object.keys(dec).length+" anchors."));
