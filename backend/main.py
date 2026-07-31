@@ -2913,13 +2913,13 @@ def _webshare_cfg():
         return None
 
 def _fetch_transcripts_proxy(vid_titles):
-    """On-demand transcript fetch through the residential proxy. vid_titles: [(id,title)].
+    """On-demand transcript fetch: Railway direct first, residential proxy only where blocked. vid_titles: [(id,title)].
     Returns [{"id","title","text"}]; silently returns [] when no proxy is configured (the
     profile then falls back to titles+descriptions, exactly the pre-transcript behavior).
     HARD DEADLINE on the whole batch: this runs inside a live request, so we take whatever
     finished within the window and abandon the rest rather than stalling the user."""
     cfg = _webshare_cfg()
-    if not cfg or not vid_titles:
+    if not vid_titles:
         return [], True  # tuple contract: caller unpacks `got, proxy_ok = _fetch_transcripts_proxy(...)`
     try:
         from youtube_transcript_api import YouTubeTranscriptApi
@@ -2931,16 +2931,27 @@ def _fetch_transcripts_proxy(vid_titles):
                   "ConnectTimeout", "ReadTimeout", "NewConnectionError", "ProtocolError")
     def one(vt):
         vid, title = vt
-        # 2 attempts: rotation gives each try a FRESH residential IP, and measured per-attempt
-        # success is ~2/3 (some pool IPs are already bot-flagged) → ~90% with the second draw
-        for _ in range(2):
+        # DIRECT FIRST, PROXY ONLY WHEN YOUTUBE BLOCKS US. This used to go straight to the proxy
+        # for every video, which is what burned the metered residential bandwidth: each fetch
+        # pulls the ~1-2 MB watch page, not just the caption text, so twelve videos is tens of
+        # megabytes per channel profile. Railway's own IP serves a good share of videos fine and
+        # costs nothing; the proxy is worth paying for only on the ones it is actually blocked on.
+        # It also means a suspended or unpaid proxy degrades the tool instead of breaking it.
+        attempts = [None] + ([cfg] * 2 if cfg else [])
+        for pc in attempts:
             try:
-                api = YouTubeTranscriptApi(proxy_config=cfg)  # per-thread client: not thread-safe shared
+                api = YouTubeTranscriptApi(proxy_config=pc) if pc else YouTubeTranscriptApi()
                 tr = api.fetch(vid)
                 txt = _tr_clip(" ".join(s.text for s in tr))
                 return {"id": vid, "title": title, "text": txt} if len(txt) > 200 else None
             except Exception as e:
-                errs.append(type(e).__name__)
+                name = type(e).__name__
+                errs.append(name)
+                # a video that is private, unplayable or simply has no captions will fail the same
+                # way through the proxy, so do not spend a paid fetch proving it twice
+                if name in ("VideoUnplayable", "VideoUnavailable", "NoTranscriptFound",
+                            "TranscriptsDisabled", "NotTranslatable"):
+                    return None
                 continue
         return None
     out = []
@@ -2980,7 +2991,7 @@ def _channel_transcripts(url, vid_titles):
         if not vids and age < _TR_MISS_TTL:
             return []  # fresh negative-cache: this channel had no fetchable transcripts
     got, proxy_ok = _fetch_transcripts_proxy(vid_titles)
-    if got or (_webshare_cfg() and proxy_ok):
+    if got or proxy_ok:
         # store hits AND genuine misses, but NOT a transient proxy outage (proxy_ok False) —
         # caching that would lock the channel to titles-only until the miss TTL expires
         _transcripts_store(url, {"channel": "", "ts": _time.time(), "via": "proxy", "videos": got})
