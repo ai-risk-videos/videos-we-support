@@ -19,6 +19,7 @@ li.row.dragging{opacity:.4}
 .sc{flex:0 0 104px;font-size:10px;color:#6b7885;padding-top:5px}
 .sc i{font-style:normal;margin-right:3px}
 .meta{flex:0 0 172px;color:var(--mut);font-size:11.5px;padding-top:4px}
+li.row.saved{outline:2px solid #4d9c5a;transition:outline .2s}
 a.src{color:#7fb2e5;text-decoration:none}a.src:hover{color:#a9cdf3;text-decoration:underline}
 .tx{flex:1;font-size:13.4px;color:#cdd6df}
 .act{flex:0 0 auto;display:flex;gap:3px}
@@ -52,12 +53,25 @@ const WHO=(new URLSearchParams(location.search).get("u")||localStorage.getItem("
 if(WHO)localStorage.setItem("anchoruser",WHO);
 function send(id,d){fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},keepalive:true,
   body:JSON.stringify({t:"anchorvote",id:id,cut:!!d.cut,bump:d.bump||0,who:WHO||"unknown",ts:new Date().toISOString()})}).catch(()=>{});}
+function resort(){
+  // A REFRESH USED TO UNDO EVERY MOVE. apply() adjusted the rank NUMBER on the row and stopped
+  // there, so the row stayed exactly where the static HTML had written it and only its number
+  // changed. Re-sorting each category by the effective rank is what makes a move survive reload.
+  document.querySelectorAll("ol.rank").forEach(ol=>{
+    const rows=Array.prototype.slice.call(ol.children).filter(li=>li.classList.contains("row"));
+    // stable sort, so anchors on the same rank keep the order the page was built with
+    rows.sort((a,b)=>(parseInt(b.querySelector(".rk").textContent,10)||0)
+                     -(parseInt(a.querySelector(".rk").textContent,10)||0));
+    rows.forEach(li=>ol.appendChild(li));
+  });
+}
 function apply(){
   for(const [id,d] of Object.entries(dec)){
     const li=document.querySelector('[data-id="'+CSS.escape(id)+'"]'); if(!li)continue;
     if(d.cut)li.classList.add("cut");
     if(d.bump){const rk=li.querySelector(".rk");rk.textContent=(parseInt(rk.textContent,10)+d.bump);}
   }
+  resort();
   save();
 }
 document.addEventListener("click",e=>{
@@ -68,6 +82,9 @@ document.addEventListener("click",e=>{
   if(b.classList.contains("x")){dec[id].cut=!dec[id].cut;li.classList.toggle("cut");}
   if(b.classList.contains("up")){dec[id].bump=(dec[id].bump||0)+1;const rk=li.querySelector(".rk");rk.textContent=parseInt(rk.textContent,10)+1;}
   if(b.classList.contains("dn")){dec[id].bump=(dec[id].bump||0)-1;const rk=li.querySelector(".rk");rk.textContent=parseInt(rk.textContent,10)-1;}
+  if(b.classList.contains("up")||b.classList.contains("dn")){
+    resort(); li.scrollIntoView({block:"center"});   // follow the row you just moved
+  }
   save(); send(id,dec[id]);
 });
 let dragging=null;
@@ -93,6 +110,7 @@ document.addEventListener("drop",e=>{
     const rk=li.querySelector(".rk"); const was=parseInt(rk.textContent,10);
     const id=li.dataset.id; dec[id]=dec[id]||{cut:false,bump:0};
     dec[id].bump=(dec[id].bump||0)+(target-was); rk.textContent=target;
+    li.classList.add("saved"); setTimeout(()=>li.classList.remove("saved"),900);
     save(); send(id,dec[id]);
   }
 });
