@@ -17,7 +17,7 @@ in the email. ~50s per channel, run it while the coffee brews.
 import json, os, re, sys, time, urllib.request
 
 API = "https://videos-similar-api-production.up.railway.app/custom"
-_KEY = os.environ.get("SPECIES_OPS_KEY", "sk-17623772cdc7e1aa2f255a1ff57b7aa0e55dfca0")  # rotated 2026-07-14
+_KEY = os.environ.get("SPECIES_OPS_KEY") or os.environ.get("EVENTS_KEY") or ""  # never hard-code it: this repo is public
 EVENTS = f"https://videos-similar-api-production.up.railway.app/events?key={_KEY}&n=3000"
 DASH = f"https://videos-similar-api-production.up.railway.app/dash?key={_KEY}"
 HERE = os.path.dirname(os.path.abspath(__file__))
