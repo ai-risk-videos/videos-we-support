@@ -65,12 +65,28 @@ function _why(){
 function _clearPop(){const p=_pop();p.style.display="none";
   p.querySelectorAll(".chip.on").forEach(c=>c.classList.remove("on"));
   p.querySelector("textarea").value="";}
+function _asEl(n){return !n?null:(n.nodeType===1?n:n.parentElement);}
+function hostOf(sel){
+  // Which sentence does this selection belong to? anchorNode alone is not enough: selecting a whole
+  // sentence often anchors on the whitespace text node BETWEEN two spans, which has no .sent
+  // ancestor, so the popup used to vanish and the drag looked like it did nothing at all.
+  const r=sel.rangeCount?sel.getRangeAt(0):null;
+  const cands=[sel.anchorNode,sel.focusNode,r&&r.startContainer,r&&r.endContainer,
+               r&&r.commonAncestorContainer];
+  for(const n of cands){
+    const el=_asEl(n); const h=el&&el.closest?el.closest(".sent"):null;
+    if(h)return h;
+  }
+  // selection spans several sentences: attribute it to the first one it touches
+  const el=_asEl(r&&r.commonAncestorContainer);
+  return el&&el.querySelector?el.querySelector(".sent"):null;
+}
 let pending=null;
 document.addEventListener("mouseup",e=>{
   if(e.target&&e.target.closest&&e.target.closest("#pop"))return;   // interacting with the popup
   const sel=window.getSelection(); const txt=(sel&&sel.toString()||"").trim();
   if(!txt){_clearPop();pending=null;return;}
-  const host=sel.anchorNode&&sel.anchorNode.parentElement&&sel.anchorNode.parentElement.closest(".sent");
+  const host=hostOf(sel);
   if(!host){_clearPop();return;}
   pending={range:sel.getRangeAt(0).cloneRange(),text:txt,sid:host.dataset.id||""};
   const r=sel.getRangeAt(0).getBoundingClientRect(); const p=_pop();
@@ -81,13 +97,32 @@ document.addEventListener("mouseup",e=>{
   p.style.left=Math.max(8,x)+"px"; p.style.top=(window.scrollY+r.bottom+7)+"px";
   p.querySelector("textarea").focus({preventScroll:true});
 });
+function wrapSelection(range,m){
+  const r=range.cloneRange();
+  // find the sentence this selection belongs to and never let the mark escape it
+  const startEl=r.startContainer.nodeType===1?r.startContainer:r.startContainer.parentElement;
+  const host=startEl&&startEl.closest?startEl.closest(".sent"):null;
+  if(host){
+    if(!host.contains(r.startContainer))r.setStart(host,0);
+    if(!host.contains(r.endContainer))r.setEnd(host,host.childNodes.length);
+  }
+  if(r.collapsed)return false;
+  try{r.surroundContents(m);return true;}catch(e){}
+  try{m.appendChild(r.extractContents());r.insertNode(m);
+      if(m.parentNode)m.parentNode.normalize();return true;}catch(e){}
+  return false;
+}
 function mark(v){
   if(!pending)return;
   const why=_why();
   const m=document.createElement("mark"); m.className=(v==="bad"?"b":"g");
   const id=Date.now()+"-"+Math.round(Math.random()*1e6); m.dataset.lid=id;
   if(why)m.dataset.why=why, m.title=why;
-  try{pending.range.surroundContents(m);}catch(err){alert("Select inside a single sentence.");return;}
+  // surroundContents() throws the moment a selection is not inside one text node, which is what
+  // happens on the most natural gesture there is: dragging across a whole sentence and catching
+  // the trailing space or the next span. Clamp the range to the sentence, then extract-and-insert,
+  // which handles a selection spanning several nodes. Only give up if BOTH routes fail.
+  if(!wrapSelection(pending.range, m)){alert("Could not mark that. Try selecting a bit less.");return;}
   const rec={id:id,sid:pending.sid,text:pending.text,verdict:v,why:why,ts:new Date().toISOString()};
   labels.push(rec);
   fetch(LAPI,{method:"POST",headers:{"Content-Type":"application/json"},keepalive:true,
