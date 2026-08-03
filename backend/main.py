@@ -4769,8 +4769,14 @@ def _bold_endgame_fix(ideas, anchors=""):
                 # returned, and its prompt used to invite "one or two short ones", so a pitch could
                 # come out of it two sentences longer than it went in. That is where a measured third
                 # of the redundant_escalation endings came from.
+                # NO EXTRA SENTENCES. The sentence count is the real anti-bloat control here, and it
+                # is strict. The word cap next to it must NOT be, because this pass swaps a short flat
+                # ending ("Nobody gets near the switch.", six words) for a blunt question at scale
+                # (about twenty). A +6 cap silently rejected six of every eight closing questions:
+                # the anti-fluff guard added this morning was cancelling the ending rule added this
+                # afternoon, and both looked like they were working.
                 _np = [p for p in re.split(r"(?<=[.?!])\s+", new.strip()) if p.strip()]
-                if len(_np) > len(parts) or len(new.split()) > len(old_line.split()) + 6:
+                if len(_np) > len(parts) or len(new.split()) > len(old_line.split()) + 20:
                     rej += 1
                     continue
                 # the returned ending must BE the closing question, not merely avoid the old failures

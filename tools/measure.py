@@ -16,6 +16,7 @@ LABELS = os.path.join(HERE, "labels.json")
 OUT = os.path.expanduser("~/Downloads/review.html")
 
 sys.path.insert(0, os.path.join(ROOT, "backend"))
+sys.path.insert(0, HERE)          # label_widget lives beside this file
 os.environ.setdefault("ANTHROPIC_API_KEY", "x")
 for _n in ("fastapi", "fastapi.concurrency", "fastapi.middleware", "fastapi.middleware.cors",
            "fastapi.responses", "anthropic", "yt_dlp"):
@@ -170,7 +171,10 @@ def build_page(ideas, hist, known):
                     % (cls, r["id"], r["cost"], E(r["text"]), tag))
     body.append("</div></div>")
 
-    page = TEMPLATE.replace("__TREND__", trend(hist)).replace("__BODY__", "".join(body))
+    import label_widget as LW
+    page = (TEMPLATE.replace("__TREND__", trend(hist)).replace("__BODY__", "".join(body))
+            .replace("__LABELCSS__", LW.CSS).replace("__LABELHTML__", LW.HTML)
+            .replace("__LABELJS__", LW.JS("reviewlabels.v1")))
     page = page.replace("__RUNS__", str(len(hist))).replace("__NLAB__", str(len(known)))
     js = re.search(r"<script>(.*?)</script>", page, re.S).group(1)
     with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False) as fh:
@@ -201,9 +205,7 @@ td.g{color:var(--grn);font-weight:600}td.b{color:var(--red);font-weight:600}
 .sent.flag{background:#3a1f1c;color:#ffb3a8}
 .sent.youbad{outline:1px dashed var(--red)}.sent.yougood{outline:1px dashed var(--grn)}
 .sent i{font-style:normal;font-size:9px;opacity:.6;margin-left:4px;vertical-align:super;text-transform:uppercase}
-mark.g{background:#16301f;color:#8fe3ad;border-bottom:2px solid var(--grn)}
-mark.b{background:#4a2320;color:#ffc0b6;border-bottom:2px solid var(--red)}
-#pop{position:absolute;display:none;z-index:60;background:#1b222b;border:1px solid #33404e;border-radius:9px;padding:6px;box-shadow:0 8px 26px rgba(0,0,0,.6)}
+__LABELCSS__
 #pop button{font:inherit;font-size:12.5px;border:0;border-radius:6px;padding:6px 11px;margin:0 3px;cursor:pointer}
 #pop .gd{background:#1d4430;color:#a6f0c2}#pop .bd{background:#4a2320;color:#ffc0b6}
 #bar{position:fixed;left:0;right:0;bottom:0;background:#12171ef2;border-top:1px solid var(--edge);padding:11px 20px;backdrop-filter:blur(8px)}
@@ -214,22 +216,19 @@ mark.b{background:#4a2320;color:#ffc0b6;border-bottom:2px solid var(--red)}
 <h1>Review</h1>
 <p class="lead">A fresh batch, every measure you have raised, and the same page takes your marks. Green means it moved the right way since the last run. Run <code>./review.sh</code> any time to regenerate this.</p>
 __TREND__
-<div class="how"><b>Mark anything.</b> Select text, then click <b>Bad</b> or <b>Good</b>, or press <kbd>b</kbd> / <kbd>g</kbd>. Click a highlight to remove it. Each mark sends immediately. Red shading is the detector's guess with the matched shape named; dashed outlines are marks you already made, so you can see where it still disagrees with you. __RUNS__ runs tracked, __NLAB__ labels so far.</div>
+<div class="how"><b>Mark anything.</b> Select any span inside a sentence, pick a reason chip or type one, then <b>Bad</b> or <b>Good</b> (or <kbd>b</kbd> / <kbd>g</kbd>). Click a highlight to remove it. Each mark sends immediately. Red shading is the detector's guess with the matched shape named; dashed outlines are marks you already made, so you can see where it still disagrees with you. __RUNS__ runs tracked, __NLAB__ labels so far.</div>
 __BODY__
 </div>
-<div id="pop"><button class="bd">Bad</button><button class="gd">Good</button></div>
+__LABELHTML__
 <div id="bar"><div class="in">
   <span><b id="nb">0</b> bad</span><span><b id="ng">0</b> good</span>
   <button id="copy">Copy labels</button><button id="resend">Re-send all</button><button id="reset">Clear</button>
   <span id="agree" style="margin-left:auto"></span>
 </div></div>
 <script>
-const API="https://videos-similar-api-production.up.railway.app/event";
-const KEY="reviewlabels.v1";
-let labels=JSON.parse(localStorage.getItem(KEY)||"[]");
 const $=s=>document.querySelector(s);
-function save(){localStorage.setItem(KEY,JSON.stringify(labels));tally();}
-function tally(){
+// the shared widget owns `labels`; this page just recounts whenever they change
+window.onLabelChange=function(labels){
   $("#nb").textContent=labels.filter(l=>l.verdict==="bad").length;
   $("#ng").textContent=labels.filter(l=>l.verdict==="good").length;
   let miss=0,over=0;
@@ -237,43 +236,11 @@ function tally(){
     const f=el.classList.contains("flag");
     if(l.verdict==="bad"&&!f)miss++; if(l.verdict==="good"&&f)over++;});
   $("#agree").textContent=labels.length?("detector missed "+miss+", over-flagged "+over):"";
-}
-let pending=null;
-document.addEventListener("mouseup",e=>{
-  const tg=e.target; if(tg&&tg.closest&&tg.closest("#pop"))return;
-  const sel=window.getSelection(); const txt=(sel&&sel.toString()||"").trim();
-  if(!txt){$("#pop").style.display="none";pending=null;return;}
-  const host=sel.anchorNode&&sel.anchorNode.parentElement&&sel.anchorNode.parentElement.closest(".sent");
-  if(!host){$("#pop").style.display="none";return;}
-  pending={range:sel.getRangeAt(0).cloneRange(),text:txt,sid:host.dataset.id};
-  const r=sel.getRangeAt(0).getBoundingClientRect(); const p=$("#pop");
-  p.style.display="block"; p.style.left=(window.scrollX+r.left)+"px"; p.style.top=(window.scrollY+r.bottom+7)+"px";
-});
-function mark(v){
-  if(!pending)return;
-  const m=document.createElement("mark"); m.className=v==="bad"?"b":"g";
-  const id=Date.now()+"-"+Math.round(Math.random()*1e6); m.dataset.lid=id;
-  try{pending.range.surroundContents(m);}catch(err){alert("Select inside one sentence.");return;}
-  const rec={id:id,sid:pending.sid,text:pending.text,verdict:v,ts:new Date().toISOString()};
-  labels.push(rec);
-  fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},keepalive:true,
-    body:JSON.stringify({t:"sentlabel",verdict:v,text:rec.text,sid:rec.sid,ts:rec.ts})}).catch(()=>{});
-  save(); window.getSelection().removeAllRanges(); $("#pop").style.display="none"; pending=null;
-}
-$("#pop").querySelector(".bd").onclick=()=>mark("bad");
-$("#pop").querySelector(".gd").onclick=()=>mark("good");
-document.addEventListener("keydown",e=>{if(!pending)return;
-  if(e.key==="b"){e.preventDefault();mark("bad");} if(e.key==="g"){e.preventDefault();mark("good");}});
-document.addEventListener("click",e=>{
-  const tg=e.target; if(!tg||!tg.closest)return; const m=tg.closest("mark"); if(!m)return;
-  labels=labels.filter(l=>l.id!==m.dataset.lid);
-  const t=document.createTextNode(m.textContent); m.replaceWith(t); t.parentNode.normalize(); save();});
-$("#copy").onclick=()=>navigator.clipboard.writeText(JSON.stringify(labels,null,1)).then(()=>alert("Copied "+labels.length));
-$("#reset").onclick=()=>{if(confirm("Clear all labels?")){labels=[];save();location.reload();}};
-$("#resend").onclick=async()=>{let ok=0;for(const l of labels){try{await fetch(API,{method:"POST",
-  headers:{"Content-Type":"application/json"},body:JSON.stringify({t:"sentlabel",verdict:l.verdict,text:l.text,sid:l.sid,ts:l.ts})});ok++;}catch(e){}}
-  alert("Re-sent "+ok+" of "+labels.length);};
-tally();
+};
+__LABELJS__
+$("#copy").onclick=()=>navigator.clipboard.writeText(labelJSON()).then(()=>alert("Copied "+labelCount()));
+$("#reset").onclick=()=>{if(confirm("Clear all labels?")){labels=[];lsave();location.reload();}};
+$("#resend").onclick=labelResend;
 </script></body></html>"""
 
 
