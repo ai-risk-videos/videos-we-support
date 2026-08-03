@@ -5449,12 +5449,18 @@ async def writeoff(req: Request):
     (opus_ideas, opus_err), (gpt_ideas, gpt_err) = await asyncio.gather(_run_opus(), _run_gpt())
     opus_ideas = (opus_ideas or [])[:n]
     gpt_ideas = (gpt_ideas or [])[:n]
-    # SAME active-voice cleanup the product runs, on BOTH sides — so this reflects shipped quality, not raw drafts
+    # SAME active-voice cleanup the product runs, on BOTH sides, so this reflects shipped quality.
+    # It was passing `_anchors_from_prompt(gen)` and `gen` does not exist in this function, so every
+    # call raised NameError straight into the bare `except` below and the pass never ran once. This
+    # endpoint is the model bake-off, which means every comparison it has ever produced was raw
+    # drafts on both sides while claiming to be shipped quality. The prompt here is `userp`, and the
+    # except now logs instead of swallowing, so the next version of this cannot hide.
     for ideas in (opus_ideas, gpt_ideas):
         try:
             _rew = await asyncio.wait_for(
-                run_in_threadpool(_activate_summaries, ideas, _anchors_from_prompt(gen)), timeout=330)
-        except Exception:
+                run_in_threadpool(_activate_summaries, ideas, _anchors_from_prompt(userp)), timeout=330)
+        except Exception as _e:
+            _log_event({"t": "writeoff_polish", "ok": False, "err": type(_e).__name__, "detail": str(_e)[:160]})
             _rew = {}
         for i in _rew:
             if i < len(ideas):
