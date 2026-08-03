@@ -37,6 +37,13 @@ THINK = {"type": "adaptive"}
 # The channel profile is a summarization task; Sonnet is markedly faster than Opus and
 # near-Opus quality, which cuts time-to-first-idea. Idea generation stays on Opus (MODEL).
 FAST_MODEL = "claude-sonnet-5"
+# THE MODEL THAT WRITES READER-FACING SENTENCES. Opus wrote the first draft, but every repair pass
+# ran on Sonnet, including _bold_endgame_fix, which rewrites the CLOSING SENTENCE: the single line
+# the curator has given the most feedback on. With the closing-question rule enforced, most endings
+# in a batch get rewritten, so the sentence he judges the batch by was a Sonnet sentence. Passes
+# that only JUDGE (grading a rung, scoring a shape) stay on FAST_MODEL: judgement is cheap and the
+# latency budget is real. Passes that WRITE now use this.
+WRITE_MODEL = MODEL
 
 # Appended to every reader-facing generator so nothing this app produces reads as AI-written.
 # Distilled from Wikipedia's "Signs of AI writing" (the concrete tells, not vibes). The single
@@ -3606,7 +3613,7 @@ def _fid_titles(ideas, anchors):
     try:
         body = "\n".join("%d. %s" % (i + 1, t) for i, t in items)
         m = get_client().messages.create(
-            model=FAST_MODEL, max_tokens=3000,
+            model=WRITE_MODEL, max_tokens=3000,
             system=(FIDELITY_FIX_SYS + "\n\nDOCUMENTED ANCHORS:\n" + anchors +
                     "\n\nNOTE: these are TITLES, one or two sentences each. Keep them the same length and "
                     "the same shape. Cut only the unknowable detail. Return {\"summaries\": {\"1\": \"...\"}} "
@@ -4652,7 +4659,7 @@ def _sentence_polish_chunk(ideas, field, items):
     if True:
         body = "\n\n".join("%d. %s" % (i + 1, t) for i, t in items)
         m = get_client().messages.create(
-            model=FAST_MODEL, max_tokens=6000, thinking=NO_THINK, system=SENTENCE_FIX_SYS,
+            model=WRITE_MODEL, max_tokens=6000, thinking=NO_THINK, system=SENTENCE_FIX_SYS,
             messages=[{"role": "user", "content": "Fix the marked sentences:\n\n" + body}])
         t = "".join(b.text for b in m.content if getattr(b, "type", "") == "text")
         obj = {}
@@ -4729,7 +4736,7 @@ def _bold_endgame_fix(ideas, anchors=""):
     try:
         body = "\n\n".join("%d. %s" % (i + 1, ideas[i]["title"]) for i in idxs)
         m = get_client().messages.create(
-            model=FAST_MODEL, max_tokens=6000, thinking=NO_THINK,
+            model=WRITE_MODEL, max_tokens=6000, thinking=NO_THINK,
             system=BOLD_ENDGAME_SYS + (("\n\nDOCUMENTED ANCHORS, for facts only, invent nothing "
                                         "beyond these:\n" + anchors) if anchors else ""),
             messages=[{"role": "user", "content": "Rewrite the last sentence of each:\n\n" + body}])
@@ -4806,7 +4813,7 @@ def _bold_endgame_fix(ideas, anchors=""):
                        "to steer or reverse this, and why there is no way back")
                     for n2, (i, r, hint) in enumerate(short))
                 m2 = get_client().messages.create(
-                    model=FAST_MODEL, max_tokens=5000, thinking=NO_THINK,
+                    model=WRITE_MODEL, max_tokens=5000, thinking=NO_THINK,
                     system=BOLD_ENDGAME_SYS + (("\n\nDOCUMENTED ANCHORS, for facts only:\n" + anchors)
                                                if anchors else ""),
                     messages=[{"role": "user", "content":
@@ -4859,7 +4866,7 @@ def _event_lead_fix(ideas, idxs, lead, rew):
                rew.get(i, ideas[i].get("summary") or ""))
             for i in idxs)
         m = get_client().messages.create(
-            model=FAST_MODEL, max_tokens=6000,
+            model=WRITE_MODEL, max_tokens=6000,
             system=EVENT_LEAD_SYS + "\n\nLEAD-WORTHY EVENTS (real, open on one of these):\n" + lead,
             messages=[{"role": "user", "content": "Fix the opening of each of these:\n\n" + body}])
         t = "".join(b.text for b in m.content if getattr(b, "type", "") == "text")
@@ -5437,7 +5444,7 @@ async def writeoff(req: Request):
     for ideas in (opus_ideas, gpt_ideas):
         try:
             _rew = await asyncio.wait_for(
-                run_in_threadpool(_activate_summaries, ideas, _anchors_from_prompt(gen)), timeout=210)
+                run_in_threadpool(_activate_summaries, ideas, _anchors_from_prompt(gen)), timeout=330)
         except Exception:
             _rew = {}
         for i in _rew:
@@ -5707,7 +5714,7 @@ async def _custom_generate(body, req=None):
         # SMALL final set, so it can't time out the way a combined pass did). Fails open (keeps originals).
         try:
             _rew = await asyncio.wait_for(
-                run_in_threadpool(_activate_summaries, ideas, _anchors_from_prompt(gen)), timeout=210)
+                run_in_threadpool(_activate_summaries, ideas, _anchors_from_prompt(gen)), timeout=330)
         except Exception:
             _rew = {}
         for i in _rew:
