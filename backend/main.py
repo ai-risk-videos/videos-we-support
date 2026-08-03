@@ -4408,6 +4408,8 @@ SLOG_HARD = 3.0         # zero false positives against his labels
 def _slog(sentence):
     """How much work this sentence makes the reader do. Higher is worse."""
     t = sentence or ""
+    if _is_species_question(t):
+        return 0.0        # this shape IS the target ending; do not send it to the simplifier
     c = 0.0
     if not _DOER_RX.search(t):
         c += 2.0                                    # nobody is doing anything
@@ -4711,9 +4713,17 @@ def _bold_endgame_fix(ideas, anchors=""):
     gets dropped. Every mechanism in this pipeline that holds — the fidelity pass, the event-lead pass —
     is a dedicated call with its own accept guard, so this is one too.
     """
+    def _needs_endgame(t):
+        parts = [p for p in re.split(r"(?<=[.?!])\s+", (t or "").strip()) if p.strip()]
+        if not parts:
+            return False
+        # THE BAR IS NOW THE CLOSING QUESTION. Prompt-only enforcement got 75% of endings to be
+        # questions but only 40% carried the scale clause, and five reverted to flat statements
+        # including "No auditor will be able to reconstruct who decided what", which is the exact
+        # one-office ending he objects to. Every rule in this file that held is a detector.
+        return not _is_species_question(parts[-1])
     idxs = [i for i, x in enumerate(ideas)
-            if (x.get("title") or "").strip()
-            and (_ends_on_waypoint(x.get("title") or "") or not _reaches_terminal(x.get("title") or ""))]
+            if (x.get("title") or "").strip() and _needs_endgame(x.get("title") or "")]
     if not idxs:
         return
     try:
@@ -4756,7 +4766,11 @@ def _bold_endgame_fix(ideas, anchors=""):
                 if len(_np) > len(parts) or len(new.split()) > len(old_line.split()) + 6:
                     rej += 1
                     continue
-                if (_ends_on_waypoint(new) or _closer_doomtag(new) or _hard_sentences(new)
+                # the returned ending must BE the closing question, not merely avoid the old failures
+                if not _is_species_question(ending.strip()):
+                    rej += 1
+                    continue
+                if (_closer_doomtag(new) or _hard_sentences(new)
                         or new.strip() == old_line.strip() or _invents_source(new)
                         or (_lacks_event_lead(new) and not _lacks_event_lead(old_line))):
                     rej += 1
