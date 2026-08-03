@@ -3777,7 +3777,10 @@ _Q_FRAME_RX = re.compile(
 _Q_STAKE_RX = re.compile(
     r'\bno (?:idea|clue)\b|\bcannot? tell\b|\bno one\b|\bnobody\b|\bstops?\s+(?:it|them|this)\b'
     r'|\btake (?:it |them )?back\b|\bturn (?:it|them) off\b|\bin charge\b|\bcontrol\b'
-    r'|\bgoing\b|\bgoes\b|\bend(?:s|ing)?\b|\bleft\b|\bstill\b|\bhappens?\b', re.I)
+    # "Where does this GO when..." is one of his own four examples and it failed here: the list had
+    # goes and going but not bare go, so a legitimate form of the target sentence was rejected and
+    # sent off to be rewritten. "end up" was missing for the same reason.
+    r'|\bgo\b|\bgoing\b|\bgoes\b|\bend(?:s|ing)?\b|\bend up\b|\bleft\b|\bstill\b|\bhappens?\b', re.I)
 
 
 def _is_species_question(sentence):
