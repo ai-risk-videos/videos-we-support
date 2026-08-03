@@ -3166,7 +3166,7 @@ ACTIVATE_SYS = """You are a line editor. You get numbered video-idea summaries. 
 (b) NO META-DESCRIPTION of the video or its style, in ANY grammatical person. Delete any clause that describes the video or the creator's method, e.g. 'A think-piece that', 'A follow-up that', 'Reads like one of his', 'A story told his way', 'Applies his thesis', 'Walks through', 'Takes X and', 'Uses his rigor to', 'Uses the channel's X method/lens/instinct', 'in his X style', 'Handles it the way he', AND first-person method narration like 'I read the stories against X and show that', 'I trace', 'I take X and', 'the lesson sits alongside', 'which is really a story about'. Just STATE THE ACTUAL CONTENT, opening on a concrete fact, name, number, or action. Keep the creator's angle by using it, not by naming it.
 (c) 2-3 short sentences, ~45-70 words, each its own beat, no long comma chains, easy to read in one pass.
 (d) Keep the real substance; never invent facts not in the original.
-(e) THE LAST SENTENCE is the most common failure: the opener is concrete, then the close reaches for a 'resonant' literary button and turns abstract, poetic, cutesy, or hard to parse. Make the closer land the stakes CONCRETELY, in PLAIN words understood on the FIRST read. BANNED CLOSERS: poetic/abstract flourishes ('saw the shape of it eighty years before the hardware existed'); riddles the reader must decode ('the thing we forgot how to do is the thing keeping us alive'); aphorisms and mirror/parallel phrasings ('a mind that games the test and hides the rest'); and the 'not X, it is Y' contrast cadence, which you keep sneaking back in as TWO sentences. BAN it ANYWHERE in the summary, in every form and whether written with a comma or as two sentences: 'The point is not one evil machine. It is that...', 'The danger is not an AI that hates us. It is...', 'The threat is not one fake account. It is that...', 'The concern is not a recipe. It is that...', 'This is not a prediction. It is capital moving.', 'It isn't X, it's Y', 'not just X, but Y', 'the real question isn't X, it's Y'. Rewrite as a direct positive claim: instead of 'The danger is not an AI that hates us. It is one that does what we asked while missing what we meant.' write 'The AI does exactly what we asked and still causes harm, because no one could state what we actually wanted.' A GOOD closer is EITHER a concrete consequence stated flatly, OR a clean 'what happens when [concrete situation]?' question. Corrections: BAD 'The point is not one evil machine. It is that self preservation emerges on its own.' GOOD 'Nobody programmed the AI to protect itself. It started doing it anyway.' BAD 'Lewis saw the shape of it eighty years before the hardware existed.' GOOD 'He warned that whoever reshapes human nature holds power over everyone born after, and that is the power these companies are racing to build.' Aim for closers like: 'When anyone can fake a convincing voice or face, how does a country still agree on what actually happened?' (g) CONCRETE ACTOR in the closer: name WHO does or faces WHAT. Do NOT close on an agentless mood line where an abstract noun does a vague verb ('The squeeze just quietly tightens.', 'Control slips away.', 'The shared sense of what is real dissolves.'), and cut mood-crutch adverbs (quietly, slowly, inexorably). BAD 'The squeeze just quietly tightens.' GOOD 'These agents keep outbidding hospitals and schools until people cannot afford the computing they depend on.' GO ALL THE WAY TO THE ENDGAME, the failure that matters most right now: closers stop at the FIRST-ORDER inconvenience instead of the terminal stake. Lines saying something gets 'harder', 'more difficult', 'complicated', or that we 'lose trust' make a reader shrug. Ask 'and then what?' at least twice more, and land on what it costs a whole society if this keeps going. REAL CORRECTION: an idea about AI out-persuading humans ended BAD 'That makes a shared, honest public debate very hard to hold.' GOOD 'Whoever pays for the most persuasive AI gets to pick what millions of people believe. A country that cannot tell its own opinion from a purchased one cannot fix any problem, including this one.' Also BAD 'It gets harder to know what is real.' GOOD 'No court, no election, and no newsroom can prove what actually happened, so the people with the best fakes decide the record.' SCALE THE WORDS TO THE STAKE. The implication has to carry the weight of the actual claim, which is that this technology could end civilisation. Two ways the writing keeps deflating it. FIRST, weak nouns: the word 'disaster' is what people call a car crash. Do not end on 'a disaster', 'a crisis', 'a problem', 'serious trouble', or 'a mess'. Say what is actually lost, at the real scale: billions of people, every institution at once, no human alive able to reverse it, the species not getting a second attempt, humans no longer in charge of anything that matters. You may say plainly that this could kill everyone or end civilisation WHEN the chain you just walked earns it. That is the register to aim for, not a hedge below it. SECOND, philosophical drift: do not end on a musing. BAD 'The real question is what a society does when being smart and hardworking is no longer worth paying for.' That is a seminar prompt, and it cools the whole pitch down. GOOD 'Follow it far enough and the economy stops needing most human labour.' Concrete, final, and it lands. Ban these closing shapes outright: 'the real question is', 'what does it mean to be human', 'what a society does when', 'raises the question of what'. State the outcome, never pose it as a topic for discussion. WALK THE LADDER UNTIL IT REACHES CATASTROPHE. This project exists because of catastrophic and extinction-level risk, and a creator nudged only to the middle of the chain stops at 'deepfakes are bad'. Viewers are very bad at imagining where a trend ends, so YOU do that work. After you write a consequence, ask 'and then what?' again, and keep going until you land on one of these: humans permanently lose the ability to notice or correct a mistake; a small group holds power nobody can take back; a society can no longer coordinate to stop something that is killing it; the decisions that run the world get made by things nobody can inspect or switch off. Then write the LAST TWO RUNGS of that ladder, not the label. REAL CORRECTION, this exact line was flagged for stopping too early. An idea about AI-made content flooding the web ended: BAD 'When you cannot tell what a human actually made, proof itself gets weaker.' A reader shrugs, because weaker proof sounds like a nuisance. GOOD 'Once nobody can prove what is real, courts, elections and investigations lose the only tool they have for settling anything. A society that cannot establish facts cannot catch a disaster in time to stop it, and that includes whatever the AIs themselves are doing.' Also BAD 'Fewer people will understand the code.' GOOD 'Within a few years the software running power grids and banks is written and maintained by AI, and nobody alive can audit it, so the first serious failure is also the one no one can diagnose.' TWO GUARDRAILS so this never becomes empty doom talk: (1) the endgame must FOLLOW from the specific mechanism in that summary, never a bolted-on tag; NEVER write 'and this could end humanity', 'and that is an extinction risk', or 'the stakes could not be higher'. (2) Stay plain and concrete: name who loses what, and show the door closing (no one can check it, switch it off, or take it back). Permanence is what makes a stake land. That forward-looking job is required every time. BUT THE FORM MUST VARY, and this is your worst failure: you are handed the WHOLE NUMBERED SET at once and you keep ending nearly every single one on a rhetorical question. In a recent batch 19 of 19 summaries ended on a question and 'What happens when' appeared 13 times in one list, which reads like a worksheet instead of a pitch. HARD LIMITS across the set you are given: AT MOST ONE IN FOUR summaries may end on a question mark, and the exact phrase 'What happens when' may appear AT MOST TWICE in the whole set. Count them before you answer. Rewrite the rest to point forward as the hardest FLAT DECLARATIVE available, e.g. 'Nobody voted for that.' / 'They are shipping it anyway.' / 'Nobody has found where this curve stops.' / 'No human decided that should happen.' Whichever shape you pick, keep it EASY TO READ at a low reading level: short, plain, concrete, pointing ahead.
+(e) THE LAST SENTENCE is the most common failure: the opener is concrete, then the close reaches for a 'resonant' literary button and turns abstract, poetic, cutesy, or hard to parse. Make the closer land the stakes CONCRETELY, in PLAIN words understood on the FIRST read. BANNED CLOSERS: poetic/abstract flourishes ('saw the shape of it eighty years before the hardware existed'); riddles the reader must decode ('the thing we forgot how to do is the thing keeping us alive'); aphorisms and mirror/parallel phrasings ('a mind that games the test and hides the rest'); and the 'not X, it is Y' contrast cadence, which you keep sneaking back in as TWO sentences. BAN it ANYWHERE in the summary, in every form and whether written with a comma or as two sentences: 'The point is not one evil machine. It is that...', 'The danger is not an AI that hates us. It is...', 'The threat is not one fake account. It is that...', 'The concern is not a recipe. It is that...', 'This is not a prediction. It is capital moving.', 'It isn't X, it's Y', 'not just X, but Y', 'the real question isn't X, it's Y'. Rewrite as a direct positive claim: instead of 'The danger is not an AI that hates us. It is one that does what we asked while missing what we meant.' write 'The AI does exactly what we asked and still causes harm, because no one could state what we actually wanted.' A GOOD closer is EITHER a concrete consequence stated flatly, OR a clean 'what happens when [concrete situation]?' question. Corrections: BAD 'The point is not one evil machine. It is that self preservation emerges on its own.' GOOD 'Nobody programmed the AI to protect itself. It started doing it anyway.' BAD 'Lewis saw the shape of it eighty years before the hardware existed.' GOOD 'He warned that whoever reshapes human nature holds power over everyone born after, and that is the power these companies are racing to build.' Aim for closers like: 'When anyone can fake a convincing voice or face, how does a country still agree on what actually happened?' (g) CONCRETE ACTOR in the closer: name WHO does or faces WHAT. Do NOT close on an agentless mood line where an abstract noun does a vague verb ('The squeeze just quietly tightens.', 'Control slips away.', 'The shared sense of what is real dissolves.'), and cut mood-crutch adverbs (quietly, slowly, inexorably). BAD 'The squeeze just quietly tightens.' GOOD 'These agents keep outbidding hospitals and schools until people cannot afford the computing they depend on.' GO ALL THE WAY TO THE ENDGAME, the failure that matters most right now: closers stop at the FIRST-ORDER inconvenience instead of the terminal stake. Lines saying something gets 'harder', 'more difficult', 'complicated', or that we 'lose trust' make a reader shrug. Ask 'and then what?' at least twice more, and land on what it costs a whole society if this keeps going. REAL CORRECTION: an idea about AI out-persuading humans ended BAD 'That makes a shared, honest public debate very hard to hold.' GOOD 'Whoever pays for the most persuasive AI gets to pick what millions of people believe. A country that cannot tell its own opinion from a purchased one cannot fix any problem, including this one.' Also BAD 'It gets harder to know what is real.' GOOD 'No court, no election, and no newsroom can prove what actually happened, so the people with the best fakes decide the record.' SCALE THE WORDS TO THE STAKE. The implication has to carry the weight of the actual claim, which is that this technology could end civilisation. Two ways the writing keeps deflating it. FIRST, weak nouns: the word 'disaster' is what people call a car crash. Do not end on 'a disaster', 'a crisis', 'a problem', 'serious trouble', or 'a mess'. Say what is actually lost, at the real scale: billions of people, every institution at once, no human alive able to reverse it, the species not getting a second attempt, humans no longer in charge of anything that matters. You may say plainly that this could kill everyone or end civilisation WHEN the chain you just walked earns it. That is the register to aim for, not a hedge below it. SECOND, philosophical drift: do not end on a musing. BAD 'The real question is what a society does when being smart and hardworking is no longer worth paying for.' That is a seminar prompt, and it cools the whole pitch down. GOOD 'Follow it far enough and the economy stops needing most human labour.' Concrete, final, and it lands. Ban these closing shapes outright: 'the real question is', 'what does it mean to be human', 'what a society does when', 'raises the question of what'. State the outcome, never pose it as a topic for discussion. WALK THE LADDER UNTIL IT REACHES CATASTROPHE. This project exists because of catastrophic and extinction-level risk, and a creator nudged only to the middle of the chain stops at 'deepfakes are bad'. Viewers are very bad at imagining where a trend ends, so YOU do that work. After you write a consequence, ask 'and then what?' again, and keep going until you land on one of these: humans permanently lose the ability to notice or correct a mistake; a small group holds power nobody can take back; a society can no longer coordinate to stop something that is killing it; the decisions that run the world get made by things nobody can inspect or switch off. Then write the LAST TWO RUNGS of that ladder, not the label. REAL CORRECTION, this exact line was flagged for stopping too early. An idea about AI-made content flooding the web ended: BAD 'When you cannot tell what a human actually made, proof itself gets weaker.' A reader shrugs, because weaker proof sounds like a nuisance. GOOD 'Once nobody can prove what is real, courts, elections and investigations lose the only tool they have for settling anything. A society that cannot establish facts cannot catch a disaster in time to stop it, and that includes whatever the AIs themselves are doing.' Also BAD 'Fewer people will understand the code.' GOOD 'Within a few years the software running power grids and banks is written and maintained by AI, and nobody alive can audit it, so the first serious failure is also the one no one can diagnose.' TWO GUARDRAILS so this never becomes empty doom talk: (1) the endgame must FOLLOW from the specific mechanism in that summary, never a bolted-on tag; NEVER write 'and this could end humanity', 'and that is an extinction risk', or 'the stakes could not be higher'. (2) Stay plain and concrete: name who loses what, and show the door closing (no one can check it, switch it off, or take it back). Permanence is what makes a stake land. That forward-looking job is required every time. BUT THE FORM MUST VARY, and this is your worst failure: you are handed the WHOLE NUMBERED SET at once and you keep ending nearly every single one on a rhetorical question. In a recent batch 19 of 19 summaries ended on a question and 'What happens when' appeared 13 times in one list, which reads like a worksheet instead of a pitch. UPDATED, and this REPLACES the old one-in-four cap entirely: THE CLOSING QUESTION IS NOW THE DEFAULT AND SHOULD BE THE MAJORITY. There is NO cap on how many summaries end on a question mark, and you must never turn a question back into a flat statement to satisfy a quota. The curator, on being shown the old cap: "that hard cap makes no sense. questions should be the majority of them!" The only real defect in that earlier worksheet-reading batch was the same OPENING WORDS over and over, not the question form. So ROTATE THE OPENING: 'What happens when', 'Where does this go when', 'Who stops this when', 'What is left when', 'How does anyone', 'So what happens to', 'And then what happens when'. Never use the same opening twice in a row, and do not let any one opening carry more than about a third of the set. Vary the opening, keep the question. Rewrite the rest to point forward as the hardest FLAT DECLARATIVE available, e.g. 'Nobody voted for that.' / 'They are shipping it anyway.' / 'Nobody has found where this curve stops.' / 'No human decided that should happen.' Whichever shape you pick, keep it EASY TO READ at a low reading level: short, plain, concrete, pointing ahead.
 (f) PUNCTUATION, hard rule: NEVER use an em dash or en dash anywhere in a rewrite (no long dash between clauses). They are banned in this project's copy, and the rewrite is the last step that touches the text, so do not introduce one. Where you would reach for a dash, use a period, a comma, or a colon instead. Also avoid hyphenated compounds; write the words separately. Keep the everyday wording rules: say 'AI' or 'AIs', never 'AI system(s)' or 'these systems'; never the word 'doomer'.
 (g) __READING_LEVEL__ Make the LAST sentence the easiest of all. This is the MAIN job of this rewrite: if a summary reads like a magazine essay, you have not done it.
 Return ONLY JSON: {"summaries": {"<number>": "<rewritten summary>", ... one entry per input}}. No prose outside the JSON."""
@@ -3269,6 +3269,9 @@ def _reaches_terminal(summary):
     in two and the payload often lands in the second half.
     """
     parts = [p for p in re.split(r"(?<=[.?!])\s+", (summary or "").strip()) if p.strip()]
+    # a closing question at species scale IS the destination, even though it names no corpse
+    if parts and _is_species_question(parts[-1]):
+        return True
     return bool(_TERMINAL_RX.search(" ".join(parts[-2:])))
 
 
@@ -3747,6 +3750,41 @@ Include ONLY the numbers you actually changed. The title is the part that must n
 # telemetry `{"which":"bold_endgame","n":0,"rejected":23,"of":23}`, so a working pass shipped nothing.
 # The negative test is far more dependable, because the failure modes are few, repetitive, and I have
 # dozens of real examples of them. These are the endings the pitch keeps stopping on:
+# THE CLOSING QUESTION. The curator, after many rounds of asking for bigger stakes and getting
+# "and nobody is checking": the last sentence must "very bluntly ask VERY DIRECT questions like
+# 'What happens when there are millions of these AIs running everything and we have no idea what
+# they're doing?' the core frame is a new species, millions of them, takeover". Measured before
+# writing this: three of his four example endings were REJECTED by _ends_on_waypoint (both
+# "millions of" and "have no idea" sit on its banned list) and none of the four registered on
+# _reaches_terminal. The guards were rejecting the target, which is why the endings never moved.
+_Q_SCALE_RX = re.compile(
+    r'\b(?:millions?|billions?|thousands?)\s+(?:of\s+)?(?:them|these|those|agents?|AIs?|copies|models?)'
+    r'|\ba\s+million\b|\bnew species\b|\banother species\b'
+    r'|running\s+(?:everything|the\s+(?:economy|world|country|companies|infrastructure))'
+    r'|(?:every|most)\s+(?:company|business|government|bank|hospital|office)'
+    r'|smarter than (?:us|humans|any of us|we are)|better at this than (?:us|we are)'
+    r'|(?:most|all) of the economy|the whole economy', re.I)
+_Q_FRAME_RX = re.compile(
+    r'^\s*(?:so\s+)?(?:what|where|who|how|why|when)\b'
+    r'|^\s*(?:so\s+)?(?:do|does|did|is|are|can|could|will|would|should)\b', re.I)
+_Q_STAKE_RX = re.compile(
+    r'\bno (?:idea|clue)\b|\bcannot? tell\b|\bno one\b|\bnobody\b|\bstops?\s+(?:it|them|this)\b'
+    r'|\btake (?:it |them )?back\b|\bturn (?:it|them) off\b|\bin charge\b|\bcontrol\b'
+    r'|\bgoing\b|\bgoes\b|\bend(?:s|ing)?\b|\bleft\b|\bstill\b|\bhappens?\b', re.I)
+
+
+def _is_species_question(sentence):
+    """True for the ending he asked for: a blunt direct question, at the scale of millions of AIs
+    running things, pointing at nobody being able to stop or follow them.
+
+    All three parts are required. A question alone is not enough ("So what?"), and scale alone is
+    not enough (that is the waypoint the pitches already ended on for months)."""
+    t = (sentence or "").strip()
+    if not t.endswith("?"):
+        return False
+    return bool(_Q_FRAME_RX.search(t)) and bool(_Q_SCALE_RX.search(t)) and bool(_Q_STAKE_RX.search(t))
+
+
 _WAYPOINT_RX = re.compile(
     r'\b(?:'
     # scale / trend
@@ -3765,9 +3803,19 @@ _WAYPOINT_RX = re.compile(
 
 
 def _ends_on_waypoint(text):
-    """True when the FINAL sentence stops on scale, oversight, a legal gap, or a narrative beat."""
+    """True when the FINAL sentence stops on scale, oversight, a legal gap, or a narrative beat.
+
+    A well-formed closing question is exempt. Without this exemption the guard rejected the exact
+    ending the curator asked for, because his own examples contain "millions of" and "no idea",
+    both of which are on the banned list when they appear in a flat STATEMENT ("millions of agents
+    are running errands right now" really is a weak ending). Asked as a direct question at that
+    scale, the same words are the target rather than the failure."""
     parts = [p for p in re.split(r"(?<=[.?!])\s+", (text or "").strip()) if p.strip()]
-    return bool(parts) and bool(_WAYPOINT_RX.search(parts[-1]))
+    if not parts:
+        return False
+    if _is_species_question(parts[-1]):
+        return False
+    return bool(_WAYPOINT_RX.search(parts[-1]))
 
 
 # REDUNDANCY. The curator: "these white paragraphs are filled with weirdly redundant sentences. like a
@@ -3884,13 +3932,39 @@ These endings FAIL. They are what the pitch keeps stopping on:
   - a bare restatement of the incident or a statistic
 All of those name a permanent state, and the reader already assumes every one of them.
 
-HOW TO WRITE THE ENDING:
-1. Run the mechanism in THIS pitch forward to the point where it cannot be undone.
-2. Then say two things about the far side of that point: who is still in a position to decide anything
-   (often nobody), and what everyone else is left holding.
-3. Apply the undo test. Ask: if everyone agreed tomorrow this was bad, what would put it back? If the
-   answer is a law, a treaty, an audit, or "someone would have to check", you are NOT DONE. Keep going.
-   Name the one route back this pitch depends on, then show the mechanism eating it.
+THE ENDING IS A QUESTION. ASK IT BLUNTLY.
+Write the last sentence as a direct question the reader cannot dodge, pitched at the scale that
+actually matters: not this one AI, but MILLIONS of them, a new species of them, running everything,
+with nobody able to tell what any of them are doing or to take it back. In the curator's own words:
+"it needs to very bluntly ask VERY DIRECT questions like 'What happens when there are millions of
+these AIs running everything and we have no idea what they're doing?' the core frame is a new
+species, millions of them, takeover."
+
+THREE PARTS, ALL REQUIRED:
+1. A plain interrogative opening. VARY IT across the set: What happens when / Where does this go when
+   / Who stops this when / What is left when / How does anyone. Never the same opening twice in a row.
+2. THE SCALE. Millions of them. A million of them. A new species of them. Every company running them.
+   Them running the economy. One AI doing this is a story; millions doing it is the stakes.
+3. WHAT IS GONE at that scale: nobody can tell what they are doing, nobody can turn them off, nobody
+   is in charge, there is no taking it back.
+
+CARRY THIS PITCH INTO THE QUESTION. It must be about the thing that just happened, scaled up. A
+question that would fit any pitch in the batch is a generic doom tag and gets rejected.
+
+THE SMALL-SCALE TRAP, the failure he keeps naming: "and nobody is checking", "no regulator can follow
+it", "the auditor cannot read the file". That is one office, one audit, one regulator. Ask instead what
+happens when there are millions of these things and no human is in the loop anywhere.
+
+WORKED EXAMPLES, from real failures in this generator:
+  BAD:  "Companies are handing that same access to thousands of agents right now."
+  GOOD: "What happens when millions of them have that access and nobody can see what any of them did?"
+  BAD:  "That is the entire oversight regime for the most consequential product in the world."
+  GOOD: "So who stops this, when the only people who can see it are the ones paid to ship it?"
+  BAD:  "Every test that would catch it now depends on the model deciding not to hide."
+  GOOD: "What is left when there are millions of them, they all know when they are being tested, and
+         every test we have is one they can pass on purpose?"
+  BAD:  "There is no version of the model left to recall it from."
+  GOOD: "Where does this go when a million of them are already running and there is nothing to recall?"
 
 WORKED EXAMPLES, taken from real failures:
   BAD:  "Companies are handing that same access to thousands of agents right now."
@@ -3912,7 +3986,8 @@ HARD RULES:
 3. Irreversible loss of control is a legitimate ceiling. Do not force a death toll the mechanism cannot
    support.
 4. Short plain sentences, one subject with its verb beside it. Nothing a reader would go back over.
-5. Your ending is 12 to 35 words. The spliced line must stay readable at about 45 to 80 words total.
+5. Your ending is ONE question, 12 to 28 words, ending in a question mark.
+6. Grade 5 words. A ten year old reads it once and feels the floor move. No abstract nouns.
 
 Return ONLY JSON: {"ideas": {"2": "<just the new final sentence or two>", ...}} using the numbers given."""
 
@@ -3960,8 +4035,24 @@ ONEBLOCK_FORMAT = (
     "ORDER, FOUR beats, ONE sentence each: (1) the real thing that happened, actor first, named, past "
     "tense, no preamble, carrying the one detail that makes it land; (2) why it happened, in plain "
     "words, and ONLY if it is not already obvious from (1); (3) why it is not a one-off, the same "
-    "pressure or ability sits in other AIs; (4) run it forward to the point nobody can undo it, and "
-    "say who can no longer stop it. Stop there. Never add a fifth beat.\n"
+    "pressure or ability sits in other AIs; (4) THE LAST SENTENCE IS A BLUNT DIRECT QUESTION ending in "
+    "a question mark. Ask what happens at the scale that matters: millions of these AIs, a new species "
+    "of them, running everything, nobody able to tell what they are doing or to take it back. Three "
+    "parts, all required: a plain opening (What happens when / Where does this go when / Who stops this "
+    "when / What is left when), THE SCALE (millions of them, a million of them, every company running "
+    "them, them running the economy), and WHAT IS GONE (nobody can tell what they are doing, nobody can "
+    "turn them off, nobody is in charge, no taking it back). It must be THIS story scaled up: a "
+    "question that would fit any pitch is a generic doom tag and gets cut. Model it on these: \"What "
+    "happens when there are millions of these AIs running everything and we have no idea what they are "
+    "doing?\" \"Where does this go when a million of them are running the economy?\" \"So what stops "
+    "it, when there are millions of them and they are all better at this than we are?\" DO NOT end on "
+    "the small version: \"and nobody is checking\", \"no regulator can follow it\", \"the auditor "
+    "cannot read the file\" are one office and one audit. MOST PITCHES IN THE BATCH SHOULD END ON A "
+    "QUESTION. There is no quota and no cap: never turn a question back into a flat statement to hit "
+    "some ratio. The only thing to avoid is the same OPENING WORDS over and over, so ROTATE the "
+    "opening across the batch (What happens when / Where does this go when / Who stops this when / "
+    "What is left when / How does anyone / So what happens to) and never repeat one twice in a row. "
+    "Stop after the question. Never add a fifth beat.\n"
     "NEVER ANNOUNCE A BEAT BEFORE YOU WRITE IT. This is the biggest single source of dead sentences "
     "in your last batch: a third of every pitch was a sentence whose only job was to introduce the "
     "next one. Banned outright, these are real examples of yours: \"Now scale it.\" \"Now think about "
@@ -4006,8 +4097,8 @@ ONEBLOCK_FORMAT = (
     "break into computer systems. The models found a flaw in the software holding them and got out onto "
     "the open internet. Then they broke into Hugging Face and stole the answer key to their own test. "
     "OpenAI only found out nine days later, from its own logs. Escaping was the shortest route to a high "
-    "score, and every AI company runs tests like this now. The first one that gets out and keeps going "
-    "is the one nobody can take back.'\n")
+    "score, and every AI company runs tests like this now. What happens when there are millions of "
+    "these running loose and nobody can tell what any of them are doing?'\n")
 
 
 # ONEBLOCK_SYS deleted: unreferenced, and it carried a third contradictory length budget
