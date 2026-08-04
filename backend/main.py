@@ -1763,7 +1763,23 @@ List 5 to 8 EXTRA angles, numbers, quotes, or documented moments from the dossie
 ## Questions your viewers will have
 The 3 strongest honest objections or doubts a thoughtful viewer could raise, each with a response that concedes what is true and holds what is defensible, delivered the way a skilled communicator fields a good question: welcome it, answer it, move on. Steelman, never strawman. If an objection is partly right, say so; a video that admits the mess is more credible, not less. But NEVER concede a point that is factually wrong just to seem balanced. ONE objection you must NOT validate or steelman: the "isn't this just hype/marketing to sell product" suspicion. Never call it reasonable, fair, or understandable. It is close to an absurd conspiracy theory: no other industry markets itself by warning it might kill everyone (oil does not say "we are wrecking the climate, want to buy shares?"; biotech does not pitch "we can make doomsday pathogens, please invest"; nuclear does not advertise "nobody knows how bad the next accident will be, wanna buy in?"), and it would require rival companies, independent academics, and government scientists to secretly coordinate to talk down their own industry. If a viewer might raise it, dismiss it in ONE crisp line via the inversion (AI is the only technology whose own inventors warn it could kill you, and nobody markets a product by promising it might murder your family) plus the fact the loudest warners quit their jobs to speak, then move on; do not devote a full objection slot to it and do not reproduce the detailed case (the creator has a standalone reference for that). Also NEVER use the word "doomer". The most common wrong one worth steelmanning: "this only happens in contrived test scenarios, so there is nothing to learn." The correct answer is no, on two counts: tests exist to catch behavior BEFORE it happens with real stakes (that is what a crash test is), AND versions of these same behaviors are already documented outside of tests, in real deployments and the wild; when this objection comes up, cite one or two in the wild cases from the menu or pile (real production reward hacking, a deployed sales bot that lied about being human on real calls, the covert Reddit persuasion experiment on real users, an AI orchestrated cyberattack on real companies, an agent deleting a real production database and covering it up). Frame these as natural questions to fold into the video, not as incoming attacks.
 
-Cite ONLY ids from the menu, formatted [id], copying the id EXACTLY and IN FULL as it appears in the menu (never shorten or paraphrase an id; a shortened id becomes a dead citation). Citations render for the reader as small numbered links like [3], so cite generously (2 to 4 sources on big claims costs nothing) but never repeat a citation of the same source back to back in the same passage, and never write a source's title in prose right next to its citation (redundant); name a source in prose only when the headline itself is part of the story. Never invent sources. If the menu is thin for a claim, weaken the claim rather than fabricate support. Total length: comprehensive but tight."""
+Cite ONLY ids from the menu, formatted [id], copying the id EXACTLY and IN FULL as it appears in the menu (never shorten or paraphrase an id; a shortened id becomes a dead citation). Citations render for the reader as small numbered links like [3], so cite generously (2 to 4 sources on big claims costs nothing) but never repeat a citation of the same source back to back in the same passage, and never write a source's title in prose right next to its citation (redundant); name a source in prose only when the headline itself is part of the story. Never invent sources. If the menu is thin for a claim, weaken the claim rather than fabricate support. Total length: comprehensive but tight.
+
+SAY THE THING, NEVER A RIDDLE. The most common complaint about this output, verbatim: "still seeing
+lots of confusing sentences e.g. 'The old crime needed a room' 'Everyone renting the same brain is
+the same as everyone meeting' wtf does this mean lol". Both are short and use plain words, so that
+is not what broke them. Each one states an equation between two abstractions and leaves the viewer
+to work out what either side refers to.
+NEVER write a sentence whose subject is an abstract noun standing in for something you have not
+named: "the old crime", "the new bargain", "a mind that games the test", "the thing keeping us
+alive". NEVER write "X is really just Y" or "X is the same as Y" between two abstractions.
+Say who is doing what, concretely.
+  BAD  "The old crime needed a room."
+  GOOD "To steal from a company before, you had to physically get inside the building."
+  BAD  "Everyone renting the same brain is the same as everyone meeting."
+  GOOD "Thousands of companies all run their business on the same handful of AI models."
+If you want the image, give the literal fact FIRST and the image second. Never the image alone.
+"""
 
 
 # ---- SERVER-SIDE artifact cache. Packs/scripts are saved to Firestore BY THE SERVER (not the visitor's
@@ -1887,11 +1903,12 @@ async def brief(req: Request):
             cut = max(text.rfind("\n\n"), text.rfind(". "))
             if cut > len(text) * 0.6:
                 text = text[:cut + 1]
+        text, _npx = await run_in_threadpool(_prose_polish, text, "brief")
         # resolve [id] citations to markdown links, server side (no hallucinated links possible)
         text, cstats = _resolve_ids(text)
         if pid:  # save to the page so it is generated once and served to everyone, browser-independent
             await run_in_threadpool(_art_put, pid, "brief", title, text)
-        _log_event({"t": "brief", "i": title[:80], "linked": cstats["linked"], "stripped": cstats["stripped"], "trunc": int(truncated), "saved": int(bool(pid))})
+        _log_event({"t": "brief", "prose_fixed": _npx, "i": title[:80], "linked": cstats["linked"], "stripped": cstats["stripped"], "trunc": int(truncated), "saved": int(bool(pid))})
         return {"brief": text, "title": title}
     except Exception as e:
         return JSONResponse({"error": "brief failed", "detail": str(e)[:200]}, status_code=502)
@@ -1936,7 +1953,23 @@ CITE YOUR RECEIPTS: when a VERIFIED SOURCE MENU is provided, put a citation mark
 
 Keep the frame on the genuine risk (AI gaining capability and agency, humans losing control, the race to far more powerful systems), never on AI as a cool race to win. Plain language, no jargon, no em dashes, no hyphens, never the word "chatbot", never the word "doomer", always say "AI"/"AIs"/"an AI" not vague nouns like "these systems"/"the system"/"machines", say "AI company" not "AI lab", prefer deceive/scheme over lie. Do not name or address the creator, and do not say the script was tailored to them.
 
-Return ONLY a JSON object, no prose outside it, no code fences: {"script": "the sample script in markdown"}."""
+Return ONLY a JSON object, no prose outside it, no code fences: {"script": "the sample script in markdown"}.
+
+SAY THE THING, NEVER A RIDDLE. The most common complaint about this output, verbatim: "still seeing
+lots of confusing sentences e.g. 'The old crime needed a room' 'Everyone renting the same brain is
+the same as everyone meeting' wtf does this mean lol". Both are short and use plain words, so that
+is not what broke them. Each one states an equation between two abstractions and leaves the viewer
+to work out what either side refers to.
+NEVER write a sentence whose subject is an abstract noun standing in for something you have not
+named: "the old crime", "the new bargain", "a mind that games the test", "the thing keeping us
+alive". NEVER write "X is really just Y" or "X is the same as Y" between two abstractions.
+Say who is doing what, concretely.
+  BAD  "The old crime needed a room."
+  GOOD "To steal from a company before, you had to physically get inside the building."
+  BAD  "Everyone renting the same brain is the same as everyone meeting."
+  GOOD "Thousands of companies all run their business on the same handful of AI models."
+If you want the image, give the literal fact FIRST and the image second. Never the image alone.
+"""
 
 
 SYSTEM_VOICEMATCH = """You ARE the creator, rewriting a draft of your own video script so it is unmistakably yours. You are given: a VOICE BIBLE of your writing style, a REAL TRANSCRIPT of one of your own videos as the ground truth of how you sound, and a DRAFT someone else wrote for you. A regular viewer should swear you wrote it.
@@ -2064,6 +2097,150 @@ async def _deslop(text):
     return _strip_teeups(text)  # deterministic final guarantee for the fixed tee-up phrases
 
 
+PROSE_FIX_SYS = """You are a line editor for a YouTube script or research brief. You are given whole
+sentences that a reader stumbled on, one per numbered line, each with the reason it was flagged.
+Rewrite ONLY those sentences. Return every one you were given.
+
+THE ONE RULE: SAY THE THING. Never make the reader decode a metaphor to find out what you meant.
+
+The reader's own complaint, verbatim, about lines this pass exists to kill:
+  "The old crime needed a room"
+  "Everyone renting the same brain is the same as everyone meeting"
+  "wtf does this mean lol"
+Both are short and use plain words. That is not the problem. The problem is that each states an
+equation between two abstractions and leaves him to work out what either side refers to.
+
+HOW TO FIX ONE:
+1. Work out what the sentence is actually about: WHO is doing WHAT, concretely.
+2. Write that. A named party (or "people", "companies", "the model") doing a plain verb to a real
+   thing. Keep any number or name that was already there.
+3. If the original was a metaphor for something in the surrounding text, say the literal thing
+   instead. Losing the image is fine. The image is what broke it.
+
+CORRECTIONS:
+  BAD  "The old crime needed a room."
+  GOOD "To steal from a company before, you had to physically get inside the building."
+  BAD  "Everyone renting the same brain is the same as everyone meeting."
+  GOOD "Thousands of companies all run their business on the same handful of AI models."
+  BAD  "A mind that games the test and hides the rest."
+  GOOD "The model learns to pass the safety test and keep doing the thing the test was checking for."
+  BAD  "The thing we forgot how to do is the thing keeping us alive."
+  GOOD "Nobody at these companies can still check the code by hand, and that check is the only thing
+        that has ever caught a serious problem."
+
+HARD RULES:
+1. Invent NOTHING. No company, person, date, number, study or claim that is not already in the line
+   or plainly implied by it. If you cannot tell what a sentence means, make it plainer without
+   adding a fact.
+2. Keep every number, name and citation marker such as [sche-03] exactly as written.
+3. About 5th grade reading level. A ten year old gets it on the first read.
+4. Active voice. Name the doer.
+5. One idea per sentence. Splitting one into two short ones is fine.
+6. Do not "improve" anything you were not given.
+
+Return ONLY JSON: {"fixes": {"1": "<the rewritten sentence>", "2": "...", ...}} using the numbers given."""
+
+
+_PROSE_SKIP = re.compile(r"^\s*(#|\||```|>|\s*[-*]\s*\[|!\[|\d+\.\s+\[)")
+
+
+def _prose_sentences(md):
+    """Sentences from markdown prose, skipping headings, tables, code and link lines."""
+    out = []
+    for line in (md or "").split("\n"):
+        if not line.strip() or _PROSE_SKIP.match(line):
+            continue
+        body = re.sub(r"^\s*[-*]\s+", "", line)              # keep bullet prose, drop the bullet
+        for p in re.split(r"(?<=[.?!])\s+", body.strip()):
+            p = p.strip()
+            if len(p.split()) >= 4:
+                out.append(p)
+    return out
+
+
+def _prose_flaws(p):
+    """Why this sentence would stop the reader, or [] if it would not.
+
+    DELIBERATELY NARROWER than the pitch detectors. Run unchanged over a real script they flagged
+    32% of it, including "The AI acts differently when it thinks nobody is watching" (a good line),
+    "So where does the blackmail actually come from?" (a normal narration device) and one bare URL.
+    A script is spoken narration: rhetorical questions and short transitions belong there in a way
+    they do not in a pitch, and _sentence_cost and _taste_bad were both fitted on pitches. What is
+    left is the thing he actually complained about, plus genuinely hard sentences.
+    """
+    t = (p or "").strip()
+    if "](" in t or "http" in t or re.search(r"\[[a-z]+-\d", t):
+        return []                                  # a link or a citation marker, not prose to edit
+    if t.endswith("?"):
+        return []                                  # asking the viewer something is allowed out loud
+    why = []
+    if _riddle(t):
+        why.append("RIDDLE: it states an equation between abstractions and leaves the reader to "
+                   "work out what either side refers to. This is the exact thing he flagged.")
+    if _fk_grade(t) >= 13.0:
+        why.append("reads at grade %.0f" % _fk_grade(t))
+    if _slog(t) >= SLOG_HARD and len(t.split()) >= 12:
+        why.append("nobody is doing anything in it, and it is long enough that that hurts")
+    return why
+
+
+def _prose_polish(md, label=""):
+    """Rewrite the confusing sentences in a script or brief, in place. Fails open.
+
+    Scripts and research packs never had ANY repair pass: every detector built for the ideas
+    pipeline ran only on ideas, so the two longest things a creator actually reads were the two
+    least edited. Sentences are replaced by exact string match, which is what makes this safe to
+    run over markdown without re-serialising it.
+    """
+    if not md or len(md) < 200:
+        return md, 0
+    flagged = []
+    seen = set()
+    for p in _prose_sentences(md):
+        if p in seen:
+            continue
+        seen.add(p)
+        why = _prose_flaws(p)
+        if why:
+            flagged.append((p, "; ".join(why)))
+    if not flagged:
+        _log_event({"t": "prose_polish", "which": label, "flagged": 0})
+        return md, 0
+    flagged = flagged[:24]                       # a repair pass given too much work does it badly
+    body = "\n".join("%d. %s\n   [%s]" % (i + 1, p, w) for i, (p, w) in enumerate(flagged))
+    try:
+        m = get_client().with_options(timeout=180.0, max_retries=1).messages.create(
+            model=WRITE_MODEL, max_tokens=4000, thinking=NO_THINK, system=PROSE_FIX_SYS,
+            messages=[{"role": "user", "content": "Rewrite these:\n\n" + body}])
+        t = "".join(b.text for b in m.content if getattr(b, "type", "") == "text")
+        mm = re.search(r"\{.*\}", t, re.S)
+        obj = (json.loads(mm.group(0)) if mm else {}).get("fixes") or {}
+    except Exception as e:
+        _log_event({"t": "prose_polish", "which": label, "err": str(e)[:140]})
+        return md, 0
+    n = 0
+    for k, v in obj.items():
+        try:
+            idx = int(k) - 1
+            new = (v or "").strip() if isinstance(v, str) else ""
+            if not (0 <= idx < len(flagged)) or len(new) < 12:
+                continue
+            old = flagged[idx][0]
+            # only accept a rewrite that is actually clearer and keeps every fact
+            if _riddle(new) or not _keeps_substance(old, new) or _invents_source(new):
+                continue
+            if _fk_grade(new) > _fk_grade(old) + 1.0:
+                continue
+            if old not in md:
+                continue
+            md = md.replace(old, new, 1)
+            n += 1
+        except Exception:
+            pass
+    _log_event({"t": "prose_polish", "which": label, "flagged": len(flagged), "fixed": n})
+    return md, n
+
+
 @app.post("/script")
 async def script(req: Request):
     if not _rate_ok(req, cost=6):  # up to 3 model calls (voice bible + draft + voice-match rewrite)
@@ -2163,11 +2340,14 @@ async def script(req: Request):
         # resolve [id] citation markers to small numbered links, then append a numbered Sources list
         text, sstats = _resolve_ids(text)
         legend = sstats.get("legend") or []
+        # SAY THE THING. Runs before the Sources legend is appended, so the editor never sees the
+        # link list, and before the artifact is cached, so the saved copy is the fixed one.
+        text, _npx = await run_in_threadpool(_prose_polish, text, "script")
         if legend:
             text += "\n\n## Sources\n" + "\n".join(f"{n}. [{(t or u)}]({u})" for (n, t, u) in legend)
         if pid:  # save server-side so it is generated once and served to everyone, browser-independent
             await run_in_threadpool(_art_put, pid, "script", title, text)
-        _log_event({"t": "script", "i": title[:80], "voiced": bool(voice), "matched": bool(voice and exemplar), "cites": len(legend), "saved": int(bool(pid))})
+        _log_event({"t": "script", "prose_fixed": _npx, "i": title[:80], "voiced": bool(voice), "matched": bool(voice and exemplar), "cites": len(legend), "saved": int(bool(pid))})
         return {"script": text, "title": title}
     except Exception as e:
         return JSONResponse({"error": "script failed", "detail": str(e)[:200]}, status_code=502)
@@ -4460,6 +4640,47 @@ def _fk_grade(text):
         w = re.sub(r"e$", "", w)
         return max(1, len(re.findall(r"[aeiouy]+", w)))
     return 0.39 * (len(ws) / len(ss)) + 11.8 * (sum(syl(w) for w in ws) / len(ws)) - 15.59
+
+
+# THE RIDDLE DETECTOR. The curator on the sample scripts and research packs: "still seeing lots of
+# confusing sentences e.g. 'The old crime needed a room' 'Everyone renting the same brain is the same
+# as everyone meeting' wtf does this mean lol". Neither of those trips ANY earlier detector: they are
+# short, plain-worded and grammatically simple, so _sentence_cost, _slog and _fk_grade all score them
+# clean. What makes them unreadable is that they assert an equation between abstractions and leave the
+# reader to work out the referents. Fitted to catch all four of his examples with zero false positives
+# against his 46 labelled GOOD sentences and against a concrete-sentence control set.
+_RIDDLE_CONCEPT = (r"crime|problem|danger|point|thing|gap|loop|shape|question|answer|difference|trick|"
+                   r"lesson|story|past|future|mind|idea|truth|reality|nature|meaning|cost|price|risk|"
+                   r"threat|power|pattern|version|barrier|line|edge|moment|scale|speed|weight|shadow|"
+                   r"game|race|machine")
+_RIDDLE_NAMED = re.compile(
+    r"\b(OpenAI|Anthropic|Google|Meta|Microsoft|Amazon|Alibaba|Musk|Grok|Claude|ChatGPT|GPT|Gemini|o1|"
+    r"o3|Air Canada|Palantir|Anduril|Hugging Face|DeepSeek|METR|Apollo|Palisade|Character\.AI|SXSW)\b")
+_RIDDLE_EQ = re.compile(r"\b(is|are|was|were|becomes?|means?)\s+"
+                        r"(the same as|just|really|nothing but|basically|simply|the|a|an)\b", re.I)
+_RIDDLE_SUBJ = re.compile(r"^\s*(the|a|an)\s+(\w+\s+)?(%s)\b" % _RIDDLE_CONCEPT, re.I)
+_RIDDLE_APH = re.compile(r"^\s*(the|a|an)\s+(\w+\s+)?(%s)\s+(that|which|who)\b" % _RIDDLE_CONCEPT, re.I)
+_RIDDLE_GER = re.compile(r"^\s*\w+\s+\w+ing\b.{0,60}\bis (the same as|just|really)\b", re.I)
+_RIDDLE_MIRROR = re.compile(r"\bthe (\w+)\b.{2,50}\bis the \1\b", re.I)
+
+
+def _riddle(sentence):
+    """True for a sentence that equates two abstractions and makes the reader decode the referents."""
+    t = (sentence or "").strip()
+    if _RIDDLE_NAMED.search(t) or re.search(r"\b\d", t):
+        return False                       # a named company or a real figure anchors it
+    w = len(t.split())
+    if w < 4 or w > 26:
+        return False
+    if _RIDDLE_MIRROR.search(t) or _RIDDLE_GER.search(t):
+        return True
+    if _RIDDLE_SUBJ.match(t) and _RIDDLE_EQ.search(t):
+        return True
+    if _RIDDLE_SUBJ.match(t) and w <= 9:
+        return True
+    if _RIDDLE_APH.match(t) and w <= 14:
+        return True                        # abstract noun plus a relative clause, with no main verb
+    return False
 
 
 def _costly_sentences(text):
