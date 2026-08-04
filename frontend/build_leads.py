@@ -58,8 +58,19 @@ h1{font-size:26px;margin:0 0 4px;font-weight:800}.dot{color:var(--red)}
 .turn{color:#9a93a2;font-size:14px;line-height:1.5;padding-left:11px;border-left:2px solid #33303a;margin:3px 0}
 .subtxt{color:#cfc9d6;font-size:15px;line-height:1.6;margin:8px 0 2px}
 .meta{margin-top:5px;font-size:12px;color:var(--mut);display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.packbtn{font:inherit;font-size:11.5px;background:#161c14;color:#9ac47f;border:1px solid #33402e;border-radius:6px;padding:2px 9px;cursor:pointer}
-.packbtn:hover{border-color:#a9d99a;color:#c5e6b3}
+/* THE TWO THINGS PEOPLE MISSED. Someone used the app for 20 minutes and never noticed these.
+   They were 11.5px pills living INSIDE the grey .meta row, next to "elo 123" and "read more",
+   so they read as footnotes rather than as the two most valuable things on the card. They now
+   get their own strip under the idea, with a label that says what they are for. */
+.extras{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:11px 0 2px;padding-top:10px;
+  border-top:1px solid #262b33}
+.exlabel{font-size:12.5px;color:#8b93a1;margin-right:2px}
+.extras.nudge .packbtn,.extras.nudge .scriptbtn{animation:exglow 2.6s ease-in-out 3}
+@keyframes exglow{0%,100%{box-shadow:0 0 0 0 rgba(154,196,127,0)}50%{box-shadow:0 0 0 4px rgba(154,196,127,.16)}}
+@media (prefers-reduced-motion:reduce){.extras.nudge .packbtn,.extras.nudge .scriptbtn{animation:none}}
+.packbtn{font:inherit;font-size:13px;font-weight:600;background:#1d2a18;color:#b6de99;
+  border:1px solid #46603a;border-radius:8px;padding:7px 13px;cursor:pointer;transition:.13s}
+.packbtn:hover{background:#26381f;border-color:#7fb864;color:#d3f0bd}
 .packbtn:disabled{opacity:.6;cursor:default}
 .brief{display:none;margin-top:10px;padding:16px 18px;background:var(--surf);border:1px solid #33402e;border-radius:10px;color:#cfced3;font-size:14px;line-height:1.62}
 .brief h4{color:#a9d99a;font-size:13px;letter-spacing:.06em;text-transform:uppercase;margin:16px 0 6px}
@@ -144,8 +155,9 @@ h1{font-size:26px;margin:0 0 4px;font-weight:800}.dot{color:var(--red)}
 .hypebody ul{margin:6px 0;padding-left:18px}
 .hypebody li{margin:4px 0}
 .hypebody p{margin:7px 0}
-.scriptbtn{font:inherit;font-size:11.5px;background:#1a1622;color:#b79ae0;border:1px solid #3a2f4e;border-radius:6px;padding:2px 9px;cursor:pointer}
-.scriptbtn:hover{border-color:#c5adf0;color:#d8c6f5}
+.scriptbtn{font:inherit;font-size:13px;font-weight:600;background:#231c30;color:#c7abf0;
+  border:1px solid #50406b;border-radius:8px;padding:7px 13px;cursor:pointer;transition:.13s}
+.scriptbtn:hover{background:#2d2440;border-color:#8e6fc4;color:#e0d0fa}
 .scriptbtn:disabled{opacity:.6;cursor:default}
 .scriptbox{display:none;margin-top:10px;padding:16px 18px;background:var(--surf);border:1px solid #3a2f4e;border-radius:10px;color:#cfced3;font-size:14.5px;line-height:1.62}
 .scriptbox h4{color:#c5adf0;font-size:13px;letter-spacing:.04em;text-transform:uppercase;margin:14px 0 6px}
@@ -379,6 +391,12 @@ function showHome(){_pushScreen({v:"home"});inCurate=false;creatorView=false;doc
 // "?p=name" off the end of their own URL became an admin, and every other creator's link then
 // opened in a full editor for them. That took no technical skill and is what got reported.
 // Browsers that were already unlocked keep the flag, so nothing changes for anyone using it today.
+// A first-time glow on the two buttons, three pulses, then never again on this browser. It exists
+// because the buttons being merely bigger does not help someone who has already learned to read
+// that strip as metadata and skip it.
+function extrasNudge(){try{return localStorage.getItem("species_used_extras")!=="1";}catch(e){return false;}}
+function extrasUsed(){try{localStorage.setItem("species_used_extras","1");}catch(e){}
+  document.querySelectorAll(".extras.nudge").forEach(el=>el.classList.remove("nudge"));}
 function isAdmin(){try{return localStorage.getItem("species_admin")==="1";}catch(e){return false;}}
 function setAdmin(){try{localStorage.setItem("species_admin","1");}catch(e){}}
 // SHA-256 of the edit passphrase. Hashed rather than in the clear so the phrase is not sitting in
@@ -605,7 +623,8 @@ function render(){
    '<div class="body"><div class="txt">'+esc(x.l)+'</div>'+((x.dirs&&x.dirs.length)?'<div class="turns">'+x.dirs.map(t=>'<div class="turn">'+esc(t)+'</div>').join("")+'</div>':'')+
    '<div class="meta">'+(x.who?'<span>'+esc(x.who)+(x.y?" · "+esc(x.y):"")+'</span>':'')+
    (x.url?'<a href="'+esc(x.url)+'" target="_blank" rel="noopener">read more ›</a>':'')+
-   '<span class="sc">elo '+x.s+'</span>'+
+   '<span class="sc">elo '+x.s+'</span></div>'+
+   '<div class="extras'+(extrasNudge()?' nudge':'')+'"><span class="exlabel">Want to make this?</span>'+
    '<button class="packbtn">📄 Research pack</button>'+
    '<button class="scriptbtn">🎬 Sample script</button></div>'+
    '<div class="brief"></div><div class="scriptbox"></div></div>'+
@@ -613,8 +632,8 @@ function render(){
    '<button class="star'+(isS?' on':'')+'" title="standout">★</button></div>';
   d.querySelector(".kill").onclick=()=>{if(killed.has(k)){killed.delete(k)}else{killed.add(k);starred.delete(k)}if(save())render()};
   d.querySelector(".star").onclick=()=>{if(starred.has(k)){starred.delete(k)}else{starred.add(k);killed.delete(k)}if(save())render()};
-  d.querySelector(".packbtn").onclick=(e)=>loadBrief(d,x,e.currentTarget);
-  d.querySelector(".scriptbtn").onclick=(e)=>loadScript(d,x,e.currentTarget);
+  d.querySelector(".packbtn").onclick=(e)=>{extrasUsed();loadBrief(d,x,e.currentTarget);};
+  d.querySelector(".scriptbtn").onclick=(e)=>{extrasUsed();loadScript(d,x,e.currentTarget);};
   list.appendChild(d);
  });
  const kept=LEADS.length-killed.size;
@@ -1221,9 +1240,11 @@ function leadCard(x,rank){
  const sub=isIdea?(x.summary||""):((x.dirs||[]).join(" "));
  d.innerHTML='<div class="rank">'+rank+'</div><div class="body"><div class="txt">'+em(main)+'</div>'+(sub.trim()?'<div class="subtxt">'+em(sub)+'</div>':'')+
   '<div class="meta">'+(x.who?'<span>'+esc(x.who)+(x.y?" · "+esc(x.y):"")+'</span>':'')+(x.url?'<a href="'+esc(x.url)+'" target="_blank" rel="noopener">read more ›</a>':'')+
-  '<button class="packbtn">📄 Research pack</button><button class="scriptbtn">🎬 Sample script</button></div><div class="brief"></div><div class="scriptbox"></div></div>';
- d.querySelector(".packbtn").onclick=(e)=>loadBrief(d,x,e.currentTarget);
- d.querySelector(".scriptbtn").onclick=(e)=>loadScript(d,x,e.currentTarget);
+  '</div><div class="extras'+(extrasNudge()?' nudge':'')+'"><span class="exlabel">Want to make this?</span>'+
+  '<button class="packbtn">📄 Research pack</button><button class="scriptbtn">🎬 Sample script</button></div>'+
+  '<div class="brief"></div><div class="scriptbox"></div></div>';
+ d.querySelector(".packbtn").onclick=(e)=>{extrasUsed();loadBrief(d,x,e.currentTarget);};
+ d.querySelector(".scriptbtn").onclick=(e)=>{extrasUsed();loadScript(d,x,e.currentTarget);};
  return d;
 }
 function withTimeout(p,ms){return Promise.race([p,new Promise((_,rej)=>setTimeout(()=>rej(new Error("timeout")),ms))]);}
