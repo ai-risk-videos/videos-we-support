@@ -367,7 +367,9 @@ function showHome(){_pushScreen({v:"home"});inCurate=false;creatorView=false;doc
  const pb=$("#poolbar");if(pb)pb.style.display="none";
  const ah=$("#adminhome");if(ah)ah.style.display="";
  const ch=$("#chead");if(ch)ch.innerHTML="";
- const l=$("#list");if(l)l.innerHTML='<div class="homehint">Paste a channel above to get started. Your published pages live under <b>📄 My published pages</b>. There is nothing else you need to do here.</div>';
+ const l=$("#list");if(l)l.innerHTML='<div class="homehint">Paste a channel above to get started.'+
+  (isAdmin()?' Your published pages live under <b>📄 My published pages</b>.':'')+' There is nothing else you need to do here.</div>';
+ const _cp=$("#cpages"); if(_cp)_cp.style.display=isAdmin()?"":"none";   // no button to a locked screen
  const m=$("#cmsg");if(m){m.textContent="";m.className="cmsg";}
  const c=$("#curl");if(c)c.value="";
 }
@@ -1165,6 +1167,19 @@ function showPublished(link,channel,n){
  $("#opendash").onclick=showDashboard;
 }
 async function showDashboard(){
+ // GATE THE WHOLE SCREEN, not just the buttons on it. This list shows EVERY creator page with an
+ // Edit button beside each one, and it was reachable by anyone from the home page. Hiding the
+ // "Edit page" button over on the ?p= view (the first attempt at this) closed the door a creator
+ // was reported walking through and left this one wide open, which is the same bug twice.
+ if(!isAdmin()){
+  const l=$("#list");
+  if(l)l.innerHTML='<div class="curbar"><div class="curtitle">📄 Your published pages</div>'+
+   '<button class="navbtn" id="dashback">← Back to start</button></div>'+
+   '<div class="editnote">This list is for the team. Open it with the edit link once on this '+
+   'computer and it will stay unlocked. Ask whoever set this up for the link.</div>';
+  const bk=$("#dashback"); if(bk)bk.onclick=()=>{showHome();};
+  return;
+ }
  if(!confirmLeaveDraft())return;
  _pushScreen({v:"dash"});
  currentPageId=""; // left the saved page for the dashboard → don't let stray saves target it
