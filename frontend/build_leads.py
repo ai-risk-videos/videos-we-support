@@ -1171,6 +1171,7 @@ async function showDashboard(){
  // Edit button beside each one, and it was reachable by anyone from the home page. Hiding the
  // "Edit page" button over on the ?p= view (the first attempt at this) closed the door a creator
  // was reported walking through and left this one wide open, which is the same bug twice.
+ const _cpb=$("#cpages"); if(_cpb)_cpb.style.display=isAdmin()?"":"none";  // keep the button honest on ?v=pages too
  if(!isAdmin()){
   const l=$("#list");
   if(l)l.innerHTML='<div class="curbar"><div class="curtitle">📄 Your published pages</div>'+
