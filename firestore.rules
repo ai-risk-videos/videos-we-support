@@ -1,3 +1,10 @@
+// !! NOT DEPLOYED, AND DO NOT DEPLOY THIS WITHOUT READING THE NEXT SIX LINES.
+// This Firebase project is SHARED with other tools (thumbnail predictor, script tools).
+// The live ruleset already allows some collections and blocks others, and a rules deploy
+// REPLACES the whole ruleset, so shipping this file as-is would very likely break them.
+// Pull the live rules from the Firebase console first and merge. firebase.json here only
+// declares hosting, so ./deploy.sh does NOT touch rules; that is deliberate.
+
 rules_version = '2';
 
 // Creator pages are shared as capability links (videos-we-support.web.app/?p=handle) and creators
