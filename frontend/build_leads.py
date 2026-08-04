@@ -394,7 +394,9 @@ function showHome(){_pushScreen({v:"home"});inCurate=false;creatorView=false;doc
 // A first-time glow on the two buttons, three pulses, then never again on this browser. It exists
 // because the buttons being merely bigger does not help someone who has already learned to read
 // that strip as metadata and skip it.
-function extrasNudge(){try{return localStorage.getItem("species_used_extras")!=="1";}catch(e){return false;}}
+function extrasNudge(i){                          // FIRST CARD ONLY: 26 strips pulsing at once
+  if(i!==0)return false;                          // reads as a christmas tree, not a hint
+  try{return localStorage.getItem("species_used_extras")!=="1";}catch(e){return false;}}
 function extrasUsed(){try{localStorage.setItem("species_used_extras","1");}catch(e){}
   document.querySelectorAll(".extras.nudge").forEach(el=>el.classList.remove("nudge"));}
 function isAdmin(){try{return localStorage.getItem("species_admin")==="1";}catch(e){return false;}}
@@ -624,7 +626,7 @@ function render(){
    '<div class="meta">'+(x.who?'<span>'+esc(x.who)+(x.y?" · "+esc(x.y):"")+'</span>':'')+
    (x.url?'<a href="'+esc(x.url)+'" target="_blank" rel="noopener">read more ›</a>':'')+
    '<span class="sc">elo '+x.s+'</span></div>'+
-   '<div class="extras'+(extrasNudge()?' nudge':'')+'"><span class="exlabel">Want to make this?</span>'+
+   '<div class="extras'+(extrasNudge(pos)?' nudge':'')+'"><span class="exlabel">Want to make this?</span>'+
    '<button class="packbtn">📄 Research pack</button>'+
    '<button class="scriptbtn">🎬 Sample script</button></div>'+
    '<div class="brief"></div><div class="scriptbox"></div></div>'+
@@ -1240,7 +1242,7 @@ function leadCard(x,rank){
  const sub=isIdea?(x.summary||""):((x.dirs||[]).join(" "));
  d.innerHTML='<div class="rank">'+rank+'</div><div class="body"><div class="txt">'+em(main)+'</div>'+(sub.trim()?'<div class="subtxt">'+em(sub)+'</div>':'')+
   '<div class="meta">'+(x.who?'<span>'+esc(x.who)+(x.y?" · "+esc(x.y):"")+'</span>':'')+(x.url?'<a href="'+esc(x.url)+'" target="_blank" rel="noopener">read more ›</a>':'')+
-  '</div><div class="extras'+(extrasNudge()?' nudge':'')+'"><span class="exlabel">Want to make this?</span>'+
+  '</div><div class="extras'+(extrasNudge(rank-1)?' nudge':'')+'"><span class="exlabel">Want to make this?</span>'+
   '<button class="packbtn">📄 Research pack</button><button class="scriptbtn">🎬 Sample script</button></div>'+
   '<div class="brief"></div><div class="scriptbox"></div></div>';
  d.querySelector(".packbtn").onclick=(e)=>{extrasUsed();loadBrief(d,x,e.currentTarget);};
