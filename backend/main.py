@@ -2134,6 +2134,8 @@ HARD RULES:
    adding a fact.
 2. Keep every number, name and citation marker such as [sche-03] exactly as written.
 3. About 5th grade reading level. A ten year old gets it on the first read.
+3b. If the sentence carries a citation like [3](https://...) or [sche-03], REPRODUCE IT EXACTLY,
+    in the same place relative to the claim it backs. A rewrite that drops a citation is rejected.
 4. Active voice. Name the doer.
 5. One idea per sentence. Splitting one into two short ones is fine.
 6. Do not "improve" anything you were not given.
@@ -2158,6 +2160,20 @@ def _prose_sentences(md):
     return out
 
 
+def _strip_md(t):
+    """Text as a reader hears it: markdown links collapse to their label, citation markers vanish.
+
+    Without this, Flesch-Kincaid counts a URL as one enormous multi-syllable word and reports a
+    plain sentence at grade 27. Every grade quoted for a script or brief before this was inflated
+    wherever a citation sat in the sentence.
+    """
+    t = re.sub(r"\[([^\]]*)\]\((?:https?|mailto)[^)]*\)", r"\1", t or "")   # [label](url) -> label
+    t = re.sub(r"\[[a-z0-9-]+\]", "", t)                                   # [sche-03] citation markers
+    t = re.sub(r"https?://\S+", "", t)
+    t = re.sub(r"[*_`#]+", "", t)
+    return re.sub(r"\s+", " ", t).strip()
+
+
 def _prose_flaws(p):
     """Why this sentence would stop the reader, or [] if it would not.
 
@@ -2169,10 +2185,11 @@ def _prose_flaws(p):
     left is the thing he actually complained about, plus genuinely hard sentences.
     """
     t = (p or "").strip()
-    if "](" in t or "http" in t or re.search(r"\[[a-z]+-\d", t):
-        return []                                  # a link or a citation marker, not prose to edit
+    if re.match(r"^\s*\[[^\]]*\]\(", t) or t.count("](") >= 3:
+        return []                                  # a bare link or a link list, not prose to edit
     if t.endswith("?"):
         return []                                  # asking the viewer something is allowed out loud
+    t = _strip_md(t)
     why = []
     if _riddle(t):
         why.append("RIDDLE: it states an equation between abstractions and leaves the reader to "
@@ -2229,7 +2246,13 @@ def _prose_polish(md, label=""):
             # only accept a rewrite that is actually clearer and keeps every fact
             if _riddle(new) or not _keeps_substance(old, new) or _invents_source(new):
                 continue
-            if _fk_grade(new) > _fk_grade(old) + 1.0:
+            # EVERY CITATION SURVIVES. Research packs are citation dense, so the pass used to skip
+            # any sentence carrying one, which is most of the hard ones. It can edit them now only
+            # if each [label](url) and each [id] marker comes back untouched.
+            cites = re.findall(r"\[[^\]]*\]\((?:https?|mailto)[^)]*\)", old) + re.findall(r"\[[a-z0-9-]+\]", old)
+            if any(c not in new for c in cites):
+                continue
+            if _fk_grade(_strip_md(new)) > _fk_grade(_strip_md(old)) + 1.0:
                 continue
             if old not in md:
                 continue
