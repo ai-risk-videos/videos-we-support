@@ -1,0 +1,52 @@
+rules_version = '2';
+
+// Creator pages are shared as capability links (videos-we-support.web.app/?p=handle) and creators
+// have no accounts, so these rules cannot ask "who are you". They are scoped to the harm that
+// actually matters instead.
+//
+// Before these rules existed the database had none at all: anyone on the internet could read, list,
+// create, edit and DELETE every creator page. Verified by doing each one against the live database.
+//
+// What is closed, and why that ranking:
+//   DELETE  denied outright. Destroying a curated page is the only unrecoverable harm here, and
+//           nothing in the app ever deletes a page or an artifact, so this costs the tool nothing.
+//   CREATE  denied on unknown paths, so nobody can litter the collection with junk documents.
+//   UPDATE  allowed, because the admin builder saves from the browser and has no server identity
+//           to prove. The app-side route into editing (flipping the admin flag) is gated in the
+//           frontend instead. A determined person with the public web API key can still craft a
+//           write; closing that needs either real sign-in or a server proxy, and the owner judged
+//           that disproportionate for this tool.
+//   READ    a single document by id stays open, because that IS the sharing mechanism. Listing the
+//           collection is kept open only because the builder's "My published pages" screen needs
+//           it; that is the one thing to revisit if creator confidentiality ever matters more than
+//           convenience.
+//
+// Shape guards are on update so a stray or hostile write cannot blank a page: the ideas array has
+// to survive, and the handle can never be rewritten to point a page at a different creator.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /creator_pages/{pageId} {
+      allow get, list: if true;
+      allow create: if request.resource.data.keys().hasAll(['handle', 'ideas']);
+      allow update: if request.resource.data.ideas is list
+                    && request.resource.data.ideas.size() > 0
+                    && request.resource.data.handle == resource.data.handle;
+      allow delete: if false;
+
+      // research packs and scripts hang off a page; same reasoning, and nothing deletes them either
+      match /artifacts/{artifactId} {
+        allow get, list: if true;
+        allow create, update: if request.resource.data.md is string
+                              && request.resource.data.md.size() > 0;
+        allow delete: if false;
+      }
+    }
+
+    // anything not named above is closed, so a new collection cannot appear by accident
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

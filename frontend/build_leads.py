@@ -371,10 +371,26 @@ function showHome(){_pushScreen({v:"home"});inCurate=false;creatorView=false;doc
  const m=$("#cmsg");if(m){m.textContent="";m.className="cmsg";}
  const c=$("#curl");if(c)c.value="";
 }
-// admin = this browser has ever used the builder tool (or ?admin in the URL). Lets the admin edit a
-// creator's ?p= page in place; a creator opening the same link fresh has no flag and just sees the page.
+// admin = this browser has been unlocked with the edit passphrase. It lets the holder EDIT a
+// creator's ?p= page in place, which is why it can no longer be granted by simply arriving here.
+// It used to be set by visiting any screen that was not a ?p= link, so a creator who deleted the
+// "?p=name" off the end of their own URL became an admin, and every other creator's link then
+// opened in a full editor for them. That took no technical skill and is what got reported.
+// Browsers that were already unlocked keep the flag, so nothing changes for anyone using it today.
 function isAdmin(){try{return localStorage.getItem("species_admin")==="1";}catch(e){return false;}}
 function setAdmin(){try{localStorage.setItem("species_admin","1");}catch(e){}}
+// SHA-256 of the edit passphrase. Hashed rather than in the clear so the phrase is not sitting in
+// the page source of a public site; this is a UI gate on a low-stakes tool, not a real credential.
+const ADMIN_HASH="7bb12c56d827ce629d6e91c8c7d17308f199844c1dd3953362afd6f29aa3c831";
+async function tryUnlock(pass){
+  try{
+    const b=new TextEncoder().encode(String(pass||""));
+    const h=await crypto.subtle.digest("SHA-256",b);
+    const hex=Array.from(new Uint8Array(h)).map(x=>x.toString(16).padStart(2,"0")).join("");
+    if(hex===ADMIN_HASH){setAdmin();return true;}
+  }catch(e){}
+  return false;
+}
 // ---- research pack (/brief): same flow as the ideas page, keyed on the lead sentence ----
 const BRIEF_API="https://videos-similar-api-production.up.railway.app/brief";
 const _BK="species_lead_briefs";
@@ -1314,7 +1330,12 @@ $("#importfile").onchange=e=>{const f=e.target.files&&e.target.files[0];if(f)imp
 $("#reset").onclick=()=>{if(confirm("Clear all kills and stars?")){killed.clear();starred.clear();save();render()}};
 // personal links: ?c=@handle → clean CREATOR view (admin chrome hidden), server-authoritative tailoring.
 try{const _q=new URLSearchParams(location.search);const _pc=(_q.get("c")||"").trim();
- if(_q.get("admin")!=null)setAdmin();
+ if(_q.get("admin")!=null){                       // ?admin=<passphrase> unlocks editing on this browser
+   tryUnlock(_q.get("admin")).then(ok=>{
+     if(ok){location.replace(location.pathname+location.hash||location.pathname);}   // drop the phrase from the URL
+     else toast("That edit passphrase is not right.");
+   });
+ }
  if(_pc){
   // creator ?c= shared link — a single ephemeral screen; no in-app history stack (Back leaves, as expected for a link)
   creatorView=true;
@@ -1329,7 +1350,9 @@ try{const _q=new URLSearchParams(location.search);const _pc=(_q.get("c")||"").tr
  }else{
   // everything else routes through the screen model, so a reload on ?v=pages/pool/edit or a ?p= link restores that screen
   const _s=_screenFromLocation();
-  if(_s.v!=="page")setAdmin(); // ?p= is a creator link; every other screen is the admin builder tool
+  // DELIBERATELY NOT granting admin here any more. Arriving on the builder is not proof of anything:
+  // the builder is a public page, so this line handed edit rights over every creator page to anyone
+  // who navigated off a ?p= link. Editing now requires ?admin=<passphrase> once per browser.
   try{history.replaceState(_s,"",_urlFor(_s));}catch(e){} _navState=_s; // set the BASE entry (Back from here leaves the app)
   _popping=true; // initial paint must not push a second entry
   (async()=>{try{await _renderScreen(_s);}catch(e){showHome();}finally{_popping=false;}})();
