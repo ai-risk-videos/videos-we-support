@@ -5598,7 +5598,12 @@ def _anchors_from_prompt(prompt):
     what the writer was given. Cheaper and far less invasive than changing what every caller returns."""
     if not prompt:
         return ""
-    lines = [l for l in prompt.split("\n") if l.startswith("- [")]
+    # KEEP THE AISM LINES. This filtered on `- [` while an AI Safety Memes anchor is written
+    # `- AISM, COPY THIS PHRASING: [who year] ...`, so every AISM line was dropped here before any
+    # repair pass could see it. That made the restore pass a no-op in production and meant the
+    # fidelity pass had been checking pitches against a menu with the AISM anchors missing.
+    lines = [l for l in prompt.split("\n")
+             if l.startswith("- [") or l.startswith("- AISM, COPY THIS PHRASING:")]
     return "\n".join(lines)
 
 
