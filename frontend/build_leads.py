@@ -1214,19 +1214,34 @@ async function showDashboard(){
  $("#dashback").onclick=()=>{showHome();};
  if(!DB){const x=$("#dashbody");if(x)x.textContent="Cloud not available right now.";return;}
  try{
-  // FORCE A SERVER READ. A plain .get() falls back to Firestore's local cache when the network is
-  // blocked, and an empty cache resolves SUCCESSFULLY with zero documents. The screen then printed
-  // "No pages yet. Tailor a channel, curate, and hit Publish." to a teammate who has published
-  // plenty, which is the app confidently telling him something false. {source:"server"} throws
-  // instead, so a connectivity problem lands in the catch below and says so.
-  const q=await withTimeout(DB.collection(PAGES_COL).orderBy("updated","desc").limit(500)
-                              .get({source:"server"}),12000);
+  // FORCE A SERVER READ, AND RETRY. Two separate faults produced the same wrong screen.
+  // (1) A plain .get() falls back to Firestore's local cache when the server is unreachable, and an
+  //     empty cache resolves SUCCESSFULLY with zero documents, so the page cheerfully printed
+  //     "No pages yet" to a teammate who has published plenty. {source:"server"} throws instead.
+  // (2) The first read after a cold page load can fail while the Firestore channel is still coming
+  //     up. A curator described exactly this: "It's fixed if you refresh a few times but you
+  //     shouldn't have to do that." One attempt turned a transient handshake into a verdict.
+  // Three attempts with a short backoff, and only then do we say anything.
+  let q=null, lastErr=null;
+  for(let attempt=0; attempt<3; attempt++){
+   try{
+    q=await withTimeout(DB.collection(PAGES_COL).orderBy("updated","desc").limit(500)
+                          .get({source:"server"}), 12000);
+    if(q&&q.docs&&q.docs.length)break;                 // got real data, stop
+    if(attempt===2)break;                              // genuinely empty after three tries
+   }catch(err){
+    lastErr=err;
+    if(attempt===2)throw err;                          // out of retries: let the catch below report it
+   }
+   await new Promise(r=>setTimeout(r, 500*(attempt+1)));
+  }
+  if(!q){throw (lastErr||new Error("could not read the page list"));}
   const rows=q.docs.map(d=>{const o=d.data()||{};o.id=d.id;return o;});
   if(!rows.length){const x=$("#dashbody");
    // distinguish "the database really has none" from "we could not reach the database"
    if(x)x.textContent=(q.metadata&&q.metadata.fromCache)
-     ? "Could not reach the database, so this list may be incomplete. Check your connection or any extension blocking firestore.googleapis.com, then reload."
-     : "No pages yet. Tailor a channel, curate, and hit Publish.";
+     ? ("Could not reach the database, so this list may be incomplete. Check your connection or any extension blocking firestore.googleapis.com, then reload. [build "+BUILD_V+"]")
+     : ("No pages yet. Tailor a channel, curate, and hit Publish. [build "+BUILD_V+"]");
    return;}
   $("#dashbody").outerHTML=rows.map(r=>{
    const link=location.origin+location.pathname+"?p="+encodeURIComponent(r.id);
@@ -1242,8 +1257,8 @@ async function showDashboard(){
   const msg=String((e&&e.message)||e);
   if(x)x.textContent=/timeout|offline|unavailable|network|Failed to fetch/i.test(msg)
     ? ("Could not reach the database ("+msg+"). This is a connection problem, not an empty list: "
-       +"check your network or an extension blocking firestore.googleapis.com, then reload.")
-    : ("Could not load pages ("+msg+").");
+       +"check your network or an extension blocking firestore.googleapis.com, then reload. [build "+BUILD_V+"]")
+    : ("Could not load pages ("+msg+"). [build "+BUILD_V+"]");
   console.error(e);}
 }
 // *emphasis* -> italics. The curator: "totally fine to use italics to highlight key words/stuff".
