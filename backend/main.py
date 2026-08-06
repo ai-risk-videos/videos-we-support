@@ -5281,9 +5281,25 @@ def _restore_aism_detail(ideas, anchors):
                 fw = _content_words(full)
                 if len(fw) < 4 or not ow:
                     continue
-                if not ow.issubset(fw):
-                    continue                              # the pitch said something else as well
-                if len(ow) / len(fw) > 0.75:
+                shared = len(ow & fw)
+                added = ow - fw
+                # A NEW FACT IS SACRED. Anything the pitch added that AISM did not have (a figure,
+                # a company, a name) means the rewrite is carrying information, so leave it alone
+                # even if the phrasing is worse. Only a rewrite that added NOTHING gets replaced.
+                adds_fact = any(re.search(r"\d", w) for w in added) or bool(
+                    re.search(r"\b\d", " ".join(added))) or any(
+                    re.search(r"\b" + re.escape(w) + r"\b", full, re.I) is None and w[:1].isupper()
+                    for w in re.findall(r"\b[A-Z][a-zA-Z.]{2,}", opening))
+                if adds_fact:
+                    continue
+                if shared / len(fw) < 0.35 or shared / max(1, len(ow)) < 0.5:
+                    continue                              # not clearly the same sentence
+                # NOTE: no length guard here on purpose. The first version skipped a rewrite that
+                # was LONGER than the anchor, which is exactly the case being complained about:
+                # "OpenAI quietly dropped safely and no financial motive from its mission" came
+                # back as the wordier, flatter "OpenAI took the words safely and no financial
+                # motive out of its mission statement". Longer and worse is still worse.
+                if ow.issubset(fw) and len(ow) / len(fw) > 0.75:
                     continue                              # barely shortened, leave it
                 whole = _content_words(t)
                 if len(fw & whole) / len(fw) >= 0.8:
