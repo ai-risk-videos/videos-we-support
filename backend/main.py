@@ -995,7 +995,17 @@ def anchor_block(k=12):
             "model named. That is a fabrication about the world built out of a gap in our notes. If a "
             "name is not in front of you, write the sentence without a name and without any claim about "
             "why the name is missing. "
-            "RETELL, DO NOT TRANSCRIBE. These anchors are written to wildly different standards. Some are crisp "
+            "RETELL, DO NOT TRANSCRIBE, EXCEPT FOR THE AISM LINES. This rule and the COPY THIS PHRASING rule "
+            "above were contradicting each other in the same breath, and this one was winning: the writer "
+            "kept AISM's opening clause and then dropped the detail that made it land. Measured on a real "
+            "batch, only 45 percent of an AISM line's words survived. \"Alibaba caught their AI trying to "
+            "escape. It secretly started using its GPUs to mine crypto\" shipped as just the first sentence. "
+            "\"Mythos 5 agents started killing other agents over resources, and to avoid being killed "
+            "themselves\" shipped as \"Mythos 5 agents started killing other agents.\" The dropped half is "
+            "always the half that makes a reader stop. SO: a line marked AISM is EXEMPT from everything in "
+            "this paragraph. Copy it whole, including the second sentence and the quoted fragment, and keep "
+            "its detail even if the sentence runs longer than you would have written. For every OTHER "
+            "anchor, retell it: these are written to wildly different standards. Some are crisp "
             "('Anthropic's new model turns to blackmail when engineers try to take it offline'), some are write-ups "
             "about a write-up ('the technical appendix gives per model numbers showing 16 leading models chose "
             "blackmail up to 96 percent of the time'). Never inherit the second kind of phrasing. Say what happened "
@@ -5208,6 +5218,106 @@ def _select_clean(candidates, want):
     return kept
 
 
+_AISM_STOP = set("the a an and or of to in on for with that its it was were is are be been by from at "
+                 "as this his her their they them then than when who how what not no had has have "
+                 "but so if into over out up down about after before while".split())
+
+
+def _content_words(t):
+    t = re.sub(r"[\"\u201c\u201d\u2018\u2019]", "", t or "")
+    return {w for w in re.findall(r"[a-z]+", t.lower()) if len(w) > 3 and w not in _AISM_STOP}
+
+
+def _restore_aism_detail(ideas, anchors):
+    """Put back the half of an AI Safety Memes line that the writer keeps dropping.
+
+    The failure is specific and repeatable, not random rewriting. The writer copies AISM's FIRST
+    sentence more or less verbatim and then throws away the second, which is always the half that
+    makes a reader stop:
+        AISM  "Alibaba caught their AI trying to escape. It secretly started using its GPUs to
+               mine crypto, while researchers thought it was training."
+        ship  "Alibaba caught their AI trying to escape."
+        AISM  "Mythos 5 agents started killing other agents over resources - and to avoid being
+               killed themselves."
+        ship  "Mythos 5 agents started killing other agents."
+    Measured across a real batch, 45 percent of an AISM line's words survived. The prompt now
+    exempts AISM lines from the RETELL rule that was causing it, but a prompt rule is what failed
+    here in the first place, so this is the deterministic backstop.
+
+    Only fires when the pitch's opening is clearly the SAME event as the anchor's opening, and the
+    dropped detail is genuinely absent from the whole pitch. Then it splices AISM's own words in,
+    unchanged, right after the opening sentence.
+    """
+    if not anchors:
+        return 0
+    lines = [ln.strip()[2:].strip() for ln in anchors.split("\n")
+             if ln.strip().startswith("- AISM, COPY THIS PHRASING:")]
+    lines = [re.sub(r"^AISM, COPY THIS PHRASING:\s*", "", ln) for ln in lines]
+    lines = [re.sub(r"^\[[^\]]*\]\s*", "", ln) for ln in lines]        # drop the [who year] prefix
+    if not lines:
+        return 0
+    n = 0
+    for x in ideas:
+        t = (x.get("title") or "").strip()
+        parts = [p for p in re.split(r"(?<=[.?!])\s+", t) if p.strip()]
+        if len(parts) < 2:
+            continue
+        opening = parts[0]
+        ow = _content_words(opening)
+        if not ow:
+            continue
+        for ln in lines:
+            asents = [p for p in re.split(r"(?<=[.?!])\s+", ln) if p.strip()]
+            if not asents:
+                continue
+            if len(asents) == 1:
+                # ONE-SENTENCE ANCHOR, TRUNCATED MID-SENTENCE. The other half of the failure:
+                #   AISM  "Mythos 5 agents started killing other agents over resources, and to
+                #          avoid being killed themselves."
+                #   ship  "Mythos 5 agents started killing other agents."
+                # There is no second sentence to splice, so restore the whole line in place of the
+                # opening, but only when the opening is plainly a shortened version of it.
+                full = asents[0].strip()
+                fw = _content_words(full)
+                if len(fw) < 4 or not ow:
+                    continue
+                if not ow.issubset(fw):
+                    continue                              # the pitch said something else as well
+                if len(ow) / len(fw) > 0.75:
+                    continue                              # barely shortened, leave it
+                whole = _content_words(t)
+                if len(fw & whole) / len(fw) >= 0.8:
+                    continue                              # the detail already survives elsewhere
+                if len((t + " " + full).split()) > 140:
+                    continue
+                parts[0] = full
+                x["title"] = " ".join(parts)
+                n += 1
+                break
+            aw = _content_words(asents[0])
+            if not aw:
+                continue
+            # same event? the pitch's opening must carry most of the anchor's opening
+            if len(aw & ow) / len(aw) < 0.6:
+                continue
+            detail = asents[1].strip()
+            dw = _content_words(detail)
+            if len(dw) < 3:
+                continue
+            whole = _content_words(t)
+            if len(dw & whole) / len(dw) >= 0.5:
+                continue                                  # the detail is already in there somewhere
+            if len((t + " " + detail).split()) > 135:
+                continue                                  # would blow the length budget
+            parts.insert(1, detail)
+            x["title"] = " ".join(parts)
+            n += 1
+            break
+    if n:
+        _log_event({"t": "aism_restore", "n": n})
+    return n
+
+
 def _activate_summaries(ideas, anchors=""):
     # In one-block mode every summary is empty, so the six summary-targeted passes below would each
     # make a model call that can only return nothing. Detect it once and skip them; the title passes
@@ -5451,6 +5561,14 @@ def _activate_summaries(ideas, anchors=""):
         if not hard:
             break
         _pass(GRADE_FIX_SYS, hard, "grade_fix_r%d" % (_round + 1), budget=3000, accept=_grade_ok)
+
+    # LAST, DELIBERATELY. Every pass above rewrites sentences, and any of them would happily smooth
+    # an AI Safety Memes line back into a paraphrase, which is the whole complaint. Restoring the
+    # exact wording after they have all run means nothing downstream can undo it.
+    try:
+        _restore_aism_detail(ideas, anchors)
+    except Exception as _e:
+        _log_event({"t": "aism_restore", "err": str(_e)[:140]})
     return rew
 
 def _dedash(s):
