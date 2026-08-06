@@ -1214,9 +1214,20 @@ async function showDashboard(){
  $("#dashback").onclick=()=>{showHome();};
  if(!DB){const x=$("#dashbody");if(x)x.textContent="Cloud not available right now.";return;}
  try{
-  const q=await withTimeout(DB.collection(PAGES_COL).orderBy("updated","desc").limit(500).get(),12000);
+  // FORCE A SERVER READ. A plain .get() falls back to Firestore's local cache when the network is
+  // blocked, and an empty cache resolves SUCCESSFULLY with zero documents. The screen then printed
+  // "No pages yet. Tailor a channel, curate, and hit Publish." to a teammate who has published
+  // plenty, which is the app confidently telling him something false. {source:"server"} throws
+  // instead, so a connectivity problem lands in the catch below and says so.
+  const q=await withTimeout(DB.collection(PAGES_COL).orderBy("updated","desc").limit(500)
+                              .get({source:"server"}),12000);
   const rows=q.docs.map(d=>{const o=d.data()||{};o.id=d.id;return o;});
-  if(!rows.length){const x=$("#dashbody");if(x)x.textContent="No pages yet. Tailor a channel, curate, and hit Publish.";return;}
+  if(!rows.length){const x=$("#dashbody");
+   // distinguish "the database really has none" from "we could not reach the database"
+   if(x)x.textContent=(q.metadata&&q.metadata.fromCache)
+     ? "Could not reach the database, so this list may be incomplete. Check your connection or any extension blocking firestore.googleapis.com, then reload."
+     : "No pages yet. Tailor a channel, curate, and hit Publish.";
+   return;}
   $("#dashbody").outerHTML=rows.map(r=>{
    const link=location.origin+location.pathname+"?p="+encodeURIComponent(r.id);
    const when=r.updated?new Date(r.updated).toISOString().slice(0,10):"";
@@ -1227,7 +1238,13 @@ async function showDashboard(){
   }).join("");
   list.querySelectorAll("[data-copy]").forEach(bn=>bn.onclick=()=>{navigator.clipboard.writeText(bn.getAttribute("data-copy")).then(()=>toast("Link copied")).catch(()=>toast("Copy failed"));});
   list.querySelectorAll("[data-edit]").forEach(bn=>bn.onclick=async()=>{try{const doc=await loadPageDoc(bn.getAttribute("data-edit"));if(doc)startCurate(doc.ideas||[],doc.handle||bn.getAttribute("data-edit"),doc.channel||doc.handle,doc.note||"",doc.profile||"",doc.style||"leads",doc.rejected||[]);else toast("That page no longer exists — refresh the list.");}catch(e){toast("Could not open page — check your connection.");}});
- }catch(e){const x=$("#dashbody");if(x)x.textContent="Could not load pages ("+((e&&e.message)||e)+").";console.error(e);}
+ }catch(e){const x=$("#dashbody");
+  const msg=String((e&&e.message)||e);
+  if(x)x.textContent=/timeout|offline|unavailable|network|Failed to fetch/i.test(msg)
+    ? ("Could not reach the database ("+msg+"). This is a connection problem, not an empty list: "
+       +"check your network or an extension blocking firestore.googleapis.com, then reload.")
+    : ("Could not load pages ("+msg+").");
+  console.error(e);}
 }
 // *emphasis* -> italics. The curator: "totally fine to use italics to highlight key words/stuff".
 // esc() ALWAYS runs first, so the only markup that survives is the <em> we add ourselves; nothing the
