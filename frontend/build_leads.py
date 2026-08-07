@@ -226,6 +226,8 @@ h1{font-size:26px;margin:0 0 4px;font-weight:800}.dot{color:var(--red)}
    reject pile; these three live on the card. */
 .ccard.st-pre{border-color:#c08a2e;box-shadow:inset 3px 0 0 #c08a2e}
 .ccard.st-ok{border-color:#3f9e63;box-shadow:inset 3px 0 0 #3f9e63}
+.vin{font-size:10.5px;color:#6f7a86;margin-left:8px;font-variant-numeric:tabular-nums}
+.vin.old{color:#c08a5a}
 .stbar{display:flex;gap:4px;align-items:center;margin-left:auto}
 .stbtn{font:inherit;font-size:11.5px;line-height:1;padding:5px 9px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--mut);cursor:pointer;white-space:nowrap}
 .stbtn:hover{border-color:#7b8794;color:var(--ink)}
@@ -862,7 +864,10 @@ function startCurate(ideas,handle,channel,note,profile,style,rejected){
  const _newHandle=handle||channelHandle;
  if(_newHandle!==curateHandle)curateRejected=[]; // switched to a different page → start a fresh reject pile
  if(rejected!==undefined)curateRejected=(rejected||[]).filter(Boolean); // opening a saved page → load its reject pile; regenerate passes undefined so the pile is preserved
- curateIdeas=(ideas||[]).map(x=>(x.title!=null)?{title:x.title||"",summary:x.summary||"",url:x.url||"",who:x.who||"",y:x.y||"",st:x.st||""}:{l:x.l||"",dirs:(x.dirs||[]).slice(0,2),url:x.url||"",who:x.who||"",y:x.y||""});
+ // gts/genv ride along: this map is a WHITELIST, so any field not named here is destroyed the
+ // moment a page is opened for curation. The generation stamps would have silently vanished on
+ // first edit and the whole "delete everything written by an older version" idea with them.
+ curateIdeas=(ideas||[]).map(x=>(x.title!=null)?{title:x.title||"",summary:x.summary||"",url:x.url||"",who:x.who||"",y:x.y||"",st:x.st||"",gts:x.gts||"",genv:x.genv||""}:{l:x.l||"",dirs:(x.dirs||[]).slice(0,2),url:x.url||"",who:x.who||"",y:x.y||"",gts:x.gts||"",genv:x.genv||""});
  curateHandle=handle||channelHandle; curateChannel=channel||channelName||curateHandle; curateProfile=(profile!==undefined&&profile!==null)?profile:channelProfile;
  inCurate=true; curateDirty=false;
  const b=$("#tbanner");if(b)b.style.display="none";
@@ -1042,6 +1047,15 @@ async function addMoreIdeas(){
 // Rejection is NOT a status: rejected ideas move to the existing reject pile, which already works
 // and keeps them as signal for the next generation.
 const ST_LABEL={"new":"Not reviewed","pre":"Needs Drew","ok":"Approved"};
+// When an idea was written, and by which build of the writer. Ideas made before this shipped have
+// neither, and show as "pre-stamp", which is exactly the set worth clearing out.
+function vintage(x){
+ const d=(x&&x.gts)?String(x.gts).slice(0,10):"";
+ const v=(x&&x.genv)?String(x.genv):"";
+ if(!d&&!v)return '<span class="vin old" title="written before ideas were stamped">pre-stamp</span>';
+ return '<span class="vin" title="written '+esc(x.gts||"?")+' by generator '+esc(v||"?")+'">'
+   +esc(d||"?")+(v?(" · "+esc(v)):"")+'</span>';
+}
 function ideaSt(x){return (x&&x.st==="pre")?"pre":((x&&x.st==="ok")?"ok":"new");}
 // Has anyone actually used the workflow on this page? If not, every idea is publishable, exactly as
 // before. Without this, every page created before today would publish as empty.
@@ -1073,7 +1087,7 @@ function renderCards(){
   const st=ideaSt(x);
   const stbar='<span class="stbar">'+["new","pre","ok"].map(k=>'<button class="stbtn'+(st===k?" on":"")+'" data-st="'+k+'" title="'+ST_LABEL[k]+'">'+ST_LABEL[k]+'</button>').join("")+'</span>';
   return '<div class="ccard st-'+st+'" data-i="'+i+'" draggable="true"><span class="cgrip" title="Drag to move this idea">⠿</span>'+head+body+'<div class="cctl"><button data-act="up">▲</button><button data-act="down">▼</button><button data-act="rm">✕ remove</button>'+
-   (x.who?'<span class="dmeta">'+esc(x.who)+(x.y?" · "+esc(x.y):"")+'</span>':'')+stbar+'</div></div>';
+   (x.who?'<span class="dmeta">'+esc(x.who)+(x.y?" · "+esc(x.y):"")+'</span>':'')+vintage(x)+stbar+'</div></div>';
  }).join("");
  w.querySelectorAll(".ccard").forEach(card=>{
   const i=+card.getAttribute("data-i");
