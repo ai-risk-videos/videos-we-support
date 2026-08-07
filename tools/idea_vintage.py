@@ -102,8 +102,14 @@ def vintage(idea):
 def main():
     args = sys.argv[1:]
     keep = None
+    all_unreviewed = "--all-unreviewed" in args
     if "--stale" in args:
         keep = args[args.index("--stale") + 1]
+    if all_unreviewed:
+        # "let's delete all 'not reviewed' ideas ... That would give us a clean slate while saving
+        # anything that's been human-marked." Version-independent: a sentinel no idea can carry
+        # makes every never-reviewed idea stale, whatever wrote it.
+        keep = "\x00-none-\x00"
     do_delete = "--delete" in args and "--yes-i-mean-it" in args
     if "--delete" in args and not do_delete:
         print("refusing: --delete also needs --yes-i-mean-it\n")
@@ -131,7 +137,11 @@ def main():
         print("the version currently live is reported at /  as \"genv\".")
         return
 
-    print("\nkeeping %s; anything else that is ALSO never-reviewed is eligible\n" % keep)
+    if all_unreviewed:
+        print("\nEVERY never-reviewed idea is eligible, whatever version wrote it.")
+        print("Approved and Needs-Drew ideas are kept.\n")
+    else:
+        print("\nkeeping %s; anything else that is ALSO never-reviewed is eligible\n" % keep)
     plan, skipped, removed_records = [], [], []
     for pid, p in rows:
         ideas = p.get("ideas") or []
