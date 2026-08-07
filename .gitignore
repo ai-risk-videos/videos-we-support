@@ -42,3 +42,8 @@ creator_page_backups/
 # never commit the admin key
 .eventskey
 bench/.eventskey
+
+# Deletion backups hold full creator-page contents: which channels we are pitching and every idea
+# written for them. This repo is PUBLIC, so these never belong in it. Keep them on disk only.
+tools/votes/deleted-ideas-*.json
+tools/votes/deleted-pages-*.json
