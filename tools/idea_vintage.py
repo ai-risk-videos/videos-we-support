@@ -168,8 +168,11 @@ def main():
         print("\nthis was a dry run. add --delete --yes-i-mean-it to apply.")
         return
 
-    os.makedirs(os.path.join(HERE, "votes"), exist_ok=True)
-    backup = os.path.join(HERE, "votes", "deleted-ideas-%s.json" % time.strftime("%Y%m%d-%H%M%S"))
+    # OUTSIDE THE REPO. These hold full creator-page contents and the list of who we pitch, and
+    # this repo is public: one of these got committed and pushed before anyone noticed.
+    bdir = os.path.expanduser("~/Downloads/species-backups")
+    os.makedirs(bdir, exist_ok=True)
+    backup = os.path.join(bdir, "deleted-ideas-%s.json" % time.strftime("%Y%m%d-%H%M%S"))
     json.dump(removed_records, open(backup, "w"), indent=1)
     print("\nbackup of every removed idea written to %s" % backup)
 
