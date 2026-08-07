@@ -6129,7 +6129,17 @@ async def _custom_generate(body, req=None):
         if _rew:
             _log_event({"t": "summary_rewrite", "ch": _chan_key(url), "n": len(_rew)})
         _dedash_ideas(ideas)  # hard-strip any em/en dash from title+summary before it ships (hard project rule)
+                # WHEN, AND BY WHICH VERSION OF THE WRITER. Per idea, not per page: a page accumulates
+        # ideas across sessions ("+ get more"), and the point of the stamp is to be able to bin the
+        # stale ones without disturbing the good ones sitting next to them. setdefault so a rerun
+        # never restamps an idea that already carries its own origin.
+        _now = __import__("datetime").datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+        for _x in ideas:
+            if isinstance(_x, dict):
+                _x.setdefault("gts", _now)
+                _x.setdefault("genv", GEN_VERSION)
         resp = {"channel": channel_name, "followers": followers, "ideas": ideas, "fresh": fresh,
+                "genv": GEN_VERSION, "gts": _now,
                 "profile": profile, "titles": titles, "research_meta": rmeta}
         if not is_more:
             _pregen_store(url, resp)  # organic cold runs warm the cache for teammates/re-visits
