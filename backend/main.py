@@ -1110,7 +1110,8 @@ def parse_ideas(text):
 
 @app.get("/")
 def health():
-    return {"ok": True, "model": MODEL, "deployed": _DEPLOY_STAMP, "genv": GEN_VERSION}
+    return {"ok": True, "model": MODEL, "deployed": _DEPLOY_STAMP, "genv": WRITER_VERSION,
+            "pregen_gen": GEN_VERSION}
 
 
 @app.post("/similar")
@@ -1153,8 +1154,8 @@ async def similar(req: Request):
         for _x in ideas:
             if isinstance(_x, dict):
                 _x.setdefault("gts", _now)          # setdefault: never restamp a rewritten idea
-                _x.setdefault("genv", GEN_VERSION)
-        return {"ideas": ideas, "genv": GEN_VERSION, "gts": _now}
+                _x.setdefault("genv", WRITER_VERSION)
+        return {"ideas": ideas, "genv": WRITER_VERSION, "gts": _now}
     except Exception as e:
         return JSONResponse({"error": "generation failed", "detail": str(e)[:300]}, status_code=502)
 
@@ -6137,9 +6138,9 @@ async def _custom_generate(body, req=None):
         for _x in ideas:
             if isinstance(_x, dict):
                 _x.setdefault("gts", _now)
-                _x.setdefault("genv", GEN_VERSION)
+                _x.setdefault("genv", WRITER_VERSION)
         resp = {"channel": channel_name, "followers": followers, "ideas": ideas, "fresh": fresh,
-                "genv": GEN_VERSION, "gts": _now,
+                "genv": WRITER_VERSION, "gts": _now,
                 "profile": profile, "titles": titles, "research_meta": rmeta}
         if not is_more:
             _pregen_store(url, resp)  # organic cold runs warm the cache for teammates/re-visits
@@ -6224,7 +6225,7 @@ for _pname in ("SYSTEM", "SYSTEM_CUSTOM", "SYSTEM_EDITOR", "SYSTEM_CATEGORY", "S
 # This is a hash of the things that actually decide how an idea reads: the model, the prompts, and
 # the repair passes. Change any of them and the id changes; restart the server a hundred times with
 # the same code and it does not.
-def _gen_version():
+def _writer_version():
     import hashlib
     parts = [MODEL, WRITE_MODEL]
     for name in ("SYSTEM_CUSTOM", "ONEBLOCK_FORMAT", "ANTI_SLOP", "READING_LEVEL", "TRAJECTORY",
@@ -6235,7 +6236,15 @@ def _gen_version():
     return "g" + h
 
 
-GEN_VERSION = _gen_version()
+# NOT named GEN_VERSION: that name is already an int (line ~3038) that invalidates the
+# pregen cache. Shadowing it took the main generate button down for every user, because
+# `int(v.get("gen_version") or 0) >= GEN_VERSION` became int >= str.
+WRITER_VERSION = _writer_version()
+# Fail at BOOT, not at request time, if these two are ever conflated again. The first version of
+# this shadowed GEN_VERSION and every non-fresh generation died on `int >= str` in the pregen
+# cache: the main button was broken for every user while a fresh:true test path kept passing.
+assert isinstance(GEN_VERSION, int), "GEN_VERSION must stay an int (pregen cache compares it)"
+assert isinstance(WRITER_VERSION, str) and WRITER_VERSION.startswith("g"), "WRITER_VERSION is a string id"
 
 
 @app.post("/category")

@@ -1395,7 +1395,16 @@ async function fetchCustom(rawurl,rejectedTitles){
   }
   if(msg){msg.className="cmsg err";msg.textContent=(j&&j.error)?j.error:"Could not generate ideas. Check the link.";}
   return false;
- }catch(e){if(msg){msg.className="cmsg err";msg.textContent="Took too long — try again.";}return false;}
+ }catch(e){
+  // SAY WHAT ACTUALLY WENT WRONG. This reported every failure as "Took too long", so a server-side
+  // crash that came back in three seconds looked like a slow channel. A curator spent a morning
+  // retrying in two browsers across several channels chasing a timeout that was never happening.
+  const em=String((e&&e.message)||e||"");
+  const slow=/abort|timeout|timed out/i.test(em);
+  if(msg){msg.className="cmsg err";
+   msg.textContent=slow ? "Took too long — try again."
+                        : ("Generation failed: "+(em||"unknown error")+" — this is an error, not a timeout, so retrying may not help. Send this message on.");}
+  return false;}
  finally{_stopC();if(btn){btn.disabled=false;btn.textContent=orig||"✍️ Write fresh ideas for them";}}
 }
 function _genGuard(fn){if(genBusy||!confirmLeaveDraft())return;genBusy=true;Promise.resolve(fn()).finally(()=>{genBusy=false;});}

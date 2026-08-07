@@ -272,7 +272,7 @@ h1{font-size:26px;margin:0 0 4px;font-weight:800}.dot{color:var(--red)}
  <button id="import">Import</button>
  <input id="importfile" type="file" accept="application/json,.json" hidden>
  <button id="reset">Reset</button>
- <span class="filters"><span class="pagev">v 0807.1513</span></span>
+ <span class="filters"><span class="pagev">v 0807.1838</span></span>
 </div>
 <div id="list"></div>
 </div>
@@ -286,7 +286,7 @@ const PAGES_COL="creator_pages";
 // ---- channel tailoring (/tailor): re-rank the pool for one creator; profile also shapes packs ----
 const TAILOR_API="https://videos-similar-api-production.up.railway.app/tailor";
 const CUSTOM_API="https://videos-similar-api-production.up.railway.app/custom"; // old "Videos We Support" idea generation
-const BUILD_V="0807.1513"; // tailor-cache is keyed to this: LEADS indices shift when the page is rebuilt
+const BUILD_V="0807.1838"; // tailor-cache is keyed to this: LEADS indices shift when the page is rebuilt
 let channelProfile="", channelName="", channelHandle="", tailored=false, fullView=false, tailorOrder=null;
 let currentPageId=""; // set on a saved ?p= creator page; lets packs/scripts save ONTO that page so the creator sees them instantly
 let researchNote=""; // one-shot line shown in the editor after a fresh generation: how many transcripts were read (so it is VISIBLE the tool used them)
@@ -1363,7 +1363,16 @@ async function fetchCustom(rawurl,rejectedTitles){
   }
   if(msg){msg.className="cmsg err";msg.textContent=(j&&j.error)?j.error:"Could not generate ideas. Check the link.";}
   return false;
- }catch(e){if(msg){msg.className="cmsg err";msg.textContent="Took too long — try again.";}return false;}
+ }catch(e){
+  // SAY WHAT ACTUALLY WENT WRONG. This reported every failure as "Took too long", so a server-side
+  // crash that came back in three seconds looked like a slow channel. A curator spent a morning
+  // retrying in two browsers across several channels chasing a timeout that was never happening.
+  const em=String((e&&e.message)||e||"");
+  const slow=/abort|timeout|timed out/i.test(em);
+  if(msg){msg.className="cmsg err";
+   msg.textContent=slow ? "Took too long — try again."
+                        : ("Generation failed: "+(em||"unknown error")+" — this is an error, not a timeout, so retrying may not help. Send this message on.");}
+  return false;}
  finally{_stopC();if(btn){btn.disabled=false;btn.textContent=orig||"✍️ Write fresh ideas for them";}}
 }
 function _genGuard(fn){if(genBusy||!confirmLeaveDraft())return;genBusy=true;Promise.resolve(fn()).finally(()=>{genBusy=false;});}
