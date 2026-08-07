@@ -1379,7 +1379,13 @@ async function fetchCustom(rawurl,rejectedTitles){
  let _stopC=function(){};
  if(msg){msg.className="cmsg";msg.innerHTML='<div class="ptwrap"></div>';_stopC=progressTicker(msg.querySelector(".ptwrap"),300,"Writing fresh ideas");}
  try{
-  const _cbody={channelUrl:url};if(Array.isArray(rejectedTitles)&&rejectedTitles.length)_cbody.rejected=rejectedTitles.slice(0,40); // feed the reject pile so a regenerate steers away from disliked ideas
+  // fresh:true BYPASSES THE PREGEN CACHE. Without it this button was a lie: the first generation
+  // for a channel gets cached by _pregen_store, and every click after that returned that same
+  // payload in about a second, so the button promising "brand-new, bespoke to their channel, takes
+  // 3-5 minutes" served whatever was written the first time anyone tried that channel. Reported as
+  // "the generator isn't suggesting custom ideas anymore, just the same 20 ideas or whatever".
+  // The cache still backs the "Pull from our idea library" button, which is what it is for.
+  const _cbody={channelUrl:url,fresh:true};if(Array.isArray(rejectedTitles)&&rejectedTitles.length)_cbody.rejected=rejectedTitles.slice(0,40); // feed the reject pile so a regenerate steers away from disliked ideas
   const _pj=await customJob(_cbody);   // job route: see customJob for why a direct POST cannot work
   const r={ok:true,status:200,json:async()=>_pj};
   if(r.status===429){if(msg){msg.className="cmsg err";msg.textContent="Busy right now — wait a minute and try again.";}return false;}
