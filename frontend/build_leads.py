@@ -228,6 +228,7 @@ h1{font-size:26px;margin:0 0 4px;font-weight:800}.dot{color:var(--red)}
 .ccard.st-ok{border-color:#3f9e63;box-shadow:inset 3px 0 0 #3f9e63}
 .vin{font-size:10.5px;color:#6f7a86;margin-left:8px;font-variant-numeric:tabular-nums}
 .vin.old{color:#c08a5a}
+.vin.man{color:#8fb8e0}
 .stbar{display:flex;gap:4px;align-items:center;margin-left:auto}
 .stbtn{font:inherit;font-size:11.5px;line-height:1;padding:5px 9px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--mut);cursor:pointer;white-space:nowrap}
 .stbtn:hover{border-color:#7b8794;color:var(--ink)}
@@ -1018,7 +1019,10 @@ async function addMoreIdeas(){
     const t=x.title||"";const k=norm(t);
     if(!k||seen.has(k))return;
     seen.add(k);
-    curateIdeas.push({title:t,summary:x.summary||"",url:x.url||"",who:x.who||"",y:x.y||""});
+    // keep the generator's own stamp; without this every idea added by "+ get more" landed as
+    // pre-stamp even though the writer had just produced it seconds earlier
+    curateIdeas.push({title:t,summary:x.summary||"",url:x.url||"",who:x.who||"",y:x.y||"",
+                      gts:x.gts||(j&&j.gts)||"",genv:x.genv||(j&&j.genv)||""});
     newThisRound++;
    });
    if(!curateProfile&&j.profile)curateProfile=j.profile;
@@ -1049,10 +1053,14 @@ async function addMoreIdeas(){
 const ST_LABEL={"new":"Not reviewed","pre":"Needs Drew","ok":"Approved"};
 // When an idea was written, and by which build of the writer. Ideas made before this shipped have
 // neither, and show as "pre-stamp", which is exactly the set worth clearing out.
+const MANUAL_GENV="manual";
 function vintage(x){
  const d=(x&&x.gts)?String(x.gts).slice(0,10):"";
  const v=(x&&x.genv)?String(x.genv):"";
  if(!d&&!v)return '<span class="vin old" title="written before ideas were stamped">pre-stamp</span>';
+ if(v===MANUAL_GENV)
+  return '<span class="vin man" title="added by hand on '+esc(x.gts||"?")+'">'
+    +esc(d||"?")+' · manual addition</span>';
  return '<span class="vin" title="written '+esc(x.gts||"?")+' by generator '+esc(v||"?")+'">'
    +esc(d||"?")+(v?(" · "+esc(v)):"")+'</span>';
 }
@@ -1144,7 +1152,12 @@ function addOwnIdea(){
  if(nl>0){title=v.slice(0,nl).trim();summary=v.slice(nl+1).trim();}
  else{const m=v.match(/^(.{20,150}?[.!?])\s+(\S.*)$/); if(m){title=m[1].trim();summary=m[2].trim();}}
  if(title.length>220){summary=(title.slice(220).trim()+(summary?(" "+summary):"")).trim();title=title.slice(0,220).trim();}
- curateIdeas.push({title:title,summary:summary,url:"",who:"",y:""});
+ // A HUMAN TYPED THIS. Gwilym: "when an idea is manually created, it is marked 'pre-stamp'.
+ // Please change stamping so that all manually added ideas are stamped with the date they were
+ // added + 'manual addition'." genv MANUAL also makes these permanently safe from the bulk
+ // cleanup, which is the point: nobody should lose an idea they wrote by hand.
+ curateIdeas.push({title:title,summary:summary,url:"",who:"",y:"",
+                   gts:new Date().toISOString(),genv:MANUAL_GENV});
  curateDirty=true; ta.value="";
  renderCards();
  const cards=document.querySelectorAll("#ccards .ccard");if(cards.length)cards[cards.length-1].scrollIntoView({behavior:"smooth",block:"center"});

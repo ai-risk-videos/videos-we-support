@@ -11,6 +11,8 @@ version."
 DELETION RULES, deliberately narrow:
   * only ideas whose status is "new" (never reviewed) are ever eligible. An idea marked Rejected or
     Approved is a human decision and is never touched, whatever wrote it.
+  * an idea a person TYPED (genv "manual") is never eligible either, at any age or status. No
+    generator wrote it, so no generator version can make it stale.
   * a page is never emptied. If removing the stale ideas would leave a page with none, that page is
     skipped and reported, because an empty creator page is worse than a stale one.
   * every removed idea is written to tools/votes/deleted-ideas-<timestamp>.json BEFORE the write,
@@ -95,8 +97,18 @@ def status(idea):
     return st if st in ("new", "pre", "ok") else "new"
 
 
+MANUAL = "manual"
+
+
 def vintage(idea):
     return (idea or {}).get("genv") or "pre-stamp"
+
+
+def hand_written(idea):
+    """An idea a person typed into the Add-idea box. Never eligible for a bulk cleanup, however
+    old and however unreviewed: no generator wrote it, so no generator version can make it stale,
+    and losing something a human sat down and wrote is not a tradeoff worth any tidiness."""
+    return vintage(idea) == MANUAL
 
 
 def main():
@@ -145,10 +157,12 @@ def main():
     plan, skipped, removed_records = [], [], []
     for pid, p in rows:
         ideas = p.get("ideas") or []
-        stale = [i for i in ideas if vintage(i) != keep and status(i) == "new"]
+        def _stale(i):
+            return vintage(i) != keep and status(i) == "new" and not hand_written(i)
+        stale = [i for i in ideas if _stale(i)]
         if not stale:
             continue
-        left = [i for i in ideas if not (vintage(i) != keep and status(i) == "new")]
+        left = [i for i in ideas if not _stale(i)]
         if not left:
             skipped.append((pid, len(ideas)))
             continue
