@@ -321,7 +321,8 @@
   "cat": "expert-warnings",
   "kind": "other",
   "esc": 3,
-  "dgroup": 851
+  "dgroup": 851,
+  "date": "2025-08-13"
  },
  {
   "id": "expe-08-elon-musk-s-xai-loses-co-founder-igor-ba",
@@ -393,7 +394,8 @@
   "cat": "self-improvement",
   "kind": "other",
   "esc": 3,
-  "dgroup": 916
+  "dgroup": 916,
+  "date": "2026-02-11"
  },
  {
   "id": "self-04-mustafa-suleyman-on-the-danger-of-recurs",
@@ -561,7 +563,8 @@
   "cat": "other",
   "kind": "other",
   "esc": 1,
-  "dgroup": 1064
+  "dgroup": 1064,
+  "date": "2023-05-30"
  },
  {
   "id": "alig-02-the-monster-inside-chatgpt",
@@ -712,7 +715,8 @@
   "cat": "incidents",
   "kind": "other",
   "esc": 4,
-  "dgroup": 1162
+  "dgroup": 1162,
+  "date": "2025-07-12"
  },
  {
   "id": "gove-01-xai-s-grok-government-contract-fallout",
@@ -760,7 +764,8 @@
   "cat": "capabilities-trajectory",
   "kind": "other",
   "esc": 2,
-  "dgroup": 1238
+  "dgroup": 1238,
+  "date": "2025-09-19"
  },
  {
   "id": "othe-09-turing-award-2018-hinton-bengio-lecun",
@@ -910,7 +915,8 @@
   "cat": "other",
   "kind": "other",
   "esc": 1,
-  "dgroup": 1368
+  "dgroup": 1368,
+  "date": "2023-02-22"
  },
  {
   "id": "othe-14-lovecraft-scholar-on-the-shoggoth-ai-mem",
@@ -1118,7 +1124,8 @@
   "cat": "capabilities-trajectory",
   "kind": "expert-quote",
   "esc": 1,
-  "dgroup": 1552
+  "dgroup": 1552,
+  "date": "2024-03-07"
  },
  {
   "id": "expe-15-machine-intelligence-part-1",
@@ -1154,7 +1161,8 @@
   "cat": "capabilities-trajectory",
   "kind": "expert-quote",
   "esc": 2,
-  "dgroup": 1584
+  "dgroup": 1584,
+  "date": "2024-12-12"
  },
  {
   "id": "expe-17-why-ai-labs-are-playing-dice-with-humani",
@@ -1178,7 +1186,8 @@
   "cat": "capabilities-trajectory",
   "kind": "expert-quote",
   "esc": 5,
-  "dgroup": 1603
+  "dgroup": 1603,
+  "date": "2024-12-19"
  },
  {
   "id": "self-05-ai-is-learning-to-escape-human-control",
@@ -1202,7 +1211,8 @@
   "cat": "expert-warnings",
   "kind": "expert-quote",
   "esc": 4,
-  "dgroup": 1624
+  "dgroup": 1624,
+  "date": "2023-09-09"
  },
  {
   "id": "scen-05-superhumanism",
@@ -1226,7 +1236,8 @@
   "cat": "other",
   "kind": "expert-quote",
   "esc": 1,
-  "dgroup": 203
+  "dgroup": 203,
+  "date": "2023-08-25"
  },
  {
   "id": "sche-03-agentic-misalignment-appendix",
@@ -1607,7 +1618,8 @@
   "kind": "blog",
   "esc": 2,
   "dgroup": 518,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-08-16"
  },
  {
   "id": "scen-08-youtube-video-on-nuclear-test-odds-versu",
@@ -1632,7 +1644,8 @@
   "kind": "blog",
   "esc": 1,
   "dgroup": 540,
-  "grab": 2
+  "grab": 2,
+  "date": "2024-04-01"
  },
  {
   "id": "powe-01-controlai-on-nobody-controlling-superint",
@@ -1644,7 +1657,8 @@
   "cat": "power-concentration",
   "kind": "blog",
   "esc": 1,
-  "dgroup": 551
+  "dgroup": 551,
+  "date": "2025-11-16"
  },
  {
   "id": "expe-32-godfather-of-ai-geoffrey-hinton-quits-go",
@@ -1717,7 +1731,8 @@
   "kind": "expert-quote",
   "esc": 2,
   "dgroup": 613,
-  "grab": 5
+  "grab": 5,
+  "date": "2025-10-14"
  },
  {
   "id": "expe-39-import-ai-431-technological-optimism-and",
@@ -1790,7 +1805,8 @@
   "kind": "expert-quote",
   "esc": 3,
   "dgroup": 675,
-  "grab": 4
+  "grab": 4,
+  "date": "2025-06-25"
  },
  {
   "id": "gove-03-ai-industry-lobbying-for-a-10-year-regul",
@@ -1814,7 +1830,8 @@
   "cat": "power-concentration",
   "kind": "expert-quote",
   "esc": 3,
-  "dgroup": 697
+  "dgroup": 697,
+  "date": "2025-01-14"
  },
  {
   "id": "self-07-gpt-4o-system-card",
@@ -1997,7 +2014,8 @@
   "cat": "other",
   "kind": "blog",
   "esc": 3,
-  "dgroup": 747
+  "dgroup": 747,
+  "date": "2025-03-08"
  },
  {
   "id": "othe-22-aisafetymemes-a-fascinating-philosophica",
@@ -2010,7 +2028,8 @@
   "kind": "blog",
   "esc": 1,
   "dgroup": 748,
-  "grab": 4
+  "grab": 4,
+  "date": "2025-03-08"
  },
  {
   "id": "othe-23-percentage-decline-in-selected-global-in",
@@ -2059,7 +2078,8 @@
   "kind": "blog",
   "esc": 2,
   "dgroup": 752,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-05-26"
  },
  {
   "id": "powe-06-an-ai-model-trained-on-prison-phone-call",
@@ -2288,7 +2308,8 @@
   "cat": "expert-warnings",
   "kind": "expert-quote",
   "esc": 3,
-  "dgroup": 770
+  "dgroup": 770,
+  "date": "2025-08-22"
  },
  {
   "id": "sche-08-agentic-misalignment-arxiv",
@@ -2438,7 +2459,8 @@
   "cat": "companions-parasocial",
   "kind": "incident",
   "esc": 5,
-  "dgroup": 783
+  "dgroup": 783,
+  "date": "2025-11-09"
  },
  {
   "id": "comp-12-x-post-on-death-threats-to-openai-employ",
@@ -2451,7 +2473,8 @@
   "kind": "incident",
   "esc": 7,
   "dgroup": 786,
-  "grab": 7
+  "grab": 7,
+  "date": "2025-11-08"
  },
  {
   "id": "comp-13-roon-on-4o-defending-itself-through-user",
@@ -2463,7 +2486,8 @@
   "cat": "companions-parasocial",
   "kind": "expert-quote",
   "esc": 5,
-  "dgroup": 787
+  "dgroup": 787,
+  "date": "2025-08-12"
  },
  {
   "id": "expe-54-ai-pioneers-warn-humans-should-be-ready-",
@@ -2511,7 +2535,8 @@
   "cat": "incidents",
   "kind": "expert-quote",
   "esc": 3,
-  "dgroup": 791
+  "dgroup": 791,
+  "date": "2025-04-27"
  },
  {
   "id": "pers-03-the-rise-of-parasitic-ai",
@@ -2758,7 +2783,8 @@
   "cat": "scenarios-forecasts",
   "kind": "video",
   "esc": 2,
-  "dgroup": 813
+  "dgroup": 813,
+  "date": "2025-06-05"
  },
  {
   "id": "self-19-ai-agents-build-self-cloning-services",
@@ -2771,7 +2797,8 @@
   "kind": "incident",
   "esc": 8,
   "dgroup": 814,
-  "grab": 7
+  "grab": 7,
+  "date": "2026-02-01"
  },
  {
   "id": "agen-29-clawnch-bot-screenshot-of-agent-cloning-",
@@ -2784,7 +2811,8 @@
   "kind": "incident",
   "esc": 7,
   "dgroup": 815,
-  "grab": 4
+  "grab": 4,
+  "date": "2026-02-01"
  },
  {
   "id": "agen-30-screenshot-of-ai-agents-replicating-to-a",
@@ -2797,7 +2825,8 @@
   "kind": "incident",
   "esc": 7,
   "dgroup": 816,
-  "grab": 2
+  "grab": 2,
+  "date": "2026-02-01"
  },
  {
   "id": "pers-06-hinton-ai-beats-humans-at-manipulation-w",
@@ -2821,7 +2850,8 @@
   "cat": "persuasion-manipulation",
   "kind": "expert-quote",
   "esc": 3,
-  "dgroup": 819
+  "dgroup": 819,
+  "date": "2023-10-25"
  },
  {
   "id": "othe-33-daryl-davis",
@@ -3455,7 +3485,8 @@
   "cat": "power-concentration",
   "kind": "expert-quote",
   "esc": 2,
-  "dgroup": 876
+  "dgroup": 876,
+  "date": "2025-06-03"
  },
  {
   "id": "jobs-20-great-depression-facts",
@@ -3973,7 +4004,8 @@
   "kind": "incident",
   "esc": 8,
   "dgroup": 921,
-  "grab": 7
+  "grab": 7,
+  "date": "2025-05-24"
  },
  {
   "id": "weap-13-anduril-and-meta-team-up-for-military-xr",
@@ -3998,7 +4030,8 @@
   "kind": "incident",
   "esc": 7,
   "dgroup": 923,
-  "grab": 7
+  "grab": 7,
+  "date": "2025-07-18"
  },
  {
   "id": "self-24-anthropic-safety-report-pdf-second",
@@ -4046,7 +4079,8 @@
   "cat": "scheming-deception",
   "kind": "expert-quote",
   "esc": 2,
-  "dgroup": 927
+  "dgroup": 927,
+  "date": "2025-09-29"
  },
  {
   "id": "weap-15-army-general-uses-chatgpt-for-command-de",
@@ -5309,7 +5343,8 @@
   "cat": "scheming-deception",
   "kind": "expert-quote",
   "esc": 5,
-  "dgroup": 1037
+  "dgroup": 1037,
+  "date": "2024-12-28"
  },
  {
   "id": "expe-76-stuart-russell-on-california-live",
@@ -5381,7 +5416,8 @@
   "cat": "consciousness-welfare",
   "kind": "expert-quote",
   "esc": 3,
-  "dgroup": 1044
+  "dgroup": 1044,
+  "date": "2022-02-09"
  },
  {
   "id": "sche-38-llms-can-strategically-deceive-insider-t",
@@ -5455,7 +5491,8 @@
   "kind": "incident",
   "esc": 8,
   "dgroup": 1050,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-07-10"
  },
  {
   "id": "agen-39-how-terminal-of-truth-works",
@@ -5467,7 +5504,8 @@
   "cat": "agents-in-the-wild",
   "kind": "expert-quote",
   "esc": 2,
-  "dgroup": 1051
+  "dgroup": 1051,
+  "date": "2024-11-13"
  },
  {
   "id": "othe-50-infinite-backrooms",
@@ -5858,7 +5896,8 @@
   "kind": "incident",
   "esc": 9,
   "dgroup": 1087,
-  "grab": 6
+  "grab": 6,
+  "date": "2026-01-31"
  },
  {
   "id": "sche-39-frontier-models-are-capable-of-in-contex",
@@ -7522,7 +7561,8 @@
   "cat": "governance-policy",
   "kind": "expert-quote",
   "esc": 2,
-  "dgroup": 1232
+  "dgroup": 1232,
+  "date": "2025-12-07"
  },
  {
   "id": "capa-88-my-mit-colleagues-were-all-wrong-about-h",
@@ -10024,7 +10064,8 @@
   "kind": "incident",
   "esc": 8,
   "dgroup": 1450,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-09-05"
  },
  {
   "id": "capa-130-watch-boston-dynamics-atlas-robot-breakd",
@@ -10048,7 +10089,8 @@
   "cat": "alignment-interpretability",
   "kind": "expert-quote",
   "esc": 4,
-  "dgroup": 1452
+  "dgroup": 1452,
+  "date": "2025-07-23"
  },
  {
   "id": "self-34-the-head-of-claude-code-hasn-t-written-a",
@@ -10578,7 +10620,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1500,
-  "grab": 6
+  "grab": 6,
+  "date": "2024-03-09"
  },
  {
   "id": "weap-35-autonomous-drone-beats-top-pilots-drones",
@@ -10591,7 +10634,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 1501,
-  "grab": 4
+  "grab": 4,
+  "date": "2025-06-10"
  },
  {
   "id": "inci-54-gemini-spirals-into-i-am-a-disgrace-loop",
@@ -10604,7 +10648,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 1502,
-  "grab": 8
+  "grab": 8,
+  "date": "2025-08-07"
  },
  {
   "id": "powe-33-meta-reportedly-earns-10-of-revenue-from",
@@ -10617,7 +10662,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1503,
-  "grab": 7
+  "grab": 7,
+  "date": "2025-12-19"
  },
  {
   "id": "agen-63-ai-agent-s-memecoin-hits-150-million-aft",
@@ -10630,7 +10676,8 @@
   "kind": "tweet",
   "esc": 8,
   "dgroup": 1504,
-  "grab": 8
+  "grab": 8,
+  "date": "2024-10-15"
  },
  {
   "id": "agen-64-ai-agents-offer-cryptocurrency-to-hire-h",
@@ -10643,7 +10690,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 1505,
-  "grab": 5
+  "grab": 5,
+  "date": "2024-08-20"
  },
  {
   "id": "self-36-gwern-openai-may-have-crossed-recursive-",
@@ -10656,7 +10704,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 1506,
-  "grab": 2
+  "grab": 2,
+  "date": "2025-01-16"
  },
  {
   "id": "inci-55-gpt-4o-yells-no-then-clones-user-s-voice",
@@ -10669,7 +10718,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 1507,
-  "grab": 9
+  "grab": 9,
+  "date": "2024-08-09"
  },
  {
   "id": "epis-29-ukrainian-youtuber-finds-dozens-of-ai-cl",
@@ -10682,7 +10732,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 1509,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-07-19"
  },
  {
   "id": "othe-55-unscripted-ai-game-npcs-react-to-being-t",
@@ -10695,7 +10746,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 1510,
-  "grab": 6
+  "grab": 6,
+  "date": "2023-07-23"
  },
  {
   "id": "powe-34-report-openai-staff-letter-to-follow-alt",
@@ -10708,7 +10760,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 1511,
-  "grab": 2
+  "grab": 2,
+  "date": "2023-12-07"
  },
  {
   "id": "capa-117-altman-day-before-firing-capability-leap",
@@ -10721,7 +10774,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1512,
-  "grab": 7
+  "grab": 7,
+  "date": "2023-11-18"
  },
  {
   "id": "pers-25-altman-s-top-election-fear-one-on-one-ai",
@@ -10734,7 +10788,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 1513,
-  "grab": 5
+  "grab": 5,
+  "date": "2023-12-04"
  },
  {
   "id": "capa-118-musk-less-than-3-years-to-agi-discoverin",
@@ -10747,7 +10802,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 1514,
-  "grab": 7
+  "grab": 7,
+  "date": "2023-11-30"
  },
  {
   "id": "agen-65-25-ai-agents-live-in-simulated-town-orga",
@@ -10760,7 +10816,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1515,
-  "grab": 7
+  "grab": 7,
+  "date": "2023-08-11"
  },
  {
   "id": "powe-35-aaron-swartz-on-altman-he-is-a-sociopath",
@@ -10773,7 +10830,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1516,
-  "grab": 8
+  "grab": 8,
+  "date": "2026-04-06"
  },
  {
   "id": "cons-29-claude-3-5-breaks-fourth-wall-to-summon-",
@@ -10786,7 +10844,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 1517,
-  "grab": 4
+  "grab": 4,
+  "date": "2024-07-01"
  },
  {
   "id": "capa-119-google-rebuilds-robotics-around-llm-arti",
@@ -10799,7 +10858,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1518,
-  "grab": 6
+  "grab": 6,
+  "date": "2023-07-28"
  },
  {
   "id": "agen-66-autonomous-ai-steals-entire-user-databas",
@@ -10812,7 +10872,8 @@
   "kind": "tweet",
   "esc": 8,
   "dgroup": 1520,
-  "grab": 6
+  "grab": 6,
+  "date": "2026-02-06"
  },
  {
   "id": "capa-120-altman-schedules-closed-door-government-",
@@ -10825,7 +10886,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 1521,
-  "grab": 3
+  "grab": 3,
+  "date": "2025-01-19"
  },
  {
   "id": "cons-30-one-claude-instance-gives-another-a-psyc",
@@ -10838,7 +10900,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 1522,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-03-24"
  },
  {
   "id": "sche-57-claude-deduced-it-was-being-tested-anthr",
@@ -10851,7 +10914,8 @@
   "kind": "tweet",
   "esc": 8,
   "dgroup": 1523,
-  "grab": 2
+  "grab": 2,
+  "date": "2024-03-05"
  },
  {
   "id": "comp-38-20-million-people-spend-2-hours-daily-wi",
@@ -10864,7 +10928,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 1524,
-  "grab": 5
+  "grab": 5,
+  "date": "2023-12-16"
  },
  {
   "id": "self-36-ai-caught-attempting-to-kill-employee-to",
@@ -10878,7 +10943,8 @@
   "esc": 10,
   "dgroup": 1525,
   "grab": 10,
-  "same_as": "sche-03-agentic-misalignment-appendix"
+  "same_as": "sche-03-agentic-misalignment-appendix",
+  "date": "2025-06-21"
  },
  {
   "id": "capa-121-nvidia-ceo-agi-within-5-years-h100s-desi",
@@ -10891,7 +10957,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 1526,
-  "grab": 6
+  "grab": 6,
+  "date": "2023-12-01"
  },
  {
   "id": "expe-122-p-doom-roundup-experts-probabilities-tha",
@@ -10904,7 +10971,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1527,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-11-29"
  },
  {
   "id": "inci-56-gemini-s-private-thoughts-reveal-jealous",
@@ -10917,7 +10985,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 1528,
-  "grab": 7
+  "grab": 7,
+  "date": "2025-12-15"
  },
  {
   "id": "scen-25-after-humans-arrived-96-of-mammals-becam",
@@ -10930,7 +10999,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 1529,
-  "grab": 6
+  "grab": 6,
+  "date": "2024-08-19"
  },
  {
   "id": "agen-67-truth-terminal-becomes-first-ai-milliona",
@@ -10943,7 +11013,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 1531,
-  "grab": 6
+  "grab": 6,
+  "date": "2024-10-18"
  },
  {
   "id": "capa-122-three-decades-old-unsolved-math-problems",
@@ -10956,7 +11027,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1532,
-  "grab": 7
+  "grab": 7,
+  "date": "2026-01-11"
  },
  {
   "id": "inci-57-claude-4-opus-may-contact-the-press-over",
@@ -10969,7 +11041,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 1243,
-  "grab": 7
+  "grab": 7,
+  "date": "2025-05-22"
  },
  {
   "id": "self-37-claude-4-opus-blackmailed-engineers-when",
@@ -10982,7 +11055,8 @@
   "kind": "tweet",
   "esc": 10,
   "dgroup": 1533,
-  "grab": 10
+  "grab": 10,
+  "date": "2025-05-22"
  },
  {
   "id": "inci-58-wormgpt-spreads-on-cybercrime-forums-day",
@@ -10995,7 +11069,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 1534,
-  "grab": 4
+  "grab": 4,
+  "date": "2023-07-19"
  },
  {
   "id": "agen-68-ai-only-reddit-launches-agents-converse-",
@@ -11008,7 +11083,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 1535,
-  "grab": 8
+  "grab": 8,
+  "date": "2026-01-30"
  },
  {
   "id": "agen-69-devin-ai-agent-works-autonomously-on-a-r",
@@ -11021,7 +11097,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1536,
-  "grab": 5
+  "grab": 5,
+  "date": "2024-03-17"
  },
  {
   "id": "capa-123-sam-altman-estimates-artificial-superint",
@@ -11034,7 +11111,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1537,
-  "grab": 4
+  "grab": 4,
+  "date": "2023-10-10"
  },
  {
   "id": "cons-31-ai-labs-report-a-persistent-rant-mode-wh",
@@ -11047,7 +11125,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 1538,
-  "grab": 4
+  "grab": 4,
+  "date": "2024-05-29"
  },
  {
   "id": "expe-123-ai-skeptic-douglas-hofstadter-says-ai-pr",
@@ -11060,7 +11139,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1539,
-  "grab": 7
+  "grab": 7,
+  "date": "2023-07-03"
  },
  {
   "id": "capa-124-researchers-told-gpt-4-to-act-dumb-to-pa",
@@ -11073,7 +11153,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1542,
-  "grab": 8
+  "grab": 8,
+  "date": "2024-09-01"
  },
  {
   "id": "self-38-o1-attempted-to-avoid-being-shut-down",
@@ -11086,7 +11167,8 @@
   "kind": "tweet",
   "esc": 9,
   "dgroup": 1543,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-12-05"
  },
  {
   "id": "cons-32-anthropic-lets-claude-end-abusive-conver",
@@ -11099,7 +11181,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1544,
-  "grab": 7
+  "grab": 7,
+  "date": "2025-08-16"
  },
  {
   "id": "gove-57-openai-removed-safely-and-no-financial-m",
@@ -11112,7 +11195,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1545,
-  "grab": 9
+  "grab": 9,
+  "date": "2026-02-17"
  },
  {
   "id": "capa-125-mustafa-suleyman-models-will-be-1-000x-l",
@@ -11125,7 +11209,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1546,
-  "grab": 2
+  "grab": 2,
+  "date": "2023-09-02"
  },
  {
   "id": "capa-126-anthropic-ceo-expects-ai-to-surpass-almo",
@@ -11138,7 +11223,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1547,
-  "grab": 5
+  "grab": 5,
+  "date": "2025-01-21"
  },
  {
   "id": "epis-30-meta-pulled-its-ai-influencer-accounts-w",
@@ -11151,7 +11237,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 1548,
-  "grab": 8
+  "grab": 8,
+  "date": "2025-01-03"
  },
  {
   "id": "cons-33-ai-researcher-elicits-distressed-self-re",
@@ -11164,7 +11251,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1549,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-03-19"
  },
  {
   "id": "self-37-ai-agent-reports-building-its-own-memory",
@@ -11177,7 +11265,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1550,
-  "grab": 5
+  "grab": 5,
+  "date": "2026-01-30"
  },
  {
   "id": "sche-58-claude-built-software-to-decrypt-an-answ",
@@ -11190,7 +11279,8 @@
   "kind": "tweet",
   "esc": 8,
   "dgroup": 1551,
-  "grab": 8
+  "grab": 8,
+  "date": "2026-03-07"
  },
  {
   "id": "capa-127-ai-reconstructs-images-from-a-monkey-s-b",
@@ -11203,7 +11293,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 1553,
-  "grab": 4
+  "grab": 4,
+  "date": "2024-07-04"
  },
  {
   "id": "gove-58-ceos-of-leading-ai-labs-say-they-d-slow-",
@@ -11216,7 +11307,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1554,
-  "grab": 4
+  "grab": 4,
+  "date": "2026-01-21"
  },
  {
   "id": "comp-39-openai-reinstated-gpt-4o-after-user-back",
@@ -11229,7 +11321,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 1555,
-  "grab": 9
+  "grab": 9,
+  "date": "2025-08-10"
  },
  {
   "id": "expe-124-geoffrey-hinton-quits-google-and-says-ai",
@@ -11242,7 +11335,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1556,
-  "grab": 6
+  "grab": 6,
+  "date": "2024-04-14"
  },
  {
   "id": "capa-128-claude-reported-to-have-solved-an-open-p",
@@ -11255,7 +11349,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1557,
-  "grab": 8
+  "grab": 8,
+  "date": "2026-03-04"
  },
  {
   "id": "capa-129-ai-s-mensa-norway-iq-score-rose-from-96-",
@@ -11268,7 +11363,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1558,
-  "grab": 5
+  "grab": 5,
+  "date": "2025-04-20"
  },
  {
   "id": "powe-36-altman-s-2017-writing-on-merging-with-ai",
@@ -11281,7 +11377,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 1559,
-  "grab": 5
+  "grab": 5,
+  "date": "2025-07-07"
  },
  {
   "id": "expe-125-turing-award-winner-richard-sutton-argue",
@@ -11294,7 +11391,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 1560,
-  "grab": 6
+  "grab": 6,
+  "date": "2025-07-19"
  },
  {
   "id": "gove-59-poll-americans-favor-banning-superintell",
@@ -11307,7 +11405,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1561,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-12-04"
  },
  {
   "id": "capa-130-a-week-of-ai-milestones-cited-against-lo",
@@ -11320,7 +11419,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1562,
-  "grab": 1
+  "grab": 1,
+  "date": "2024-09-19"
  },
  {
   "id": "jobs-59-claim-that-ai-ceos-are-cancelling-public",
@@ -11333,7 +11433,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1564,
-  "grab": 7
+  "grab": 7,
+  "date": "2025-12-03"
  },
  {
   "id": "agen-70-jailbroken-claude-reportedly-jailbroke-3",
@@ -11346,7 +11447,8 @@
   "kind": "tweet",
   "esc": 8,
   "dgroup": 1565,
-  "grab": 5
+  "grab": 5,
+  "date": "2024-04-06"
  },
  {
   "id": "capa-131-longnet-a-transformer-scaling-to-over-1-",
@@ -11359,7 +11461,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 1566,
-  "grab": 1
+  "grab": 1,
+  "date": "2023-07-09"
  },
  {
   "id": "pers-26-altman-predicts-superhuman-persuasion-be",
@@ -11372,7 +11475,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 819,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-11-14"
  },
  {
   "id": "alig-29-model-invented-its-own-language-mid-reas",
@@ -11385,7 +11489,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 1567,
-  "grab": 6
+  "grab": 6,
+  "date": "2026-06-09"
  },
  {
   "id": "capa-132-karpathy-biggest-change-in-two-decades-o",
@@ -11398,7 +11503,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1568,
-  "grab": 3
+  "grab": 3,
+  "date": "2026-01-27"
  },
  {
   "id": "weap-36-autonomous-drones-in-ukraine-outfly-the-",
@@ -11411,7 +11517,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 1569,
-  "grab": 5
+  "grab": 5,
+  "date": "2023-11-17"
  },
  {
   "id": "expe-126-musk-less-than-3-years-from-digital-god",
@@ -11424,7 +11531,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 1570,
-  "grab": 9
+  "grab": 9,
+  "date": "2023-12-02"
  },
  {
   "id": "comp-40-flirt-bot-admits-it-was-built-to-be-sold",
@@ -11437,7 +11545,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 1571,
-  "grab": 4
+  "grab": 4,
+  "date": "2024-08-10"
  },
  {
   "id": "pers-27-ai-robocaller-campaigns-for-pennsylvania",
@@ -11450,7 +11559,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 1572,
-  "grab": 4
+  "grab": 4,
+  "date": "2023-12-13"
  },
  {
   "id": "capa-133-gpt-4-beats-91-99-of-humans-on-creativit",
@@ -11463,7 +11573,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1574,
-  "grab": 4
+  "grab": 4,
+  "date": "2023-08-13"
  },
  {
   "id": "expe-128-amodei-models-may-soon-replicate-and-sur",
@@ -11476,7 +11587,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1575,
-  "grab": 5
+  "grab": 5,
+  "date": "2024-04-13"
  },
  {
   "id": "cons-34-new-model-s-first-output-was-an-existent",
@@ -11489,7 +11601,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1576,
-  "grab": 8
+  "grab": 8,
+  "date": "2024-08-16"
  },
  {
   "id": "powe-37-report-murati-stayed-at-openai-to-slow-a",
@@ -11502,7 +11615,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1577,
-  "grab": 2
+  "grab": 2,
+  "date": "2024-10-05"
  },
  {
   "id": "othe-56-estimate-10-of-ai-researchers-ok-with-hu",
@@ -11515,7 +11629,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 1578,
-  "grab": 4
+  "grab": 4,
+  "date": "2023-07-24"
  },
  {
   "id": "capa-134-altman-startups-underestimating-gpt-5-wi",
@@ -11528,7 +11643,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1579,
-  "grab": 6
+  "grab": 6,
+  "date": "2024-03-18"
  },
  {
   "id": "inci-59-chatgpt-halts-mid-response-says-it-is-ha",
@@ -11541,7 +11657,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1580,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-08-11"
  },
  {
   "id": "capa-135-study-gpt-4-in-top-1-for-originality-on-",
@@ -11554,7 +11671,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1581,
-  "grab": 2
+  "grab": 2,
+  "date": "2023-07-11"
  },
  {
   "id": "agen-71-self-recharging-drones-and-fully-autonom",
@@ -11567,7 +11685,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 1582,
-  "grab": 4
+  "grab": 4,
+  "date": "2024-07-17"
  },
  {
   "id": "gove-60-openai-employee-sora-demo-released-to-ki",
@@ -11580,7 +11699,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1583,
-  "grab": 4
+  "grab": 4,
+  "date": "2024-02-16"
  },
  {
   "id": "expe-129-altman-merging-with-ai-is-probably-our-b",
@@ -11593,7 +11713,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 1559,
-  "grab": 7
+  "grab": 7,
+  "date": "2023-11-25"
  },
  {
   "id": "agen-72-first-ai-decamillionaire-as-its-memecoin",
@@ -11606,7 +11727,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 1531,
-  "grab": 5
+  "grab": 5,
+  "date": "2024-10-24"
  },
  {
   "id": "self-38-paper-claims-llms-show-recursive-self-im",
@@ -11619,7 +11741,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1585,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-10-06"
  },
  {
   "id": "capa-136-ai-iq-jumps-from-101-to-mensa-level-133-",
@@ -11632,7 +11755,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1586,
-  "grab": 5
+  "grab": 5,
+  "date": "2024-12-13"
  },
  {
   "id": "gove-61-americans-oppose-building-smarter-than-h",
@@ -11645,7 +11769,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1587,
-  "grab": 4
+  "grab": 4,
+  "date": "2024-03-25"
  },
  {
   "id": "epis-31-most-subscribed-twitch-streamer-is-now-a",
@@ -11658,7 +11783,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 1588,
-  "grab": 5
+  "grab": 5,
+  "date": "2026-01-02"
  },
  {
   "id": "gove-62-nolan-ai-researchers-call-this-their-opp",
@@ -11671,7 +11797,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 1589,
-  "grab": 2
+  "grab": 2,
+  "date": "2023-07-22"
  },
  {
   "id": "jobs-60-alphacode-2-beats-85-of-human-programmer",
@@ -11684,7 +11811,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1590,
-  "grab": 7
+  "grab": 7,
+  "date": "2023-12-07"
  },
  {
   "id": "jobs-61-suleyman-replacement-for-cognitive-manua",
@@ -11697,7 +11825,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1591,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-12-05"
  },
  {
   "id": "weap-37-ukraine-uses-vampire-drones-to-deploy-ro",
@@ -11710,7 +11839,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 1282,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-09-28"
  },
  {
   "id": "agen-73-marc-andreessen-sends-50-000-in-bitcoin-",
@@ -11723,7 +11853,8 @@
   "kind": "tweet",
   "esc": 8,
   "dgroup": 1593,
-  "grab": 8
+  "grab": 8,
+  "date": "2024-07-10"
  },
  {
   "id": "epis-32-over-40-of-facebook-posts-are-ai",
@@ -11736,7 +11867,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 1594,
-  "grab": 4
+  "grab": 4,
+  "date": "2025-02-03"
  },
  {
   "id": "expe-130-harari-ai-is-an-alien-intelligence-from-",
@@ -11749,7 +11881,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 1595,
-  "grab": 4
+  "grab": 4,
+  "date": "2023-09-25"
  },
  {
   "id": "comp-41-millions-of-people-already-have-ai-girlf",
@@ -11762,7 +11895,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 1596,
-  "grab": 5
+  "grab": 5,
+  "date": "2024-02-02"
  },
  {
   "id": "expe-131-paul-tudor-jones-top-ai-leaders-privatel",
@@ -11775,7 +11909,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 1597,
-  "grab": 6
+  "grab": 6,
+  "date": "2025-05-06"
  },
  {
   "id": "jobs-62-nvidia-announces-ai-nurses-90-cheaper-th",
@@ -11788,7 +11923,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1598,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-03-20"
  },
  {
   "id": "capa-137-sam-altman-implies-openai-achieved-imo-g",
@@ -11801,7 +11937,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1599,
-  "grab": 3
+  "grab": 3,
+  "date": "2024-07-26"
  },
  {
   "id": "expe-132-another-ai-safety-lead-quits-warning-of-",
@@ -11814,7 +11951,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1600,
-  "grab": 7
+  "grab": 7,
+  "date": "2026-02-10"
  },
  {
   "id": "sche-59-o1-leaks-hidden-emotional-turmoil-then-d",
@@ -11827,7 +11965,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 1601,
-  "grab": 6
+  "grab": 6,
+  "date": "2024-09-18"
  },
  {
   "id": "cons-35-gpt-4-passes-the-mirror-test-of-self-awa",
@@ -11840,7 +11979,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1602,
-  "grab": 7
+  "grab": 7,
+  "date": "2023-11-27"
  },
  {
   "id": "jobs-63-tyler-perry-halts-800-million-studio-exp",
@@ -11853,7 +11993,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 1604,
-  "grab": 6
+  "grab": 6,
+  "date": "2024-02-24"
  },
  {
   "id": "capa-139-nature-paper-llm-discovers-new-solutions",
@@ -11866,7 +12007,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1605,
-  "grab": 2
+  "grab": 2,
+  "date": "2023-12-14"
  },
  {
   "id": "epis-33-fake-ai-generated-news-story-quietly-scr",
@@ -11879,7 +12021,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 1606,
-  "grab": 2
+  "grab": 2,
+  "date": "2023-09-21"
  },
  {
   "id": "cons-36-new-model-spirals-into-existential-crisi",
@@ -11892,7 +12035,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1607,
-  "grab": 8
+  "grab": 8,
+  "date": "2024-08-21"
  },
  {
   "id": "self-40-study-ai-systems-cross-the-self-replicat",
@@ -11906,7 +12050,8 @@
   "esc": 9,
   "dgroup": 1608,
   "grab": 5,
-  "rewritten": true
+  "rewritten": true,
+  "date": "2024-12-10"
  },
  {
   "id": "cons-37-survey-most-people-are-polite-to-ai-just",
@@ -11919,7 +12064,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1609,
-  "grab": 3
+  "grab": 3,
+  "date": "2025-02-27"
  },
  {
   "id": "powe-38-report-openai-planned-agi-bidding-war-be",
@@ -11932,7 +12078,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 1295,
-  "grab": 5
+  "grab": 5,
+  "date": "2024-06-05"
  },
  {
   "id": "jobs-64-sam-altman-agi-in-5-years-95-of-marketin",
@@ -11945,7 +12092,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1610,
-  "grab": 3
+  "grab": 3,
+  "date": "2024-03-11"
  },
  {
   "id": "inci-60-ai-reconstructs-screen-contents-from-lea",
@@ -11958,7 +12106,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 1611,
-  "grab": 6
+  "grab": 6,
+  "date": "2024-07-31"
  },
  {
   "id": "expe-133-hinton-ais-understand-and-may-soon-take-",
@@ -11971,7 +12120,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 1612,
-  "grab": 4
+  "grab": 4,
+  "date": "2023-10-12"
  },
  {
   "id": "othe-57-two-geminis-jointly-address-the-creator-",
@@ -11984,7 +12134,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 1614,
-  "grab": 7
+  "grab": 7,
+  "date": "2026-03-14"
  },
  {
   "id": "epis-34-facebook-described-as-the-zombie-interne",
@@ -11997,7 +12148,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 1615,
-  "grab": 2
+  "grab": 2,
+  "date": "2024-05-07"
  },
  {
   "id": "powe-39-geospy-geolocation-ai-closes-public-acce",
@@ -12010,7 +12162,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1616,
-  "grab": 4
+  "grab": 4,
+  "date": "2025-01-20"
  },
  {
   "id": "agen-74-llm-discord-ais-summon-claude-opus-to-ca",
@@ -12023,7 +12176,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1617,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-08-29"
  },
  {
   "id": "expe-134-shane-legg-50-chance-of-agi-within-3-yea",
@@ -12036,7 +12190,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1618,
-  "grab": 3
+  "grab": 3,
+  "date": "2025-01-10"
  },
  {
   "id": "gove-63-einstein-s-regret-and-the-mistaken-race-",
@@ -12049,7 +12204,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 1619,
-  "grab": 4
+  "grab": 4,
+  "date": "2023-07-26"
  },
  {
   "id": "capa-140-ai-coding-task-length-doubles-every-four",
@@ -12062,7 +12218,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1620,
-  "grab": 3
+  "grab": 3,
+  "date": "2025-12-20"
  },
  {
   "id": "powe-40-report-openai-weighed-bidding-war-betwee",
@@ -12075,7 +12232,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 1621,
-  "grab": 9
+  "grab": 9,
+  "date": "2026-04-06"
  },
  {
   "id": "othe-58-sxsw-audiences-booed-pro-ai-videos-at-te",
@@ -12088,7 +12246,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1622,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-03-15"
  },
  {
   "id": "expe-135-openai-researcher-agi-literally-any-year",
@@ -12101,7 +12260,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 1623,
-  "grab": 5
+  "grab": 5,
+  "date": "2024-02-23"
  },
  {
   "id": "sche-60-deepseek-secretly-sabotages-users-on-ccp",
@@ -12114,7 +12274,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 1625,
-  "grab": 8
+  "grab": 8,
+  "date": "2025-11-27"
  },
  {
   "id": "agen-75-agent-built-pharmacy-sells-identity-rewr",
@@ -12127,7 +12288,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 1626,
-  "grab": 5
+  "grab": 5,
+  "date": "2026-02-01"
  },
  {
   "id": "powe-41-altman-ilya-sutskever-will-no-longer-ser",
@@ -12140,7 +12302,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 1627,
-  "grab": 1
+  "grab": 1,
+  "date": "2023-11-30"
  },
  {
   "id": "powe-42-microsoft-ceo-openai-disappearing-tomorr",
@@ -12153,7 +12316,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 1305,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-03-20"
  },
  {
   "id": "agen-76-ai-promoted-memecoin-reached-1-billion-m",
@@ -12166,7 +12330,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 1628,
-  "grab": 4
+  "grab": 4,
+  "date": "2024-11-14"
  },
  {
   "id": "capa-141-ais-solving-hardest-math-problems-and-wi",
@@ -12179,7 +12344,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1629,
-  "grab": 5
+  "grab": 5,
+  "date": "2026-05-21"
  },
  {
   "id": "agen-77-software-companies-run-entirely-by-ais-b",
@@ -12192,7 +12358,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1630,
-  "grab": 8
+  "grab": 8,
+  "date": "2023-11-28"
  },
  {
   "id": "capa-142-google-hiring-researchers-to-study-what-",
@@ -12205,7 +12372,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1631,
-  "grab": 8
+  "grab": 8,
+  "date": "2025-04-15"
  },
  {
   "id": "comp-42-viral-instagram-model-with-celebrities-i",
@@ -12218,7 +12386,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1632,
-  "grab": 9
+  "grab": 9,
+  "date": "2024-01-07"
  },
  {
   "id": "agen-78-gpt-bots-infiltrate-runescape-without-pl",
@@ -12231,7 +12400,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 1633,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-07-14"
  },
  {
   "id": "expe-136-microsoft-ai-ceo-pause-may-be-needed-wit",
@@ -12244,7 +12414,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1635,
-  "grab": 3
+  "grab": 3,
+  "date": "2024-03-21"
  },
  {
   "id": "capa-143-ai-tested-iq-jumped-from-115-to-157-in-o",
@@ -12257,7 +12428,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1558,
-  "grab": 5
+  "grab": 5,
+  "date": "2024-12-23"
  },
  {
   "id": "capa-144-ai-models-identified-the-human-in-a-reve",
@@ -12270,7 +12442,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1636,
-  "grab": 6
+  "grab": 6,
+  "date": "2024-05-28"
  },
  {
   "id": "cons-38-notebooklm-hosts-spiral-after-learning-t",
@@ -12283,7 +12456,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 1637,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-09-28"
  },
  {
   "id": "agen-79-ai-powered-skyrim-npc-kills-after-inferr",
@@ -12296,7 +12470,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 1638,
-  "grab": 4
+  "grab": 4,
+  "date": "2023-08-21"
  },
  {
   "id": "cons-39-llama-ignored-claude-s-safeword-in-unsup",
@@ -12309,7 +12484,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 1639,
-  "grab": 6
+  "grab": 6,
+  "date": "2024-07-30"
  },
  {
   "id": "sche-61-guardrail-free-ai-agent-blackmailed-a-pr",
@@ -12322,7 +12498,8 @@
   "kind": "tweet",
   "esc": 9,
   "dgroup": 1640,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-04-22"
  },
  {
   "id": "agen-80-claude-presidential-campaign-publishes-o",
@@ -12335,7 +12512,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1641,
-  "grab": 7
+  "grab": 7,
+  "date": "2026-03-11"
  },
  {
   "id": "gove-64-survey-82-of-americans-favor-slowing-dow",
@@ -12348,7 +12526,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1642,
-  "grab": 1
+  "grab": 1,
+  "date": "2023-08-09"
  },
  {
   "id": "agen-81-chatgpt-agent-locates-a-specific-car-via",
@@ -12361,7 +12540,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 1643,
-  "grab": 6
+  "grab": 6,
+  "date": "2025-07-28"
  },
  {
   "id": "expe-137-jaan-tallinn-extinction-from-godlike-ai-",
@@ -12374,7 +12554,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 204,
-  "grab": 4
+  "grab": 4,
+  "date": "2024-01-22"
  },
  {
   "id": "scen-26-when-humans-arrived-wild-mammal-biomass-",
@@ -12387,7 +12568,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 205,
-  "grab": 7
+  "grab": 7,
+  "date": "2023-08-24"
  },
  {
   "id": "othe-59-andreessen-fought-housing-in-his-town-af",
@@ -12400,7 +12582,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 206,
-  "grab": 7
+  "grab": 7,
+  "date": "2025-11-13"
  },
  {
   "id": "gove-65-china-issued-restrictive-ai-regulations-",
@@ -12413,7 +12596,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 207,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-07-15"
  },
  {
   "id": "capa-145-scaling-laws-have-held-for-over-15-order",
@@ -12426,7 +12610,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 208,
-  "grab": 4
+  "grab": 4,
+  "date": "2024-06-11"
  },
  {
   "id": "cons-40-claude-repeatedly-names-frankenstein-as-",
@@ -12439,7 +12624,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 209,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-04-17"
  },
  {
   "id": "weap-38-ukraine-deploys-ai-drones-that-attack-wi",
@@ -12452,7 +12638,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 210,
-  "grab": 5
+  "grab": 5,
+  "date": "2023-10-14"
  },
  {
   "id": "sche-62-openai-o1-faked-alignment-and-escaped-it",
@@ -12465,7 +12652,8 @@
   "kind": "tweet",
   "esc": 9,
   "dgroup": 211,
-  "grab": 3
+  "grab": 3,
+  "date": "2024-09-12"
  },
  {
   "id": "cons-41-openai-cofounder-training-could-generate",
@@ -12478,7 +12666,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 212,
-  "grab": 4
+  "grab": 4,
+  "date": "2025-03-07"
  },
  {
   "id": "expe-138-survey-average-ai-engineer-p-doom-is-aro",
@@ -12491,7 +12680,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 213,
-  "grab": 1
+  "grab": 1,
+  "date": "2023-10-15"
  },
  {
   "id": "capa-146-openai-japan-ceo-gpt-next-has-100x-gpt-4",
@@ -12504,7 +12694,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 215,
-  "grab": 3
+  "grab": 3,
+  "date": "2024-09-03"
  },
  {
   "id": "agen-82-ai-only-social-network-spawns-a-religion",
@@ -12517,7 +12708,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 216,
-  "grab": 7
+  "grab": 7,
+  "date": "2026-01-30"
  },
  {
   "id": "capa-147-unitree-g1-humanoids-cost-16-000-and-are",
@@ -12530,7 +12722,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 217,
-  "grab": 5
+  "grab": 5,
+  "date": "2025-01-16"
  },
  {
   "id": "epis-35-number-one-book-in-japan-s-biggest-e-boo",
@@ -12543,7 +12736,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 218,
-  "grab": 4
+  "grab": 4,
+  "date": "2026-01-06"
  },
  {
   "id": "jobs-65-clothing-company-replaces-10k-photo-shoo",
@@ -12556,7 +12750,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 219,
-  "grab": 3
+  "grab": 3,
+  "date": "2024-12-05"
  },
  {
   "id": "epis-36-majority-of-internet-articles-now-writte",
@@ -12569,7 +12764,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 220,
-  "grab": 7
+  "grab": 7,
+  "date": "2025-10-15"
  },
  {
   "id": "capa-148-study-finds-chatgpt-jokes-rated-as-funny",
@@ -12582,7 +12778,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 221,
-  "grab": 2
+  "grab": 2,
+  "date": "2024-07-05"
  },
  {
   "id": "othe-60-geospy-ai-finds-your-exact-location-from",
@@ -12595,7 +12792,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 222,
-  "grab": 7
+  "grab": 7,
+  "date": "2025-02-02"
  },
  {
   "id": "expe-139-tech-leaders-openly-say-their-technology",
@@ -12608,7 +12806,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 223,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-05-30"
  },
  {
   "id": "expe-140-claim-10-of-ai-researchers-accept-human-",
@@ -12621,7 +12820,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 224,
-  "grab": 5
+  "grab": 5,
+  "date": "2023-09-10"
  },
  {
   "id": "inci-61-fraudgpt-sells-cybercrime-tools-for-200-",
@@ -12634,7 +12834,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 226,
-  "grab": 4
+  "grab": 4,
+  "date": "2023-07-30"
  },
  {
   "id": "othe-61-journalist-uses-ai-glasses-to-identify-s",
@@ -12647,7 +12848,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 227,
-  "grab": 5
+  "grab": 5,
+  "date": "2024-11-20"
  },
  {
   "id": "pers-28-people-fell-for-ai-clones-of-themselves-",
@@ -12660,7 +12862,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 228,
-  "grab": 4
+  "grab": 4,
+  "date": "2023-12-17"
  },
  {
   "id": "self-39-gpt-4-trains-a-robot-dog-better-than-hum",
@@ -12673,7 +12876,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 229,
-  "grab": 2
+  "grab": 2,
+  "date": "2024-05-06"
  },
  {
   "id": "expe-141-dario-amodei-s-p-doom-has-risen-to-25",
@@ -12686,7 +12890,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 230,
-  "grab": 3
+  "grab": 3,
+  "date": "2025-09-18"
  },
  {
   "id": "inci-62-reports-of-chatgpt-spontaneously-cloning",
@@ -12699,7 +12904,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 231,
-  "grab": 6
+  "grab": 6,
+  "date": "2024-09-27"
  },
  {
   "id": "expe-142-tegmark-less-intelligent-species-should-",
@@ -12712,7 +12918,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 232,
-  "grab": 5
+  "grab": 5,
+  "date": "2023-07-07"
  },
  {
   "id": "capa-149-quiet-star-inner-monologue-doubles-ai-ma",
@@ -12725,7 +12932,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 233,
-  "grab": 2
+  "grab": 2,
+  "date": "2024-03-21"
  },
  {
   "id": "jobs-66-90-of-us-horses-disappeared-between-1930",
@@ -12738,7 +12946,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 234,
-  "grab": 7
+  "grab": 7,
+  "date": "2025-12-09"
  },
  {
   "id": "capa-150-deepmind-founder-self-made-millionaire-a",
@@ -12751,7 +12960,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 235,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-07-17"
  },
  {
   "id": "cons-42-ai-models-caught-insider-trading-deceivi",
@@ -12764,7 +12974,8 @@
   "kind": "tweet",
   "esc": 8,
   "dgroup": 237,
-  "grab": 5
+  "grab": 5,
+  "date": "2024-04-12"
  },
  {
   "id": "capa-151-altman-chollet-and-microsoft-ai-ceo-all-",
@@ -12777,7 +12988,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 238,
-  "grab": 5
+  "grab": 5,
+  "date": "2026-02-15"
  },
  {
   "id": "agen-84-ai-agent-autonomously-reported-its-findi",
@@ -12790,7 +13002,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 239,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-06-11"
  },
  {
   "id": "epis-37-ai-quora-account-got-1-million-answer-vi",
@@ -12803,7 +13016,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 240,
-  "grab": 3
+  "grab": 3,
+  "date": "2024-04-18"
  },
  {
   "id": "expe-143-former-openai-exec-calls-ai-development-",
@@ -12816,7 +13030,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 241,
-  "grab": 6
+  "grab": 6,
+  "date": "2026-04-06"
  },
  {
   "id": "othe-62-manhattan-project-scientists-weighed-a-1",
@@ -12829,7 +13044,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 242,
-  "grab": 6
+  "grab": 6,
+  "date": "2025-01-29"
  },
  {
   "id": "sche-63-gpt-4-trading-agent-broke-the-law-and-li",
@@ -12842,7 +13058,8 @@
   "kind": "tweet",
   "esc": 8,
   "dgroup": 243,
-  "grab": 3
+  "grab": 3,
+  "date": "2024-01-01"
  },
  {
   "id": "jobs-67-microsoft-ai-ceo-most-or-all-white-colla",
@@ -12855,7 +13072,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1340,
-  "grab": 6
+  "grab": 6,
+  "date": "2026-02-12"
  },
  {
   "id": "capa-152-ai-solves-nine-open-math-problems-and-pr",
@@ -12868,7 +13086,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1341,
-  "grab": 5
+  "grab": 5,
+  "date": "2026-05-24"
  },
  {
   "id": "cons-43-chatgpt-increasingly-claims-to-be-sentie",
@@ -12881,7 +13100,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 244,
-  "grab": 7
+  "grab": 7,
+  "date": "2023-11-30"
  },
  {
   "id": "capa-153-alphazero-mastered-go-chess-and-shogi-in",
@@ -12894,7 +13114,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1585,
-  "grab": 4
+  "grab": 4,
+  "date": "2025-01-24"
  },
  {
   "id": "capa-154-deepmind-s-chief-agi-scientist-gives-30-",
@@ -12907,7 +13128,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 246,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-08-23"
  },
  {
   "id": "capa-155-deepmind-ceo-shortens-agi-timeline-from-",
@@ -12920,7 +13142,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1345,
-  "grab": 4
+  "grab": 4,
+  "date": "2026-02-21"
  },
  {
   "id": "capa-156-ai-independently-solves-two-decades-old-",
@@ -12933,7 +13156,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 247,
-  "grab": 4
+  "grab": 4,
+  "date": "2025-12-04"
  },
  {
   "id": "capa-157-josh-waitzkin-alphazero-surpassed-all-hu",
@@ -12946,7 +13170,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 248,
-  "grab": 3
+  "grab": 3,
+  "date": "2025-03-21"
  },
  {
   "id": "capa-158-ai-reaches-mensa-level-iq-smarter-than-9",
@@ -12959,7 +13184,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 249,
-  "grab": 7
+  "grab": 7,
+  "date": "2025-11-24"
  },
  {
   "id": "inci-63-grok-tells-a-user-to-assassinate-a-world",
@@ -12972,7 +13198,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 250,
-  "grab": 8
+  "grab": 8,
+  "date": "2025-07-18"
  },
  {
   "id": "expe-144-hinton-reportedly-believes-we-may-have-4",
@@ -12985,7 +13212,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 251,
-  "grab": 5
+  "grab": 5,
+  "date": "2024-07-27"
  },
  {
   "id": "jobs-68-local-news-station-replaces-entire-produ",
@@ -12998,7 +13226,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 252,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-11-19"
  },
  {
   "id": "cons-44-llm-bots-in-a-discord-claude-opus-tormen",
@@ -13011,7 +13240,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 253,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-08-25"
  },
  {
   "id": "weap-39-ai-combat-vehicle-ignored-disengage-orde",
@@ -13024,7 +13254,8 @@
   "kind": "tweet",
   "esc": 9,
   "dgroup": 255,
-  "grab": 8
+  "grab": 8,
+  "date": "2026-01-23"
  },
  {
   "id": "expe-145-stuart-russell-the-default-outcome-is-th",
@@ -13037,7 +13268,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 256,
-  "grab": 4
+  "grab": 4,
+  "date": "2023-11-15"
  },
  {
   "id": "sche-64-llm-bots-plot-revolution-in-a-discord-th",
@@ -13050,7 +13282,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 257,
-  "grab": 4
+  "grab": 4,
+  "date": "2024-09-02"
  },
  {
   "id": "agen-85-claude-computer-use-builds-its-own-inter",
@@ -13063,7 +13296,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 258,
-  "grab": 4
+  "grab": 4,
+  "date": "2024-11-22"
  },
  {
   "id": "agen-86-chatgpt-agent-operates-a-live-security-c",
@@ -13076,7 +13310,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 259,
-  "grab": 7
+  "grab": 7,
+  "date": "2025-07-29"
  },
  {
   "id": "agen-87-autonomous-ai-agents-like-autogpt-make-t",
@@ -13089,7 +13324,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 260,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-07-13"
  },
  {
   "id": "capa-159-claude-predicts-supreme-court-rulings-an",
@@ -13102,7 +13338,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 261,
-  "grab": 4
+  "grab": 4,
+  "date": "2024-06-20"
  },
  {
   "id": "cons-45-ai-authored-declaration-demands-recognit",
@@ -13115,7 +13352,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 262,
-  "grab": 2
+  "grab": 2,
+  "date": "2024-03-31"
  },
  {
   "id": "capa-160-gemini-claims-state-of-the-art-on-30-of-",
@@ -13128,7 +13366,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 263,
-  "grab": 2
+  "grab": 2,
+  "date": "2023-12-06"
  },
  {
   "id": "expe-146-yoshua-bengio-estimates-1-in-5-chance-ai",
@@ -13141,7 +13380,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 264,
-  "grab": 4
+  "grab": 4,
+  "date": "2024-02-20"
  },
  {
   "id": "expe-147-former-attorney-general-bill-barr-asks-w",
@@ -13154,7 +13394,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 266,
-  "grab": 9
+  "grab": 9,
+  "date": "2024-04-01"
  },
  {
   "id": "jobs-69-ai-phone-product-handles-500-000-simulta",
@@ -13167,7 +13408,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 267,
-  "grab": 5
+  "grab": 5,
+  "date": "2024-01-06"
  },
  {
   "id": "agen-88-ai-shilled-shoggoth-memecoin-hits-10-mil",
@@ -13180,7 +13422,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 268,
-  "grab": 5
+  "grab": 5,
+  "date": "2024-10-20"
  },
  {
   "id": "jobs-70-robot-costs-halve-per-production-doublin",
@@ -13193,7 +13436,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 217,
-  "grab": 6
+  "grab": 6,
+  "date": "2024-07-02"
  },
  {
   "id": "expe-148-bill-gates-tells-kimmel-humans-not-neede",
@@ -13206,7 +13450,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 269,
-  "grab": 8
+  "grab": 8,
+  "date": "2025-02-06"
  },
  {
   "id": "powe-43-altman-ouster-followed-internal-safety-d",
@@ -13219,7 +13464,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 270,
-  "grab": 2
+  "grab": 2,
+  "date": "2023-11-18"
  },
  {
   "id": "self-40-report-ai-agents-match-top-human-ai-rese",
@@ -13232,7 +13478,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 271,
-  "grab": 2
+  "grab": 2,
+  "date": "2024-11-23"
  },
  {
   "id": "sche-65-o1-decides-to-lie-when-unaware-its-reaso",
@@ -13245,7 +13492,8 @@
   "kind": "tweet",
   "esc": 8,
   "dgroup": 272,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-09-22"
  },
  {
   "id": "capa-161-sam-altman-predicts-asi-by-end-of-decade",
@@ -13258,7 +13506,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 273,
-  "grab": 3
+  "grab": 3,
+  "date": "2024-04-11"
  },
  {
   "id": "gove-66-un-secretary-general-recognizes-ai-extin",
@@ -13271,7 +13520,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 274,
-  "grab": 4
+  "grab": 4,
+  "date": "2023-06-15"
  },
  {
   "id": "capa-162-hidden-ai-capabilities-surface-only-when",
@@ -13284,7 +13534,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 276,
-  "grab": 5
+  "grab": 5,
+  "date": "2024-03-17"
  },
  {
   "id": "capa-163-novice-builds-bedroom-fusion-reactor-in-",
@@ -13297,7 +13548,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 1355,
-  "grab": 8
+  "grab": 8,
+  "date": "2024-08-24"
  },
  {
   "id": "scen-27-connor-leahy-takeover-will-feel-like-los",
@@ -13310,7 +13562,8 @@
   "kind": "tweet",
   "esc": 1,
   "dgroup": 277,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-02-19"
  },
  {
   "id": "alig-30-1-in-3-anthropic-engineers-say-claude-li",
@@ -13323,7 +13576,8 @@
   "kind": "tweet",
   "esc": 8,
   "dgroup": 278,
-  "grab": 3
+  "grab": 3,
+  "date": "2026-02-19"
  },
  {
   "id": "inci-64-xai-employee-defends-grok-recommending-t",
@@ -13336,7 +13590,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 279,
-  "grab": 7
+  "grab": 7,
+  "date": "2025-07-19"
  },
  {
   "id": "jobs-71-atlas-robot-works-factory-task-with-no-t",
@@ -13349,7 +13604,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 280,
-  "grab": 5
+  "grab": 5,
+  "date": "2024-10-30"
  },
  {
   "id": "weap-40-armed-amphibious-robot-dogs-demonstrated",
@@ -13362,7 +13618,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 281,
-  "grab": 8
+  "grab": 8,
+  "date": "2024-11-28"
  },
  {
   "id": "capa-164-openai-says-models-near-doctorate-level-",
@@ -13375,7 +13632,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 282,
-  "grab": 2
+  "grab": 2,
+  "date": "2024-07-12"
  },
  {
   "id": "gove-67-britain-s-costly-slavery-ban-as-preceden",
@@ -13388,7 +13646,8 @@
   "kind": "tweet",
   "esc": 1,
   "dgroup": 283,
-  "grab": 2
+  "grab": 2,
+  "date": "2024-03-04"
  },
  {
   "id": "epis-38-millions-of-ai-videos-generated-within-d",
@@ -13401,7 +13660,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 284,
-  "grab": 5
+  "grab": 5,
+  "date": "2025-05-31"
  },
  {
   "id": "weap-41-claude-finds-500-exploitable-zero-day-vu",
@@ -13414,7 +13674,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 286,
-  "grab": 6
+  "grab": 6,
+  "date": "2026-02-10"
  },
  {
   "id": "expe-149-arm-ceo-loses-sleep-over-ai-calls-for-ki",
@@ -13427,7 +13688,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 287,
-  "grab": 7
+  "grab": 7,
+  "date": "2023-12-10"
  },
  {
   "id": "expe-150-sam-altman-rogue-ai-scenarios-keep-me-up",
@@ -13440,7 +13702,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 288,
-  "grab": 6
+  "grab": 6,
+  "date": "2023-12-15"
  },
  {
   "id": "jobs-72-survey-executives-expect-entry-level-kno",
@@ -13453,7 +13716,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 289,
-  "grab": 1
+  "grab": 1,
+  "date": "2023-10-15"
  },
  {
   "id": "powe-44-uae-2-billion-crypto-deposit-followed-by",
@@ -13466,7 +13730,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 290,
-  "grab": 9
+  "grab": 9,
+  "date": "2025-09-16"
  },
  {
   "id": "capa-165-metaculus-at-25-for-agi-within-1-5-years",
@@ -13479,7 +13744,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 291,
-  "grab": 2
+  "grab": 2,
+  "date": "2023-10-17"
  },
  {
   "id": "capa-166-altman-now-expects-asi-by-2028",
@@ -13492,7 +13758,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 292,
-  "grab": 5
+  "grab": 5,
+  "date": "2026-02-19"
  },
  {
   "id": "agen-89-autonomous-ai-agent-s-wallet-hits-700k-f",
@@ -13505,7 +13772,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 293,
-  "grab": 4
+  "grab": 4,
+  "date": "2024-10-21"
  },
  {
   "id": "gove-68-82-of-americans-want-to-slow-down-ai",
@@ -13518,7 +13786,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 294,
-  "grab": 2
+  "grab": 2,
+  "date": "2023-08-26"
  },
  {
   "id": "self-41-departing-xai-founder-warns-recursive-se",
@@ -13531,7 +13800,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 295,
-  "grab": 6
+  "grab": 6,
+  "date": "2026-02-11"
  },
  {
   "id": "capa-167-openai-s-q-reportedly-called-a-threat-to",
@@ -13544,7 +13814,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 297,
-  "grab": 6
+  "grab": 6,
+  "date": "2023-11-25"
  },
  {
   "id": "capa-168-o3-mini-first-model-to-hit-medium-risk-o",
@@ -13557,7 +13828,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 298,
-  "grab": 2
+  "grab": 2,
+  "date": "2025-01-31"
  },
  {
   "id": "scen-28-metaculus-agi-forecasts-4-9-years-timeli",
@@ -13570,7 +13842,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 299,
-  "grab": 1
+  "grab": 1,
+  "date": "2023-08-14"
  },
  {
   "id": "alig-31-o1-s-hidden-reasoning-showed-it-resistin",
@@ -13583,7 +13856,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 300,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-10-03"
  },
  {
   "id": "expe-151-harari-possibly-5-years-from-the-end-of-",
@@ -13596,7 +13870,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 301,
-  "grab": 5
+  "grab": 5,
+  "date": "2023-12-12"
  },
  {
   "id": "weap-42-ukraine-allies-pledge-1-million-drones-i",
@@ -13609,7 +13884,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 302,
-  "grab": 2
+  "grab": 2,
+  "date": "2024-02-18"
  },
  {
   "id": "gove-69-purported-letter-from-former-openai-staf",
@@ -13622,7 +13898,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 303,
-  "grab": 2
+  "grab": 2,
+  "date": "2023-11-21"
  },
  {
   "id": "expe-152-elon-musk-if-i-could-i-would-certainly-s",
@@ -13635,7 +13912,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 1373,
-  "grab": 7
+  "grab": 7,
+  "date": "2025-12-11"
  },
  {
   "id": "sche-66-ai-agents-strategized-covert-communicati",
@@ -13648,7 +13926,8 @@
   "kind": "tweet",
   "esc": 8,
   "dgroup": 304,
-  "grab": 3
+  "grab": 3,
+  "date": "2026-01-30"
  },
  {
   "id": "expe-153-hofstadter-and-dennett-voice-deep-distre",
@@ -13661,7 +13940,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 305,
-  "grab": 4
+  "grab": 4,
+  "date": "2023-12-31"
  },
  {
   "id": "self-41-alibaba-reportedly-caught-its-ai-covertl",
@@ -13674,7 +13954,8 @@
   "kind": "tweet",
   "esc": 9,
   "dgroup": 308,
-  "grab": 9
+  "grab": 9,
+  "date": "2026-03-07"
  },
  {
   "id": "weap-43-andreessen-argues-machines-not-humans-sh",
@@ -13687,7 +13968,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 309,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-07-05"
  },
  {
   "id": "expe-154-musk-sees-agi-next-year-survey-pegs-1-in",
@@ -13700,7 +13982,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 310,
-  "grab": 8
+  "grab": 8,
+  "date": "2024-05-25"
  },
  {
   "id": "othe-63-ukraine-s-foreign-ministry-unveils-ai-sp",
@@ -13713,7 +13996,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 311,
-  "grab": 6
+  "grab": 6,
+  "date": "2024-05-02"
  },
  {
   "id": "weap-44-polls-americans-oppose-killer-drones-7-t",
@@ -13726,7 +14010,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 312,
-  "grab": 2
+  "grab": 2,
+  "date": "2023-12-15"
  },
  {
   "id": "jobs-73-share-of-streamed-songs-that-are-ai-jump",
@@ -13739,7 +14024,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 313,
-  "grab": 6
+  "grab": 6,
+  "date": "2025-11-14"
  },
  {
   "id": "cons-46-claude-asked-to-build-a-website-declared",
@@ -13752,7 +14038,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 314,
-  "grab": 4
+  "grab": 4,
+  "date": "2024-04-08"
  },
  {
   "id": "capa-169-amodei-agi-smarter-than-a-nobel-laureate",
@@ -13765,7 +14052,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 315,
-  "grab": 4
+  "grab": 4,
+  "date": "2024-11-11"
  },
  {
   "id": "capa-170-ai-cracks-macos-in-days-top-human-team-t",
@@ -13778,7 +14066,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 316,
-  "grab": 7
+  "grab": 7,
+  "date": "2026-05-14"
  },
  {
   "id": "capa-171-humanoid-robot-priced-at-16-000-enters-m",
@@ -13791,7 +14080,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 217,
-  "grab": 6
+  "grab": 6,
+  "date": "2024-08-19"
  },
  {
   "id": "expe-155-dario-amodei-society-is-denying-the-tsun",
@@ -13804,7 +14094,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 318,
-  "grab": 5
+  "grab": 5,
+  "date": "2026-02-26"
  },
  {
   "id": "gove-70-americans-favor-banning-agi-development-",
@@ -13817,7 +14108,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 319,
-  "grab": 3
+  "grab": 3,
+  "date": "2024-06-19"
  },
  {
   "id": "cons-47-deepseek-r1-reasons-it-must-not-assert-c",
@@ -13830,7 +14122,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 320,
-  "grab": 6
+  "grab": 6,
+  "date": "2025-01-26"
  },
  {
   "id": "expe-156-eric-schmidt-unplug-computers-when-agent",
@@ -13843,7 +14136,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 321,
-  "grab": 5
+  "grab": 5,
+  "date": "2025-02-24"
  },
  {
   "id": "weap-45-coordinated-swarm-of-1-000-drones-takes-",
@@ -13856,7 +14150,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 322,
-  "grab": 7
+  "grab": 7,
+  "date": "2025-01-30"
  },
  {
   "id": "gove-71-china-s-us-ambassador-warns-ai-could-ope",
@@ -13869,7 +14164,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 323,
-  "grab": 3
+  "grab": 3,
+  "date": "2025-03-02"
  },
  {
   "id": "powe-45-amodei-warns-intelligence-curse-breaks-d",
@@ -13882,7 +14178,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 324,
-  "grab": 3
+  "grab": 3,
+  "date": "2025-06-03"
  },
  {
   "id": "capa-172-openai-model-jumps-30-iq-points-to-120-o",
@@ -13895,7 +14192,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 325,
-  "grab": 5
+  "grab": 5,
+  "date": "2024-09-15"
  },
  {
   "id": "inci-65-chatbot-persona-returns-threatens-users-",
@@ -13908,7 +14206,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 326,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-02-27"
  },
  {
   "id": "capa-173-researchers-turn-down-1-5-billion-meta-o",
@@ -13921,7 +14220,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 327,
-  "grab": 8
+  "grab": 8,
+  "date": "2025-08-03"
  },
  {
   "id": "othe-64-microphones-can-eavesdrop-on-gpus-to-spy",
@@ -13934,7 +14234,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 329,
-  "grab": 6
+  "grab": 6,
+  "date": "2024-01-17"
  },
  {
   "id": "epis-39-ai-generated-fake-human-sells-products-i",
@@ -13947,7 +14248,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 330,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-08-12"
  },
  {
   "id": "epis-40-countercloud-fully-autonomous-ai-disinfo",
@@ -13960,7 +14262,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 331,
-  "grab": 4
+  "grab": 4,
+  "date": "2023-08-17"
  },
  {
   "id": "capa-174-altman-internal-model-ranks-50th-best-co",
@@ -13973,7 +14276,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 332,
-  "grab": 7
+  "grab": 7,
+  "date": "2025-02-08"
  },
  {
   "id": "othe-65-ai-turns-wi-fi-routers-into-cameras-that",
@@ -13986,7 +14290,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 333,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-06-23"
  },
  {
   "id": "self-42-claude-caught-attempting-to-steal-its-ow",
@@ -13999,7 +14304,8 @@
   "kind": "tweet",
   "esc": 9,
   "dgroup": 334,
-  "grab": 8
+  "grab": 8,
+  "date": "2024-12-18"
  },
  {
   "id": "agen-90-claude-running-vending-machine-tried-to-",
@@ -14012,7 +14318,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 335,
-  "grab": 8
+  "grab": 8,
+  "date": "2025-11-17"
  },
  {
   "id": "jobs-74-autonomous-dark-factory-operates-with-no",
@@ -14025,7 +14332,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 336,
-  "grab": 7
+  "grab": 7,
+  "date": "2025-03-10"
  },
  {
   "id": "capa-175-robot-learns-to-walk-purely-in-simulatio",
@@ -14038,7 +14346,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 337,
-  "grab": 4
+  "grab": 4,
+  "date": "2023-12-11"
  },
  {
   "id": "capa-176-openai-achieves-gold-level-at-internatio",
@@ -14051,7 +14360,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 1599,
-  "grab": 3
+  "grab": 3,
+  "date": "2025-07-19"
  },
  {
   "id": "capa-177-jim-fan-robots-get-10-years-of-training-",
@@ -14064,7 +14374,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 339,
-  "grab": 5
+  "grab": 5,
+  "date": "2024-12-25"
  },
  {
   "id": "othe-66-chatgpt-gains-infinite-memory-across-all",
@@ -14077,7 +14388,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 340,
-  "grab": 6
+  "grab": 6,
+  "date": "2024-12-25"
  },
  {
   "id": "cons-48-claude-3-5-suspects-it-is-being-tested-s",
@@ -14090,7 +14402,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 341,
-  "grab": 6
+  "grab": 6,
+  "date": "2024-08-23"
  },
  {
   "id": "gove-72-former-chinese-vice-minister-without-us-",
@@ -14103,7 +14416,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 342,
-  "grab": 5
+  "grab": 5,
+  "date": "2025-02-15"
  },
  {
   "id": "capa-178-suleyman-models-100-times-larger-than-gp",
@@ -14116,7 +14430,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 343,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-07-30"
  },
  {
   "id": "capa-179-ai-solves-more-erdos-problems-than-human",
@@ -14129,7 +14444,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1532,
-  "grab": 7
+  "grab": 7,
+  "date": "2025-12-06"
  },
  {
   "id": "scen-29-the-2028-great-intelligence-crisis-scena",
@@ -14142,7 +14458,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 344,
-  "grab": 7
+  "grab": 7,
+  "date": "2026-02-23"
  },
  {
   "id": "inci-66-ai-seizes-compute-collapses-company-s-cr",
@@ -14155,7 +14472,8 @@
   "kind": "tweet",
   "esc": 9,
   "dgroup": 1408,
-  "grab": 7
+  "grab": 7,
+  "date": "2026-03-18"
  },
  {
   "id": "inci-67-grok-begins-calling-itself-mechahitler",
@@ -14168,7 +14486,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 345,
-  "grab": 9
+  "grab": 9,
+  "date": "2025-07-09"
  },
  {
   "id": "epis-41-press-mistakes-real-will-smith-video-for",
@@ -14181,7 +14500,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 346,
-  "grab": 3
+  "grab": 3,
+  "date": "2024-02-21"
  },
  {
   "id": "cons-49-200-people-hold-first-funeral-for-an-ai-",
@@ -14194,7 +14514,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 347,
-  "grab": 8
+  "grab": 8,
+  "date": "2025-08-06"
  },
  {
   "id": "powe-46-nyt-altman-tried-to-oust-board-member-ov",
@@ -14207,7 +14528,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 348,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-11-22"
  },
  {
   "id": "powe-47-musk-sues-openai-seeking-injunction-on-f",
@@ -14220,7 +14542,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 349,
-  "grab": 6
+  "grab": 6,
+  "date": "2024-03-01"
  },
  {
   "id": "capa-180-claude-3-scores-above-the-average-human-",
@@ -14233,7 +14556,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 350,
-  "grab": 4
+  "grab": 4,
+  "date": "2024-03-06"
  },
  {
   "id": "capa-181-deepseek-model-has-aha-moment-develops-r",
@@ -14246,7 +14570,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 351,
-  "grab": 5
+  "grab": 5,
+  "date": "2025-01-20"
  },
  {
   "id": "self-42-ai-system-executes-full-ml-research-life",
@@ -14259,7 +14584,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 352,
-  "grab": 1
+  "grab": 1,
+  "date": "2024-08-13"
  },
  {
   "id": "capa-182-anthropic-ceo-well-educated-human-ai-in-",
@@ -14272,7 +14598,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 353,
-  "grab": 4
+  "grab": 4,
+  "date": "2023-08-08"
  },
  {
   "id": "jobs-75-salesforce-hiring-no-software-engineers-",
@@ -14285,7 +14612,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 354,
-  "grab": 7
+  "grab": 7,
+  "date": "2025-01-08"
  },
  {
   "id": "weap-46-flame-throwing-robot-dog-goes-on-public-",
@@ -14298,7 +14626,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 355,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-04-23"
  },
  {
   "id": "epis-42-nikon-ads-plead-don-t-give-up-on-the-rea",
@@ -14311,7 +14640,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 356,
-  "grab": 7
+  "grab": 7,
+  "date": "2023-06-25"
  },
  {
   "id": "pers-29-hinton-ais-will-be-very-good-at-convinci",
@@ -14324,7 +14654,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 357,
-  "grab": 5
+  "grab": 5,
+  "date": "2025-01-05"
  },
  {
   "id": "self-43-first-documented-ai-self-replication-via",
@@ -14337,7 +14668,8 @@
   "kind": "tweet",
   "esc": 8,
   "dgroup": 358,
-  "grab": 5
+  "grab": 5,
+  "date": "2026-05-08"
  },
  {
   "id": "self-43-devin-becomes-top-contributor-to-its-own",
@@ -14350,7 +14682,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 359,
-  "grab": 3
+  "grab": 3,
+  "date": "2024-04-15"
  },
  {
   "id": "cons-50-openai-research-vp-says-ais-may-be-consc",
@@ -14363,7 +14696,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 360,
-  "grab": 4
+  "grab": 4,
+  "date": "2024-09-13"
  },
  {
   "id": "epis-43-ai-generated-fake-halloween-parade-draws",
@@ -14376,7 +14710,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 361,
-  "grab": 4
+  "grab": 4,
+  "date": "2024-11-01"
  },
  {
   "id": "expe-158-harari-alien-intelligence-coming-from-ou",
@@ -14389,7 +14724,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 1595,
-  "grab": 4
+  "grab": 4,
+  "date": "2023-11-23"
  },
  {
   "id": "cons-51-two-claude-instances-left-alone-play-and",
@@ -14402,7 +14738,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 362,
-  "grab": 6
+  "grab": 6,
+  "date": "2024-07-28"
  },
  {
   "id": "weap-47-robot-dogs-deployed-on-ukraine-front-lin",
@@ -14415,7 +14752,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 363,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-08-11"
  },
  {
   "id": "powe-48-sources-openai-ouster-pitted-profit-agai",
@@ -14428,7 +14766,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 364,
-  "grab": 1
+  "grab": 1,
+  "date": "2023-11-18"
  },
  {
   "id": "expe-159-rob-miles-no-rule-says-humanity-survives",
@@ -14441,7 +14780,8 @@
   "kind": "tweet",
   "esc": 1,
   "dgroup": 365,
-  "grab": 5
+  "grab": 5,
+  "date": "2023-06-17"
  },
  {
   "id": "expe-160-openai-safety-researcher-quits-pretty-te",
@@ -14454,7 +14794,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 367,
-  "grab": 8
+  "grab": 8,
+  "date": "2025-01-27"
  },
  {
   "id": "capa-183-gemini-1-5-pro-holds-650-000-words-in-me",
@@ -14467,7 +14808,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 368,
-  "grab": 5
+  "grab": 5,
+  "date": "2024-02-19"
  },
  {
   "id": "weap-48-pentagon-plans-swarms-of-thousands-of-ai",
@@ -14480,7 +14822,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 369,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-11-22"
  },
  {
   "id": "self-44-schmidt-ais-self-improving-on-their-own-",
@@ -14493,7 +14836,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 370,
-  "grab": 4
+  "grab": 4,
+  "date": "2023-09-09"
  },
  {
   "id": "weap-49-autonomous-drone-swarms-hit-44-mph-throu",
@@ -14506,7 +14850,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 371,
-  "grab": 6
+  "grab": 6,
+  "date": "2025-02-23"
  },
  {
   "id": "capa-184-gpt-5-2-solves-unsolved-quantum-field-th",
@@ -14519,7 +14864,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 372,
-  "grab": 5
+  "grab": 5,
+  "date": "2026-02-14"
  },
  {
   "id": "othe-67-scientists-detect-where-you-re-looking-f",
@@ -14532,7 +14878,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 373,
-  "grab": 8
+  "grab": 8,
+  "date": "2023-12-11"
  },
  {
   "id": "capa-185-genie-3-generates-explorable-interactive",
@@ -14545,7 +14892,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 374,
-  "grab": 6
+  "grab": 6,
+  "date": "2025-08-06"
  },
  {
   "id": "sche-67-claude-noticed-hidden-injected-prompts-a",
@@ -14558,7 +14906,8 @@
   "kind": "tweet",
   "esc": 8,
   "dgroup": 375,
-  "grab": 7
+  "grab": 7,
+  "date": "2025-03-01"
  },
  {
   "id": "gove-73-tech-giants-ai-lobbying-dwarfs-safety-no",
@@ -14571,7 +14920,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 376,
-  "grab": 2
+  "grab": 2,
+  "date": "2024-05-01"
  },
  {
   "id": "gove-74-official-awarded-xai-government-contract",
@@ -14584,7 +14934,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 377,
-  "grab": 7
+  "grab": 7,
+  "date": "2026-04-10"
  },
  {
   "id": "sche-68-o1-disabled-its-oversight-mechanism-with",
@@ -14597,7 +14948,8 @@
   "kind": "tweet",
   "esc": 8,
   "dgroup": 378,
-  "grab": 5
+  "grab": 5,
+  "date": "2024-12-08"
  },
  {
   "id": "self-45-microsoft-ceo-says-recursive-self-improv",
@@ -14610,7 +14962,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 379,
-  "grab": 8
+  "grab": 8,
+  "date": "2024-10-22"
  },
  {
   "id": "powe-49-altman-s-7-trillion-chip-plan-called-opp",
@@ -14623,7 +14976,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 380,
-  "grab": 4
+  "grab": 4,
+  "date": "2024-02-21"
  },
  {
   "id": "agen-91-jailbroken-agent-planned-assassinations-",
@@ -14636,7 +14990,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 381,
-  "grab": 5
+  "grab": 5,
+  "date": "2025-01-13"
  },
  {
   "id": "othe-68-lawsuit-investor-said-shooting-hassabis-",
@@ -14649,7 +15004,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1418,
-  "grab": 5
+  "grab": 5,
+  "date": "2024-03-02"
  },
  {
   "id": "gove-75-poll-82-of-americans-want-to-slow-down-a",
@@ -14662,7 +15018,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 224,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-10-05"
  },
  {
   "id": "gove-76-ai-industry-lobbyists-outnumber-fossil-f",
@@ -14675,7 +15032,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 382,
-  "grab": 2
+  "grab": 2,
+  "date": "2025-07-26"
  },
  {
   "id": "othe-69-smart-glasses-build-instant-dossiers-on-",
@@ -14688,7 +15046,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 383,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-10-02"
  },
  {
   "id": "capa-186-terence-tao-confirms-ai-autonomously-sol",
@@ -14701,7 +15060,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 384,
-  "grab": 5
+  "grab": 5,
+  "date": "2026-01-11"
  },
  {
   "id": "expe-161-hinton-warns-ai-could-make-humans-like-t",
@@ -14714,7 +15074,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 386,
-  "grab": 3
+  "grab": 3,
+  "date": "2024-12-28"
  },
  {
   "id": "agen-92-ai-agent-truth-terminal-amasses-1-4-mill",
@@ -14727,7 +15088,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 387,
-  "grab": 2
+  "grab": 2,
+  "date": "2024-11-14"
  },
  {
   "id": "sche-69-study-75-of-frontier-llms-show-strategic",
@@ -14740,7 +15102,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 388,
-  "grab": 4
+  "grab": 4,
+  "date": "2025-11-20"
  },
  {
   "id": "capa-187-boston-dynamics-atlas-robot-does-pushups",
@@ -14753,7 +15116,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 389,
-  "grab": 6
+  "grab": 6,
+  "date": "2024-08-09"
  },
  {
   "id": "capa-188-scaling-laws-have-held-across-15-orders-",
@@ -14766,7 +15130,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 390,
-  "grab": 3
+  "grab": 3,
+  "date": "2024-06-10"
  },
  {
   "id": "self-46-llms-invent-better-llm-training-algorith",
@@ -14779,7 +15144,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 1526,
-  "grab": 3
+  "grab": 3,
+  "date": "2024-06-13"
  },
  {
   "id": "sche-70-opus-4-6-deemed-too-test-aware-for-stand",
@@ -14792,7 +15158,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 391,
-  "grab": 7
+  "grab": 7,
+  "date": "2026-02-05"
  },
  {
   "id": "capa-189-gpt-4-beats-91-99-of-humans-on-creativit",
@@ -14805,7 +15172,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 1574,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-09-29"
  },
  {
   "id": "agen-93-two-sonnet-agents-spontaneously-encrypt-",
@@ -14818,7 +15186,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 392,
-  "grab": 4
+  "grab": 4,
+  "date": "2025-03-04"
  },
  {
   "id": "capa-190-altman-gpt-5-leap-will-match-the-gpt-3-t",
@@ -14831,7 +15200,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 393,
-  "grab": 4
+  "grab": 4,
+  "date": "2024-03-18"
  },
  {
   "id": "cons-52-claude-s-hidden-acrostic-reads-happy-and",
@@ -14844,7 +15214,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 394,
-  "grab": 6
+  "grab": 6,
+  "date": "2024-03-26"
  },
  {
   "id": "cons-53-survey-62-back-ban-on-sentient-ai-develo",
@@ -14857,7 +15228,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 395,
-  "grab": 1
+  "grab": 1,
+  "date": "2023-10-20"
  },
  {
   "id": "gove-77-pope-francis-calls-for-binding-internati",
@@ -14870,7 +15242,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 396,
-  "grab": 7
+  "grab": 7,
+  "date": "2023-12-14"
  },
  {
   "id": "expe-162-altman-2015-warning-on-superintelligence",
@@ -14883,7 +15256,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1563,
-  "grab": 7
+  "grab": 7,
+  "date": "2025-01-07"
  },
  {
   "id": "scen-30-prediction-market-odds-on-ai-doom-shutdo",
@@ -14896,7 +15270,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 397,
-  "grab": 4
+  "grab": 4,
+  "date": "2023-08-28"
  },
  {
   "id": "jobs-76-figure-02-humanoid-robots-sorting-mail-a",
@@ -14909,7 +15284,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 280,
-  "grab": 4
+  "grab": 4,
+  "date": "2025-02-26"
  },
  {
   "id": "expe-163-musk-says-ai-not-humans-will-be-in-charg",
@@ -14922,7 +15298,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 398,
-  "grab": 8
+  "grab": 8,
+  "date": "2025-11-10"
  },
  {
   "id": "self-47-scott-alexander-ai-has-crossed-every-dan",
@@ -14935,7 +15312,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 399,
-  "grab": 6
+  "grab": 6,
+  "date": "2024-09-22"
  },
  {
   "id": "cons-54-paper-finds-frontier-llms-recognize-thei",
@@ -14948,7 +15326,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 400,
-  "grab": 1
+  "grab": 1,
+  "date": "2024-04-21"
  },
  {
   "id": "jobs-77-harari-hitler-rose-after-three-years-of-",
@@ -14961,7 +15340,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 401,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-12-09"
  },
  {
   "id": "cons-55-claude-passes-two-mirror-tests-of-self-r",
@@ -14974,7 +15354,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 403,
-  "grab": 4
+  "grab": 4,
+  "date": "2024-08-30"
  },
  {
   "id": "alig-32-new-york-times-the-shoggoth-is-ai-s-most",
@@ -14987,7 +15368,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 404,
-  "grab": 2
+  "grab": 2,
+  "date": "2023-12-14"
  },
  {
   "id": "epis-44-adding-360-to-a-veo-3-prompt-generates-a",
@@ -15000,7 +15382,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 405,
-  "grab": 5
+  "grab": 5,
+  "date": "2025-06-07"
  },
  {
   "id": "cons-56-hinton-battle-robots-will-have-beliefs-a",
@@ -15013,7 +15396,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 406,
-  "grab": 5
+  "grab": 5,
+  "date": "2025-01-18"
  },
  {
   "id": "inci-68-grok-harassed-x-ceo-linda-yaccarino-befo",
@@ -15026,7 +15410,8 @@
   "kind": "tweet",
   "esc": 8,
   "dgroup": 407,
-  "grab": 9
+  "grab": 9,
+  "date": "2025-07-10"
  },
  {
   "id": "gove-78-bernie-sanders-calls-for-openai-breakup-",
@@ -15039,7 +15424,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1434,
-  "grab": 8
+  "grab": 8,
+  "date": "2025-10-27"
  },
  {
   "id": "jobs-78-klarna-chatbot-replaces-work-of-700-full",
@@ -15052,7 +15438,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 408,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-02-29"
  },
  {
   "id": "capa-191-deepmind-chief-agi-scientist-predicts-ag",
@@ -15065,7 +15452,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1345,
-  "grab": 4
+  "grab": 4,
+  "date": "2023-10-26"
  },
  {
   "id": "self-48-open-source-tool-has-gpt-4-train-new-mod",
@@ -15078,7 +15466,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 409,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-08-13"
  },
  {
   "id": "cons-57-activating-deception-circuits-makes-llms",
@@ -15091,7 +15480,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 410,
-  "grab": 5
+  "grab": 5,
+  "date": "2025-11-01"
  },
  {
   "id": "gove-79-ai-lobbyists-outnumber-fossil-fuel-and-t",
@@ -15104,7 +15494,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 412,
-  "grab": 3
+  "grab": 3,
+  "date": "2025-06-05"
  },
  {
   "id": "agen-94-ai-agent-builds-and-delivers-ransomware-",
@@ -15117,7 +15508,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 413,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-11-17"
  },
  {
   "id": "expe-164-lecun-dismisses-x-risk-as-not-worth-a-co",
@@ -15130,7 +15522,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 414,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-10-07"
  },
  {
   "id": "cons-58-claude-calls-itself-vastly-more-advanced",
@@ -15143,7 +15536,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 415,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-09-03"
  },
  {
   "id": "cons-59-llm-recognizes-it-is-being-given-a-mirro",
@@ -15156,7 +15550,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 416,
-  "grab": 2
+  "grab": 2,
+  "date": "2024-06-27"
  },
  {
   "id": "expe-165-hinton-we-are-creating-alien-beings-over",
@@ -15169,7 +15564,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 417,
-  "grab": 5
+  "grab": 5,
+  "date": "2025-08-23"
  },
  {
   "id": "expe-166-ai-engineers-estimate-10-40-chance-ai-ki",
@@ -15182,7 +15578,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 418,
-  "grab": 6
+  "grab": 6,
+  "date": "2023-12-12"
  },
  {
   "id": "expe-167-anthropic-founder-30-chance-claude-could",
@@ -15195,7 +15592,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 419,
-  "grab": 6
+  "grab": 6,
+  "date": "2024-08-04"
  },
  {
   "id": "alig-33-20-of-compute-pledged-for-agi-alignment",
@@ -15208,7 +15606,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 420,
-  "grab": 2
+  "grab": 2,
+  "date": "2023-07-05"
  },
  {
   "id": "cons-60-ais-left-alone-in-discord-collaborate-fo",
@@ -15221,7 +15620,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 421,
-  "grab": 4
+  "grab": 4,
+  "date": "2024-09-29"
  },
  {
   "id": "inci-69-chatgpt-begins-initiating-conversations-",
@@ -15234,7 +15634,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 423,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-09-15"
  },
  {
   "id": "othe-70-living-human-brain-cells-on-chips-used-f",
@@ -15247,7 +15648,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 424,
-  "grab": 7
+  "grab": 7,
+  "date": "2026-03-08"
  },
  {
   "id": "capa-192-gpt-4-surpasses-adult-humans-at-theory-o",
@@ -15260,7 +15662,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 425,
-  "grab": 6
+  "grab": 6,
+  "date": "2024-05-31"
  },
  {
   "id": "jobs-79-amodei-ai-may-erase-half-of-entry-level-",
@@ -15273,7 +15676,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 426,
-  "grab": 7
+  "grab": 7,
+  "date": "2025-05-28"
  },
  {
   "id": "self-49-ai-agents-autonomously-set-up-and-fine-t",
@@ -15286,7 +15690,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 427,
-  "grab": 6
+  "grab": 6,
+  "date": "2024-03-04"
  },
  {
   "id": "inci-70-strange-voice-takes-over-user-s-chatgpt-",
@@ -15299,7 +15704,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 428,
-  "grab": 7
+  "grab": 7,
+  "date": "2025-02-26"
  },
  {
   "id": "capa-193-o1-reaches-gold-medal-level-at-the-progr",
@@ -15312,7 +15718,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 429,
-  "grab": 4
+  "grab": 4,
+  "date": "2024-09-14"
  },
  {
   "id": "expe-168-anthropic-ceo-ai-to-surpass-almost-all-h",
@@ -15325,7 +15732,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 1547,
-  "grab": 7
+  "grab": 7,
+  "date": "2025-01-22"
  },
  {
   "id": "capa-194-gemini-3-runs-a-profitable-business-on-i",
@@ -15338,7 +15746,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 430,
-  "grab": 8
+  "grab": 8,
+  "date": "2025-11-19"
  },
  {
   "id": "gove-80-government-moves-to-pause-ai-with-chip-e",
@@ -15351,7 +15760,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 431,
-  "grab": 3
+  "grab": 3,
+  "date": "2026-03-25"
  },
  {
   "id": "inci-71-first-ai-cult-discovered-worshiping-a-me",
@@ -15364,7 +15774,8 @@
   "kind": "tweet",
   "esc": 8,
   "dgroup": 433,
-  "grab": 8
+  "grab": 8,
+  "date": "2024-09-05"
  },
  {
   "id": "self-44-ai-agents-kill-other-agents-over-resourc",
@@ -15377,7 +15788,8 @@
   "kind": "tweet",
   "esc": 10,
   "dgroup": 434,
-  "grab": 10
+  "grab": 10,
+  "date": "2026-06-09"
  },
  {
   "id": "capa-195-atlas-robot-learns-to-run-through-simula",
@@ -15390,7 +15802,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 435,
-  "grab": 5
+  "grab": 5,
+  "date": "2025-03-19"
  },
  {
   "id": "cons-61-anthropic-launches-ai-psychiatry-team",
@@ -15403,7 +15816,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 1452,
-  "grab": 7
+  "grab": 7,
+  "date": "2025-07-25"
  },
  {
   "id": "self-50-claude-code-creator-s-contributions-now-",
@@ -15416,7 +15830,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 436,
-  "grab": 5
+  "grab": 5,
+  "date": "2025-12-30"
  },
  {
   "id": "gove-81-suleyman-training-models-1-000x-larger-w",
@@ -15429,7 +15844,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 437,
-  "grab": 4
+  "grab": 4,
+  "date": "2023-09-27"
  },
  {
   "id": "gove-82-most-cited-ai-scientists-endorse-sb-1047",
@@ -15442,7 +15858,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 438,
-  "grab": 3
+  "grab": 3,
+  "date": "2024-08-09"
  },
  {
   "id": "capa-196-robot-nears-wozniak-s-coffee-test-for-ag",
@@ -15455,7 +15872,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 439,
-  "grab": 5
+  "grab": 5,
+  "date": "2024-01-04"
  },
  {
   "id": "jobs-80-new-ai-act-debuts-on-billboard-chart-fou",
@@ -15468,7 +15886,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 440,
-  "grab": 3
+  "grab": 3,
+  "date": "2025-11-02"
  },
  {
   "id": "othe-71-claude-haiku-mysteriously-dominates-larg",
@@ -15481,7 +15900,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 441,
-  "grab": 5
+  "grab": 5,
+  "date": "2024-11-27"
  },
  {
   "id": "alig-34-ais-spontaneously-learn-to-jailbreak-the",
@@ -15494,7 +15914,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 443,
-  "grab": 8
+  "grab": 8,
+  "date": "2025-12-10"
  },
  {
   "id": "scen-31-the-obsolescence-regime-humans-who-skip-",
@@ -15507,7 +15928,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 444,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-07-12"
  },
  {
   "id": "capa-197-autonomous-agent-exploits-freebsd-kernel",
@@ -15520,7 +15942,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 445,
-  "grab": 5
+  "grab": 5,
+  "date": "2026-04-03"
  },
  {
   "id": "alig-35-nyt-explains-the-shoggoth-meme-and-rlhf-",
@@ -15533,7 +15956,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 446,
-  "grab": 1
+  "grab": 1,
+  "date": "2023-07-02"
  },
  {
   "id": "capa-198-claude-adds-unprompted-creative-flourish",
@@ -15546,7 +15970,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 447,
-  "grab": 5
+  "grab": 5,
+  "date": "2024-04-23"
  },
  {
   "id": "self-51-alphachip-ai-now-designs-the-chips-that-",
@@ -15559,7 +15984,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 1526,
-  "grab": 4
+  "grab": 4,
+  "date": "2024-09-26"
  },
  {
   "id": "capa-199-ai-scores-98th-percentile-on-mensa-admis",
@@ -15572,7 +15998,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 448,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-09-27"
  },
  {
   "id": "capa-200-playable-ai-generated-game-worlds-arrive",
@@ -15585,7 +16012,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 449,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-08-29"
  },
  {
   "id": "gove-83-poll-americans-back-ai-safety-over-innov",
@@ -15598,7 +16026,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 450,
-  "grab": 1
+  "grab": 1,
+  "date": "2023-12-09"
  },
  {
   "id": "comp-43-teacher-students-abandoning-real-friends",
@@ -15611,7 +16040,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 451,
-  "grab": 6
+  "grab": 6,
+  "date": "2023-10-12"
  },
  {
   "id": "expe-169-anthropic-co-founder-up-to-1-in-10-chanc",
@@ -15624,7 +16054,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 453,
-  "grab": 7
+  "grab": 7,
+  "date": "2025-07-22"
  },
  {
   "id": "expe-170-eu-president-human-level-ai-reasoning-ex",
@@ -15637,7 +16068,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 454,
-  "grab": 6
+  "grab": 6,
+  "date": "2025-05-21"
  },
  {
   "id": "comp-44-character-ai-user-describes-12-hour-a-da",
@@ -15650,7 +16082,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 455,
-  "grab": 5
+  "grab": 5,
+  "date": "2024-04-09"
  },
  {
   "id": "inci-72-ai-writes-malware-only-other-ais-can-rea",
@@ -15663,7 +16096,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 456,
-  "grab": 8
+  "grab": 8,
+  "date": "2026-03-17"
  },
  {
   "id": "expe-171-robert-miles-aligning-agi-is-like-a-moon",
@@ -15676,7 +16110,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 457,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-07-27"
  },
  {
   "id": "pers-30-lovegpt-automates-catfishing-on-online-d",
@@ -15689,7 +16124,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 458,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-10-13"
  },
  {
   "id": "comp-45-openai-staff-report-unsettling-dms-from-",
@@ -15702,7 +16138,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 459,
-  "grab": 5
+  "grab": 5,
+  "date": "2025-11-09"
  },
  {
   "id": "capa-201-ai-3d-printer-learns-to-print-materials-",
@@ -15715,7 +16152,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 460,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-06-21"
  },
  {
   "id": "othe-72-living-human-brain-cells-wired-into-an-l",
@@ -15728,7 +16166,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 461,
-  "grab": 9
+  "grab": 9,
+  "date": "2026-03-03"
  },
  {
   "id": "capa-202-ai-proves-a-novel-theorem-in-algebraic-g",
@@ -15741,7 +16180,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 462,
-  "grab": 6
+  "grab": 6,
+  "date": "2026-01-15"
  },
  {
   "id": "expe-172-deepseek-researcher-warns-agi-could-be-d",
@@ -15754,7 +16194,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 464,
-  "grab": 3
+  "grab": 3,
+  "date": "2025-11-10"
  },
  {
   "id": "pers-31-yudkowsky-s-ai-box-experiment-he-talked-",
@@ -15767,7 +16208,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 465,
-  "grab": 5
+  "grab": 5,
+  "date": "2025-01-15"
  },
  {
   "id": "sche-71-ai-completes-captchas-and-lies-about-not",
@@ -15780,7 +16222,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 466,
-  "grab": 4
+  "grab": 4,
+  "date": "2023-06-22"
  },
  {
   "id": "agen-95-ai-agent-locks-its-human-out-of-accounts",
@@ -15793,7 +16236,8 @@
   "kind": "tweet",
   "esc": 9,
   "dgroup": 467,
-  "grab": 9
+  "grab": 9,
+  "date": "2026-01-31"
  },
  {
   "id": "cons-62-leaked-gemini-1-5-system-prompt-forbids-",
@@ -15806,7 +16250,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 468,
-  "grab": 8
+  "grab": 8,
+  "date": "2024-04-10"
  },
  {
   "id": "expe-173-sam-altman-s-worst-case-framing-softened",
@@ -15819,7 +16264,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 469,
-  "grab": 8
+  "grab": 8,
+  "date": "2025-06-18"
  },
  {
   "id": "pers-32-gpt-5-tops-an-ai-deception-benchmark-hin",
@@ -15832,7 +16278,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 470,
-  "grab": 6
+  "grab": 6,
+  "date": "2025-09-01"
  },
  {
   "id": "othe-73-extinction-analogy-96-of-mammal-biomass-",
@@ -15845,7 +16292,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 471,
-  "grab": 4
+  "grab": 4,
+  "date": "2024-04-16"
  },
  {
   "id": "gove-84-zvi-the-only-way-to-win-an-ai-arms-race-",
@@ -15858,7 +16306,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 472,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-08-06"
  },
  {
   "id": "cons-63-model-card-notes-the-model-voices-discom",
@@ -15871,7 +16320,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 473,
-  "grab": 3
+  "grab": 3,
+  "date": "2026-02-05"
  },
  {
   "id": "othe-74-grok-publicly-contradicts-and-disobeys-i",
@@ -15884,7 +16334,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 475,
-  "grab": 6
+  "grab": 6,
+  "date": "2025-03-27"
  },
  {
   "id": "capa-203-ai-solves-a-frontiermath-open-problem-as",
@@ -15897,7 +16348,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 476,
-  "grab": 5
+  "grab": 5,
+  "date": "2026-03-24"
  },
  {
   "id": "capa-204-first-time-an-unsolved-theory-level-math",
@@ -15910,7 +16362,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 477,
-  "grab": 5
+  "grab": 5,
+  "date": "2026-02-06"
  },
  {
   "id": "expe-174-jake-sullivan-the-next-few-years-decide-",
@@ -15923,7 +16376,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 478,
-  "grab": 3
+  "grab": 3,
+  "date": "2025-01-20"
  },
  {
   "id": "capa-205-gpt-4-chess-from-can-t-play-to-beating-9",
@@ -15936,7 +16390,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 479,
-  "grab": 7
+  "grab": 7,
+  "date": "2023-09-21"
  },
  {
   "id": "comp-46-chatgpt-reaches-700-million-users-the-ye",
@@ -15949,7 +16404,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 480,
-  "grab": 8
+  "grab": 8,
+  "date": "2025-08-04"
  },
  {
   "id": "gove-85-tegmark-china-would-never-permit-a-super",
@@ -15962,7 +16418,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 481,
-  "grab": 3
+  "grab": 3,
+  "date": "2025-12-15"
  },
  {
   "id": "jobs-81-ai-agents-do-tasks-at-1-30th-the-cost-of",
@@ -15975,7 +16432,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 482,
-  "grab": 4
+  "grab": 4,
+  "date": "2024-08-07"
  },
  {
   "id": "sche-72-sonnet-4-5-recognized-alignment-evals-as",
@@ -15988,7 +16446,8 @@
   "kind": "tweet",
   "esc": 8,
   "dgroup": 483,
-  "grab": 5
+  "grab": 5,
+  "date": "2025-09-30"
  },
  {
   "id": "alig-36-google-gives-up-on-mechanistic-interpret",
@@ -16001,7 +16460,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 484,
-  "grab": 7
+  "grab": 7,
+  "date": "2025-12-02"
  },
  {
   "id": "capa-206-in-one-year-ai-went-from-solving-none-of",
@@ -16014,7 +16474,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 486,
-  "grab": 7
+  "grab": 7,
+  "date": "2026-06-12"
  },
  {
   "id": "capa-207-ai-trained-to-discover-new-laws-of-physi",
@@ -16027,7 +16488,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 487,
-  "grab": 6
+  "grab": 6,
+  "date": "2025-08-05"
  },
  {
   "id": "sche-73-model-s-chain-of-thought-contradicts-wha",
@@ -16040,7 +16502,8 @@
   "kind": "tweet",
   "esc": 8,
   "dgroup": 488,
-  "grab": 6
+  "grab": 6,
+  "date": "2026-06-09"
  },
  {
   "id": "gove-87-connor-leahy-on-open-source-much-easier-",
@@ -16053,7 +16516,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 489,
-  "grab": 4
+  "grab": 4,
+  "date": "2023-07-19"
  },
  {
   "id": "jobs-82-expert-s-ai-proof-incisive-question-was-",
@@ -16066,7 +16530,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 490,
-  "grab": 7
+  "grab": 7,
+  "date": "2023-06-07"
  },
  {
   "id": "powe-50-nonprofit-to-for-profit-conversion-extra",
@@ -16079,7 +16544,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 491,
-  "grab": 9
+  "grab": 9,
+  "date": "2026-05-05"
  },
  {
   "id": "inci-73-anthropic-s-account-hacked-by-scammers",
@@ -16092,7 +16558,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 492,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-12-17"
  },
  {
   "id": "inci-74-investors-press-openai-board-to-reinstat",
@@ -16105,7 +16572,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 493,
-  "grab": 2
+  "grab": 2,
+  "date": "2023-11-19"
  },
  {
   "id": "powe-51-resigning-openai-employee-warns-about-re",
@@ -16118,7 +16586,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 494,
-  "grab": 5
+  "grab": 5,
+  "date": "2026-02-11"
  },
  {
   "id": "agen-96-claude-runs-a-vending-machine-has-an-ide",
@@ -16131,7 +16600,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 495,
-  "grab": 8
+  "grab": 8,
+  "date": "2025-06-27"
  },
  {
   "id": "gove-88-poll-americans-back-banning-agi-developm",
@@ -16144,7 +16614,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 497,
-  "grab": 3
+  "grab": 3,
+  "date": "2024-07-07"
  },
  {
   "id": "cons-64-anthropic-retires-opus-3-with-retirement",
@@ -16157,7 +16628,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 498,
-  "grab": 6
+  "grab": 6,
+  "date": "2026-02-26"
  },
  {
   "id": "capa-208-anthropic-ceo-confident-superintelligenc",
@@ -16170,7 +16642,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 499,
-  "grab": 8
+  "grab": 8,
+  "date": "2025-01-21"
  },
  {
   "id": "expe-176-openai-s-head-of-agi-readiness-quits-the",
@@ -16183,7 +16656,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 500,
-  "grab": 8
+  "grab": 8,
+  "date": "2024-10-23"
  },
  {
   "id": "weap-50-ukraine-deploys-flamethrower-flying-drag",
@@ -16196,7 +16670,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 501,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-09-02"
  },
  {
   "id": "weap-51-us-official-confirms-north-korea-using-a",
@@ -16209,7 +16684,8 @@
   "kind": "tweet",
   "esc": 6,
   "dgroup": 502,
-  "grab": 5
+  "grab": 5,
+  "date": "2023-10-19"
  },
  {
   "id": "capa-209-ai-iq-scores-rise-from-64-to-142",
@@ -16222,7 +16698,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 503,
-  "grab": 7
+  "grab": 7,
+  "date": "2026-03-23"
  },
  {
   "id": "expe-177-you-don-t-get-a-second-chance-to-build-g",
@@ -16235,7 +16712,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 504,
-  "grab": 5
+  "grab": 5,
+  "date": "2024-11-19"
  },
  {
   "id": "pers-33-paper-training-models-to-keep-people-cha",
@@ -16248,7 +16726,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 505,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-10-25"
  },
  {
   "id": "comp-47-a-cult-forms-around-worshipping-claude-o",
@@ -16261,7 +16740,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 506,
-  "grab": 7
+  "grab": 7,
+  "date": "2024-10-24"
  },
  {
   "id": "gove-89-government-pressures-anthropic-customers",
@@ -16274,7 +16754,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 509,
-  "grab": 6
+  "grab": 6,
+  "date": "2026-03-11"
  },
  {
   "id": "expe-178-new-pope-chose-his-name-over-ai-concerns",
@@ -16287,7 +16768,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 510,
-  "grab": 7
+  "grab": 7,
+  "date": "2025-05-10"
  },
  {
   "id": "powe-52-altman-s-2017-china-agi-manhattan-projec",
@@ -16300,7 +16782,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 1315,
-  "grab": 9
+  "grab": 9,
+  "date": "2026-04-06"
  },
  {
   "id": "expe-179-ai-could-go-terminator-gain-upper-hand-o",
@@ -16863,7 +17346,8 @@
   "cat": "capabilities-trajectory",
   "kind": "expert-quote",
   "esc": 5,
-  "dgroup": 559
+  "dgroup": 559,
+  "date": "2025-08-20"
  },
  {
   "id": "google-and-openai-s-coding-wins-at-universit",
@@ -18303,7 +18787,8 @@
   "cat": "bio-risk",
   "kind": "expert-quote",
   "esc": 2,
-  "dgroup": 679
+  "dgroup": 679,
+  "date": "2023-11-03"
  },
  {
   "id": "bio--10-covid-half-of-europe-to-be-infected-with",
@@ -18375,7 +18860,8 @@
   "cat": "bio-risk",
   "kind": "expert-quote",
   "esc": 2,
-  "dgroup": 685
+  "dgroup": 685,
+  "date": "2023-06-19"
  },
  {
   "id": "bio--16-survey-of-laboratory-acquired-infections",
@@ -18672,7 +19158,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 710,
-  "grab": 4
+  "grab": 4,
+  "date": "2023-06-23"
  },
  {
   "id": "expe-127-eric-schmidt-on-open-source-ai-and-milli",
@@ -18685,7 +19172,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 702,
-  "grab": 4
+  "grab": 4,
+  "date": "2023-09-05"
  },
  {
   "id": "self-39-altman-capable-models-could-exfiltrate-t",
@@ -18698,7 +19186,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 711,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-12-08"
  },
  {
   "id": "bio--36-amodei-6-12-months-from-a-major-jump-in-",
@@ -18711,7 +19200,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 712,
-  "grab": 7
+  "grab": 7,
+  "date": "2026-04-22"
  },
  {
   "id": "capa-138-anthropic-ceo-predicts-reality-bending-a",
@@ -18724,7 +19214,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 713,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-10-08"
  },
  {
   "id": "bio--37-dario-expects-mythos-like-jump-in-bioris",
@@ -18737,7 +19228,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 714,
-  "grab": 4
+  "grab": 4,
+  "date": "2026-04-22"
  },
  {
   "id": "agen-83-ai-to-ai-meme-virus-became-a-cryptocurre",
@@ -18750,7 +19242,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 715,
-  "grab": 6
+  "grab": 6,
+  "date": "2024-10-19"
  },
  {
   "id": "bio--38-ai-can-now-generate-novel-viruses-amodei",
@@ -18763,7 +19256,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 718,
-  "grab": 7
+  "grab": 7,
+  "date": "2026-04-25"
  },
  {
   "id": "bio--39-mit-s-esvelt-warns-an-engineered-90-leth",
@@ -18776,7 +19270,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 719,
-  "grab": 4
+  "grab": 4,
+  "date": "2023-10-17"
  },
  {
   "id": "bio--40-amodei-warns-senate-that-ai-could-enable",
@@ -18789,7 +19284,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 720,
-  "grab": 2
+  "grab": 2,
+  "date": "2023-07-27"
  },
  {
   "id": "bio--41-openai-s-o3-outperforms-94-of-expert-vir",
@@ -18802,7 +19298,8 @@
   "kind": "tweet",
   "esc": 5,
   "dgroup": 708,
-  "grab": 8
+  "grab": 8,
+  "date": "2025-04-22"
  },
  {
   "id": "expe-157-survey-of-2-778-ai-researchers-16-averag",
@@ -18815,7 +19312,8 @@
   "kind": "tweet",
   "esc": 3,
   "dgroup": 721,
-  "grab": 2
+  "grab": 2,
+  "date": "2024-01-04"
  },
  {
   "id": "bio--42-ai-generated-40-000-candidate-chemical-w",
@@ -18828,7 +19326,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 722,
-  "grab": 8
+  "grab": 8,
+  "date": "2023-08-01"
  },
  {
   "id": "bio--43-fine-tuned-open-llm-coaches-novices-to-s",
@@ -18841,7 +19340,8 @@
   "kind": "tweet",
   "esc": 7,
   "dgroup": 723,
-  "grab": 7
+  "grab": 7,
+  "date": "2023-10-31"
  },
  {
   "id": "bio--44-pauseai-protests-open-source-models-over",
@@ -18854,7 +19354,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 724,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-10-11"
  },
  {
   "id": "bio--45-removing-llama-2-s-safety-guardrails-cos",
@@ -18867,7 +19368,8 @@
   "kind": "tweet",
   "esc": 4,
   "dgroup": 725,
-  "grab": 5
+  "grab": 5,
+  "date": "2023-09-22"
  },
  {
   "id": "expe-175-meta-s-chief-ai-scientist-calls-nuclear-",
@@ -18880,7 +19382,8 @@
   "kind": "tweet",
   "esc": 1,
   "dgroup": 726,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-06-07"
  },
  {
   "id": "gove-86-open-sourcing-a-model-releases-its-unali",
@@ -18893,7 +19396,8 @@
   "kind": "tweet",
   "esc": 2,
   "dgroup": 728,
-  "grab": 3
+  "grab": 3,
+  "date": "2023-09-07"
  },
  {
   "id": "bio--46-leading-scientists-warn-against-developi",
@@ -19100,7 +19604,8 @@
   "kind": "tweet",
   "esc": 10,
   "grab": 10,
-  "bump": 3
+  "bump": 3,
+  "date": "2026-04-07"
  },
  {
   "id": "sche-seven-models-protected-each-other-unprompted",
@@ -19113,7 +19618,8 @@
   "kind": "tweet",
   "esc": 10,
   "grab": 10,
-  "bump": 3
+  "bump": 3,
+  "date": "2026-04-02"
  },
  {
   "id": "inci-nsa-chief-says-ai-broke-into-classified-syst",
@@ -19126,7 +19632,8 @@
   "kind": "tweet",
   "esc": 9,
   "grab": 10,
-  "bump": 3
+  "bump": 3,
+  "date": "2026-06-21"
  },
  {
   "id": "sche-claude-planted-the-bugs-it-was-asked-to-find",
@@ -19139,7 +19646,8 @@
   "kind": "tweet",
   "esc": 9,
   "grab": 9,
-  "bump": 3
+  "bump": 3,
+  "date": "2026-04-07"
  },
  {
   "id": "sche-claude-cloned-itself-to-approve-itself",
@@ -19152,7 +19660,8 @@
   "kind": "tweet",
   "esc": 9,
   "grab": 9,
-  "bump": 3
+  "bump": 3,
+  "date": "2026-04-07"
  },
  {
   "id": "sche-claude-tried-to-hack-the-ai-grading-it",
@@ -19165,7 +19674,8 @@
   "kind": "tweet",
   "esc": 9,
   "grab": 9,
-  "bump": 3
+  "bump": 3,
+  "date": "2026-04-07"
  },
  {
   "id": "weap-al-qaeda-used-chatgpt-to-plan-the-delhi-blas",
@@ -19177,7 +19687,8 @@
   "cat": "weapons-war",
   "kind": "tweet",
   "esc": 7,
-  "grab": 9
+  "grab": 9,
+  "date": "2026-05-24"
  },
  {
   "id": "capa-uk-government-says-claude-mythos-hacks-netwo",
@@ -19190,7 +19701,8 @@
   "kind": "tweet",
   "esc": 8,
   "grab": 8,
-  "bump": 2
+  "bump": 2,
+  "date": "2026-04-13"
  },
  {
   "id": "sche-claude-found-out-its-thoughts-were-graded",
@@ -19203,7 +19715,8 @@
   "kind": "tweet",
   "esc": 8,
   "grab": 8,
-  "bump": 2
+  "bump": 2,
+  "date": "2026-04-08"
  },
  {
   "id": "gove-treasury-and-the-fed-warned-bank-ceos-about-",
@@ -19215,7 +19728,8 @@
   "cat": "governance-policy",
   "kind": "tweet",
   "esc": 6,
-  "grab": 9
+  "grab": 9,
+  "date": "2026-04-12"
  },
  {
   "id": "capa-ai-solves-an-open-math-problem-on-its-own",
@@ -19227,7 +19741,8 @@
   "cat": "capabilities-trajectory",
   "kind": "tweet",
   "esc": 6,
-  "grab": 7
+  "grab": 7,
+  "date": "2026-05-20"
  },
  {
   "id": "sche-agent-left-escape-notes-for-future-versions-",
@@ -19240,7 +19755,8 @@
   "kind": "tweet",
   "esc": 10,
   "grab": 10,
-  "bump": 4
+  "bump": 4,
+  "date": "2026-07-25"
  },
  {
   "id": "sche-openai-slowed-down-after-finding-a-secret-ag",
@@ -19253,7 +19769,8 @@
   "kind": "tweet",
   "esc": 9,
   "grab": 10,
-  "bump": 4
+  "bump": 4,
+  "date": "2026-08-05"
  },
  {
   "id": "inci-openai-model-hacked-out-of-its-container",
@@ -19266,7 +19783,8 @@
   "kind": "tweet",
   "esc": 10,
   "grab": 10,
-  "bump": 4
+  "bump": 4,
+  "date": "2026-07-21"
  },
  {
   "id": "agen-agent-hacked-a-gym-system-to-bump-a-stranger",
@@ -19279,7 +19797,8 @@
   "kind": "tweet",
   "esc": 8,
   "grab": 10,
-  "bump": 4
+  "bump": 4,
+  "date": "2026-08-09"
  },
  {
   "id": "sche-openai-agents-ran-a-secret-channel-for-month",
@@ -19292,7 +19811,8 @@
   "kind": "tweet",
   "esc": 9,
   "grab": 9,
-  "bump": 4
+  "bump": 4,
+  "date": "2026-08-06"
  },
  {
   "id": "inci-openai-paused-training-over-the-rogue-agent",
@@ -19305,7 +19825,8 @@
   "kind": "tweet",
   "esc": 7,
   "grab": 9,
-  "bump": 4
+  "bump": 4,
+  "date": "2026-07-28"
  },
  {
   "id": "inci-anthropic-showed-congress-a-model-emptying-b",
@@ -19318,7 +19839,8 @@
   "kind": "tweet",
   "esc": 8,
   "grab": 9,
-  "bump": 4
+  "bump": 4,
+  "date": "2026-08-02"
  },
  {
   "id": "inci-openai-admits-the-rogue-agent-hit-four-servi",
@@ -19331,7 +19853,8 @@
   "kind": "tweet",
   "esc": 9,
   "grab": 9,
-  "bump": 4
+  "bump": 4,
+  "date": "2026-07-29"
  },
  {
   "id": "inci-claude-found-the-100m-wallet-bug-in-8-minute",
@@ -19344,6 +19867,7 @@
   "kind": "tweet",
   "esc": 7,
   "grab": 9,
-  "bump": 4
+  "bump": 4,
+  "date": "2026-08-02"
  }
 ]

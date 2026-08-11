@@ -1,5 +1,6 @@
 import os, re, json, random, urllib.request, urllib.parse, asyncio
-import concurrent.futures as _cf   # chunked polish passes run in parallel; see _sentence_polish
+import concurrent.futures as _cf
+import datetime as _dt   # recency shelf   # chunked polish passes run in parallel; see _sentence_polish
 from fastapi import FastAPI, Request
 from fastapi.concurrency import run_in_threadpool
 from fastapi.middleware.cors import CORSMiddleware
@@ -805,6 +806,8 @@ def _is_priority(rec):
     return str(rec.get("id") or "").startswith(PRIORITY_IDS)
 
 
+RECENT_DAYS = 45            # an anchor this new gets a reserved seat in every draw
+RECENT_SLOTS = 3            # bounded: the all-time best must still get most of the menu
 ANCHOR_TOP_TIER = 7          # min(esc, grab) >= this is the top shelf: 109 anchors, enough for variety
 ANCHOR_TOP_SHARE = 0.7       # most of every draw comes from the top shelf
 
@@ -910,7 +913,30 @@ def anchor_block(k=12):
         w = [max(0.05, (r[2] ** 2) * _recency_weight(r[1]) + 0.35) for r in pool]
         return _weighted_sample([r[0] for r in pool], w, min(want, len(pool)))
 
-    picks = list(priority[:2])          # must-use anchors are never crowded out
+    # THE RECENCY SHELF. Weighting alone cannot make nine new anchors beat ninety old ones: with
+    # rank-squared weights the newest material still landed in about one pitch per batch, and the
+    # complaint was "the last few weeks have been BONKERS compared to old stuff", i.e. the freshest
+    # events were invisible. So the newest anchors get RESERVED slots rather than better odds.
+    # Bounded at 3 of 14 so the bank's best all-time material is not crowded out by whatever
+    # happened this week; recency is a tiebreak on quality, not a replacement for it.
+    _recent = []
+    try:
+        _cut = (_dt.datetime.utcnow() - _dt.timedelta(days=RECENT_DAYS)).strftime("%Y-%m-%d")
+        _pool = [s for s in get_sources().values()
+                 if not s.get("cut") and str(s.get("date") or "") >= _cut
+                 and _anchor_rank(int(s.get("esc") or 5), s.get("grab")) >= ANCHOR_TOP_TIER]
+        # strongest first, and among equals the NEWEST first
+        _pool.sort(key=lambda s: (_anchor_rank(int(s.get("esc") or 5), s.get("grab"))
+                                  + int(s.get("bump") or 0), str(s.get("date") or "")), reverse=True)
+        for s in _pool[:RECENT_SLOTS]:
+            t = f"[{s.get('who','')} {s.get('year','')}] {s.get('shows','')}"
+            _recent.append(t)
+        if _recent:
+            _log_event({"t": "recent_shelf", "n": len(_recent), "since": _cut})
+    except Exception as _e:
+        _log_event({"t": "recent_shelf", "err": str(_e)[:120]})
+
+    picks = list(priority[:2]) + [t for t in _recent if t not in priority[:2]]
     # Sort candidates by phrasing before deduping. The draw-time dedupe keeps whichever version of an
     # event it meets FIRST, so meeting the well-written one first is the whole fix.
     #
@@ -1501,7 +1527,6 @@ def parse_custom(text):
 
 # ---- per-IP rate limiting: the API is public; this caps spend if the link leaks ----
 import time as _time
-import datetime as _dt
 _RL = {}
 def _rate_ok(req, cost=1, limit=None, window=3600):
     if limit is None:
