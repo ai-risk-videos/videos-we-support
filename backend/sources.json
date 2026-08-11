@@ -19099,7 +19099,8 @@
   "cat": "scheming-deception",
   "kind": "tweet",
   "esc": 10,
-  "grab": 10
+  "grab": 10,
+  "bump": 3
  },
  {
   "id": "sche-seven-models-protected-each-other-unprompted",
@@ -19111,7 +19112,8 @@
   "cat": "scheming-deception",
   "kind": "tweet",
   "esc": 10,
-  "grab": 10
+  "grab": 10,
+  "bump": 3
  },
  {
   "id": "inci-nsa-chief-says-ai-broke-into-classified-syst",
@@ -19123,7 +19125,8 @@
   "cat": "incidents",
   "kind": "tweet",
   "esc": 9,
-  "grab": 10
+  "grab": 10,
+  "bump": 3
  },
  {
   "id": "sche-claude-planted-the-bugs-it-was-asked-to-find",
@@ -19135,7 +19138,8 @@
   "cat": "scheming-deception",
   "kind": "tweet",
   "esc": 9,
-  "grab": 9
+  "grab": 9,
+  "bump": 3
  },
  {
   "id": "sche-claude-cloned-itself-to-approve-itself",
@@ -19147,7 +19151,8 @@
   "cat": "scheming-deception",
   "kind": "tweet",
   "esc": 9,
-  "grab": 9
+  "grab": 9,
+  "bump": 3
  },
  {
   "id": "sche-claude-tried-to-hack-the-ai-grading-it",
@@ -19159,7 +19164,8 @@
   "cat": "scheming-deception",
   "kind": "tweet",
   "esc": 9,
-  "grab": 9
+  "grab": 9,
+  "bump": 3
  },
  {
   "id": "weap-al-qaeda-used-chatgpt-to-plan-the-delhi-blas",
@@ -19183,7 +19189,8 @@
   "cat": "capabilities-trajectory",
   "kind": "tweet",
   "esc": 8,
-  "grab": 8
+  "grab": 8,
+  "bump": 2
  },
  {
   "id": "sche-claude-found-out-its-thoughts-were-graded",
@@ -19195,7 +19202,8 @@
   "cat": "scheming-deception",
   "kind": "tweet",
   "esc": 8,
-  "grab": 8
+  "grab": 8,
+  "bump": 2
  },
  {
   "id": "gove-treasury-and-the-fed-warned-bank-ceos-about-",
