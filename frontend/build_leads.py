@@ -108,7 +108,7 @@ h1{font-size:26px;margin:0 0 4px;font-weight:800}.dot{color:var(--red)}
 .star.on{background:#2a2410;border-color:var(--gold);color:var(--gold)}
 .acts button:hover{border-color:var(--red2)}
 .pagev{color:#57515c;font-size:11px}
-.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:#1c1922;border:1px solid var(--line);color:var(--ink);padding:10px 16px;border-radius:10px;font-size:13.5px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:9}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);width:max-content;max-width:min(560px,calc(100vw - 32px));background:#1c1922;border:1px solid var(--line);color:var(--ink);padding:10px 16px;border-radius:10px;font-size:13.5px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:9}
 .toast.show{opacity:1}
 .chanbox{background:var(--surf);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:0 0 14px}
 .chantitle{font-weight:700;font-size:15px;margin-bottom:3px}
@@ -484,6 +484,22 @@ async function loadBrief(d,lead,btn){
   if(saved){briefCache[t]=saved;_bsave(t,saved);renderBrief(box,saved,t);return;}}
  loadBrief2(d,box,lead,"",btn); // no format prompt: the server shapes the pack from the transcript-derived channel profile it already has
 }
+// The backend's own words for a failure. `error` is the readable message (a safety-filter decline
+// explains itself there, with refusal:true); when `error` is only a short label like "brief failed",
+// `detail` says why.
+function apiErr(j){
+ if(!j)return "";
+ const e=String(j.error||"").trim(),d=String(j.detail||"").trim();
+ if(j.refusal||j.lost||!d)return e;
+ return e?(e+": "+d):d;
+}
+// What to show when a call came back without a result. A refusal or a lost job is shown as the server
+// wrote it (it already says what to do); anything else keeps the friendly line and adds the reason.
+function failText(j,generic){
+ if(j&&(j.refusal||j.lost)&&j.error)return String(j.error);
+ const why=apiErr(j);
+ return why?(generic+" (Server said: "+why.slice(0,220)+")"):generic;
+}
 async function loadBrief2(d,box,lead,fmt,btn){
  if(d._briefLoading)return;d._briefLoading=true;
  const t=ideaTitle(lead);
@@ -501,7 +517,7 @@ async function loadBrief2(d,box,lead,fmt,btn){
   if(r.status===429){box.innerHTML='<span class="simmsg simerr">Busy right now — try again in a minute.</span>';return;}
   const j=await r.json();
   if(j&&j.brief){briefCache[t]=j.brief;_bsave(t,j.brief);renderBrief(box,j.brief,t);if(currentPageId)saveArtifact(currentPageId,"brief",t,j.brief).then(ok=>{if(!ok&&isAdmin())toast("Heads up: couldn't save this pack to the page");});}
-  else box.innerHTML='<span class="simmsg simerr">Could not build it just now — try again in a moment.</span>';
+  else box.innerHTML='<span class="simmsg simerr">'+esc(failText(j,"Could not build it just now. Try again in a moment."))+'</span>';
  }catch(e){box.innerHTML='<span class="simmsg simerr">Took too long — try again in a moment.</span>';}
  finally{_stop();btn.textContent=old;btn.disabled=false;d._briefLoading=false;}
 }
@@ -556,7 +572,7 @@ async function loadScript2(d,box,lead,fmt,btn){
   if(r.status===429){box.innerHTML='<span class="simmsg simerr">Busy right now — try again in a minute.</span>';return;}
   const j=await r.json();
   if(j&&j.script){scriptCache[t]=j.script;_ssave(t,j.script);renderScript(box,j.script,t);if(currentPageId)saveArtifact(currentPageId,"script",t,j.script).then(ok=>{if(!ok&&isAdmin())toast("Heads up: couldn't save this script to the page");});}
-  else box.innerHTML='<span class="simmsg simerr">Could not write it just now — try again in a moment.</span>';
+  else box.innerHTML='<span class="simmsg simerr">'+esc(failText(j,"Could not write it just now. Try again in a moment."))+'</span>';
  }catch(e){box.innerHTML='<span class="simmsg simerr">Took too long — try again in a moment.</span>';}
  finally{_stop();btn.textContent=old;btn.disabled=false;d._scriptLoading=false;}
 }
@@ -588,7 +604,7 @@ let viewOrder=LEADS.map((_,i)=>i); // indices into LEADS in display order (tailo
 const $=s=>document.querySelector(s);
 function esc(s){return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")}
 function key(l){return l.slice(0,80)}
-let _t;function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(_t);_t=setTimeout(()=>t.classList.remove("show"),1600)}
+let _t;function toast(m,ms){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(_t);_t=setTimeout(()=>t.classList.remove("show"),ms||1600)} // ms: hold longer for a message people must read
 function save(){
  try{
   const k=JSON.stringify([...killed]),s=JSON.stringify([...starred]);
@@ -938,42 +954,72 @@ async function regenerate(mode){
 // generation now measures 200-340s, so a direct POST /custom fails roughly half the time: the browser
 // gets a 502 with no ideas, the code counts it as an empty batch, and the button quietly resets. That
 // is exactly the "processes, then nothing appears" report, and it hit the two bulk paths because only
-// fetchCustom had been converted. Start, poll, and fall back to the old single request if the job
-// route is unavailable.
+// fetchCustom had been converted. Start, poll, and use the old single request ONLY when the job route
+// itself cannot start.
+//
+// ONCE A JOB ID EXISTS IT IS NEVER ABANDONED FOR THE DIRECT ROUTE. This used to drop to POST /custom on
+// ANY error while polling. A full generation now takes ~455s, so that request always died at the 300s
+// cut, while the server paid for a second generation on top of the first, which was still running. A
+// failed poll (network blip, a proxy 502 page) is retried with backoff instead. A job the server no
+// longer knows (it restarted and lost it) is reported as lost so the user decides to start again; the
+// page never quietly starts a second paid run.
+const JOB_POLL_TRIES=5; // consecutive failed polls before giving up (waits 2s, 4s, 8s, 15s between them)
 async function customJob(body,onTick){
  const base=CUSTOM_API.replace(/\/custom$/,"");
+ const sleep=ms=>new Promise(res=>setTimeout(res,ms));
+ let job="";
  try{
   const st=await fetch(base+"/custom_start",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
   if(st.status===429)return {busy:true};
   if(!st.ok)throw new Error("start "+st.status);
-  const {job}=await st.json();
+  job=((await st.json())||{}).job||"";
   if(!job)throw new Error("no job id");
+ }catch(e){
+  return await customDirect(body); // the job route itself is unavailable: the one case for the direct route
+ }
   // A measured generation just took 1138s: longer bold lines (45-70 words now, up from ~32) mean more
   // output tokens per idea, and the escalation pass selects nearly every idea instead of none. At the
   // old 700s the client gave up on work the server went on to finish, which is the same class of bug
   // as the Railway proxy ceiling: throwing away a completed batch. 1800s, and the progress ticker
   // keeps counting so a long wait reads as progress rather than a hang.
   const deadline=Date.now()+1800000;
+  let fails=0;
   while(Date.now()<deadline){
-   await new Promise(res=>setTimeout(res,4000));
-   const pr=await fetch(base+"/custom_result?job="+encodeURIComponent(job));
-   if(pr.status===404)throw new Error("job lost");
-   const pj=await pr.json().catch(()=>null);
-   if(!pj)continue;
-   if(pj.status==="running"){if(onTick)onTick(pj.elapsed||0);continue;}
-   if(pj.status==="error")throw new Error(pj.error||"generation failed");
-   return pj;
+   await sleep(4000);
+   let pr=null,pj=null,why="";
+   const pc=new AbortController();const pto=setTimeout(()=>pc.abort(),30000); // a hung poll counts as a failed one
+   try{
+    pr=await fetch(base+"/custom_result?job="+encodeURIComponent(job),{signal:pc.signal});
+    pj=await pr.json().catch(()=>null);
+   }catch(e){why=String((e&&e.message)||e||"network error");}
+   finally{clearTimeout(pto);}
+   if(pj&&pj.status==="running"){fails=0;if(onTick)onTick(pj.elapsed||0);continue;}
+   if(pr&&pr.status===404&&pj&&pj.status==="unknown")
+    return {lost:true,error:"The server restarted while it was writing these ideas, so this run was lost and nothing came back from it. Click the button again to start a fresh run."};
+   if(pj&&pj.status==="error")throw new Error(pj.error||"generation failed");
+   if(pj&&(pj.status==="done"||Array.isArray(pj.ideas)||pj.error))return pj; // done, or the generator's own readable failure (a refusal is a 422 with error)
+   // anything else is a failed poll: network error, a proxy error page, an unreadable body. The job is
+   // still running on the server, so wait and ask again rather than start a second one.
+   fails++;
+   if(!why)why=pr?("server "+pr.status):"no response";
+   if(fails>=JOB_POLL_TRIES)
+    return {lost:true,error:"Lost contact with the server while it was writing these ideas ("+why+"). Check your connection, wait a minute, then click the button again."};
+   await sleep(Math.min(15000,2000*Math.pow(2,fails-1)));
   }
   throw new Error("timed out waiting for the job");
- }catch(e){
-  // fallback: still works whenever a generation happens to finish under the proxy ceiling
-  const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),290000);
+}
+// The old single request. Used ONLY when /custom_start itself fails. It can only succeed when a
+// generation finishes under the 300s proxy cut, which at ~455s is now rare.
+async function customDirect(body){
+ const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),290000);
+ try{
   const r=await fetch(CUSTOM_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body),signal:ctrl.signal});
-  clearTimeout(to);
   if(r.status===429)return {busy:true};
-  if(!r.ok)throw new Error("server "+r.status);
-  return await r.json();
- }
+  const j=await r.json().catch(()=>null);
+  if(j&&(Array.isArray(j.ideas)||j.error))return j; // a refusal or other readable failure comes back as {error}
+  if(!r.ok||!j)throw new Error("server "+r.status);
+  return j;
+ }finally{clearTimeout(to);}
 }
 
 const MORE_TARGET = 50;      // how many NEW ideas one click tries to add
@@ -986,7 +1032,7 @@ async function addMoreIdeas(){
  const btn=$("#moreideas");const orig="＋ Get 50 more ideas (keeps the ones you have)";  // must match the markup, or the button loses its label after one run
  const norm=t=>(t||"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();
  moreCancel=false;
- let added=0, round=0, dry=0;
+ let added=0, round=0, dry=0, stopMsg=""; // stopMsg: why the run ended early, shown once at the end
  const setLabel=t=>{if(btn)btn.textContent=t;};
  if(btn){btn.disabled=false;btn.classList.add("working");}
  setLabel("Finding ideas… 0 of "+MORE_TARGET+"  (click to stop)");
@@ -1006,10 +1052,13 @@ async function addMoreIdeas(){
     const prof=(curateProfile&&curateProfile.length>80)?curateProfile:((channelProfile&&channelProfile.length>80)?channelProfile:"");
     if(prof)body.profile=prof; // cached profile -> the fast "more" path, no re-research
     j=await customJob(body,secs=>setLabel("Finding ideas… "+added+" of "+MORE_TARGET+", batch "+round+" ("+secs+"s)  (click to stop)"));
-    if(j&&j.busy){toast("Busy right now. Keeping the "+added+" found so far.");break;}
+    if(j&&j.busy){stopMsg="Busy right now.";break;}
+    // a refusal (422 with a readable error), a lost job, or any other server failure: stop and show it.
+    // Counting it as a dry batch quietly started ANOTHER paid generation that would fail the same way.
+    if(j&&j.error&&!(Array.isArray(j.ideas)&&j.ideas.length)){stopMsg=failText(j,"A batch failed.");break;}
    }catch(e){
     // one slow batch should not throw away the batches that already worked, but SAY what happened
-    toast("A batch failed ("+String(e&&e.message||e).slice(0,60)+"). Keeping the "+added+" found so far.");
+    stopMsg="A batch failed ("+String(e&&e.message||e).slice(0,60)+").";
     break;
    }
    if(!(j&&Array.isArray(j.ideas)&&j.ideas.length)){dry++;if(dry>=2)break;continue;}
@@ -1038,10 +1087,11 @@ async function addMoreIdeas(){
  if(added){
   const cards=document.querySelectorAll("#ccards .ccard");
   if(cards.length>=added)cards[cards.length-added].scrollIntoView({behavior:"smooth",block:"center"});
-  toast("Done: "+added+" new ideas added. You now have "+curateIdeas.length+".");
- } else {
-  toast("No genuinely new ideas came back. Try once more, or reject a few to steer it.");
  }
+ // one final message. A failure toast used to be overwritten at once by "Done"/"No new ideas" below it.
+ if(stopMsg)toast(stopMsg+(added?(" Kept the "+added+" new ideas found before that. You now have "+curateIdeas.length+"."):""),12000);
+ else if(added)toast("Done: "+added+" new ideas added. You now have "+curateIdeas.length+".");
+ else toast("No genuinely new ideas came back. Try once more, or reject a few to steer it.");
 }
 
 // ---- IDEA STATUS ------------------------------------------------------------------------------
@@ -1366,6 +1416,7 @@ async function generateMore(btn,shown,style){
   if(style==="ideas"){
    const j=await customJob({channelUrl:cleanChanUrl(channelHandle),exclude:shown.map(ideaTitle).slice(0,60),profile:channelProfile,channel:channelName});
    if(j&&j.busy){btn.textContent="Busy — try again in a minute";return;}
+   if(j&&j.error&&!(Array.isArray(j.ideas)&&j.ideas.length)){toast(failText(j,"Couldn't load more ideas."),12000);btn.textContent="Couldn't load more ideas";return;}
    if(j&&j.profile)channelProfile=j.profile;
    fresh=((j&&j.ideas)||[]).filter(x=>ideaTitle(x)&&!seen.has(key(ideaTitle(x)))).slice(0,12);
   }else{
@@ -1399,10 +1450,8 @@ async function fetchCustom(rawurl,rejectedTitles){
   // "the generator isn't suggesting custom ideas anymore, just the same 20 ideas or whatever".
   // The cache still backs the "Pull from our idea library" button, which is what it is for.
   const _cbody={channelUrl:url,fresh:true};if(Array.isArray(rejectedTitles)&&rejectedTitles.length)_cbody.rejected=rejectedTitles.slice(0,40); // feed the reject pile so a regenerate steers away from disliked ideas
-  const _pj=await customJob(_cbody);   // job route: see customJob for why a direct POST cannot work
-  const r={ok:true,status:200,json:async()=>_pj};
-  if(r.status===429){if(msg){msg.className="cmsg err";msg.textContent="Busy right now — wait a minute and try again.";}return false;}
-  const j=await r.json();
+  const j=await customJob(_cbody);   // job route: see customJob for why a direct POST cannot work
+  if(j&&j.busy){if(msg){msg.className="cmsg err";msg.textContent="Busy right now. Wait a minute and try again.";}return false;}
   if(j&&Array.isArray(j.ideas)&&j.ideas.length){
    channelName=j.channel||h; channelHandle=h; channelProfile=j.profile||"";
    const _nt=(j.research_meta&&j.research_meta.transcripts)||0; // make transcript usage VISIBLE (Drew: "is the transcript feature working?")
@@ -1412,7 +1461,7 @@ async function fetchCustom(rawurl,rejectedTitles){
    startCurate(j.ideas.slice(0,30), h, channelName, "", channelProfile, "ideas");
    return true;
   }
-  if(msg){msg.className="cmsg err";msg.textContent=(j&&j.error)?j.error:"Could not generate ideas. Check the link.";}
+  if(msg){msg.className="cmsg err";msg.textContent=(j&&j.error)?apiErr(j):"Could not generate ideas. Check the link.";}
   return false;
  }catch(e){
   // SAY WHAT ACTUALLY WENT WRONG. This reported every failure as "Took too long", so a server-side

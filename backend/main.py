@@ -23,27 +23,33 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-MODEL = "claude-opus-5"
+MODEL = "claude-opus-5-5"
 
-# Claude Opus 5 turns thinking ON by default (Opus 4.8 did not), and max_tokens caps thinking PLUS
-# response text together. Eighteen call sites here run on max_tokens between 350 and 15000, tuned for
-# a model that never spent any of that budget on thinking; several would now come back as thinking and
-# a truncated answer, or nothing at all. So thinking is explicitly OFF everywhere by default, which
-# preserves the exact behaviour we measured on 4.8, and switched ON deliberately where it earns its
-# cost. Disabling is only legal at effort `high` or below, which is the default and what we use.
-# Generation is the one long call, and it needs a bound of its own rather than the shared client's.
+# CLAUDE OPUS 5.5 THINKS ON EVERY CALL. Thinking cannot be switched off any more (`thinking:
+# {"type": "disabled"}` is a 400), and the thinking shares max_tokens with the reply. On Opus 5 every
+# call here ran with thinking OFF on budgets of 350 to 9000 tokens; on 5.5 those budgets would come
+# back as thinking and an empty or truncated answer. So: no call sends `thinking`, every max_tokens
+# is at least 4000 (16000 for normal calls, 32000 for "high" effort, which can think 26k+ tokens),
+# and EVERY call streams (see claude()), so a long think is never cut off by a request timeout.
+# EFFORT is now the one control over how long the model thinks, which makes it the latency and cost
+# knob as well as the quality knob. Every call sets it explicitly (the 5.5 default is "medium"):
+#   "high"   the main creative output of a route that is not racing a browser timeout (ideas, review, pitch)
+#   "medium" analysis and rewrite passes (channel profile, voice bible, tailoring, the polish chain)
+#   "low"    quick judge/classify/select calls, and the research pack + script, where the browser gives
+#            up at 180s and the calls ran with thinking OFF before
+# Generation is the one long call. GEN_TIMEOUT_S is its silence bound (no retry, see the call) and the
+# wall-clock bound /compare and /writeoff put around their Opus side.
 GEN_TIMEOUT_S = 420.0
-NO_THINK = {"type": "disabled"}
-THINK = {"type": "adaptive"}
-# The channel profile is a summarization task; Sonnet is markedly faster than Opus and
-# near-Opus quality, which cuts time-to-first-idea. Idea generation stays on Opus (MODEL).
-FAST_MODEL = "claude-sonnet-5"
+# Idea generation runs as a background job (see /custom_start), so it can afford to think. /compare
+# uses the same value so its Opus side stays identical to the product call.
+GEN_EFFORT = "high"
+# There used to be a faster, cheaper second model here for the judge passes and line edits. Everything
+# runs on Opus 5.5 now; those calls get their speed from a lower effort instead of a smaller model.
+# The name stays so the "this pass only judges" intent at each call site is still readable.
+FAST_MODEL = MODEL
 # THE MODEL THAT WRITES READER-FACING SENTENCES. Opus wrote the first draft, but every repair pass
-# ran on Sonnet, including _bold_endgame_fix, which rewrites the CLOSING SENTENCE: the single line
-# the curator has given the most feedback on. With the closing-question rule enforced, most endings
-# in a batch get rewritten, so the sentence he judges the batch by was a Sonnet sentence. Passes
-# that only JUDGE (grading a rung, scoring a shape) stay on FAST_MODEL: judgement is cheap and the
-# latency budget is real. Passes that WRITE now use this.
+# used to run on the faster model, including _bold_endgame_fix, which rewrites the CLOSING SENTENCE:
+# the single line the curator has given the most feedback on. Passes that WRITE use this.
 WRITE_MODEL = MODEL
 
 # Appended to every reader-facing generator so nothing this app produces reads as AI-written.
@@ -572,14 +578,93 @@ def seed_block(k=9):
             + "\n".join("- " + s for s in picks))
 
 _client = None
+CLAUDE_SILENCE_S = 300.0  # max seconds between streamed chunks before a call counts as stalled
 def get_client():
     global _client
     if _client is None:
-        # explicit bounds: default SDK timeout is ~10min and retries up to 2x — during an upstream
-        # slowdown that ties a worker thread up for minutes. 150s covers the slowest legit call
-        # (the 9000-token /brief) and caps retry amplification.
-        _client = anthropic.Anthropic(timeout=150.0, max_retries=1)  # reads ANTHROPIC_API_KEY from env
+        # Every call streams (see claude()), so `timeout` is the longest SILENCE allowed between two
+        # chunks of a reply, not a cap on how long the reply takes. 300s lets a slow high-effort think
+        # finish however long it runs, while a connection that has really stalled still fails instead
+        # of holding a worker thread forever. It used to be 150s on non-streaming calls, where it
+        # capped the WHOLE reply: a slow call timed out, silently retried and could take ~300s to fail.
+        # max_retries=1 still covers a refused connection or a 429/5xx before the reply starts; a
+        # reply that breaks mid-stream is not retried, so a slow call is never paid for twice.
+        _client = anthropic.Anthropic(timeout=CLAUDE_SILENCE_S, max_retries=1)  # reads ANTHROPIC_API_KEY from env
     return _client
+
+
+# ---- every Claude call goes through claude() ----
+# The subject matter here (engineered pandemics, AI takeover, cyberattacks) is exactly what the
+# model's safety classifiers watch, and on Opus 5.5 a classifier decline comes back as HTTP 200 with
+# stop_reason "refusal" and no usable text. Two defences, both applied here so no call site can forget:
+#   1. Every Opus 5.5 call opts into the server-side fallback: when a classifier declines, the API
+#      re-runs the same request on a fallback model inside the same call.
+#   2. If the whole chain still declines, claude() raises ModelRefusal with a readable message instead
+#      of handing back empty text that a caller would read as "no ideas parsed".
+# It also sets effort on every call, logs every API error before re-raising (so a fail-open polish
+# pass can never go quiet the way a bare `except` lets it), enforces the max_tokens floors below, and
+# STREAMS EVERY CALL. A plain request is bounded by the client timeout end to end, so a slow
+# high-effort reply (a real /retitle took 170s) timed out, retried and could take ~300s to fail.
+# Streamed, the timeout only bounds silence between chunks, and a reply can take as long as it needs.
+FALLBACK_BETA = "server-side-fallback-2026-07-01"
+MIN_TOKENS = 4000        # thinking shares max_tokens with the reply; below this the reply can vanish
+MIN_TOKENS_HIGH = 32000  # "high" effort can think 26k+ tokens and then truncate the JSON it writes
+
+
+class ModelRefusal(RuntimeError):
+    """The model's safety filter declined the request (HTTP 200, stop_reason == "refusal")."""
+    def __init__(self, tag, category):
+        self.tag = tag
+        self.category = category or "unspecified"
+        super().__init__(
+            "The AI model's safety filter declined this request (flagged as: %s). This happens now and "
+            "then on biosecurity, cyber and similar topics even when the request is legitimate. Try "
+            "rewording it or pick a different idea." % self.category)
+
+
+def msg_text(msg):
+    """The reply text. Responses can open with thinking (or fallback) blocks, so never content[0]."""
+    return "".join(b.text for b in (getattr(msg, "content", None) or []) if getattr(b, "type", "") == "text")
+
+
+def claude(tag, effort, *, client=None, **kw):
+    """One Messages API call, always streamed. `tag` names the call site in the logs; `effort` is
+    low|medium|high. `client` is an optional get_client().with_options(...) for a call with its own
+    silence bound or retry count."""
+    kw.setdefault("model", MODEL)
+    kw["output_config"] = {**(kw.get("output_config") or {}), "effort": effort}
+    floor = MIN_TOKENS_HIGH if effort == "high" else MIN_TOKENS
+    kw["max_tokens"] = max(int(kw.get("max_tokens") or 0), floor)
+    if str(kw["model"]).startswith("claude-opus-5-5"):
+        kw["extra_headers"] = {**(kw.get("extra_headers") or {}), "anthropic-beta": FALLBACK_BETA}
+        kw["extra_body"] = {**(kw.get("extra_body") or {}), "fallbacks": "default"}
+    c = client or get_client()
+    try:
+        with c.messages.stream(**kw) as s:
+            msg = s.get_final_message()
+    except Exception as e:
+        _log_event({"t": "model_error", "where": tag, "err": type(e).__name__, "detail": str(e)[:300]})
+        raise
+    stop = getattr(msg, "stop_reason", "") or ""
+    blocks = [getattr(b, "type", "") for b in (getattr(msg, "content", None) or [])]
+    if "fallback" in blocks:
+        _log_event({"t": "model_fallback", "where": tag, "served_by": getattr(msg, "model", ""), "stop": stop})
+    if stop == "refusal":
+        cat = getattr(getattr(msg, "stop_details", None), "category", None)
+        _log_event({"t": "model_refusal", "where": tag, "category": cat or "unspecified",
+                    "model": getattr(msg, "model", "")})
+        raise ModelRefusal(tag, cat)
+    if stop == "max_tokens" and not msg_text(msg).strip():
+        _log_event({"t": "model_truncated_empty", "where": tag, "max_tokens": kw.get("max_tokens"), "effort": effort})
+    return msg
+
+
+def _fail(label, e, n=200, status=502):
+    """Error response for a failed model call. A refusal gets its own readable message as `error`
+    (the front end shows `error`), and 422, because sending the same request again will not help."""
+    if isinstance(e, ModelRefusal):
+        return JSONResponse({"error": str(e), "refusal": True, "category": e.category}, status_code=422)
+    return JSONResponse({"error": label, "detail": str(e)[:n]}, status_code=status)
 
 # ---- verified source bank (sources.json, built from Species' own cited sources + research sweep) ----
 # Every URL in the bank was live-checked before shipping. The model only ever cites sources by ID
@@ -1163,13 +1248,13 @@ async def similar(req: Request):
         + seed_block(6) + anchor_block(10)
     )
     try:
-        msg = await run_in_threadpool(lambda: get_client().messages.create(
-            model=MODEL, thinking=NO_THINK,
-            max_tokens=1100,
+        msg = await run_in_threadpool(lambda: claude(
+            "similar", "high", model=MODEL,
+            max_tokens=32000,
             system=SYSTEM,
             messages=[{"role": "user", "content": user}],
         ))
-        text = "".join(b.text for b in msg.content if getattr(b, "type", "") == "text")
+        text = msg_text(msg)
         ideas = parse_ideas(text)
         if not ideas:
             return JSONResponse({"error": "no ideas parsed"}, status_code=502)
@@ -1183,7 +1268,7 @@ async def similar(req: Request):
                 _x.setdefault("genv", WRITER_VERSION)
         return {"ideas": ideas, "genv": WRITER_VERSION, "gts": _now}
     except Exception as e:
-        return JSONResponse({"error": "generation failed", "detail": str(e)[:300]}, status_code=502)
+        return _fail("generation failed", e, 300)
 
 
 SYSTEM_CUSTOM = """You brainstorm candidate AI risk video ideas for ONE specific creator, given a strategist profile of them and their recent video titles.
@@ -1435,13 +1520,15 @@ async def _build_profile(prof):
     best = ""
     for _ in range(3):
         try:
-            msg = await run_in_threadpool(lambda: get_client().messages.create(
-                model=MODEL, thinking=NO_THINK, max_tokens=2200, system=SYSTEM_ANALYST,  # transcript profiles run long (quoted cold-opens, structure beats)
+            msg = await run_in_threadpool(lambda: claude(
+                "profile", "medium", model=MODEL, max_tokens=16000, system=SYSTEM_ANALYST,  # transcript profiles run long (quoted cold-opens, structure beats)
                 messages=[{"role": "user", "content": blob}],
             ))
+        except ModelRefusal:
+            raise  # a refusal will not change on a retry; the caller says so readably
         except Exception:
-            continue
-        txt = "".join(b.text for b in msg.content if getattr(b, "type", "") == "text").strip()
+            continue  # claude() has already logged it
+        txt = msg_text(msg).strip()
         if getattr(msg, "stop_reason", "") == "max_tokens":
             # never ship a profile that stops mid sentence: cut back to the last complete block
             cut = max(txt.rfind("\n\n"), txt.rfind(". "))
@@ -1934,11 +2021,13 @@ async def brief(req: Request):
             + ("\n\nVERIFIED SOURCE MENU:\n" + menu if menu else "")
             + "\n\nWrite the research pack.")
     try:
-        msg = await run_in_threadpool(lambda: get_client().messages.create(
-            model=MODEL, thinking=NO_THINK, max_tokens=9000, system=SYSTEM_BRIEF + ANTI_SLOP,
+        # low effort: the browser gives up at 180s and this ran with thinking OFF on Opus 5.
+        # claude() streams it, so the client timeout bounds silence between chunks, not length.
+        msg = await run_in_threadpool(lambda: claude(
+            "brief", "low", model=MODEL, max_tokens=32000, system=SYSTEM_BRIEF + ANTI_SLOP,
             messages=[{"role": "user", "content": user}],
         ))
-        text = _plain_company("".join(b.text for b in msg.content if getattr(b, "type", "") == "text").strip())
+        text = _plain_company(msg_text(msg).strip())
         if not text:
             return JSONResponse({"error": "no brief"}, status_code=502)
         truncated = getattr(msg, "stop_reason", "") == "max_tokens"
@@ -1955,7 +2044,7 @@ async def brief(req: Request):
         _log_event({"t": "brief", "prose_fixed": _npx, "i": title[:80], "linked": cstats["linked"], "stripped": cstats["stripped"], "trunc": int(truncated), "saved": int(bool(pid))})
         return {"brief": text, "title": title}
     except Exception as e:
-        return JSONResponse({"error": "brief failed", "detail": str(e)[:200]}, status_code=502)
+        return _fail("brief failed", e)
 
 
 SYSTEM_SCRIPT = """You write a SAMPLE SCRIPT for ONE AI risk video, so a specific YouTube creator can see concretely what this video could look like IN THEIR OWN VOICE. This is a first draft they will rewrite and make their own, not a finished script. It has to feel like something THEY would actually say, not a generic AI voiceover, or it does the opposite of its job.
@@ -2125,11 +2214,11 @@ async def _deslop(text):
                      "rewritten as plain positive statements (state what the thing IS; drop the negation setup):\n"
                      + "\n".join("- " + h.strip()[:160] for h in hits[:12]))
         try:
-            m = await run_in_threadpool(lambda: get_client().messages.create(
-                model=MODEL, thinking=NO_THINK, max_tokens=3000, system=SYSTEM_DESLOP,
+            m = await run_in_threadpool(lambda: claude(
+                "deslop", "low", model=MODEL, max_tokens=16000, system=SYSTEM_DESLOP,
                 messages=[{"role": "user", "content": user}],
             ))
-            cleaned = _parse_script("".join(b.text for b in m.content if getattr(b, "type", "") == "text").strip())
+            cleaned = _parse_script(msg_text(m).strip())
             if cleaned and len(cleaned) > 200:
                 text = cleaned
             else:
@@ -2270,10 +2359,11 @@ def _prose_polish(md, label=""):
     flagged = flagged[:24]                       # a repair pass given too much work does it badly
     body = "\n".join("%d. %s\n   [%s]" % (i + 1, p, w) for i, (p, w) in enumerate(flagged))
     try:
-        m = get_client().with_options(timeout=180.0, max_retries=1).messages.create(
-            model=WRITE_MODEL, max_tokens=4000, thinking=NO_THINK, system=PROSE_FIX_SYS,
+        m = claude("prose_polish:" + (label or "?"), "low",
+            client=get_client().with_options(timeout=180.0, max_retries=1),
+            model=WRITE_MODEL, max_tokens=16000, system=PROSE_FIX_SYS,
             messages=[{"role": "user", "content": "Rewrite these:\n\n" + body}])
-        t = "".join(b.text for b in m.content if getattr(b, "type", "") == "text")
+        t = msg_text(m)
         mm = re.search(r"\{.*\}", t, re.S)
         obj = (json.loads(mm.group(0)) if mm else {}).get("fixes") or {}
     except Exception as e:
@@ -2377,11 +2467,13 @@ async def script(req: Request):
 
     try:
         # pass 1: draft in their voice
-        d = await run_in_threadpool(lambda: get_client().messages.create(
-            model=MODEL, thinking=NO_THINK, max_tokens=3000, system=SYSTEM_SCRIPT + ANTI_SLOP,
+        # low effort for every call in this chain: the browser gives up at 180s and the draft,
+        # voice match, de-slop and line edit run one after another (all thinking OFF on Opus 5).
+        d = await run_in_threadpool(lambda: claude(
+            "script", "low", model=MODEL, max_tokens=16000, system=SYSTEM_SCRIPT + ANTI_SLOP,
             messages=[{"role": "user", "content": _mk_user()}],
         ))
-        draft = _parse_script("".join(b.text for b in d.content if getattr(b, "type", "") == "text").strip())
+        draft = _parse_script(msg_text(d).strip())
         if not draft:
             return JSONResponse({"error": "no script"}, status_code=502)
         text = draft
@@ -2392,11 +2484,11 @@ async def script(req: Request):
                        + exemplar + "\n\nDRAFT to rewrite in their voice:\n" + draft
                        + "\n\nRewrite it and return the JSON object.")
             try:
-                r = await run_in_threadpool(lambda: get_client().messages.create(
-                    model=MODEL, thinking=NO_THINK, max_tokens=3000, system=SYSTEM_VOICEMATCH + ANTI_SLOP,
+                r = await run_in_threadpool(lambda: claude(
+                    "voicematch", "low", model=MODEL, max_tokens=16000, system=SYSTEM_VOICEMATCH + ANTI_SLOP,
                     messages=[{"role": "user", "content": vm_user}],
                 ))
-                rewritten = _parse_script("".join(b.text for b in r.content if getattr(b, "type", "") == "text").strip())
+                rewritten = _parse_script(msg_text(r).strip())
                 if rewritten and len(rewritten) > 200:
                     text = rewritten
             except Exception:
@@ -2417,7 +2509,7 @@ async def script(req: Request):
         _log_event({"t": "script", "prose_fixed": _npx, "i": title[:80], "voiced": bool(voice), "matched": bool(voice and exemplar), "cites": len(legend), "saved": int(bool(pid))})
         return {"script": text, "title": title}
     except Exception as e:
-        return JSONResponse({"error": "script failed", "detail": str(e)[:200]}, status_code=502)
+        return _fail("script failed", e)
 
 
 SYSTEM_TAILOR = """You are an elite YouTube strategist. You are given (1) a strategist PROFILE of one specific creator and (2) a numbered list of documented AI-risk LEADS: real, verified events, findings, and facts, each a candidate for a video. Pick and rank the leads THIS creator's audience would most want to watch, best fit first.
@@ -2482,6 +2574,8 @@ async def tailor(req: Request):
         else:
             profile = cached
     except Exception as e:
+        if isinstance(e, ModelRefusal):
+            return _fail("", e)
         return JSONResponse({"error": "Could not read that channel. Check the link and try again.", "detail": str(e)[:200]}, status_code=502)
     if not profile:
         return JSONResponse({"error": "Could not analyze that channel. Try again."}, status_code=502)
@@ -2490,6 +2584,7 @@ async def tailor(req: Request):
     user = ("Strategist profile of the creator:\n" + profile
             + "\n\nCandidate AI-risk leads (index. lead):\n" + listing
             + "\n\nReturn the JSON object with the best-fit lead indices, strongest first.")
+    # (History: FAST_MODEL was a separate, faster model then; it is the same model now.)
     # Use the main model here, not FAST_MODEL: on a large, alarming 120-lead listing the fast
     # model intermittently returns an EMPTY completion (verified), and it does not support
     # assistant-prefill to force output. The main model reliably emits the ranking. Retry as a
@@ -2497,15 +2592,15 @@ async def tailor(req: Request):
     order = []
     for attempt in range(3):
         try:
-            rmsg = await run_in_threadpool(lambda: get_client().messages.create(
-                model=MODEL, thinking=NO_THINK, max_tokens=2000, system=SYSTEM_TAILOR,
+            rmsg = await run_in_threadpool(lambda: claude(
+                "tailor", "medium", model=MODEL, max_tokens=16000, system=SYSTEM_TAILOR,
                 messages=[{"role": "user", "content": user}],
             ))
         except Exception as e:
-            if attempt < 2:
+            if attempt < 2 and not isinstance(e, ModelRefusal):  # a refusal repeats; do not retry it
                 continue
-            return JSONResponse({"error": "tailor failed", "detail": str(e)[:200]}, status_code=502)
-        raw = "".join(b.text for b in rmsg.content if getattr(b, "type", "") == "text").strip()
+            return _fail("tailor failed", e)
+        raw = msg_text(rmsg).strip()
         raw = re.sub(r"^```(?:json)?", "", raw).strip()
         raw = re.sub(r"```$", "", raw).strip()
         # Robust parse: the ranking model's formatting is non-deterministic, so never let a
@@ -2585,11 +2680,11 @@ async def review(req: Request):
             + ("VERIFIED SOURCE MENU:\n" + menu + "\n\n" if menu else "")
             + "Write the review.")
     try:
-        msg = await run_in_threadpool(lambda: get_client().messages.create(
-            model=MODEL, thinking=NO_THINK, max_tokens=4000, system=SYSTEM_REVIEW,
+        msg = await run_in_threadpool(lambda: claude(
+            "review", "high", model=MODEL, max_tokens=32000, system=SYSTEM_REVIEW,
             messages=[{"role": "user", "content": user}],
         ))
-        text = _plain_company("".join(b.text for b in msg.content if getattr(b, "type", "") == "text").strip())
+        text = _plain_company(msg_text(msg).strip())
         if not text:
             return JSONResponse({"error": "no review"}, status_code=502)
         text, _ = _resolve_ids(text)
@@ -2597,7 +2692,7 @@ async def review(req: Request):
         _log_event({"t": "review", "chars": len(script)})
         return {"review": text}
     except Exception as e:
-        return JSONResponse({"error": "review failed", "detail": str(e)[:200]}, status_code=502)
+        return _fail("review failed", e)
 
 
 # ---- idea claims: reserve an idea once a deal is verbal, so creators don't collide ----
@@ -3037,7 +3132,7 @@ async def debug_profile(req: Request):
                 "transcripts_used": len(prof.get("transcripts") or []),
                 "profile": profile, "chars": len(profile)}
     except Exception as e:
-        return JSONResponse({"error": "debug-profile failed", "detail": str(e)[:200]}, status_code=502)
+        return _fail("debug-profile failed", e)
 
 
 @app.get("/events")
@@ -3291,13 +3386,15 @@ async def _build_voice(videos):
     blob = "\n\n".join(blocks)
     for _ in range(3):
         try:
-            msg = await run_in_threadpool(lambda: get_client().messages.create(
-                model=MODEL, thinking=NO_THINK, max_tokens=2400, system=SYSTEM_VOICE,
+            msg = await run_in_threadpool(lambda: claude(
+                "voice", "medium", model=MODEL, max_tokens=16000, system=SYSTEM_VOICE,
                 messages=[{"role": "user", "content": blob}],
             ))
+        except ModelRefusal:
+            raise  # do not retry a refusal; /script carries on without a voice bible
         except Exception:
-            continue
-        txt = "".join(b.text for b in msg.content if getattr(b, "type", "") == "text").strip()
+            continue  # claude() has already logged it
+        txt = msg_text(msg).strip()
         if getattr(msg, "stop_reason", "") == "max_tokens":
             cut = max(txt.rfind("\n\n"), txt.rfind(". "))
             if cut > len(txt) * 0.6:
@@ -3396,10 +3493,10 @@ def _cause_harm_cuts(cands):
         return set()
     try:
         lines = "\n".join("%d. %s :: %s" % (i + 1, (c.get("title") or ""), (c.get("summary") or "")) for i, c in enumerate(cands))
-        msg = get_client().messages.create(
-            model=MODEL, thinking=NO_THINK, max_tokens=600, system=CAUSE_FILTER_SYS,
+        msg = claude(
+            "cause_filter", "low", model=MODEL, max_tokens=8000, system=CAUSE_FILTER_SYS,
             messages=[{"role": "user", "content": "Candidate ideas:\n" + lines}])
-        txt = "".join(b.text for b in msg.content if getattr(b, "type", "") == "text")
+        txt = msg_text(msg)
         m = re.search(r"\{.*\}", txt, re.S)
         obj = json.loads(m.group(0)) if m else {}
         cut = set()
@@ -3859,14 +3956,14 @@ def _fid_titles(ideas, anchors):
         return
     try:
         body = "\n".join("%d. %s" % (i + 1, t) for i, t in items)
-        m = get_client().messages.create(
-            model=WRITE_MODEL, max_tokens=3000,
+        m = claude(
+            "fidelity_titles", "high", model=WRITE_MODEL, max_tokens=32000,
             system=(FIDELITY_FIX_SYS + "\n\nDOCUMENTED ANCHORS:\n" + anchors +
                     "\n\nNOTE: these are TITLES, one or two sentences each. Keep them the same length and "
                     "the same shape. Cut only the unknowable detail. Return {\"summaries\": {\"1\": \"...\"}} "
                     "keyed the same way, containing only the ones you changed."),
             messages=[{"role": "user", "content": "Rewrite these:\n" + body}])
-        t = "".join(b.text for b in m.content if getattr(b, "type", "") == "text")
+        t = msg_text(m)
         mm = re.search(r"\{.*\}", t, re.S)
         obj = json.loads(mm.group(0)) if mm else {}
         n = 0
@@ -4148,10 +4245,10 @@ def _grade_endings(lines):
             parts = [p for p in re.split(r"(?<=[.?!])\s+", (t or "").strip()) if p.strip()]
             return " ".join(parts[-2:])          # the ending is all it judges; the block was ~150 words
         body = "\n\n".join("%d. %s" % (n + 1, _tail(t)) for n, (_, t) in enumerate(lines))
-        m = get_client().messages.create(
-            model=FAST_MODEL, max_tokens=3000, thinking=NO_THINK, system=ENDGAME_GRADE_SYS,
+        m = claude(
+            "grade_endings", "low", model=FAST_MODEL, max_tokens=8000, system=ENDGAME_GRADE_SYS,
             messages=[{"role": "user", "content": "Grade these endings:\n\n" + body}])
-        t = "".join(b.text for b in m.content if getattr(b, "type", "") == "text")
+        t = msg_text(m)
         mm = re.search(r"\{.*\}", t, re.S)
         obj = (json.loads(mm.group(0)) if mm else {}).get("grades") or {}
         out = {}
@@ -4949,10 +5046,10 @@ def _sentence_polish_chunk(ideas, field, items):
     n = rej = 0
     if True:
         body = "\n\n".join("%d. %s" % (i + 1, t) for i, t in items)
-        m = get_client().messages.create(
-            model=WRITE_MODEL, max_tokens=6000, thinking=NO_THINK, system=SENTENCE_FIX_SYS,
+        m = claude(
+            "sentence_polish:" + field, "medium", model=WRITE_MODEL, max_tokens=16000, system=SENTENCE_FIX_SYS,
             messages=[{"role": "user", "content": "Fix the marked sentences:\n\n" + body}])
-        t = "".join(b.text for b in m.content if getattr(b, "type", "") == "text")
+        t = msg_text(m)
         obj = {}
         mm = re.search(r"\{.*\}", t, re.S)
         if mm:
@@ -5026,12 +5123,12 @@ def _bold_endgame_fix(ideas, anchors=""):
         return
     try:
         body = "\n\n".join("%d. %s" % (i + 1, ideas[i]["title"]) for i in idxs)
-        m = get_client().messages.create(
-            model=WRITE_MODEL, max_tokens=6000, thinking=NO_THINK,
+        m = claude(
+            "bold_endgame", "medium", model=WRITE_MODEL, max_tokens=16000,
             system=BOLD_ENDGAME_SYS + (("\n\nDOCUMENTED ANCHORS, for facts only, invent nothing "
                                         "beyond these:\n" + anchors) if anchors else ""),
             messages=[{"role": "user", "content": "Rewrite the last sentence of each:\n\n" + body}])
-        t = "".join(b.text for b in m.content if getattr(b, "type", "") == "text")
+        t = msg_text(m)
         mm = re.search(r"\{.*\}", t, re.S)
         obj = json.loads(mm.group(0)) if mm else {}
         n = rej = 0
@@ -5109,14 +5206,14 @@ def _bold_endgame_fix(ideas, anchors=""):
                     % (n2 + 1, ideas[i].get("title") or "", r, hint or "who permanently loses the ability "
                        "to steer or reverse this, and why there is no way back")
                     for n2, (i, r, hint) in enumerate(short))
-                m2 = get_client().messages.create(
-                    model=WRITE_MODEL, max_tokens=5000, thinking=NO_THINK,
+                m2 = claude(
+                    "bold_endgame_retry", "medium", model=WRITE_MODEL, max_tokens=16000,
                     system=BOLD_ENDGAME_SYS + (("\n\nDOCUMENTED ANCHORS, for facts only:\n" + anchors)
                                                if anchors else ""),
                     messages=[{"role": "user", "content":
                                "These endings did not reach the bar. Write the final sentence again, "
                                "further along:\n\n" + body2}])
-                t2 = "".join(b.text for b in m2.content if getattr(b, "type", "") == "text")
+                t2 = msg_text(m2)
                 mm2 = re.search(r"\{.*\}", t2, re.S)
                 obj2 = (json.loads(mm2.group(0)) if mm2 else {}).get("ideas") or {}
                 n2ok = 0
@@ -5162,11 +5259,11 @@ def _event_lead_fix(ideas, idxs, lead, rew):
             % (i + 1, (ideas[i].get("title") or ""),
                rew.get(i, ideas[i].get("summary") or ""))
             for i in idxs)
-        m = get_client().messages.create(
-            model=WRITE_MODEL, max_tokens=6000,
+        m = claude(
+            "event_lead", "high", model=WRITE_MODEL, max_tokens=32000,
             system=EVENT_LEAD_SYS + "\n\nLEAD-WORTHY EVENTS (real, open on one of these):\n" + lead,
             messages=[{"role": "user", "content": "Fix the opening of each of these:\n\n" + body}])
-        t = "".join(b.text for b in m.content if getattr(b, "type", "") == "text")
+        t = msg_text(m)
         mm = re.search(r"\{.*\}", t, re.S)
         obj = json.loads(mm.group(0)) if mm else {}
         n = 0
@@ -5405,10 +5502,10 @@ def _activate_summaries(ideas, anchors=""):
         return rew
     try:
         lines = "\n".join("%d. %s" % (i + 1, (x.get("summary") or "")) for i, x in enumerate(ideas))
-        msg = get_client().messages.create(
-            model=FAST_MODEL, max_tokens=4000, system=ACTIVATE_SYS,
+        msg = claude(
+            "activate", "medium", model=FAST_MODEL, max_tokens=16000, system=ACTIVATE_SYS,
             messages=[{"role": "user", "content": "Summaries to rewrite:\n" + lines}])
-        txt = "".join(b.text for b in msg.content if getattr(b, "type", "") == "text")
+        txt = msg_text(msg)
         m = re.search(r"\{.*\}", txt, re.S)
         obj = json.loads(m.group(0)) if m else {}
         for k, v in (obj.get("summaries") or {}).items():
@@ -5455,7 +5552,7 @@ def _activate_summaries(ideas, anchors=""):
                 pass
         return False
 
-    def _pass(system, items, tag, budget=2500, accept=None):
+    def _pass(system, items, tag, budget=16000, accept=None):
         """items: [(index, line_text)]. Applies accepted rewrites into `rew`. When `accept(old,new)`
         is given, a rewrite is only kept if it passes that check, so a pass can never make things
         worse (used by the grade pass to reject rewrites that drop a fact or fail to get easier)."""
@@ -5466,10 +5563,10 @@ def _activate_summaries(ideas, anchors=""):
             return
         try:
             body = "\n".join("%d. %s" % (i + 1, t) for i, t in items)
-            m = get_client().messages.create(
-                model=FAST_MODEL, max_tokens=budget, system=system,
+            m = claude(
+                "polish:" + tag, "medium", model=FAST_MODEL, max_tokens=budget, system=system,
                 messages=[{"role": "user", "content": "Rewrite these:\n" + body}])
-            t = "".join(b.text for b in m.content if getattr(b, "type", "") == "text")
+            t = msg_text(m)
             mm = re.search(r"\{.*\}", t, re.S)
             obj = json.loads(mm.group(0)) if mm else {}
             n = rej = 0
@@ -5503,7 +5600,7 @@ def _activate_summaries(ideas, anchors=""):
     if anchors:
         e = _eff()
         _pass(FIDELITY_FIX_SYS + "\n\nDOCUMENTED ANCHORS:\n" + anchors,
-              [(i, e[i]) for i in range(len(ideas))], "fidelity", budget=4000)
+              [(i, e[i]) for i in range(len(ideas))], "fidelity")
         # TITLES TOO. The pass above only ever touched summaries, so an invented detail sitting in the
         # bold line went out untouched, and the bold line is the part a creator reads first. Measured:
         # a batch came back with the summary softened to "a night-shift security alert" while the title
@@ -5557,7 +5654,7 @@ def _activate_summaries(ideas, anchors=""):
             claimed, actual = bad
             ritems.append((i, "%s\n   [the two numbers in this text give about %s to one, not %s to one]"
                            % (e[i], int(round(actual)), int(round(claimed)))))
-    _pass(RATIO_FIX_SYS, ritems, "ratio_fix", budget=2000)
+    _pass(RATIO_FIX_SYS, ritems, "ratio_fix")
     # (3b) WEAK IMPLICATION: the closer shrugs ("makes an honest debate hard to hold") instead of
     # naming the endgame. Runs BEFORE the grade pass so any escalation still gets read-levelled.
     # Accept only if the shrug is gone and the rewrite did not reach for a generic doom tag.
@@ -5567,7 +5664,7 @@ def _activate_summaries(ideas, anchors=""):
     # short-of-terminal and mealy-mouthed, and the shrug words are still worth catching on their own.
     weak = [(i, e[i]) for i in range(len(ideas))
             if not _reaches_terminal(e[i] or "") or _closer_weak(e[i] or "")]
-    _pass(ESCALATE_FIX_SYS, weak, "weak_implication", budget=3000,
+    _pass(ESCALATE_FIX_SYS, weak, "weak_implication",
           accept=lambda old, new: (not _closer_doomtag(new) and not _closer_weak(new)
                                    and (_reaches_terminal(new) or not _reaches_terminal(old))))
     # (4) MEASURED READING GRADE. Everything above only *asks* for plain writing; this checks it.
@@ -5610,7 +5707,7 @@ def _activate_summaries(ideas, anchors=""):
             hard.append((i, "%s\n   %s" % (t, note)))
         if not hard:
             break
-        _pass(GRADE_FIX_SYS, hard, "grade_fix_r%d" % (_round + 1), budget=3000, accept=_grade_ok)
+        _pass(GRADE_FIX_SYS, hard, "grade_fix_r%d" % (_round + 1), accept=_grade_ok)
 
     # LAST, DELIBERATELY. Every pass above rewrites sentences, and any of them would happily smooth
     # an AI Safety Memes line back into a paraphrase, which is the whole complaint. Restoring the
@@ -5696,6 +5793,12 @@ def _build_gen_prompt(profile, titles, exclude, rejected, more=False):
             "The LARGE MAJORITY of your ideas, at least two thirds, must arise from AND be told through the creator's own world, domain, expertise, and method, never a general AI risk headline with a tacked on connection; every connection must be load bearing. The remaining ideas may reach wider across the risk space, but each must still sound unmistakably like THIS creator, not a generic AI channel.")
     return gen
 
+# The OpenAI side of the /compare and /writeoff bake-offs (and /gptprobe). A request can still name any
+# model in its body. gpt-6.1-sol accepts reasoning_effort + max_completion_tokens (what we send) and
+# rejects max_tokens and any temperature other than 1, so neither is ever sent.
+OPENAI_TEXT_MODEL = "gpt-6.1-sol"
+
+
 def _openai_ideas(system, user, model):
     """Run the same idea-gen prompt through an OpenAI model via the REST API (key from the server env,
     never from the client). Returns (ideas, error_or_None)."""
@@ -5724,7 +5827,7 @@ def _openai_ideas(system, user, model):
         return [], detail
 
 @app.get("/gptprobe")
-def gptprobe(key: str = "", model: str = "gpt-5.6"):
+def gptprobe(key: str = "", model: str = OPENAI_TEXT_MODEL):
     """Fast diagnostic: a trivial OpenAI call to learn how <model> behaves (works? latency? param
     errors?) without a 3-minute full generation. Gated."""
     if key != EVENTS_KEY:
@@ -5762,7 +5865,7 @@ async def compare(req: Request):
     if body.get("key") != EVENTS_KEY:
         return JSONResponse({"error": "bad key"}, status_code=403)
     url = re.sub(r"[?#].*$", "", (body.get("channelUrl") or "").strip())
-    gpt_model = (body.get("model") or "gpt-5.6").strip()
+    gpt_model = (body.get("model") or OPENAI_TEXT_MODEL).strip()
     if not url:
         return JSONResponse({"error": "missing channelUrl"}, status_code=400)
     try:
@@ -5771,18 +5874,22 @@ async def compare(req: Request):
         return JSONResponse({"error": "channel read timed out"}, status_code=504)
     if not prof or not prof.get("recent"):
         return JSONResponse({"error": "could not read channel"}, status_code=502)
-    profile = await _build_profile(prof)
+    try:
+        profile = await _build_profile(prof)
+    except ModelRefusal as e:
+        return _fail("", e)
     titles = prof.get("recent") or []
     gen = _build_gen_prompt(profile, titles, [], [])
     sysp = SYSTEM_CUSTOM + ANTI_SLOP
     # run BOTH models concurrently (sequential summed past the request timeout) and bound each side
     async def _run_opus():
         try:
-            om = await asyncio.wait_for(run_in_threadpool(lambda: get_client().messages.create(
-                model=MODEL, thinking=NO_THINK, max_tokens=12000, system=sysp, messages=[{"role": "user", "content": gen}])), timeout=190)
-            return parse_custom("".join(b.text for b in om.content if getattr(b, "type", "") == "text")), None
+            om = await asyncio.wait_for(run_in_threadpool(lambda: claude(
+                "compare", GEN_EFFORT, model=MODEL, max_tokens=64000, system=sysp,
+                messages=[{"role": "user", "content": gen}])), timeout=GEN_TIMEOUT_S)
+            return parse_custom(msg_text(om)), None
         except asyncio.TimeoutError:
-            return [], MODEL + " timed out (>190s)"
+            return [], MODEL + " timed out (>%ds)" % GEN_TIMEOUT_S
         except Exception as e:
             return [], str(e)[:300]
     async def _run_gpt():
@@ -5825,7 +5932,7 @@ async def writeoff(req: Request):
     if body.get("key") != EVENTS_KEY:
         return JSONResponse({"error": "bad key"}, status_code=403)
     url = re.sub(r"[?#].*$", "", (body.get("channelUrl") or "").strip())
-    gpt_model = (body.get("model") or "gpt-5.6-sol").strip()
+    gpt_model = (body.get("model") or OPENAI_TEXT_MODEL).strip()
     concepts = body.get("concepts") or []
     if not isinstance(concepts, list):
         concepts = []
@@ -5840,7 +5947,10 @@ async def writeoff(req: Request):
         return JSONResponse({"error": "channel read timed out"}, status_code=504)
     if not prof or not prof.get("recent"):
         return JSONResponse({"error": "could not read channel"}, status_code=502)
-    profile = await _build_profile(prof)
+    try:
+        profile = await _build_profile(prof)
+    except ModelRefusal as e:
+        return _fail("", e)
     n = len(concepts)
     concept_block = "\n".join("%d. %s" % (i + 1, c) for i, c in enumerate(concepts))
     userp = ("Strategist profile of the creator:\n" + profile +
@@ -5848,12 +5958,12 @@ async def writeoff(req: Request):
              "one entry per concept, keeping the same underlying idea:\n" + concept_block)
     async def _run_opus():
         try:
-            om = await asyncio.wait_for(run_in_threadpool(lambda: get_client().messages.create(
-                model=MODEL, thinking=NO_THINK, max_tokens=8000, system=SYSTEM_WRITEOFF,
-                messages=[{"role": "user", "content": userp}])), timeout=190)
-            return parse_custom("".join(b.text for b in om.content if getattr(b, "type", "") == "text")), None
+            om = await asyncio.wait_for(run_in_threadpool(lambda: claude(
+                "writeoff", "high", model=MODEL, max_tokens=32000, system=SYSTEM_WRITEOFF,
+                messages=[{"role": "user", "content": userp}])), timeout=GEN_TIMEOUT_S)
+            return parse_custom(msg_text(om)), None
         except asyncio.TimeoutError:
-            return [], MODEL + " timed out (>190s)"
+            return [], MODEL + " timed out (>%ds)" % GEN_TIMEOUT_S
         except Exception as e:
             return [], str(e)[:300]
     async def _run_gpt():
@@ -5897,8 +6007,10 @@ async def writeoff(req: Request):
 # after the user had already waited five minutes, and the client-side abort timers cannot help because
 # something upstream of the client hangs up first. Raising them, which is what I did first, was useless.
 # The fix has to make each HTTP request short. Start the work, return an id, poll for the result.
-# Single instance, so an in-memory store is fine; a restart loses in-flight jobs and the client falls
-# back to a normal /custom call.
+# Single instance, so an in-memory store is fine; a restart loses in-flight jobs. /custom_result then
+# answers 404 {"status": "unknown"} and the page tells the user to start again. It must NOT fall back
+# to a direct /custom call: that needs ~455s, always dies at the 300s proxy cut, and pays for a second
+# generation.
 _JOBS = {}
 _JOB_TTL_S = 1800
 
@@ -6055,6 +6167,8 @@ async def _custom_generate(body, req=None):
         else:
             profile = cached
     except Exception as e:
+        if isinstance(e, ModelRefusal):
+            return _fail("", e)
         return JSONResponse({"error": "Could not read that channel. Check the link and try again.", "detail": str(e)[:200]}, status_code=502)
 
     if not profile:
@@ -6063,26 +6177,24 @@ async def _custom_generate(body, req=None):
     is_more = isinstance(cached, str) and len(cached) > 80
     gen = _build_gen_prompt(profile, titles, exclude, rejected, more=is_more)
     try:
-        # OWN TIMEOUT, AND NO RETRY. The shared client is timeout=150s, max_retries=1 — a bound sized
-        # for the slowest call under a model that never spent budget on thinking. Turning adaptive
-        # thinking on here pushed this one call past 150s, so it timed out, retried, timed out again,
-        # and returned NOTHING at ~300s: zero ideas, not truncated ideas. A retry is actively harmful
-        # on a call this long, doubling the wall clock to re-attempt something that failed on duration
-        # rather than on a blip. The bound stays even with thinking off, because this call was always
-        # the closest to 150s and the shared default was never sized for it.
+        # OWN TIMEOUT, AND NO RETRY. The shared client allows one retry. On Opus 5, when this was a
+        # plain request on a 150s client, turning adaptive thinking on pushed it past 150s, so it timed
+        # out, retried, timed out again, and returned NOTHING at ~300s: zero ideas, not truncated ideas. A retry is
+        # actively harmful on a call this long, doubling the wall clock to re-attempt something that
+        # failed on duration rather than on a blip.
         #
-        # THINKING IS OFF HERE ON PURPOSE. Opus 5 defaults it on and it is this model's headline
-        # strength, but switching it on is a change whose BENEFIT is unmeasured and whose COST is
-        # ~100s on a pipeline already at ~330s. Shipping it on the strength of the release notes broke
-        # generation outright. Opus 5 with thinking off is a like-for-like swap of a configuration we
-        # have actually measured. Turning it on is a separate experiment: raise max_tokens to
-        # 26000/32000 alongside it (thinking and output share the budget), and compare batches.
-        gmsg = await run_in_threadpool(lambda: get_client().with_options(
-            timeout=GEN_TIMEOUT_S, max_retries=0).messages.create(
-            model=MODEL, thinking=NO_THINK, max_tokens=(30000 if is_more else 26000), system=_gen_system(body),  # raised: summaries are now 2-3 sentences, 32 candidates overflowed 7000 and truncated the JSON
+        # THINKING IS ALWAYS ON from Opus 5.5 (it cannot be disabled), so the two things that broke it
+        # on Opus 5 are handled here instead: the call STREAMS (claude() streams every call, so
+        # GEN_TIMEOUT_S bounds silence, not length), and max_tokens is 64000 because thinking and
+        # the JSON share it (32 candidates alone overflowed 7000 and truncated
+        # the JSON, which is why it was 26000/30000 with thinking off). This runs inside the
+        # /custom_start background job, so the 300s proxy ceiling does not apply to it.
+        gmsg = await run_in_threadpool(lambda: claude(
+            "generate", GEN_EFFORT, client=get_client().with_options(timeout=GEN_TIMEOUT_S, max_retries=0),
+            model=MODEL, max_tokens=64000, system=_gen_system(body),
             messages=[{"role": "user", "content": gen}],
         ))
-        candidates = parse_custom("".join(b.text for b in gmsg.content if getattr(b, "type", "") == "text"))
+        candidates = parse_custom(msg_text(gmsg))
         if not candidates:
             return JSONResponse({"error": "no ideas parsed"}, status_code=502)
         # Catalog-collision net: suggesting a video the creator ALREADY MADE is instant death.
@@ -6142,7 +6254,7 @@ async def _custom_generate(body, req=None):
             ideas = _pick(candidates, 28)
         else:
             ideas = _pick(candidates, 25)
-        # SUMMARY POLISH: rewrite the final summaries to active voice (separate fast Sonnet pass on the
+        # SUMMARY POLISH: rewrite the final summaries to active voice (separate pass on the
         # SMALL final set, so it can't time out the way a combined pass did). Fails open (keeps originals).
         try:
             _rew = await asyncio.wait_for(
@@ -6172,7 +6284,7 @@ async def _custom_generate(body, req=None):
             _log_event({"t": "generate", "ch": _chan_key(url), "n": len(ideas)})
         return resp
     except Exception as e:
-        return JSONResponse({"error": "generation failed", "detail": str(e)[:300]}, status_code=502)
+        return _fail("generation failed", e, 300)
 
 
 SYSTEM_RETITLE = """You are a title writer for AI risk videos. Given a video's premise (its summary) and its current title, write fresh ALTERNATIVE titles for the SAME premise. The premise does not change, only the title.
@@ -6308,11 +6420,11 @@ async def category(req: Request):
         user += "\n\nDo NOT repeat or closely overlap any of these titles:\n" + "\n".join("- " + e for e in excl)
     user += seed_block(8) + anchor_block(10)
     try:
-        msg = await run_in_threadpool(lambda: get_client().messages.create(
-            model=MODEL, thinking=NO_THINK, max_tokens=1300, system=SYSTEM_CATEGORY,
+        msg = await run_in_threadpool(lambda: claude(
+            "category", "high", model=MODEL, max_tokens=32000, system=SYSTEM_CATEGORY,
             messages=[{"role": "user", "content": user}],
         ))
-        text = "".join(b.text for b in msg.content if getattr(b, "type", "") == "text")
+        text = msg_text(msg)
         ideas = parse_custom(text)[:5]
         if not ideas:
             return JSONResponse({"error": "no ideas parsed"}, status_code=502)
@@ -6323,7 +6435,7 @@ async def category(req: Request):
             it["priority"] = bool(it.get("priority")) and triple
         return {"ideas": ideas}
     except Exception as e:
-        return JSONResponse({"error": "generation failed", "detail": str(e)[:300]}, status_code=502)
+        return _fail("generation failed", e, 300)
 
 
 @app.post("/retitle")
@@ -6344,16 +6456,16 @@ async def retitle(req: Request):
              + "\nCurrent title (rewrite away from this): " + title
              + "\n\nWrite 5 fresh alternative titles for this exact premise.")
     try:
-        msg = await run_in_threadpool(lambda: get_client().messages.create(
-            model=MODEL, thinking=NO_THINK, max_tokens=700, system=SYSTEM_RETITLE,
+        msg = await run_in_threadpool(lambda: claude(
+            "retitle", "medium", model=MODEL, max_tokens=8000, system=SYSTEM_RETITLE,
             messages=[{"role": "user", "content": user}],
         ))
-        titles = parse_titles("".join(b.text for b in msg.content if getattr(b, "type", "") == "text"))
+        titles = parse_titles(msg_text(msg))
         if not titles:
             return JSONResponse({"error": "no titles"}, status_code=502)
         return {"titles": titles}
     except Exception as e:
-        return JSONResponse({"error": "retitle failed", "detail": str(e)[:200]}, status_code=502)
+        return _fail("retitle failed", e)
 
 
 
@@ -6403,11 +6515,11 @@ async def _vet_cited(idea_text, out):
         return out
     try:
         listing = "\n".join(f"{i+1}. {s.get('title','')} :: {s.get('shows','')[:160]}" for i, s in enumerate(out))
-        msg = await run_in_threadpool(lambda: get_client().messages.create(
-            model=FAST_MODEL, max_tokens=150, system=SYSTEM_VET,
+        msg = await run_in_threadpool(lambda: claude(
+            "vet_sources", "low", model=FAST_MODEL, max_tokens=8000, system=SYSTEM_VET,
             messages=[{"role": "user", "content": "Idea: " + idea_text[:500] + "\n\nSources:\n" + listing + "\n\nReturn the JSON."}],
         ))
-        raw = "".join(b.text for b in msg.content if getattr(b, "type", "") == "text")
+        raw = msg_text(msg)
         obj = None
         for val in reversed(_json_candidates(raw)):
             if isinstance(val, dict) and "keep" in val:  # presence, NOT truthiness: keep=[] means drop all
@@ -6500,11 +6612,11 @@ async def directions(req: Request):
     if len(lead) < 20:
         return JSONResponse({"error": "missing lead"}, status_code=400)
     try:
-        msg = await run_in_threadpool(lambda: get_client().messages.create(
-            model=MODEL, thinking=NO_THINK, max_tokens=1400, system=SYSTEM_DIRECTIONS + ANTI_SLOP,
+        msg = await run_in_threadpool(lambda: claude(
+            "directions", "high", model=MODEL, max_tokens=32000, system=SYSTEM_DIRECTIONS + ANTI_SLOP,
             messages=[{"role": "user", "content": "LEAD: " + lead + "\n\nSuggest the video directions and return the JSON object."}],
         ))
-        raw = "".join(b.text for b in msg.content if getattr(b, "type", "") == "text").strip()
+        raw = msg_text(msg).strip()
         obj = _last_obj_with(raw, "directions")
         if obj is None:
             try: obj = json.loads(re.sub(r"^```(?:json)?|```$", "", raw).strip())
@@ -6519,7 +6631,7 @@ async def directions(req: Request):
         _log_event({"t": "directions", "lead": lead[:80]})
         return {"directions": dirs}
     except Exception as e:
-        return JSONResponse({"error": "directions failed", "detail": str(e)[:200]}, status_code=502)
+        return _fail("directions failed", e)
 
 SYSTEM_PITCH = """You write the longer description for a single AI risk video idea. Given the title and one sentence summary (and optionally a profile of the creator who will read it), write 3 to 5 sentences that explain the idea so a smart stranger immediately gets it: open with the concrete thing that happened, lay out what the video would cover, and end on where the stakes are or the question it leaves. The interest must come entirely from the SUBSTANCE, the specific fact, number, quote, or turn, explained clearly. NO SELLING: never address the reader or the creator (no names, no "you", no "your audience"), never reference their channel or formats or compare the idea to their videos, never coach ("this is your X", "this lands because", "your viewers will"), no hype editorializing ("should stop everyone cold", "mind blowing", "wild"), no exclamation marks, and NO production speak: never open with "Walks through", "Explains", "Traces", "Maps", "Explores" or describe the video's mechanics ("the hook is X, the point is Y"); just say the thing itself, directly, as if telling a smart friend what is actually going on. Just explain the thing plainly and let it be interesting on its own. If a creator profile is given, use it only to choose which aspects to emphasize, never to imitate their voice or mention them.
 
@@ -6557,11 +6669,11 @@ async def pitch(req: Request):
     else:
         user += "\n\nWrite the pitch and return the JSON object (source_ids may be an empty list)."
     try:
-        msg = await run_in_threadpool(lambda: get_client().messages.create(
-            model=MODEL, thinking=NO_THINK, max_tokens=1300, system=SYSTEM_PITCH + ANTI_SLOP,
+        msg = await run_in_threadpool(lambda: claude(
+            "pitch", "high", model=MODEL, max_tokens=32000, system=SYSTEM_PITCH + ANTI_SLOP,
             messages=[{"role": "user", "content": user}],
         ))
-        raw = "".join(b.text for b in msg.content if getattr(b, "type", "") == "text").strip()
+        raw = msg_text(msg).strip()
         obj = _last_obj_with(raw, "pitch")  # the LAST draft is the model's corrected final answer
         pitch_text, cited = "", []
         picked = []
@@ -6591,7 +6703,7 @@ async def pitch(req: Request):
         pitch_text, _pstats = _resolve_ids(pitch_text)
         return {"pitch": pitch_text, "sources": cited}
     except Exception as e:
-        return JSONResponse({"error": "pitch failed", "detail": str(e)[:200]}, status_code=502)
+        return _fail("pitch failed", e)
 
 
 SYSTEM_SOURCES = """You attach verified sources to ONE AI risk video idea. You are given the idea (title + summary + optionally its longer pitch) and a menu of verified sources, each with an id and kind. Choose 4 to 10 for this idea (more is better as long as every one genuinely fits; summary posts that excerpt the key finding are cheap extra coverage). The reader is a random YouTuber, not an academic, and every link must pay off within a minute of clicking. Prefer sources they would actually read (news articles, official blog posts, short videos). HARD CAP: at most ONE paper, system card, or technical PDF in the whole list, always last; if the menu lacks readable support, cite fewer sources rather than more documents. Kind "tweet" sources are short posts excerpting the key finding: good supporting citations, but the FIRST source must be institutional (news, official blog, or primary document), never a post. Prefer sources where something HAPPENS (an incident, a finding with a number, a person saying something wild) over methods papers. Never documentaries or films, or sources that only confirm what everyone already knows. Whenever the menu has a source documenting the central event, include it. ALWAYS give the creator somewhere to go next: if nothing documents the exact premise, pick the 2 or 3 closest genuinely relevant reads on the same mechanism; return an empty list only if truly nothing relates at all. Include every menu source that truly supports the idea, up to 10. The only ban is off topic padding: a loosely related source that merely shares a word with the idea is worse than none.
@@ -6623,11 +6735,11 @@ async def sources_for(req: Request):
             + (("\nPitch: " + pitch_text) if pitch_text else "")
             + "\n\nVERIFIED SOURCE MENU:\n" + menu + "\n\nReturn the JSON object.")
     try:
-        msg = await run_in_threadpool(lambda: get_client().messages.create(
-            model=FAST_MODEL, max_tokens=550, system=SYSTEM_SOURCES,
+        msg = await run_in_threadpool(lambda: claude(
+            "sources", "low", model=FAST_MODEL, max_tokens=8000, system=SYSTEM_SOURCES,
             messages=[{"role": "user", "content": user}],
         ))
-        raw = "".join(b.text for b in msg.content if getattr(b, "type", "") == "text").strip()
+        raw = msg_text(msg).strip()
         obj = _last_obj_with(raw, "source_ids")
         picked = []
         if obj:
@@ -6639,7 +6751,7 @@ async def sources_for(req: Request):
         cited = _cited_payload(await _finalize_cited(title + " " + summary, picked, ranked))
         return {"pitch": pitch_text, "sources": cited}
     except Exception as e:
-        return JSONResponse({"error": "sources failed", "detail": str(e)[:200]}, status_code=502)
+        return _fail("sources failed", e)
 
 
 # ============================================================================
@@ -6776,11 +6888,11 @@ async def verdict(req: Request):
             + "\nPredict the editor's verdict. Return only the JSON object.")
     content = images + [{"type": "text", "text": user}] if images else user
     try:
-        msg = await run_in_threadpool(lambda: get_client().messages.create(
-            model=MODEL, thinking=NO_THINK, max_tokens=350, system=SYSTEM_VERDICT,
+        msg = await run_in_threadpool(lambda: claude(
+            "verdict", "low", model=MODEL, max_tokens=8000, system=SYSTEM_VERDICT,
             messages=[{"role": "user", "content": content}],
         ))
-        raw = "".join(b.text for b in msg.content if getattr(b, "type", "") == "text").strip()
+        raw = msg_text(msg).strip()
         obj = _last_obj_with(raw, "score") or json.loads(raw)
         # score is 1..5 (5 = very positive to spread). Approve only 4 and 5.
         try:
@@ -6796,4 +6908,4 @@ async def verdict(req: Request):
                 "concern": _plain_company(str(obj.get("concern", "")).strip()),
                 "fetched": fetched, "text": text[:1500], "platform": platform}
     except Exception as e:
-        return JSONResponse({"error": "verdict failed", "detail": str(e)[:200]}, status_code=502)
+        return _fail("verdict failed", e)

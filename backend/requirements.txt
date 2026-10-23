@@ -1,5 +1,5 @@
 fastapi
 uvicorn[standard]
-anthropic>=0.40
+anthropic>=0.120,<1  # 1.x/2.x change the HTTP stack and API version; output_config + stop_details need >=0.120
 yt-dlp
 youtube-transcript-api
