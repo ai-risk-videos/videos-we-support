@@ -121,3 +121,4 @@
 {"abs": 1, "bump": 0, "cut": false, "id": "expe-01-cnn-godfather-of-ai-warns-ai-may-figure-", "srv_ts": 1793324250, "t": "anchorvote", "ts": "", "who": "claude-test"}
 {"abs": 1, "bump": 0, "cut": false, "id": "expe-84-welcome-to-moltbook", "srv_ts": 1793324283, "t": "anchorvote", "ts": "2026-10-30T01:38:02.617Z", "who": "claude-test"}
 {"abs": 1, "bump": 0, "cut": false, "id": "capa-03-welcome-to-llmflation-llm-inference-cost", "srv_ts": 1793324295, "t": "anchorvote", "ts": "", "who": "qa-verifier"}
+{"abs": 1, "bump": 0, "cut": false, "id": "expe-84-welcome-to-moltbook", "srv_ts": 1793330337, "t": "anchorvote", "ts": "2026-10-30T03:18:56Z", "who": "claude-test"}
