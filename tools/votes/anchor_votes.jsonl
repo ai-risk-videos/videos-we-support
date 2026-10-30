@@ -118,3 +118,6 @@
 {"bump": 0, "cut": true, "id": "scen-23-openai-scientists-and-an-agi-bunker", "srv_ts": 1785443042, "t": "anchorvote", "who": "drew"}
 {"bump": 0, "cut": true, "id": "scen-29-the-2028-great-intelligence-crisis-scena", "srv_ts": 1785443042, "t": "anchorvote", "who": "drew"}
 {"bump": 0, "cut": true, "id": "gove-01-xai-s-grok-government-contract-fallout", "srv_ts": 1785443042, "t": "anchorvote", "who": "drew"}
+{"abs": 1, "bump": 0, "cut": false, "id": "expe-01-cnn-godfather-of-ai-warns-ai-may-figure-", "srv_ts": 1793324250, "t": "anchorvote", "ts": "", "who": "claude-test"}
+{"abs": 1, "bump": 0, "cut": false, "id": "expe-84-welcome-to-moltbook", "srv_ts": 1793324283, "t": "anchorvote", "ts": "2026-10-30T01:38:02.617Z", "who": "claude-test"}
+{"abs": 1, "bump": 0, "cut": false, "id": "capa-03-welcome-to-llmflation-llm-inference-cost", "srv_ts": 1793324295, "t": "anchorvote", "ts": "", "who": "qa-verifier"}
