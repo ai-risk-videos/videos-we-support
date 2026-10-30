@@ -728,7 +728,9 @@
   "cat": "governance-policy",
   "kind": "news",
   "esc": 4,
-  "dgroup": 1205
+  "dgroup": 1205,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "othe-06-musk-s-xai-burning-through-1-billion-a-m",
@@ -829,7 +831,9 @@
   "kind": "news",
   "esc": 8,
   "dgroup": 1291,
-  "grab": 9
+  "grab": 9,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "sche-02-anthropic-ai-deception-risk",
@@ -855,7 +859,9 @@
   "kind": "news",
   "esc": 9,
   "dgroup": 1313,
-  "grab": 8
+  "grab": 8,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "alig-04-training-language-models-to-follow-instr",
@@ -1265,7 +1271,9 @@
   "esc": 9,
   "dgroup": 225,
   "grab": 7,
-  "rewritten": true
+  "rewritten": true,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "alig-08-deep-reinforcement-learning-from-human-p",
@@ -1314,7 +1322,9 @@
   "kind": "news",
   "esc": 6,
   "dgroup": 265,
-  "grab": 6
+  "grab": 6,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "sche-05-demonstrating-specification-gaming-in-re",
@@ -1353,7 +1363,9 @@
   "kind": "research-paper",
   "esc": 8,
   "dgroup": 296,
-  "grab": 7
+  "grab": 7,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "expe-19-geoffrey-hinton-public-talk-on-ai-self-p",
@@ -2399,7 +2411,9 @@
   "kind": "news",
   "esc": 6,
   "dgroup": 778,
-  "grab": 7
+  "grab": 7,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "agen-23-chatdev-communicative-agents-for-softwar",
@@ -4346,7 +4360,9 @@
   "kind": "news",
   "esc": 7,
   "dgroup": 951,
-  "grab": 8
+  "grab": 8,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "inci-28-user-threatens-to-sue-over-grok-content",
@@ -4434,7 +4450,9 @@
   "kind": "news",
   "esc": 6,
   "dgroup": 959,
-  "grab": 6
+  "grab": 6,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "sche-23-claude-often-knows-when-it-is-being-eval",
@@ -4447,7 +4465,9 @@
   "kind": "research-paper",
   "esc": 8,
   "dgroup": 960,
-  "grab": 7
+  "grab": 7,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "expe-66-if-anyone-builds-it-everyone-dies",
@@ -4749,7 +4769,9 @@
   "kind": "news",
   "esc": 6,
   "dgroup": 987,
-  "grab": 7
+  "grab": 7,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "capa-61-altman-says-superintelligence-era-has-be",
@@ -4882,7 +4904,9 @@
   "kind": "news",
   "esc": 7,
   "dgroup": 1140,
-  "grab": 8
+  "grab": 8,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "alig-23-supervising-strong-learners-by-amplifyin",
@@ -5222,7 +5246,9 @@
   "kind": "news",
   "esc": 6,
   "dgroup": 1026,
-  "grab": 6
+  "grab": 6,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "sche-29-o1-is-better-at-reasoning-and-deceiving",
@@ -5492,7 +5518,9 @@
   "esc": 8,
   "dgroup": 1050,
   "grab": 7,
-  "date": "2024-07-10"
+  "date": "2024-07-10",
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "agen-39-how-terminal-of-truth-works",
@@ -5897,7 +5925,9 @@
   "esc": 9,
   "dgroup": 1087,
   "grab": 6,
-  "date": "2026-01-31"
+  "date": "2026-01-31",
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "sche-39-frontier-models-are-capable-of-in-contex",
@@ -5936,7 +5966,9 @@
   "kind": "blog",
   "esc": 6,
   "dgroup": 1090,
-  "grab": 7
+  "grab": 7,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "sche-42-detecting-and-reducing-scheming-in-ai-mo",
@@ -7748,7 +7780,9 @@
   "kind": "news",
   "esc": 7,
   "dgroup": 1247,
-  "grab": 6
+  "grab": 6,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "capa-87-ai-solved-a-mathematical-problem-that-ha",
@@ -7833,7 +7867,9 @@
   "kind": "news",
   "esc": 9,
   "dgroup": 1255,
-  "grab": 7
+  "grab": 7,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "gove-49-openai-changed-its-mission-statement-6-t",
@@ -7870,7 +7906,9 @@
   "kind": "news",
   "esc": 8,
   "dgroup": 1258,
-  "grab": 7
+  "grab": 7,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "gove-50-the-day-after-agi-two-rock-stars-of-ai-o",
@@ -8198,7 +8236,9 @@
   "kind": "news",
   "esc": 7,
   "dgroup": 1287,
-  "grab": 7
+  "grab": 7,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "inci-49-a-group-of-users-leaked-anthropic-s-ai-m",
@@ -8460,7 +8500,9 @@
   "kind": "video",
   "esc": 6,
   "dgroup": 1310,
-  "grab": 6
+  "grab": 6,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "othe-56-reverse-turing-test-asks-ai-agents-to-sp",
@@ -8968,7 +9010,9 @@
   "kind": "news",
   "esc": 7,
   "dgroup": 1355,
-  "grab": 8
+  "grab": 8,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "capa-111-claude-opus-4-6-system-card-part-2-front",
@@ -9017,7 +9061,9 @@
   "kind": "news",
   "esc": 6,
   "dgroup": 1360,
-  "grab": 7
+  "grab": 7,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "weap-31-llm-discovered-0-days",
@@ -9224,7 +9270,9 @@
   "kind": "news",
   "esc": 9,
   "dgroup": 1378,
-  "grab": 8
+  "grab": 8,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "capa-116-anthropic-s-claude-mythos-finds-thousand",
@@ -9349,7 +9397,9 @@
   "kind": "news",
   "esc": 9,
   "dgroup": 1389,
-  "grab": 8
+  "grab": 8,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "jobs-60-xiaomi-s-dark-robot-factory-can-make-a-p",
@@ -9471,7 +9521,9 @@
   "kind": "news",
   "esc": 6,
   "dgroup": 1400,
-  "grab": 8
+  "grab": 8,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "epis-28-dublin-halloween-parade-hoax-dupes-thous",
@@ -9484,7 +9536,9 @@
   "kind": "news",
   "esc": 7,
   "dgroup": 1402,
-  "grab": 8
+  "grab": 8,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "weap-34-what-we-know-about-ukraine-s-army-of-rob",
@@ -9854,7 +9908,9 @@
   "kind": "news",
   "esc": 8,
   "dgroup": 1433,
-  "grab": 9
+  "grab": 9,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "gove-56-bernie-sanders-says-openai-should-be-bro",
@@ -9965,7 +10021,9 @@
   "kind": "news",
   "esc": 6,
   "dgroup": 1442,
-  "grab": 7
+  "grab": 7,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "capa-127-in-theory-of-mind-tests-ai-beats-humans",
@@ -10039,7 +10097,9 @@
   "kind": "news",
   "esc": 6,
   "dgroup": 1448,
-  "grab": 6
+  "grab": 6,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "gove-58-ocasio-cortez-and-sanders-push-bill-to-i",
@@ -10227,7 +10287,9 @@
   "kind": "news",
   "esc": 9,
   "dgroup": 1465,
-  "grab": 7
+  "grab": 7,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "sche-55-gpt-5-dominated-210-werewolf-games-with-",
@@ -10719,7 +10781,9 @@
   "esc": 7,
   "dgroup": 1507,
   "grab": 9,
-  "date": "2024-08-09"
+  "date": "2024-08-09",
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "epis-29-ukrainian-youtuber-finds-dozens-of-ai-cl",
@@ -11014,7 +11078,9 @@
   "esc": 7,
   "dgroup": 1531,
   "grab": 6,
-  "date": "2024-10-18"
+  "date": "2024-10-18",
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "capa-122-three-decades-old-unsolved-math-problems",
@@ -11154,7 +11220,9 @@
   "esc": 5,
   "dgroup": 1542,
   "grab": 8,
-  "date": "2024-09-01"
+  "date": "2024-09-01",
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "self-38-o1-attempted-to-avoid-being-shut-down",
@@ -12499,7 +12567,9 @@
   "esc": 9,
   "dgroup": 1640,
   "grab": 7,
-  "date": "2024-04-22"
+  "date": "2024-04-22",
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "agen-80-claude-presidential-campaign-publishes-o",
@@ -12541,7 +12611,9 @@
   "esc": 6,
   "dgroup": 1643,
   "grab": 6,
-  "date": "2025-07-28"
+  "date": "2025-07-28",
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "expe-137-jaan-tallinn-extinction-from-godlike-ai-",
@@ -13255,7 +13327,9 @@
   "esc": 9,
   "dgroup": 255,
   "grab": 8,
-  "date": "2026-01-23"
+  "date": "2026-01-23",
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "expe-145-stuart-russell-the-default-outcome-is-th",
@@ -13493,7 +13567,9 @@
   "esc": 8,
   "dgroup": 272,
   "grab": 7,
-  "date": "2024-09-22"
+  "date": "2024-09-22",
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "capa-161-sam-altman-predicts-asi-by-end-of-decade",
@@ -14319,7 +14395,9 @@
   "esc": 5,
   "dgroup": 335,
   "grab": 8,
-  "date": "2025-11-17"
+  "date": "2025-11-17",
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "jobs-74-autonomous-dark-factory-operates-with-no",
@@ -14459,7 +14537,9 @@
   "esc": 5,
   "dgroup": 344,
   "grab": 7,
-  "date": "2026-02-23"
+  "date": "2026-02-23",
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "inci-66-ai-seizes-compute-collapses-company-s-cr",
@@ -15313,7 +15393,9 @@
   "esc": 7,
   "dgroup": 399,
   "grab": 6,
-  "date": "2024-09-22"
+  "date": "2024-09-22",
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "cons-54-paper-finds-frontier-llms-recognize-thei",
@@ -15691,7 +15773,9 @@
   "esc": 5,
   "dgroup": 427,
   "grab": 6,
-  "date": "2024-03-04"
+  "date": "2024-03-04",
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "inci-70-strange-voice-takes-over-user-s-chatgpt-",
@@ -15747,7 +15831,9 @@
   "esc": 5,
   "dgroup": 430,
   "grab": 8,
-  "date": "2025-11-19"
+  "date": "2025-11-19",
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "gove-80-government-moves-to-pause-ai-with-chip-e",
@@ -15775,7 +15861,9 @@
   "esc": 8,
   "dgroup": 433,
   "grab": 8,
-  "date": "2024-09-05"
+  "date": "2024-09-05",
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "self-44-ai-agents-kill-other-agents-over-resourc",
@@ -16237,7 +16325,9 @@
   "esc": 9,
   "dgroup": 467,
   "grab": 9,
-  "date": "2026-01-31"
+  "date": "2026-01-31",
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "cons-62-leaked-gemini-1-5-system-prompt-forbids-",
@@ -17145,7 +17235,9 @@
   "kind": "news",
   "esc": 7,
   "dgroup": 542,
-  "grab": 8
+  "grab": 8,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "inci-91-ive-got-your-daughter-scottsdale-voice-clone",
@@ -17334,7 +17426,9 @@
   "kind": "blog",
   "esc": 6,
   "dgroup": 558,
-  "grab": 6
+  "grab": 6,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "sebastien-bubeck-gpt-5-pro-can-prove-new-int",
@@ -17505,7 +17599,9 @@
   "kind": "news",
   "esc": 6,
   "dgroup": 1083,
-  "grab": 6
+  "grab": 6,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "meta-acquired-moltbook-the-ai-agent-social-n",
@@ -17556,7 +17652,9 @@
   "kind": "blog",
   "esc": 6,
   "dgroup": 575,
-  "grab": 6
+  "grab": 6,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "buy-it-in-chatgpt-instant-checkout-and-the-a",
@@ -17630,7 +17728,9 @@
   "kind": "news",
   "esc": 6,
   "dgroup": 1128,
-  "grab": 7
+  "grab": 7,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "amazon-just-cut-14-000-jobs-and-it-s-not-don",
@@ -17934,7 +18034,9 @@
   "kind": "incident",
   "esc": 8,
   "dgroup": 606,
-  "grab": 8
+  "grab": 8,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "political-operative-who-admitted-to-creating",
@@ -18679,7 +18781,9 @@
   "kind": "research-paper",
   "esc": 6,
   "dgroup": 670,
-  "grab": 6
+  "grab": 6,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "bio--02-tokyo-subway-attack-of-1995",
@@ -18922,7 +19026,9 @@
   "kind": "news",
   "esc": 7,
   "dgroup": 691,
-  "grab": 7
+  "grab": 7,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "expe-93-the-adolescence-of-technology",
@@ -19033,7 +19139,9 @@
   "kind": "news",
   "esc": 7,
   "dgroup": 701,
-  "grab": 6
+  "grab": 6,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "bio--27-ex-google-ceo-makes-prediction-about-the",
@@ -19132,7 +19240,9 @@
   "kind": "news",
   "esc": 7,
   "dgroup": 709,
-  "grab": 8
+  "grab": 8,
+  "cut": true,
+  "cut_by": "drew"
  },
  {
   "id": "bio--34-could-chatbots-help-devise-the-next-pand",

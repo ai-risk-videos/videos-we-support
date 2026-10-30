@@ -24,7 +24,8 @@ def votes_from_events():
 
 def votes_from_file(path):
     d = json.load(open(path))
-    return {k: {"cut": bool(v.get("cut")), "bump": int(v.get("bump") or 0)} for k, v in d.items()}
+    return {k: {"cut": bool(v.get("cut")), "bump": int(v.get("bump") or 0),
+                "who": str(v.get("who") or "unknown")} for k, v in d.items()}
 
 
 def main():
