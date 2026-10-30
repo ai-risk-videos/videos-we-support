@@ -79,7 +79,10 @@ def log_new(votes):
 
 def main():
     live = len(sys.argv) < 2
-    votes = votes_from_live() if live else votes_from_file(sys.argv[1])
+    try:
+        votes = votes_from_live() if live else votes_from_file(sys.argv[1])
+    except Exception as ex:
+        sys.exit("could not read the votes: %r" % (ex,))
     if live:
         print("%d live votes, %d new to tools/votes/anchor_votes.jsonl" % (len(votes), log_new(votes)))
     if not votes:
