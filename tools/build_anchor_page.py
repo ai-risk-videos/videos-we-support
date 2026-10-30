@@ -20,10 +20,11 @@ for s in src:
         continue
     e = s["esc"] if isinstance(s.get("esc"), int) else 5
     g = s["grab"] if isinstance(s.get("grab"), int) else None
-    rank = min(e, g if g is not None else min(e, 6)) + (s.get("bump") or 0)
+    score = min(e, g if g is not None else min(e, 6))
+    bump = int(s.get("bump") or 0)
     rows.append({"id": s["id"], "who": str(s.get("who") or ""), "year": str(s.get("year") or ""),
                  "url": str(s.get("url") or ""),
-                 "text": t, "esc": e, "grab": g, "rank": rank,
+                 "text": t, "esc": e, "grab": g, "rank": score + bump, "score": score, "bump": bump,
                  "cat": str(s.get("cat") or "other"), "cut": bool(s.get("cut")),
                  "aism": bool(re.search(r"aisafetymemes|ai safety memes",
                                         str(s.get("who") or "") + str(s.get("url") or ""), re.I))})
@@ -40,7 +41,7 @@ SHOW = 40          # per category, best first; the tail is where the weak ones h
 
 def row_html(r):
     band = "t10" if r["rank"] >= 9 else ("t8" if r["rank"] >= 7 else ("t6" if r["rank"] >= 5 else "t1"))
-    return ("<li class='row%s' data-id='%s' draggable='true'>"
+    return ("<li class='row%s' data-id='%s' data-score='%d' data-bump='%d' draggable='true'>"
             "<span class='grip'>⠿</span>"
             "<span class='rk %s'>%d</span>"
             "<span class='sc'><i>event</i>%s<i>telling</i>%s</span>"
@@ -49,7 +50,7 @@ def row_html(r):
             "<span class='act'><button class='up' title='more important'>▲</button>"
             "<button class='dn' title='less important'>▼</button>"
             "<button class='x' title='never use this one'>✕</button></span></li>"
-            % (" cut" if r["cut"] else "", E(r["id"]), band, r["rank"], r["esc"],
+            % (" cut" if r["cut"] else "", E(r["id"]), r["score"], r["bump"], band, r["rank"], r["esc"],
                r["grab"] if r["grab"] is not None else "&ndash;",
                E(r["year"]), " &middot; " if r["who"] else "",
                ("<a class='src' href='%s' target='_blank' rel='noopener' title='open the source'>%s ↗</a>"
@@ -103,27 +104,56 @@ a.src{color:#7fb2e5;text-decoration:none}a.src:hover{color:#a9cdf3;text-decorati
 </style></head><body><div class="wrap">
 <h1>Anchor bank</h1>
 <p class="lead">Every real incident the generator can build on, grouped by category and ranked best-first. Two scores: <b>event</b> is how far the AI went, <b>telling</b> is whether the sentence would stop a normal person scrolling. The rank is the lower of the two, which is why a huge event described badly sits low.</p>
-<div class="how"><b>Curate it.</b> <b>✕</b> means never use this one. <b>▲ ▼</b> move it up or down the ranking. Drag by the ⠿ handle to move something a long way. Every change sends to me immediately and gets applied to the bank, so the generator uses your ordering rather than my guess at it. The bottom of each category is shown separately, because that is where the weak ones hide.</div>
+<div class="how"><b>Curate it.</b> <b>✕</b> means never use this one. <b>▲ ▼</b> move it up or down the ranking. Drag by the ⠿ handle to move something a long way. Every change goes live in the generator within seconds, so it uses your ordering rather than my guess at it. The bottom of each category is shown separately, because that is where the weak ones hide.</div>
 __BODY__
 </div>
 <div id="bar"><div class="in">
-  <span><b id="ncut">0</b> cut</span><span><b id="nmoved">0</b> moved</span>
+  <span><b id="ncut">&hellip;</b> cut in the bank</span><span><b id="nmoved">&hellip;</b> moved</span>
   <button id="copy">Copy decisions</button><button id="resend">Re-send all</button>
-  <span id="whoami"></span>
-  <span style="margin-left:auto">changes save locally and send as you make them</span>
+  <span id="whoami"></span><span id="status"></span>
+  <span style="margin-left:auto">changes go live in the generator within seconds</span>
 </div></div>
 <script>
-const API="https://videos-similar-api-production.up.railway.app/event";
+const BASE="https://videos-similar-api-production.up.railway.app";
+const API=BASE+"/event";
 const KEY="anchordecisions.v1";
 let dec=JSON.parse(localStorage.getItem(KEY)||"{}");
 const $=s=>document.querySelector(s);
-function save(){localStorage.setItem(KEY,JSON.stringify(dec));
-  $("#ncut").textContent=Object.values(dec).filter(d=>d.cut).length;
-  $("#nmoved").textContent=Object.values(dec).filter(d=>d.bump).length;}
-const WHO=(new URLSearchParams(location.search).get("u")||localStorage.getItem("anchoruser")||"").trim();
+let WHO=(new URLSearchParams(location.search).get("u")||localStorage.getItem("anchoruser")||"").trim();
 if(WHO)localStorage.setItem("anchoruser",WHO);
-function send(id,d){fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},keepalive:true,
-  body:JSON.stringify({t:"anchorvote",id:id,cut:!!d.cut,bump:d.bump||0,who:WHO||"unknown",ts:new Date().toISOString()})}).catch(()=>{});}
+const rowOf=id=>document.querySelector('li.row[data-id="'+CSS.escape(id)+'"]');
+// A ROW'S RANK IS ITS SCORE PLUS ITS WHOLE BUMP. Votes used to carry only this browser's offset from the
+// rank the page was built with, and the bank stored that offset as the whole bump, so moving an anchor
+// that already had a bump of 3 up one place set it to 1. Votes now carry the whole bump and say so (abs).
+function bumpOf(li){return parseInt(li.dataset.bump,10)||0;}
+function show(li){const rk=li.querySelector(".rk"), r=(parseInt(li.dataset.score,10)||0)+bumpOf(li);
+  rk.textContent=r; rk.className="rk "+(r>=9?"t10":r>=7?"t8":r>=5?"t6":"t1");}
+function setStatus(t,bad){const s=$("#status");s.textContent=t;s.style.color=bad?"var(--red)":"var(--grn)";}
+// THE FOOTER USED TO COUNT ONLY THIS BROWSER'S CLICKS, so after the bank had 55 cuts it still said
+// "0 cut". It now shows the live bank, loaded from the server below.
+let BANK=null;
+function counts(){if(BANK){$("#ncut").textContent=BANK.cut.size;$("#nmoved").textContent=Object.keys(BANK.bump).length;}}
+function save(){localStorage.setItem(KEY,JSON.stringify(dec));counts();}
+function whoami(){$("#whoami").textContent = WHO ? ("curating as " + WHO) : "add ?u=yourname to the URL so your picks count";}
+function needName(){
+  // Unsigned votes are logged but never applied, so ask once rather than let a click silently do nothing.
+  if(WHO)return true;
+  const n=(prompt("Your name, so your picks count:")||"").trim();
+  if(!n)return false;
+  WHO=n;localStorage.setItem("anchoruser",WHO);whoami();return true;}
+function voteBody(id,d){return JSON.stringify(Object.assign({t:"anchorvote",id:id,cut:!!d.cut,bump:d.bump||0,
+  who:WHO||"unknown",ts:new Date().toISOString()},d.abs?{abs:1}:{}));}
+function send(id,d,li){
+  fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},keepalive:true,body:voteBody(id,d)})
+  .then(r=>r.json()).then(j=>{
+    if(j&&j.applied){
+      if(BANK){if(d.cut)BANK.cut.add(id);else BANK.cut.delete(id);
+        if(d.bump)BANK.bump[id]=d.bump;else delete BANK.bump[id];counts();}
+      setStatus("saved, live in the generator");
+      if(li){li.classList.add("saved");setTimeout(()=>li.classList.remove("saved"),900);}
+    } else setStatus("not applied: add ?u=yourname to the URL",true);
+  }).catch(()=>setStatus("could not reach the server: this change is saved in this browser only",true));
+}
 function resort(){
   // A REFRESH USED TO UNDO EVERY MOVE. apply() adjusted the rank NUMBER on the row and stopped
   // there, so the row stayed exactly where the static HTML had written it and only its number
@@ -136,34 +166,28 @@ function resort(){
     rows.forEach(li=>ol.appendChild(li));
   });
 }
-function apply(){
-  for(const [id,d] of Object.entries(dec)){
-    const li=document.querySelector('[data-id="'+CSS.escape(id)+'"]'); if(!li)continue;
-    if(d.cut)li.classList.add("cut");
-    if(d.bump){const rk=li.querySelector(".rk");rk.textContent=(parseInt(rk.textContent,10)+d.bump);}
-  }
-  resort();
-  save();
+function record(li){   // remember this row's whole state, then send it
+  const id=li.dataset.id; dec[id]={cut:li.classList.contains("cut"),bump:bumpOf(li),abs:1};
+  save(); send(id,dec[id],li);
 }
 document.addEventListener("click",e=>{
   if(e.target.closest&&e.target.closest("a.src"))return;   // opening the source is not a vote
   const b=e.target.closest&&e.target.closest("button"); if(!b)return;
   const li=b.closest("li.row"); if(!li)return;
-  const id=li.dataset.id; dec[id]=dec[id]||{cut:false,bump:0};
-  if(b.classList.contains("x")){dec[id].cut=!dec[id].cut;li.classList.toggle("cut");}
-  if(b.classList.contains("up")){dec[id].bump=(dec[id].bump||0)+1;const rk=li.querySelector(".rk");rk.textContent=parseInt(rk.textContent,10)+1;}
-  if(b.classList.contains("dn")){dec[id].bump=(dec[id].bump||0)-1;const rk=li.querySelector(".rk");rk.textContent=parseInt(rk.textContent,10)-1;}
+  if(!needName())return;
+  if(b.classList.contains("x"))li.classList.toggle("cut");
   if(b.classList.contains("up")||b.classList.contains("dn")){
+    li.dataset.bump=bumpOf(li)+(b.classList.contains("up")?1:-1); show(li);
     resort(); li.scrollIntoView({block:"center"});   // follow the row you just moved
   }
-  save(); send(id,dec[id]);
+  record(li);
 });
 let dragging=null;
 document.addEventListener("dragstart",e=>{
   if(e.target.closest&&e.target.closest("a.src")){e.preventDefault();return;}
   const li=e.target.closest&&e.target.closest("li.row");
   if(!li)return;dragging=li;li.classList.add("dragging");});
-function record(li){
+function dropped(li){
   // RECORD ON dragend, NOT ONLY ON drop. dragover already moved the row on screen, but the vote
   // was saved in the drop handler, and drop never fires when you release over a heading or the
   // gap between two lists. The row slid into place and nothing was ever sent: the move looked
@@ -173,15 +197,14 @@ function record(li){
   const a=nrank(prev), b=nrank(next);
   const target = a!==null&&b!==null ? Math.round((a+b)/2) : (a!==null?a:(b!==null?b:null));
   if(target===null)return;
-  const rk=li.querySelector(".rk"); const was=parseInt(rk.textContent,10);
+  const was=parseInt(li.querySelector(".rk").textContent,10);
   if(target===was)return;                       // dropped back where it started
-  const id=li.dataset.id; dec[id]=dec[id]||{cut:false,bump:0};
-  dec[id].bump=(dec[id].bump||0)+(target-was); rk.textContent=target;
-  li.classList.add("saved"); setTimeout(()=>li.classList.remove("saved"),900);
-  save(); send(id,dec[id]);
+  if(!needName()){resort();return;}
+  li.dataset.bump=bumpOf(li)+(target-was); show(li);
+  record(li);
 }
 document.addEventListener("dragend",()=>{
-  if(dragging){dragging.classList.remove("dragging"); record(dragging);}
+  if(dragging){dragging.classList.remove("dragging"); dropped(dragging);}
   dragging=null;});
 document.addEventListener("dragover",e=>{
   const li=e.target.closest&&e.target.closest("li.row");
@@ -191,15 +214,33 @@ document.addEventListener("dragover",e=>{
 });
 document.addEventListener("drop",e=>{
   if(!dragging)return; e.preventDefault();
-  const li=dragging; dragging=null; li.classList.remove("dragging"); record(li);
+  const li=dragging; dragging=null; li.classList.remove("dragging"); dropped(li);
 });
 $("#copy").onclick=()=>navigator.clipboard.writeText(JSON.stringify(dec,null,1))
   .then(()=>alert("Copied decisions for "+Object.keys(dec).length+" anchors."));
-$("#resend").onclick=async()=>{let ok=0;for(const [id,d] of Object.entries(dec)){try{await fetch(API,{method:"POST",
-  headers:{"Content-Type":"application/json"},body:JSON.stringify({t:"anchorvote",id:id,cut:!!d.cut,bump:d.bump||0,who:WHO||"unknown"})});ok++;}catch(e){}}
-  alert("Re-sent "+ok+" of "+Object.keys(dec).length);};
-$("#whoami").textContent = WHO ? ("curating as " + WHO) : "add ?u=yourname to the URL so your picks are attributed";
-apply();
+$("#resend").onclick=async()=>{if(!needName())return;let ok=0;for(const [id,d] of Object.entries(dec)){try{
+  const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:voteBody(id,d)});
+  if((await r.json()).applied)ok++;}catch(e){}}
+  alert("Re-sent "+Object.keys(dec).length+", applied "+ok+". Reload to see the bank.");};
+function serverView(j){
+  // The live bank is the truth: the cuts and moves baked into sources.json plus every vote since.
+  BANK={cut:new Set(j.cut||[]),bump:j.bump||{}};
+  document.querySelectorAll("li.row").forEach(li=>{
+    li.classList.toggle("cut",BANK.cut.has(li.dataset.id));
+    li.dataset.bump=BANK.bump[li.dataset.id]||0; show(li);});
+  resort(); counts();
+}
+function localView(){   // server unreachable: show the page as built plus this browser's own clicks
+  for(const [id,d] of Object.entries(dec)){
+    const li=rowOf(id); if(!li)continue;
+    if(d.cut)li.classList.add("cut");
+    li.dataset.bump=d.abs?(d.bump||0):bumpOf(li)+(d.bump||0); show(li);
+  }
+  resort();
+}
+whoami();
+fetch(BASE+"/anchorvotes").then(r=>r.json()).then(j=>{serverView(j);setStatus("showing the live bank");})
+  .catch(()=>{localView();setStatus("could not load the live bank: showing the page as built plus your clicks",true);});
 </script></body></html>"""
 
 body = "".join(cat_html(c) for c in CATS)

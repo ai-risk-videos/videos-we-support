@@ -678,7 +678,92 @@ def get_sources():
                 _SOURCES = {s["id"]: s for s in json.load(f) if s.get("id") and s.get("url")}
         except Exception:
             _SOURCES = {}
+        _replay_anchor_votes(_SOURCES)
     return _SOURCES
+
+# ---- the curator's anchor votes, applied live ----
+# anchors.html posts an `anchorvote` for every cut, un-cut and move. Those used to wait in the event log
+# until someone ran tools/apply_anchor_votes.py, and after 30 July 2026 nobody did: 55 cuts sat unapplied
+# for three months while the generator kept drawing them. Now each vote changes the in-memory bank the
+# moment it arrives, is appended to ANCHOR_VOTES_PATH (a Railway volume at /data, so it outlives a
+# redeploy), and is replayed over sources.json at boot. ./deploy.sh also pulls /anchorvotes and bakes the
+# votes into sources.json, so the repo matches what is live. tools/apply_anchor_votes.py mirrors this logic.
+ANCHOR_VOTES_PATH = os.environ.get("ANCHOR_VOTES_PATH") or os.path.join(
+    "/data" if os.path.isdir("/data") else os.path.dirname(os.path.abspath(__file__)), "anchor_votes.jsonl")
+_ANCHOR_VOTES = {}   # id -> latest applied vote, what /anchorvotes serves
+
+def _anchor_voter(e):
+    """Only a named curator's vote changes the bank (anchors.html?u=<name>). Unnamed clicks are still
+    logged as events but never applied, so a stray visitor poking at the page cannot cut anchors."""
+    who = str(e.get("who") or "").strip()
+    return who[:40] if who and who.lower() != "unknown" else ""
+
+def _apply_anchor_vote(bank, e):
+    s = bank.get(str(e.get("id") or ""))
+    who = _anchor_voter(e)
+    if not s or not who:
+        return False
+    if e.get("cut"):
+        s["cut"] = True
+        s["cut_by"] = who
+    else:
+        s.pop("cut", None)
+        s.pop("cut_by", None)
+    try:
+        b = max(-20, min(20, int(e.get("bump") or 0)))
+    except (TypeError, ValueError):
+        b = 0
+    if e.get("abs"):      # the page sends the anchor's whole bump, so 0 puts it back on its scored rank
+        if b:
+            s["bump"] = b
+        else:
+            s.pop("bump", None)
+    elif b:               # votes from before 30 Oct 2026 carried a bare offset, applied only when nonzero
+        s["bump"] = b
+    return True
+
+def _clean_anchor_vote(e):
+    try:
+        bump = int(e.get("bump") or 0)
+    except (TypeError, ValueError):
+        bump = 0
+    return {"t": "anchorvote", "id": str(e.get("id") or "")[:200], "cut": bool(e.get("cut")), "bump": bump,
+            "abs": 1 if e.get("abs") else 0, "who": _anchor_voter(e),
+            "ts": str(e.get("ts") or "")[:40], "srv_ts": e.get("srv_ts")}
+
+def _replay_anchor_votes(bank):
+    try:
+        with open(ANCHOR_VOTES_PATH, encoding="utf-8") as f:
+            for line in f:
+                try:
+                    v = json.loads(line)
+                except ValueError:
+                    continue
+                if _apply_anchor_vote(bank, v):
+                    _ANCHOR_VOTES[v["id"]] = v
+    except FileNotFoundError:
+        pass
+    except Exception as ex:
+        print("ANCHOR VOTE REPLAY FAILED: %r" % (ex,), flush=True)
+
+def _take_anchor_vote(e):
+    """Apply one vote from the page now and keep it. Returns whether it changed the bank."""
+    v = _clean_anchor_vote(e)
+    if not _apply_anchor_vote(get_sources(), v):
+        return False
+    _ANCHOR_VOTES[v["id"]] = v
+    try:
+        try:
+            if os.path.getsize(ANCHOR_VOTES_PATH) > 5_000_000:   # unauthenticated beacon: bound the file
+                print("ANCHOR VOTE FILE FULL, vote applied in memory only", flush=True)
+                return True
+        except OSError:
+            pass
+        with open(ANCHOR_VOTES_PATH, "a", encoding="utf-8") as f:
+            f.write(json.dumps(v, ensure_ascii=False) + "\n")
+    except Exception as ex:
+        print("ANCHOR VOTE NOT SAVED (applied in memory only): %r" % (ex,), flush=True)
+    return True
 
 _BANK_SOURCES = None
 def get_bank_sources():
@@ -1677,7 +1762,20 @@ async def event(req: Request):
         obj = {}
     obj["srv_ts"] = int(__import__("time").time())
     _log_event(obj)
+    if obj.get("t") == "anchorvote":
+        return {"ok": True, "applied": _take_anchor_vote(obj)}
     return {"ok": True}
+
+@app.get("/anchorvotes")
+def anchorvotes():
+    """The live state of the curator's anchor curation: the latest vote per anchor, plus every anchor the
+    bank currently treats as cut or moved (votes and whatever was baked into sources.json). Public: it is
+    the same information anchors.html already shows. ./deploy.sh pulls it to bake the votes into the repo."""
+    bank = get_sources()
+    return {"votes": list(_ANCHOR_VOTES.values()),
+            "cut": sorted(k for k, s in bank.items() if s.get("cut")),
+            "bump": {k: s["bump"] for k, s in bank.items() if s.get("bump")},
+            "durable": ANCHOR_VOTES_PATH.startswith("/data/")}
 
 @app.post("/interest")
 async def interest(req: Request):
@@ -3840,14 +3938,8 @@ def _hard_sentences(text):
             if x.strip() and _parse_load(x) >= PARSE_LIMIT]
 
 
-def _fk_grade(text):
-    """Flesch-Kincaid grade level. 0 when there is nothing measurable."""
-    sents = [s for s in re.split(r'[.?!]+', text or "") if s.strip()]
-    words = re.findall(r"[A-Za-z]+", text or "")
-    if not sents or not words:
-        return 0.0
-    syl = sum(_syllables(w) for w in words)
-    return round(0.39 * (len(words) / len(sents)) + 11.8 * (syl / len(words)) - 15.59, 1)
+# _fk_grade lives further down (the reported-only version). An older copy here was dead code: Python
+# keeps the last definition, so every caller already got the later one.
 
 _NUM_RX = re.compile(r'\d[\d,.%]*')
 _NAME_RX = re.compile(r'\b(?:[A-Z][a-z]{2,}(?:\s+[A-Z][a-z]{2,})?|[A-Z]{2,}\d*)\b')
