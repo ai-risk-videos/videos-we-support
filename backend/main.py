@@ -1095,10 +1095,14 @@ def anchor_block(k=12):
         _pool = [s for s in get_sources().values()
                  if not s.get("cut") and str(s.get("date") or "") >= _cut
                  and _anchor_rank(int(s.get("esc") or 5), s.get("grab")) >= ANCHOR_TOP_TIER]
+        _shelf_rank = lambda s: _anchor_rank(int(s.get("esc") or 5), s.get("grab")) + int(s.get("bump") or 0)
+        # SAMPLE the shelf, weighted by rank, instead of always taking the top three. With nine recent
+        # anchors a fixed top three was fine; the Oct 30 2026 refresh put ~40 on it, and a fixed top
+        # three then opened every single batch on the same three stories.
+        _pool = _weighted_sample(_pool, [_shelf_rank(s) ** 2 for s in _pool], min(RECENT_SLOTS, len(_pool)))
         # strongest first, and among equals the NEWEST first
-        _pool.sort(key=lambda s: (_anchor_rank(int(s.get("esc") or 5), s.get("grab"))
-                                  + int(s.get("bump") or 0), str(s.get("date") or "")), reverse=True)
-        for s in _pool[:RECENT_SLOTS]:
+        _pool.sort(key=lambda s: (_shelf_rank(s), str(s.get("date") or "")), reverse=True)
+        for s in _pool:
             t = f"[{s.get('who','')} {s.get('year','')}] {s.get('shows','')}"
             _recent.append(t)
         if _recent:

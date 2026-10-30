@@ -94,6 +94,24 @@ check("the list opens on a top-shelf anchor", not weak,
       "%d of %d draws opened below rank %d, e.g. %s"
       % (len(weak), len(firsts), main.ANCHOR_TOP_TIER, weak[0][:80] if weak else ""))
 check("draws stay varied", len(seen) >= 40, "only %d unique anchors across 25 draws" % len(seen))
+# The recency shelf reserves seats for the newest top-shelf anchors. It used to take a fixed top three,
+# which was fine with nine recent anchors and put the same three stories in EVERY batch once the Oct 30
+# 2026 refresh added ~40. With more recent anchors than seats, no one of them may be in every draw.
+_cut = (main._dt.datetime.utcnow() - main._dt.timedelta(days=main.RECENT_DAYS)).strftime("%Y-%m-%d")
+_recent = [s for s in SRC if not s.get("cut") and str(s.get("date") or "") >= _cut
+           and main._anchor_rank(int(s.get("esc") or 5), s.get("grab")) >= main.ANCHOR_TOP_TIER]
+if len(_recent) > main.RECENT_SLOTS + 2:
+    _hits = {}
+    for _ in range(25):
+        _b = main.anchor_block(14)
+        for _s in _recent:
+            if _s["shows"] in _b:
+                _hits[_s["id"]] = _hits.get(_s["id"], 0) + 1
+    _always = [k for k, v in _hits.items() if v == 25]
+    check("the recency shelf rotates", not _always,
+          "%d recent anchors were in all 25 draws, e.g. %s" % (len(_always), _always[:1]))
+else:
+    check("the recency shelf rotates", True)
 
-print("\n%s (%d checks, %d failed)" % ("FAILED" if fails else "ALL PASS", 13, len(fails)))
+print("\n%s (%d checks, %d failed)" % ("FAILED" if fails else "ALL PASS", 14, len(fails)))
 sys.exit(1 if fails else 0)
